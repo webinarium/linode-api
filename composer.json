@@ -1,0 +1,35 @@
+{
+    "name": "webinarium/linode-api",
+    "description": "Linode API Client Library",
+    "type": "library",
+    "keywords": ["api", "linode"],
+    "homepage": "https://github.com/webinarium/linode-api",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Artem Rodygin",
+            "homepage": "https://github.com/webinarium"
+        }
+    ],
+    "require": {
+        "php": "^7.1"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.13",
+        "phpunit/phpunit": "^7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Linode\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Linode\\": "tests/"
+        }
+    },
+    "config": {
+        "bin-dir": "bin",
+        "sort-packages": true
+    }
+}
