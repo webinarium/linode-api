@@ -11,7 +11,9 @@
 
 namespace Linode\Repository;
 
+use GuzzleHttp\Psr7\Response;
 use Linode\Entity\Entity;
+use Linode\Exception\LinodeException;
 use Linode\Internal\ApiTrait;
 
 /**
@@ -87,6 +89,25 @@ abstract class AbstractRepository implements RepositoryInterface
             function (array $json) {
                 return $this->jsonToEntity($json);
             });
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findOneBy(array $criteria): ?Entity
+    {
+        $collection = $this->findBy($criteria);
+
+        if (count($collection) === 0) {
+            return null;
+        }
+
+        if (count($collection) !== 1) {
+            $errors = ['errors' => [['reason' => 'More than one entity was found']]];
+            throw new LinodeException(new Response(self::ERROR_BAD_REQUEST, [], json_encode($errors)));
+        }
+
+        return $collection->current();
     }
 
     /**

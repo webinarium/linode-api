@@ -14,6 +14,7 @@ namespace Linode\Repository;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use Linode\Entity\Entity;
+use Linode\Exception\LinodeException;
 use Linode\Internal\ApiTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -94,6 +95,22 @@ class AbstractRepositoryTest extends TestCase
             ],
         ];
 
+        $single = [
+            'page'    => 1,
+            'pages'   => 1,
+            'results' => 1,
+            'data'    => [
+                ['name' => 'February', 'season' => 'Winter', 'days' => 28],
+            ],
+        ];
+
+        $zero = [
+            'page'    => 1,
+            'pages'   => 1,
+            'results' => 0,
+            'data'    => [],
+        ];
+
         $this->client = $this->createMock(Client::class);
         $this->client
             ->method('request')
@@ -102,6 +119,8 @@ class AbstractRepositoryTest extends TestCase
                 ['GET', 'http://localhost/entries', ['headers' => ['X-Filter' => '{"+order_by":"name","+order":"asc"}'], 'query' => ['page' => 1]], new Response(200, [], json_encode($sorted))],
                 ['GET', 'http://localhost/entries', ['headers' => ['X-Filter' => '{"days":31}'], 'query' => ['page' => 1]], new Response(200, [], json_encode($filtered))],
                 ['GET', 'http://localhost/entries', ['headers' => ['X-Filter' => '{"days":31,"+order_by":"name","+order":"asc"}'], 'query' => ['page' => 1]], new Response(200, [], json_encode($filteredAndSorted))],
+                ['GET', 'http://localhost/entries', ['headers' => ['X-Filter' => '{"days":28}'], 'query' => ['page' => 1]], new Response(200, [], json_encode($single))],
+                ['GET', 'http://localhost/entries', ['headers' => ['X-Filter' => '{"days":29}'], 'query' => ['page' => 1]], new Response(200, [], json_encode($zero))],
             ]);
     }
 
@@ -137,6 +156,8 @@ class AbstractRepositoryTest extends TestCase
     public function testFindAll()
     {
         $repository = $this->mockRepository($this->client);
+
+        /** @noinspection PhpUnhandledExceptionInspection */
         $collection = $repository->findAll();
 
         self::assertCount(12, $collection);
@@ -165,6 +186,8 @@ class AbstractRepositoryTest extends TestCase
     public function testFindAllSorted()
     {
         $repository = $this->mockRepository($this->client);
+
+        /** @noinspection PhpUnhandledExceptionInspection */
         $collection = $repository->findAll('name');
 
         self::assertCount(12, $collection);
@@ -193,6 +216,8 @@ class AbstractRepositoryTest extends TestCase
     public function testFindBy()
     {
         $repository = $this->mockRepository($this->client);
+
+        /** @noinspection PhpUnhandledExceptionInspection */
         $collection = $repository->findBy([
             'days' => 31,
         ]);
@@ -218,6 +243,8 @@ class AbstractRepositoryTest extends TestCase
     public function testFindBySorted()
     {
         $repository = $this->mockRepository($this->client);
+
+        /** @noinspection PhpUnhandledExceptionInspection */
         $collection = $repository->findBy([
             'days' => 31,
         ], 'name');
@@ -238,6 +265,51 @@ class AbstractRepositoryTest extends TestCase
             self::assertInstanceOf(Entity::class, $entity);
             self::assertSame($expected[$index], $entity->name);
         }
+    }
+
+    public function testFindOneBy()
+    {
+        $data = [
+            'name'   => 'February',
+            'season' => 'Winter',
+            'days'   => 28,
+        ];
+
+        $repository = $this->mockRepository($this->client);
+
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $entity = $repository->findOneBy([
+            'days' => 28,
+        ]);
+
+        self::assertInstanceOf(Entity::class, $entity);
+        self::assertSame($data, $entity->toArray());
+    }
+
+    public function testFindOneByZero()
+    {
+        $repository = $this->mockRepository($this->client);
+
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $entity = $repository->findOneBy([
+            'days' => 29,
+        ]);
+
+        self::assertNull($entity);
+    }
+
+    public function testFindOneByException()
+    {
+        $this->expectException(LinodeException::class);
+        $this->expectExceptionCode(400);
+        $this->expectExceptionMessage('More than one entity was found');
+
+        $repository = $this->mockRepository($this->client);
+
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $repository->findOneBy([
+            'days' => 31,
+        ]);
     }
 
     protected function mockRepository(Client $client)

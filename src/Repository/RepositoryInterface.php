@@ -39,6 +39,8 @@ interface RepositoryInterface
      * @param null|string $orderBy  Optional property name, which the collection should be sorted by.
      * @param string      $orderDir Optional sort direction (ignored when `orderBy` is `null`).
      *
+     * @throws \Linode\Exception\LinodeException
+     *
      * @return LinodeCollection
      */
     public function findAll(string $orderBy = null, string $orderDir = self::SORT_ASC): LinodeCollection;
@@ -50,7 +52,21 @@ interface RepositoryInterface
      * @param null|string $orderBy  Optional property name, which the collection should be sorted by.
      * @param string      $orderDir Optional sort direction (ignored when `orderBy` is `null`).
      *
+     * @throws \Linode\Exception\LinodeException
+     *
      * @return LinodeCollection
      */
     public function findBy(array $criteria, string $orderBy = null, string $orderDir = self::SORT_ASC): LinodeCollection;
+
+    /**
+     * Finds an entity by specified filters. If entity is not found, return `null`.
+     * If more than one entity is found, raises an exception.
+     *
+     * @param array $criteria List of filters.
+     *
+     * @throws \Linode\Exception\LinodeException
+     *
+     * @return null|Entity
+     */
+    public function findOneBy(array $criteria): ?Entity;
 }
