@@ -51,6 +51,18 @@ abstract class AbstractRepository implements RepositoryInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function find($id): ?Entity
+    {
+        $response = $this->api(self::REQUEST_GET, '/' . $id);
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return $this->jsonToEntity($json);
+    }
+
+    /**
      * Creates a repository-specific entity using specified JSON data.
      *
      * @param array $json
