@@ -18,6 +18,10 @@ use Linode\Entity\Entity;
  */
 interface RepositoryInterface
 {
+    // Sort directions.
+    public const SORT_ASC  = 'asc';
+    public const SORT_DESC = 'desc';
+
     /**
      * Finds and returns an entity by its ID. If entity is not found, return `null`.
      *
@@ -28,4 +32,14 @@ interface RepositoryInterface
      * @return null|Entity
      */
     public function find($id): ?Entity;
+
+    /**
+     * Finds all entities.
+     *
+     * @param null|string $orderBy  Optional property name, which the collection should be sorted by.
+     * @param string      $orderDir Optional sort direction (ignored when `orderBy` is `null`).
+     *
+     * @return LinodeCollection
+     */
+    public function findAll(string $orderBy = null, string $orderDir = self::SORT_ASC): LinodeCollection;
 }
