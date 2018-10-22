@@ -64,12 +64,44 @@ class AbstractRepositoryTest extends TestCase
             ],
         ];
 
+        $filtered = [
+            'page'    => 1,
+            'pages'   => 1,
+            'results' => 7,
+            'data'    => [
+                ['name' => 'January',  'season' => 'Winter', 'days' => 31],
+                ['name' => 'March',    'season' => 'Spring', 'days' => 31],
+                ['name' => 'May',      'season' => 'Spring', 'days' => 31],
+                ['name' => 'July',     'season' => 'Summer', 'days' => 31],
+                ['name' => 'August',   'season' => 'Summer', 'days' => 31],
+                ['name' => 'October',  'season' => 'Autumn', 'days' => 31],
+                ['name' => 'December', 'season' => 'Winter', 'days' => 31],
+            ],
+        ];
+
+        $filteredAndSorted = [
+            'page'    => 1,
+            'pages'   => 1,
+            'results' => 7,
+            'data'    => [
+                ['name' => 'August',   'season' => 'Summer', 'days' => 31],
+                ['name' => 'December', 'season' => 'Winter', 'days' => 31],
+                ['name' => 'January',  'season' => 'Winter', 'days' => 31],
+                ['name' => 'July',     'season' => 'Summer', 'days' => 31],
+                ['name' => 'March',    'season' => 'Spring', 'days' => 31],
+                ['name' => 'May',      'season' => 'Spring', 'days' => 31],
+                ['name' => 'October',  'season' => 'Autumn', 'days' => 31],
+            ],
+        ];
+
         $this->client = $this->createMock(Client::class);
         $this->client
             ->method('request')
             ->willReturnMap([
                 ['GET', 'http://localhost/entries', ['query' => ['page' => 1]], new Response(200, [], json_encode($all))],
                 ['GET', 'http://localhost/entries', ['headers' => ['X-Filter' => '{"+order_by":"name","+order":"asc"}'], 'query' => ['page' => 1]], new Response(200, [], json_encode($sorted))],
+                ['GET', 'http://localhost/entries', ['headers' => ['X-Filter' => '{"days":31}'], 'query' => ['page' => 1]], new Response(200, [], json_encode($filtered))],
+                ['GET', 'http://localhost/entries', ['headers' => ['X-Filter' => '{"days":31,"+order_by":"name","+order":"asc"}'], 'query' => ['page' => 1]], new Response(200, [], json_encode($filteredAndSorted))],
             ]);
     }
 
@@ -150,6 +182,56 @@ class AbstractRepositoryTest extends TestCase
             'November',
             'October',
             'September',
+        ];
+
+        foreach ($collection as $index => $entity) {
+            self::assertInstanceOf(Entity::class, $entity);
+            self::assertSame($expected[$index], $entity->name);
+        }
+    }
+
+    public function testFindBy()
+    {
+        $repository = $this->mockRepository($this->client);
+        $collection = $repository->findBy([
+            'days' => 31,
+        ]);
+
+        self::assertCount(7, $collection);
+
+        $expected = [
+            'January',
+            'March',
+            'May',
+            'July',
+            'August',
+            'October',
+            'December',
+        ];
+
+        foreach ($collection as $index => $entity) {
+            self::assertInstanceOf(Entity::class, $entity);
+            self::assertSame($expected[$index], $entity->name);
+        }
+    }
+
+    public function testFindBySorted()
+    {
+        $repository = $this->mockRepository($this->client);
+        $collection = $repository->findBy([
+            'days' => 31,
+        ], 'name');
+
+        self::assertCount(7, $collection);
+
+        $expected = [
+            'August',
+            'December',
+            'January',
+            'July',
+            'March',
+            'May',
+            'October',
         ];
 
         foreach ($collection as $index => $entity) {

@@ -67,18 +67,22 @@ abstract class AbstractRepository implements RepositoryInterface
      */
     public function findAll(string $orderBy = null, string $orderDir = self::SORT_ASC): LinodeCollection
     {
-        $filters = [];
+        return $this->findBy([], $orderBy, $orderDir);
+    }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function findBy(array $criteria, string $orderBy = null, string $orderDir = self::SORT_ASC): LinodeCollection
+    {
         if ($orderBy !== null) {
-            $filters = [
-                '+order_by' => $orderBy,
-                '+order'    => $orderDir,
-            ];
+            $criteria['+order_by'] = $orderBy;
+            $criteria['+order']    = $orderDir;
         }
 
         return new LinodeCollection(
-            function (int $page) use ($filters) {
-                return $this->api(self::REQUEST_GET, '', ['page' => $page], $filters);
+            function (int $page) use ($criteria) {
+                return $this->api(self::REQUEST_GET, '', ['page' => $page], $criteria);
             },
             function (array $json) {
                 return $this->jsonToEntity($json);

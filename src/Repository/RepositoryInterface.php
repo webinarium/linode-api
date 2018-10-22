@@ -42,4 +42,15 @@ interface RepositoryInterface
      * @return LinodeCollection
      */
     public function findAll(string $orderBy = null, string $orderDir = self::SORT_ASC): LinodeCollection;
+
+    /**
+     * Finds entities by specified filters.
+     *
+     * @param array       $criteria List of filters.
+     * @param null|string $orderBy  Optional property name, which the collection should be sorted by.
+     * @param string      $orderDir Optional sort direction (ignored when `orderBy` is `null`).
+     *
+     * @return LinodeCollection
+     */
+    public function findBy(array $criteria, string $orderBy = null, string $orderDir = self::SORT_ASC): LinodeCollection;
 }
