@@ -15,6 +15,8 @@ use GuzzleHttp\Psr7\Response;
 use Linode\Entity\Entity;
 use Linode\Exception\LinodeException;
 use Linode\Internal\ApiTrait;
+use Linode\Internal\QueryCompiler;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 /**
  * An abstract Linode repository.
@@ -109,6 +111,34 @@ abstract class AbstractRepository implements RepositoryInterface
 
         return $collection->current();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function query(string $query, array $parameters = [], string $orderBy = null, string $orderDir = self::SORT_ASC): LinodeCollection
+    {
+        try {
+            $parser   = new ExpressionLanguage();
+            $compiler = new QueryCompiler();
+
+            $query    = $compiler->apply($query, $parameters);
+            $ast      = $parser->parse($query, $this->getSupportedFields())->getNodes();
+            $criteria = $compiler->compile($ast);
+        }
+        catch (\Throwable $exception) {
+            $errors = ['errors' => [['reason' => $exception->getMessage()]]];
+            throw new LinodeException(new Response(self::ERROR_BAD_REQUEST, [], json_encode($errors)));
+        }
+
+        return $this->findBy($criteria, $orderBy, $orderDir);
+    }
+
+    /**
+     * Returns list of all fields (entity properties) supported by the repository.
+     *
+     * @return string[]
+     */
+    abstract protected function getSupportedFields(): array;
 
     /**
      * Creates a repository-specific entity using specified JSON data.

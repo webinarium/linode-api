@@ -122,6 +122,11 @@ class LinodeCollectionTest extends TestCase
                     });
             }
 
+            protected function getSupportedFields(): array
+            {
+                return [];
+            }
+
             protected function jsonToEntity(array $json): Entity
             {
                 return new class($json) extends Entity {};

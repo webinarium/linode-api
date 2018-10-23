@@ -312,6 +312,72 @@ class AbstractRepositoryTest extends TestCase
         ]);
     }
 
+    public function testQuery()
+    {
+        $repository = $this->mockRepository($this->client);
+
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $collection = $repository->query('days == :number', [
+            'number' => 31,
+        ]);
+
+        self::assertCount(7, $collection);
+
+        $expected = [
+            'January',
+            'March',
+            'May',
+            'July',
+            'August',
+            'October',
+            'December',
+        ];
+
+        foreach ($collection as $index => $entity) {
+            self::assertInstanceOf(Entity::class, $entity);
+            self::assertSame($expected[$index], $entity->name);
+        }
+    }
+
+    public function testQuerySorted()
+    {
+        $repository = $this->mockRepository($this->client);
+
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $collection = $repository->query('days == :number', [
+            'number' => 31,
+        ], 'name');
+
+        self::assertCount(7, $collection);
+
+        $expected = [
+            'August',
+            'December',
+            'January',
+            'July',
+            'March',
+            'May',
+            'October',
+        ];
+
+        foreach ($collection as $index => $entity) {
+            self::assertInstanceOf(Entity::class, $entity);
+            self::assertSame($expected[$index], $entity->name);
+        }
+    }
+
+    public function testQueryException()
+    {
+        $this->expectException(LinodeException::class);
+        $this->expectExceptionCode(400);
+        $this->expectExceptionMessage('Invalid expression');
+
+        $repository = $this->mockRepository($this->client);
+
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $repository->query('days');
+    }
+
     protected function mockRepository(Client $client)
     {
         return new class($client) extends AbstractRepository {
@@ -323,6 +389,11 @@ class AbstractRepositoryTest extends TestCase
 
                 $this->client   = $client;
                 $this->base_uri = 'http://localhost/entries';
+            }
+
+            protected function getSupportedFields(): array
+            {
+                return ['days', 'name', 'season'];
             }
 
             protected function jsonToEntity(array $json): Entity

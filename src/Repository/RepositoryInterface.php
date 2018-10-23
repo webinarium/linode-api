@@ -69,4 +69,18 @@ interface RepositoryInterface
      * @return null|Entity
      */
     public function findOneBy(array $criteria): ?Entity;
+
+    /**
+     * Finds entities by specified query.
+     *
+     * @param string      $query      Query string.
+     * @param array       $parameters Query parameters.
+     * @param null|string $orderBy    Optional property name, which the collection should be sorted by.
+     * @param string      $orderDir   Optional sort direction (ignored when `orderBy` is `null`).
+     *
+     * @throws \Linode\Exception\LinodeException
+     *
+     * @return LinodeCollection
+     */
+    public function query(string $query, array $parameters = [], string $orderBy = null, string $orderDir = self::SORT_ASC): LinodeCollection;
 }
