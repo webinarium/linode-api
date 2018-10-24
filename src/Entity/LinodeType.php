@@ -41,7 +41,7 @@ class LinodeType extends Entity
     public function __get(string $name)
     {
         if ($name === 'price') {
-            return new Price($this->data[$name] ?? []);
+            return new Price($this->client, $this->data[$name] ?? []);
         }
 
         return parent::__get($name);

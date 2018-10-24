@@ -9,22 +9,33 @@
 //
 //----------------------------------------------------------------------
 
+/** @noinspection PhpUndefinedFieldInspection */
+
 namespace Linode\Repository;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use Linode\Entity\Entity;
 use Linode\Exception\LinodeException;
-use Linode\Internal\ApiTrait;
+use Linode\LinodeClient;
+use Linode\ReflectionTrait;
 use PHPUnit\Framework\TestCase;
 
 class AbstractRepositoryTest extends TestCase
 {
-    /** @var Client */
-    protected $client;
+    use ReflectionTrait;
+
+    /** @var AbstractRepository */
+    protected $repository;
 
     protected function setUp()
     {
+        $entity = [
+            'name'   => 'February',
+            'season' => 'Winter',
+            'days'   => 28,
+        ];
+
         $all = [
             'page'    => 1,
             'pages'   => 1,
@@ -111,54 +122,51 @@ class AbstractRepositoryTest extends TestCase
             'data'    => [],
         ];
 
-        $this->client = $this->createMock(Client::class);
-        $this->client
+        $client = $this->createMock(Client::class);
+        $client
             ->method('request')
             ->willReturnMap([
-                ['GET', 'http://localhost/entries', ['query' => ['page' => 1]], new Response(200, [], json_encode($all))],
-                ['GET', 'http://localhost/entries', ['headers' => ['X-Filter' => '{"+order_by":"name","+order":"asc"}'], 'query' => ['page' => 1]], new Response(200, [], json_encode($sorted))],
-                ['GET', 'http://localhost/entries', ['headers' => ['X-Filter' => '{"days":31}'], 'query' => ['page' => 1]], new Response(200, [], json_encode($filtered))],
-                ['GET', 'http://localhost/entries', ['headers' => ['X-Filter' => '{"days":31,"+order_by":"name","+order":"asc"}'], 'query' => ['page' => 1]], new Response(200, [], json_encode($filteredAndSorted))],
-                ['GET', 'http://localhost/entries', ['headers' => ['X-Filter' => '{"days":28}'], 'query' => ['page' => 1]], new Response(200, [], json_encode($single))],
-                ['GET', 'http://localhost/entries', ['headers' => ['X-Filter' => '{"days":29}'], 'query' => ['page' => 1]], new Response(200, [], json_encode($zero))],
+                ['GET', 'https://api.linode.com/v4/test/2', [], new Response(200, [], json_encode($entity))],
+                ['GET', 'https://api.linode.com/v4/test', ['query' => ['page' => 1]], new Response(200, [], json_encode($all))],
+                ['GET', 'https://api.linode.com/v4/test', ['headers' => ['X-Filter' => '{"+order_by":"name","+order":"asc"}'], 'query' => ['page' => 1]], new Response(200, [], json_encode($sorted))],
+                ['GET', 'https://api.linode.com/v4/test', ['headers' => ['X-Filter' => '{"days":31}'], 'query' => ['page' => 1]], new Response(200, [], json_encode($filtered))],
+                ['GET', 'https://api.linode.com/v4/test', ['headers' => ['X-Filter' => '{"days":31,"+order_by":"name","+order":"asc"}'], 'query' => ['page' => 1]], new Response(200, [], json_encode($filteredAndSorted))],
+                ['GET', 'https://api.linode.com/v4/test', ['headers' => ['X-Filter' => '{"days":28}'], 'query' => ['page' => 1]], new Response(200, [], json_encode($single))],
+                ['GET', 'https://api.linode.com/v4/test', ['headers' => ['X-Filter' => '{"days":29}'], 'query' => ['page' => 1]], new Response(200, [], json_encode($zero))],
             ]);
+
+        $linodeClient = new LinodeClient();
+        $this->setProperty($linodeClient, 'client', $client);
+
+        $this->repository = new class($linodeClient) extends AbstractRepository {
+            // Overload to fake.
+            protected const BASE_API_URI = '/test';
+
+            protected function getSupportedFields(): array
+            {
+                return ['days', 'name', 'season'];
+            }
+
+            protected function jsonToEntity(array $json): Entity
+            {
+                return new class($this->client, $json) extends Entity {};
+            }
+        };
     }
 
     public function testFind()
     {
-        $data = [
-            'id'          => 'g6-standard-1',
-            'label'       => 'Linode 2GB',
-            'class'       => 'standard',
-            'vcpus'       => 1,
-            'price'       => [
-                'hourly'  => 0.015,
-                'monthly' => 10,
-            ],
-        ];
-
-        $client = $this->createMock(Client::class);
-        $client
-            ->method('request')
-            ->willReturn(new Response(200, [], json_encode($data)));
-
-        /** @var Client $client */
-        $repository = $this->mockRepository($client);
-
         /** @noinspection PhpUnhandledExceptionInspection */
-        $entity = $repository->find(123);
+        $entity = $this->repository->find(2);
 
         self::assertInstanceOf(Entity::class, $entity);
-        self::assertSame('standard', $entity->class);
-        self::assertSame($data, $entity->toArray());
+        self::assertSame('February', $entity->name);
     }
 
     public function testFindAll()
     {
-        $repository = $this->mockRepository($this->client);
-
         /** @noinspection PhpUnhandledExceptionInspection */
-        $collection = $repository->findAll();
+        $collection = $this->repository->findAll();
 
         self::assertCount(12, $collection);
 
@@ -185,10 +193,8 @@ class AbstractRepositoryTest extends TestCase
 
     public function testFindAllSorted()
     {
-        $repository = $this->mockRepository($this->client);
-
         /** @noinspection PhpUnhandledExceptionInspection */
-        $collection = $repository->findAll('name');
+        $collection = $this->repository->findAll('name');
 
         self::assertCount(12, $collection);
 
@@ -215,10 +221,8 @@ class AbstractRepositoryTest extends TestCase
 
     public function testFindBy()
     {
-        $repository = $this->mockRepository($this->client);
-
         /** @noinspection PhpUnhandledExceptionInspection */
-        $collection = $repository->findBy([
+        $collection = $this->repository->findBy([
             'days' => 31,
         ]);
 
@@ -242,10 +246,8 @@ class AbstractRepositoryTest extends TestCase
 
     public function testFindBySorted()
     {
-        $repository = $this->mockRepository($this->client);
-
         /** @noinspection PhpUnhandledExceptionInspection */
-        $collection = $repository->findBy([
+        $collection = $this->repository->findBy([
             'days' => 31,
         ], 'name');
 
@@ -275,10 +277,8 @@ class AbstractRepositoryTest extends TestCase
             'days'   => 28,
         ];
 
-        $repository = $this->mockRepository($this->client);
-
         /** @noinspection PhpUnhandledExceptionInspection */
-        $entity = $repository->findOneBy([
+        $entity = $this->repository->findOneBy([
             'days' => 28,
         ]);
 
@@ -288,10 +288,8 @@ class AbstractRepositoryTest extends TestCase
 
     public function testFindOneByZero()
     {
-        $repository = $this->mockRepository($this->client);
-
         /** @noinspection PhpUnhandledExceptionInspection */
-        $entity = $repository->findOneBy([
+        $entity = $this->repository->findOneBy([
             'days' => 29,
         ]);
 
@@ -304,20 +302,16 @@ class AbstractRepositoryTest extends TestCase
         $this->expectExceptionCode(400);
         $this->expectExceptionMessage('More than one entity was found');
 
-        $repository = $this->mockRepository($this->client);
-
         /** @noinspection PhpUnhandledExceptionInspection */
-        $repository->findOneBy([
+        $this->repository->findOneBy([
             'days' => 31,
         ]);
     }
 
     public function testQuery()
     {
-        $repository = $this->mockRepository($this->client);
-
         /** @noinspection PhpUnhandledExceptionInspection */
-        $collection = $repository->query('days == :number', [
+        $collection = $this->repository->query('days == :number', [
             'number' => 31,
         ]);
 
@@ -341,10 +335,8 @@ class AbstractRepositoryTest extends TestCase
 
     public function testQuerySorted()
     {
-        $repository = $this->mockRepository($this->client);
-
         /** @noinspection PhpUnhandledExceptionInspection */
-        $collection = $repository->query('days == :number', [
+        $collection = $this->repository->query('days == :number', [
             'number' => 31,
         ], 'name');
 
@@ -372,34 +364,7 @@ class AbstractRepositoryTest extends TestCase
         $this->expectExceptionCode(400);
         $this->expectExceptionMessage('Invalid expression');
 
-        $repository = $this->mockRepository($this->client);
-
         /** @noinspection PhpUnhandledExceptionInspection */
-        $repository->query('days');
-    }
-
-    protected function mockRepository(Client $client)
-    {
-        return new class($client) extends AbstractRepository {
-            use ApiTrait;
-
-            public function __construct(Client $client)
-            {
-                parent::__construct();
-
-                $this->client   = $client;
-                $this->base_uri = 'http://localhost/entries';
-            }
-
-            protected function getSupportedFields(): array
-            {
-                return ['days', 'name', 'season'];
-            }
-
-            protected function jsonToEntity(array $json): Entity
-            {
-                return new class($json) extends Entity {};
-            }
-        };
+        $this->repository->query('days');
     }
 }

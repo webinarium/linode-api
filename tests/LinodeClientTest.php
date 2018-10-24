@@ -9,7 +9,7 @@
 //
 //----------------------------------------------------------------------
 
-namespace Linode\Internal;
+namespace Linode;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
@@ -18,10 +18,11 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Linode\Exception\LinodeException;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\ResponseInterface;
 
-class ApiTraitTest extends TestCase
+class LinodeClientTest extends TestCase
 {
+    use ReflectionTrait;
+
     public function testApiGetAnonymous()
     {
         $client = new class() extends Client {
@@ -31,14 +32,14 @@ class ApiTraitTest extends TestCase
             }
         };
 
-        $object = $this->mockApiTrait($client);
+        $object = $this->mockLinodeClient($client);
 
-        /** @var ResponseInterface $response */
-        $response = $object->proxyApi('GET', '/test');
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $response = $object->api('GET', '/test');
         self::assertSame([], json_decode($response->getBody()->getContents(), true));
 
-        /** @var ResponseInterface $response */
-        $response = $object->proxyApi('GET', '/test', ['page' => 2, 'page_size' => 25]);
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $response = $object->api('GET', '/test', ['page' => 2, 'page_size' => 25]);
         self::assertSame([
             'query' => [
                 'page'      => 2,
@@ -46,16 +47,16 @@ class ApiTraitTest extends TestCase
             ],
         ], json_decode($response->getBody()->getContents(), true));
 
-        /** @var ResponseInterface $response */
-        $response = $object->proxyApi('GET', '/test', [], ['class' => 'standard', 'vcpus' => 1]);
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $response = $object->api('GET', '/test', [], ['class' => 'standard', 'vcpus' => 1]);
         self::assertSame([
             'headers' => [
                 'X-Filter' => '{"class":"standard","vcpus":1}',
             ],
         ], json_decode($response->getBody()->getContents(), true));
 
-        /** @var ResponseInterface $response */
-        $response = $object->proxyApi('GET', '/test', ['page' => 2, 'page_size' => 25], ['class' => 'standard', 'vcpus' => 1]);
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $response = $object->api('GET', '/test', ['page' => 2, 'page_size' => 25], ['class' => 'standard', 'vcpus' => 1]);
         self::assertSame([
             'headers' => [
                 'X-Filter' => '{"class":"standard","vcpus":1}',
@@ -76,18 +77,18 @@ class ApiTraitTest extends TestCase
             }
         };
 
-        $object = $this->mockApiTrait($client, 'secret');
+        $object = $this->mockLinodeClient($client, 'secret');
 
-        /** @var ResponseInterface $response */
-        $response = $object->proxyApi('GET', '/test');
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $response = $object->api('GET', '/test');
         self::assertSame([
             'headers' => [
                 'Authorization' => 'Bearer secret',
             ],
         ], json_decode($response->getBody()->getContents(), true));
 
-        /** @var ResponseInterface $response */
-        $response = $object->proxyApi('GET', '/test', ['page' => 2, 'page_size' => 25]);
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $response = $object->api('GET', '/test', ['page' => 2, 'page_size' => 25]);
         self::assertSame([
             'headers' => [
                 'Authorization' => 'Bearer secret',
@@ -98,8 +99,8 @@ class ApiTraitTest extends TestCase
             ],
         ], json_decode($response->getBody()->getContents(), true));
 
-        /** @var ResponseInterface $response */
-        $response = $object->proxyApi('GET', '/test', [], ['class' => 'standard', 'vcpus' => 1]);
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $response = $object->api('GET', '/test', [], ['class' => 'standard', 'vcpus' => 1]);
         self::assertSame([
             'headers' => [
                 'Authorization' => 'Bearer secret',
@@ -107,8 +108,8 @@ class ApiTraitTest extends TestCase
             ],
         ], json_decode($response->getBody()->getContents(), true));
 
-        /** @var ResponseInterface $response */
-        $response = $object->proxyApi('GET', '/test', ['page' => 2, 'page_size' => 25], ['class' => 'standard', 'vcpus' => 1]);
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $response = $object->api('GET', '/test', ['page' => 2, 'page_size' => 25], ['class' => 'standard', 'vcpus' => 1]);
         self::assertSame([
             'headers' => [
                 'Authorization' => 'Bearer secret',
@@ -130,18 +131,18 @@ class ApiTraitTest extends TestCase
             }
         };
 
-        $object = $this->mockApiTrait($client, 'secret');
+        $object = $this->mockLinodeClient($client, 'secret');
 
-        /** @var ResponseInterface $response */
-        $response = $object->proxyApi('POST', '/test');
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $response = $object->api('POST', '/test');
         self::assertSame([
             'headers' => [
                 'Authorization' => 'Bearer secret',
             ],
         ], json_decode($response->getBody()->getContents(), true));
 
-        /** @var ResponseInterface $response */
-        $response = $object->proxyApi('POST', '/test', ['domain' => 'example.com', 'type' => 'master']);
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $response = $object->api('POST', '/test', ['domain' => 'example.com', 'type' => 'master']);
         self::assertSame([
             'headers' => [
                 'Authorization' => 'Bearer secret',
@@ -152,16 +153,16 @@ class ApiTraitTest extends TestCase
             ],
         ], json_decode($response->getBody()->getContents(), true));
 
-        /** @var ResponseInterface $response */
-        $response = $object->proxyApi('POST', '/test', [], ['class' => 'standard', 'vcpus' => 1]);
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $response = $object->api('POST', '/test', [], ['class' => 'standard', 'vcpus' => 1]);
         self::assertSame([
             'headers' => [
                 'Authorization' => 'Bearer secret',
             ],
         ], json_decode($response->getBody()->getContents(), true));
 
-        /** @var ResponseInterface $response */
-        $response = $object->proxyApi('POST', '/test', ['domain' => 'example.com', 'type' => 'master'], ['class' => 'standard', 'vcpus' => 1]);
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $response = $object->api('POST', '/test', ['domain' => 'example.com', 'type' => 'master'], ['class' => 'standard', 'vcpus' => 1]);
         self::assertSame([
             'headers' => [
                 'Authorization' => 'Bearer secret',
@@ -182,18 +183,18 @@ class ApiTraitTest extends TestCase
             }
         };
 
-        $object = $this->mockApiTrait($client, 'secret');
+        $object = $this->mockLinodeClient($client, 'secret');
 
-        /** @var ResponseInterface $response */
-        $response = $object->proxyApi('PUT', '/test');
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $response = $object->api('PUT', '/test');
         self::assertSame([
             'headers' => [
                 'Authorization' => 'Bearer secret',
             ],
         ], json_decode($response->getBody()->getContents(), true));
 
-        /** @var ResponseInterface $response */
-        $response = $object->proxyApi('PUT', '/test', ['domain' => 'example.com', 'type' => 'master']);
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $response = $object->api('PUT', '/test', ['domain' => 'example.com', 'type' => 'master']);
         self::assertSame([
             'headers' => [
                 'Authorization' => 'Bearer secret',
@@ -204,16 +205,16 @@ class ApiTraitTest extends TestCase
             ],
         ], json_decode($response->getBody()->getContents(), true));
 
-        /** @var ResponseInterface $response */
-        $response = $object->proxyApi('PUT', '/test', [], ['class' => 'standard', 'vcpus' => 1]);
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $response = $object->api('PUT', '/test', [], ['class' => 'standard', 'vcpus' => 1]);
         self::assertSame([
             'headers' => [
                 'Authorization' => 'Bearer secret',
             ],
         ], json_decode($response->getBody()->getContents(), true));
 
-        /** @var ResponseInterface $response */
-        $response = $object->proxyApi('PUT', '/test', ['domain' => 'example.com', 'type' => 'master'], ['class' => 'standard', 'vcpus' => 1]);
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $response = $object->api('PUT', '/test', ['domain' => 'example.com', 'type' => 'master'], ['class' => 'standard', 'vcpus' => 1]);
         self::assertSame([
             'headers' => [
                 'Authorization' => 'Bearer secret',
@@ -234,34 +235,34 @@ class ApiTraitTest extends TestCase
             }
         };
 
-        $object = $this->mockApiTrait($client, 'secret');
+        $object = $this->mockLinodeClient($client, 'secret');
 
-        /** @var ResponseInterface $response */
-        $response = $object->proxyApi('DELETE', '/test');
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $response = $object->api('DELETE', '/test');
         self::assertSame([
             'headers' => [
                 'Authorization' => 'Bearer secret',
             ],
         ], json_decode($response->getBody()->getContents(), true));
 
-        /** @var ResponseInterface $response */
-        $response = $object->proxyApi('DELETE', '/test', ['domain' => 'example.com', 'type' => 'master']);
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $response = $object->api('DELETE', '/test', ['domain' => 'example.com', 'type' => 'master']);
         self::assertSame([
             'headers' => [
                 'Authorization' => 'Bearer secret',
             ],
         ], json_decode($response->getBody()->getContents(), true));
 
-        /** @var ResponseInterface $response */
-        $response = $object->proxyApi('DELETE', '/test', [], ['class' => 'standard', 'vcpus' => 1]);
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $response = $object->api('DELETE', '/test', [], ['class' => 'standard', 'vcpus' => 1]);
         self::assertSame([
             'headers' => [
                 'Authorization' => 'Bearer secret',
             ],
         ], json_decode($response->getBody()->getContents(), true));
 
-        /** @var ResponseInterface $response */
-        $response = $object->proxyApi('DELETE', '/test', ['domain' => 'example.com', 'type' => 'master'], ['class' => 'standard', 'vcpus' => 1]);
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $response = $object->api('DELETE', '/test', ['domain' => 'example.com', 'type' => 'master'], ['class' => 'standard', 'vcpus' => 1]);
         self::assertSame([
             'headers' => [
                 'Authorization' => 'Bearer secret',
@@ -285,9 +286,10 @@ class ApiTraitTest extends TestCase
             }
         };
 
-        $object = $this->mockApiTrait($client, 'secret');
+        $object = $this->mockLinodeClient($client, 'secret');
 
-        $object->proxyApi('GET', '/client');
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $object->api('GET', '/client');
     }
 
     public function testApiGuzzleException()
@@ -303,27 +305,17 @@ class ApiTraitTest extends TestCase
             }
         };
 
-        $object = $this->mockApiTrait($client, 'secret');
+        $object = $this->mockLinodeClient($client, 'secret');
 
-        $object->proxyApi('GET', '/guzzle');
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $object->api('GET', '/guzzle');
     }
 
-    protected function mockApiTrait(Client $client, string $access_token = null)
+    protected function mockLinodeClient(Client $client, string $access_token = null)
     {
-        return new class($client, $access_token) {
-            use ApiTrait;
+        $object = new LinodeClient($access_token);
+        $this->setProperty($object, 'client', $client);
 
-            public function __construct(Client $client, string $access_token = null)
-            {
-                $this->client       = $client;
-                $this->base_uri     = 'http://localhost';
-                $this->access_token = $access_token;
-            }
-
-            public function proxyApi(string $method, string $uri, array $parameters = [], array $filters = []): ResponseInterface
-            {
-                return $this->api($method, $uri, $parameters, $filters);
-            }
-        };
+        return $object;
     }
 }

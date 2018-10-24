@@ -11,10 +11,18 @@
 
 namespace Linode\Entity;
 
+use Linode\LinodeClient;
 use PHPUnit\Framework\TestCase;
 
 class LinodeTypeTest extends TestCase
 {
+    protected $client;
+
+    protected function setUp()
+    {
+        $this->client = $this->createMock(LinodeClient::class);
+    }
+
     public function testPrice()
     {
         $data = [
@@ -41,7 +49,7 @@ class LinodeTypeTest extends TestCase
             'vcpus'       => 2,
         ];
 
-        $entity = new LinodeType($data);
+        $entity = new LinodeType($this->client, $data);
 
         self::assertSame('standard', $entity->class);
 

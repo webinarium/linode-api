@@ -76,4 +76,19 @@ trait ReflectionTrait
             return null;
         }
     }
+
+    /**
+     * Gets specified protected constant of the object.
+     *
+     * @param mixed  $object
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function getConstant($object, $name)
+    {
+        $reflection = new \ReflectionClassConstant(get_class($object), $name);
+
+        return $reflection->getValue();
+    }
 }

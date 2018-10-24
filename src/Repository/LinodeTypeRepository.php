@@ -29,15 +29,8 @@ class LinodeTypeRepository extends AbstractRepository
     public const FIELD_NETWORK_OUT = 'network_out';
     public const FIELD_TRANSFER    = 'transfer';
 
-    /**
-     * {@inheritdoc}
-     */
-    public function __construct(string $access_token = null)
-    {
-        parent::__construct($access_token);
-
-        $this->base_uri .= '/linode/types';
-    }
+    /** {@inheritdoc} */
+    protected const BASE_API_URI = '/linode/types';
 
     /**
      * {@inheritdoc}
@@ -61,6 +54,6 @@ class LinodeTypeRepository extends AbstractRepository
      */
     protected function jsonToEntity(array $json): Entity
     {
-        return new LinodeType($json);
+        return new LinodeType($this->client, $json);
     }
 }

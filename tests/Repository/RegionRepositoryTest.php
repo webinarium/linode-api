@@ -12,6 +12,7 @@
 namespace Linode\Repository;
 
 use Linode\Entity\Region;
+use Linode\LinodeClient;
 use Linode\ReflectionTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -24,14 +25,16 @@ class RegionRepositoryTest extends TestCase
 
     protected function setUp()
     {
-        $this->repository = new RegionRepository();
+        $client = new LinodeClient();
+
+        $this->repository = new RegionRepository($client);
     }
 
-    public function testConstructor()
+    public function testBaseApiUri()
     {
-        $expected = 'https://api.linode.com/v4/regions';
+        $expected = '/regions';
 
-        self::assertSame($expected, $this->getProperty($this->repository, 'base_uri'));
+        self::assertSame($expected, $this->getConstant($this->repository, 'BASE_API_URI'));
     }
 
     public function testGetSupportedFields()

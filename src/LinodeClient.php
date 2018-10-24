@@ -9,7 +9,7 @@
 //
 //----------------------------------------------------------------------
 
-namespace Linode\Internal;
+namespace Linode;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
@@ -19,24 +19,41 @@ use Linode\Exception\LinodeException;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * A trait to make API calls.
+ * Linode API client.
  */
-trait ApiTrait
+class LinodeClient
 {
+    // Request methods.
+    public const REQUEST_GET    = 'GET';
+    public const REQUEST_POST   = 'POST';
+    public const REQUEST_PUT    = 'PUT';
+    public const REQUEST_DELETE = 'DELETE';
+
+    // Base URI to Linode API.
+    protected const LINODE_API_URI = 'https://api.linode.com/v4';
+
     /** @var Client HTTP client. */
     protected $client;
-
-    /** @var string Base URI to the API endpoint. */
-    protected $base_uri;
 
     /** @var null|string API access token (PAT or retrieved via OAuth). */
     protected $access_token;
 
     /**
+     * LinodeClient constructor.
+     *
+     * @param null|string $access_token API access token (PAT or retrieved via OAuth).
+     */
+    public function __construct(string $access_token = null)
+    {
+        $this->client       = new Client();
+        $this->access_token = $access_token;
+    }
+
+    /**
      * Performs a request to specified API endpoint.
      *
      * @param string $method     Request method.
-     * @param string $uri        API endpoint.
+     * @param string $uri        Relative URI to API endpoint.
      * @param array  $parameters Optional parameters.
      * @param array  $filters    Optional filters.
      *
@@ -44,34 +61,29 @@ trait ApiTrait
      *
      * @return ResponseInterface
      */
-    protected function api(string $method, string $uri, array $parameters = [], array $filters = []): ResponseInterface
+    public function api(string $method, string $uri, array $parameters = [], array $filters = []): ResponseInterface
     {
         try {
-
-            if ($this->client === null) {
-                $this->client = new Client();
-            }
-
             $options = [];
 
             if ($this->access_token !== null) {
                 $options['headers']['Authorization'] = 'Bearer ' . $this->access_token;
             }
 
-            if (count($filters) !== 0 && $method === 'GET') {
+            if (count($filters) !== 0 && $method === self::REQUEST_GET) {
                 $options['headers']['X-Filter'] = json_encode($filters);
             }
 
             if (count($parameters) !== 0) {
-                if ($method === 'GET') {
+                if ($method === self::REQUEST_GET) {
                     $options['query'] = $parameters;
                 }
-                elseif ($method === 'POST' || $method === 'PUT') {
+                elseif ($method === self::REQUEST_POST || $method === self::REQUEST_PUT) {
                     $options['json'] = $parameters;
                 }
             }
 
-            return $this->client->request($method, $this->base_uri . $uri, $options);
+            return $this->client->request($method, self::LINODE_API_URI . $uri, $options);
         }
         catch (ClientException $exception) {
             throw new LinodeException($exception->getResponse());

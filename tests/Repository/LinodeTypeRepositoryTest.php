@@ -12,6 +12,7 @@
 namespace Linode\Repository;
 
 use Linode\Entity\LinodeType;
+use Linode\LinodeClient;
 use Linode\ReflectionTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -24,14 +25,16 @@ class LinodeTypeRepositoryTest extends TestCase
 
     protected function setUp()
     {
-        $this->repository = new LinodeTypeRepository();
+        $client = new LinodeClient();
+
+        $this->repository = new LinodeTypeRepository($client);
     }
 
-    public function testConstructor()
+    public function testBaseApiUri()
     {
-        $expected = 'https://api.linode.com/v4/linode/types';
+        $expected = '/linode/types';
 
-        self::assertSame($expected, $this->getProperty($this->repository, 'base_uri'));
+        self::assertSame($expected, $this->getConstant($this->repository, 'BASE_API_URI'));
     }
 
     public function testGetSupportedFields()

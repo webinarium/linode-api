@@ -9,18 +9,22 @@
 //
 //----------------------------------------------------------------------
 
+/** @noinspection PhpUndefinedMethodInspection */
+
 namespace Linode\Repository;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use Linode\Entity\Entity;
-use Linode\Internal\ApiTrait;
+use Linode\LinodeClient;
+use Linode\ReflectionTrait;
 use PHPUnit\Framework\TestCase;
 
 class LinodeCollectionTest extends TestCase
 {
-    /** @var Client */
-    protected $client;
+    use ReflectionTrait;
+
+    protected $repository;
 
     protected function setUp()
     {
@@ -52,19 +56,47 @@ class LinodeCollectionTest extends TestCase
             ],
         ];
 
-        $this->client = $this->createMock(Client::class);
-        $this->client
+        $client = $this->createMock(Client::class);
+        $client
             ->method('request')
             ->willReturnMap([
-                ['GET', 'http://localhost/entries', ['query' => ['page' => 1]], new Response(200, [], json_encode($page1))],
-                ['GET', 'http://localhost/entries', ['query' => ['page' => 2]], new Response(200, [], json_encode($page2))],
+                ['GET', 'https://api.linode.com/v4/test', ['query' => ['page' => 1]], new Response(200, [], json_encode($page1))],
+                ['GET', 'https://api.linode.com/v4/test', ['query' => ['page' => 2]], new Response(200, [], json_encode($page2))],
             ]);
+
+        $linodeClient = new LinodeClient();
+        $this->setProperty($linodeClient, 'client', $client);
+
+        $this->repository = new class($linodeClient) extends AbstractRepository {
+            // Overload to fake.
+            //protected const BASE_API_URI = '/test';
+
+            public function getCollection(): LinodeCollection
+            {
+                return new LinodeCollection(
+                    function (int $page) {
+                        return $this->client->api($this->client::REQUEST_GET, '/test', ['page' => $page]);
+                    },
+                    function (array $json) {
+                        return $this->jsonToEntity($json);
+                    });
+            }
+
+            protected function getSupportedFields(): array
+            {
+                return [];
+            }
+
+            protected function jsonToEntity(array $json): Entity
+            {
+                return new class($this->client, $json) extends Entity {};
+            }
+        };
     }
 
     public function testCountable()
     {
-        $repository = $this->mockRepository($this->client);
-        $collection = $repository->getCollection();
+        $collection = $this->repository->getCollection();
 
         self::assertCount(12, $collection);
     }
@@ -86,8 +118,7 @@ class LinodeCollectionTest extends TestCase
             'December',
         ];
 
-        $repository = $this->mockRepository($this->client);
-        $collection = $repository->getCollection();
+        $collection = $this->repository->getCollection();
 
         $actual = [];
 
@@ -96,41 +127,5 @@ class LinodeCollectionTest extends TestCase
         }
 
         self::assertSame($expected, $actual);
-    }
-
-    protected function mockRepository(Client $client)
-    {
-        return new class($client) extends AbstractRepository {
-            use ApiTrait;
-
-            public function __construct(Client $client)
-            {
-                parent::__construct();
-
-                $this->client   = $client;
-                $this->base_uri = 'http://localhost';
-            }
-
-            public function getCollection(): LinodeCollection
-            {
-                return new LinodeCollection(
-                    function (int $page) {
-                        return $this->api(AbstractRepository::REQUEST_GET, '/entries', ['page' => $page]);
-                    },
-                    function (array $json) {
-                        return $this->jsonToEntity($json);
-                    });
-            }
-
-            protected function getSupportedFields(): array
-            {
-                return [];
-            }
-
-            protected function jsonToEntity(array $json): Entity
-            {
-                return new class($json) extends Entity {};
-            }
-        };
     }
 }

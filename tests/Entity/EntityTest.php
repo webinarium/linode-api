@@ -13,10 +13,18 @@
 
 namespace Linode\Entity;
 
+use Linode\LinodeClient;
 use PHPUnit\Framework\TestCase;
 
 class EntityTest extends TestCase
 {
+    protected $client;
+
+    protected function setUp()
+    {
+        $this->client = $this->createMock(LinodeClient::class);
+    }
+
     public function testIsSet()
     {
         $data = [
@@ -31,7 +39,7 @@ class EntityTest extends TestCase
             ],
         ];
 
-        $entity = new class($data) extends Entity {
+        $entity = new class($this->client, $data) extends Entity {
         };
 
         self::assertTrue(isset($entity->class));
@@ -52,7 +60,7 @@ class EntityTest extends TestCase
             ],
         ];
 
-        $entity = new class($data) extends Entity {
+        $entity = new class($this->client, $data) extends Entity {
         };
 
         self::assertSame('standard', $entity->class);
@@ -75,7 +83,7 @@ class EntityTest extends TestCase
             ],
         ];
 
-        $entity = new class($data) extends Entity {
+        $entity = new class($this->client, $data) extends Entity {
         };
 
         self::assertSame($data, $entity->toArray());

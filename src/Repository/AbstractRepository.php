@@ -14,8 +14,8 @@ namespace Linode\Repository;
 use GuzzleHttp\Psr7\Response;
 use Linode\Entity\Entity;
 use Linode\Exception\LinodeException;
-use Linode\Internal\ApiTrait;
 use Linode\Internal\QueryCompiler;
+use Linode\LinodeClient;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 /**
@@ -23,8 +23,6 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
  */
 abstract class AbstractRepository implements RepositoryInterface
 {
-    use ApiTrait;
-
     // Response error codes.
     public const ERROR_BAD_REQUEST           = 400;
     public const ERROR_UNAUTHORIZED          = 401;
@@ -37,21 +35,20 @@ abstract class AbstractRepository implements RepositoryInterface
     protected const SUCCESS_OK         = 200;
     protected const SUCCESS_NO_CONTENT = 204;
 
-    // Request methods.
-    protected const REQUEST_GET    = 'GET';
-    protected const REQUEST_POST   = 'POST';
-    protected const REQUEST_PUT    = 'PUT';
-    protected const REQUEST_DELETE = 'DELETE';
+    // Base URI to the repository-specific API.
+    protected const BASE_API_URI = '';
+
+    /** @var LinodeClient */
+    protected $client;
 
     /**
      * AbstractRepository constructor.
      *
-     * @param null|string $access_token API access token (PAT or retrieved via OAuth).
+     * @param LinodeClient $client Linode API client.
      */
-    public function __construct(string $access_token = null)
+    public function __construct(LinodeClient $client)
     {
-        $this->base_uri     = 'https://api.linode.com/v4';
-        $this->access_token = $access_token;
+        $this->client = $client;
     }
 
     /**
@@ -59,7 +56,7 @@ abstract class AbstractRepository implements RepositoryInterface
      */
     public function find($id): ?Entity
     {
-        $response = $this->api(self::REQUEST_GET, '/' . $id);
+        $response = $this->client->api($this->client::REQUEST_GET, static::BASE_API_URI . '/' . $id);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
@@ -86,7 +83,7 @@ abstract class AbstractRepository implements RepositoryInterface
 
         return new LinodeCollection(
             function (int $page) use ($criteria) {
-                return $this->api(self::REQUEST_GET, '', ['page' => $page], $criteria);
+                return $this->client->api($this->client::REQUEST_GET, static::BASE_API_URI, ['page' => $page], $criteria);
             },
             function (array $json) {
                 return $this->jsonToEntity($json);

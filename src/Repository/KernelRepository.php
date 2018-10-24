@@ -28,15 +28,8 @@ class KernelRepository extends AbstractRepository
     public const FIELD_XEN          = 'xen';
     public const FIELD_PVOPS        = 'pvops';
 
-    /**
-     * {@inheritdoc}
-     */
-    public function __construct(string $access_token = null)
-    {
-        parent::__construct($access_token);
-
-        $this->base_uri .= '/linode/kernels';
-    }
+    /** {@inheritdoc} */
+    protected const BASE_API_URI = '/linode/kernels';
 
     /**
      * {@inheritdoc}
@@ -59,6 +52,6 @@ class KernelRepository extends AbstractRepository
      */
     protected function jsonToEntity(array $json): Entity
     {
-        return new Kernel($json);
+        return new Kernel($this->client, $json);
     }
 }

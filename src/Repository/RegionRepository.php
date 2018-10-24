@@ -23,15 +23,8 @@ class RegionRepository extends AbstractRepository
     public const FIELD_ID      = 'id';
     public const FIELD_COUNTRY = 'country';
 
-    /**
-     * {@inheritdoc}
-     */
-    public function __construct(string $access_token = null)
-    {
-        parent::__construct($access_token);
-
-        $this->base_uri .= '/regions';
-    }
+    /** {@inheritdoc} */
+    protected const BASE_API_URI = '/regions';
 
     /**
      * {@inheritdoc}
@@ -49,6 +42,6 @@ class RegionRepository extends AbstractRepository
      */
     protected function jsonToEntity(array $json): Entity
     {
-        return new Region($json);
+        return new Region($this->client, $json);
     }
 }

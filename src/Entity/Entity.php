@@ -11,21 +11,26 @@
 
 namespace Linode\Entity;
 
+use Linode\LinodeClient;
+
 /**
  * An abstract read-only entity.
  */
 abstract class Entity
 {
+    protected $client;
     protected $data;
 
     /**
      * Entity constructor.
      *
-     * @param array $data JSON data retrieved from Linode.
+     * @param LinodeClient $client Linode API client.
+     * @param array        $data   JSON data retrieved from Linode.
      */
-    public function __construct(array $data = [])
+    public function __construct(LinodeClient $client, array $data = [])
     {
-        $this->data = $data;
+        $this->client = $client;
+        $this->data   = $data;
     }
 
     /**
