@@ -16,10 +16,17 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
 use Linode\Exception\LinodeException;
+use Linode\Internal\KernelRepository;
+use Linode\Internal\LinodeTypeRepository;
+use Linode\Internal\RegionRepository;
 use Psr\Http\Message\ResponseInterface;
 
 /**
  * Linode API client.
+ *
+ * @property Repository\KernelRepositoryInterface     $kernels
+ * @property Repository\LinodeTypeRepositoryInterface $linodeTypes
+ * @property Repository\RegionRepositoryInterface     $regions
  */
 class LinodeClient
 {
@@ -30,7 +37,7 @@ class LinodeClient
     public const REQUEST_DELETE = 'DELETE';
 
     // Base URI to Linode API.
-    protected const LINODE_API_URI = 'https://api.linode.com/v4';
+    protected const BASE_API_URI = 'https://api.linode.com/v4';
 
     /** @var Client HTTP client. */
     protected $client;
@@ -47,6 +54,30 @@ class LinodeClient
     {
         $this->client       = new Client();
         $this->access_token = $access_token;
+    }
+
+    /**
+     * Returns specified repository.
+     *
+     * @param string $name Repository name.
+     *
+     * @return null|Repository\RepositoryInterface
+     */
+    public function __get(string $name)
+    {
+        switch ($name) {
+
+            case 'kernels':
+                return new KernelRepository($this);
+
+            case 'linodeTypes':
+                return new LinodeTypeRepository($this);
+
+            case 'regions':
+                return new RegionRepository($this);
+        }
+
+        return null;
     }
 
     /**
@@ -83,7 +114,7 @@ class LinodeClient
                 }
             }
 
-            return $this->client->request($method, self::LINODE_API_URI . $uri, $options);
+            return $this->client->request($method, self::BASE_API_URI . $uri, $options);
         }
         catch (ClientException $exception) {
             throw new LinodeException($exception->getResponse());

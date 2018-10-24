@@ -24,4 +24,12 @@ namespace Linode\Entity;
  */
 class Kernel extends Entity
 {
+    // Available fields.
+    public const FIELD_ID           = 'id';
+    public const FIELD_LABEL        = 'label';
+    public const FIELD_VERSION      = 'version';
+    public const FIELD_ARCHITECTURE = 'architecture';
+    public const FIELD_KVM          = 'kvm';
+    public const FIELD_XEN          = 'xen';
+    public const FIELD_PVOPS        = 'pvops';
 }

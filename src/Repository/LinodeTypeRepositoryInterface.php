@@ -9,17 +9,11 @@
 //
 //----------------------------------------------------------------------
 
-namespace Linode\Entity;
+namespace Linode\Repository;
 
 /**
- * An area where Linode services are available.
- *
- * @property string $id      The unique ID of this Region.
- * @property string $country The country where this Region resides.
+ * Linode type repository.
  */
-class Region extends Entity
+interface LinodeTypeRepositoryInterface extends RepositoryInterface
 {
-    // Available fields.
-    public const FIELD_ID      = 'id';
-    public const FIELD_COUNTRY = 'country';
 }

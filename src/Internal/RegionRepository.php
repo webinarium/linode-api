@@ -9,22 +9,24 @@
 //
 //----------------------------------------------------------------------
 
-namespace Linode\Repository;
+namespace Linode\Internal;
 
 use Linode\Entity\Entity;
 use Linode\Entity\Region;
+use Linode\Repository\RegionRepositoryInterface;
 
 /**
- * Region repository.
+ * {@inheritdoc}
  */
-class RegionRepository extends AbstractRepository
+class RegionRepository extends AbstractRepository implements RegionRepositoryInterface
 {
-    // Available fields.
-    public const FIELD_ID      = 'id';
-    public const FIELD_COUNTRY = 'country';
-
-    /** {@inheritdoc} */
-    protected const BASE_API_URI = '/regions';
+    /**
+     * {@inheritdoc}
+     */
+    protected function getBaseUri(): string
+    {
+        return '/regions';
+    }
 
     /**
      * {@inheritdoc}
@@ -32,8 +34,8 @@ class RegionRepository extends AbstractRepository
     protected function getSupportedFields(): array
     {
         return [
-            self::FIELD_ID,
-            self::FIELD_COUNTRY,
+            Region::FIELD_ID,
+            Region::FIELD_COUNTRY,
         ];
     }
 

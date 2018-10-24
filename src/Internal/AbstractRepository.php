@@ -9,13 +9,14 @@
 //
 //----------------------------------------------------------------------
 
-namespace Linode\Repository;
+namespace Linode\Internal;
 
 use GuzzleHttp\Psr7\Response;
 use Linode\Entity\Entity;
 use Linode\Exception\LinodeException;
-use Linode\Internal\QueryCompiler;
 use Linode\LinodeClient;
+use Linode\Repository\LinodeCollection;
+use Linode\Repository\RepositoryInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 /**
@@ -35,9 +36,6 @@ abstract class AbstractRepository implements RepositoryInterface
     protected const SUCCESS_OK         = 200;
     protected const SUCCESS_NO_CONTENT = 204;
 
-    // Base URI to the repository-specific API.
-    protected const BASE_API_URI = '';
-
     /** @var LinodeClient */
     protected $client;
 
@@ -56,7 +54,7 @@ abstract class AbstractRepository implements RepositoryInterface
      */
     public function find($id): ?Entity
     {
-        $response = $this->client->api($this->client::REQUEST_GET, static::BASE_API_URI . '/' . $id);
+        $response = $this->client->api($this->client::REQUEST_GET, sprintf('%s/%s', $this->getBaseUri(), $id));
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
@@ -83,7 +81,7 @@ abstract class AbstractRepository implements RepositoryInterface
 
         return new LinodeCollection(
             function (int $page) use ($criteria) {
-                return $this->client->api($this->client::REQUEST_GET, static::BASE_API_URI, ['page' => $page], $criteria);
+                return $this->client->api($this->client::REQUEST_GET, $this->getBaseUri(), ['page' => $page], $criteria);
             },
             function (array $json) {
                 return $this->jsonToEntity($json);
@@ -129,6 +127,34 @@ abstract class AbstractRepository implements RepositoryInterface
 
         return $this->findBy($criteria, $orderBy, $orderDir);
     }
+
+    /**
+     * Verifies that all specified parameters are supported by the repository.
+     * An exception is raised when unsupported parameter was found.
+     *
+     * @param array $parameters
+     *
+     * @throws LinodeException
+     */
+    protected function checkParametersSupport(array $parameters): void
+    {
+        $supported = $this->getSupportedFields();
+        $provided  = array_keys($parameters);
+
+        $unknown = array_diff($provided, $supported);
+
+        if (count($unknown) !== 0) {
+            $errors = ['errors' => [['reason' => sprintf('Unknown field(s): %s', implode(', ', $unknown))]]];
+            throw new LinodeException(new Response(self::ERROR_BAD_REQUEST, [], json_encode($errors)));
+        }
+    }
+
+    /**
+     * Returns base URI to the repository-specific API.
+     *
+     * @return string
+     */
+    abstract protected function getBaseUri(): string;
 
     /**
      * Returns list of all fields (entity properties) supported by the repository.

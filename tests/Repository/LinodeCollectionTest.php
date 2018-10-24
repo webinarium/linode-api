@@ -16,6 +16,7 @@ namespace Linode\Repository;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use Linode\Entity\Entity;
+use Linode\Internal\AbstractRepository;
 use Linode\LinodeClient;
 use Linode\ReflectionTrait;
 use PHPUnit\Framework\TestCase;
@@ -68,14 +69,16 @@ class LinodeCollectionTest extends TestCase
         $this->setProperty($linodeClient, 'client', $client);
 
         $this->repository = new class($linodeClient) extends AbstractRepository {
-            // Overload to fake.
-            //protected const BASE_API_URI = '/test';
+            protected function getBaseUri(): string
+            {
+                return '/test';
+            }
 
             public function getCollection(): LinodeCollection
             {
                 return new LinodeCollection(
                     function (int $page) {
-                        return $this->client->api($this->client::REQUEST_GET, '/test', ['page' => $page]);
+                        return $this->client->api($this->client::REQUEST_GET, $this->getBaseUri(), ['page' => $page]);
                     },
                     function (array $json) {
                         return $this->jsonToEntity($json);

@@ -17,11 +17,26 @@ use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Linode\Exception\LinodeException;
+use Linode\Internal\KernelRepository;
+use Linode\Internal\LinodeTypeRepository;
+use Linode\Internal\RegionRepository;
 use PHPUnit\Framework\TestCase;
 
 class LinodeClientTest extends TestCase
 {
     use ReflectionTrait;
+
+    public function testRepositories()
+    {
+        $object = new LinodeClient();
+
+        self::assertInstanceOf(KernelRepository::class, $object->kernels);
+        self::assertInstanceOf(LinodeTypeRepository::class, $object->linodeTypes);
+        self::assertInstanceOf(RegionRepository::class, $object->regions);
+
+        /** @noinspection PhpUndefinedFieldInspection */
+        self::assertNull($object->unknown);
+    }
 
     public function testApiGetAnonymous()
     {

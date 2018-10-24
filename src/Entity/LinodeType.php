@@ -30,6 +30,16 @@ namespace Linode\Entity;
  */
 class LinodeType extends Entity
 {
+    // Available fields.
+    public const FIELD_ID          = 'id';
+    public const FIELD_LABEL       = 'label';
+    public const FIELD_CLASS       = 'class';
+    public const FIELD_DISK        = 'disk';
+    public const FIELD_MEMORY      = 'memory';
+    public const FIELD_VCPLUS      = 'vcpus';
+    public const FIELD_NETWORK_OUT = 'network_out';
+    public const FIELD_TRANSFER    = 'transfer';
+
     // Linode type classes.
     public const CLASS_NANODE   = 'nanode';
     public const CLASS_STANDARD = 'standard';

@@ -9,39 +9,44 @@
 //
 //----------------------------------------------------------------------
 
-namespace Linode\Repository;
+namespace Linode\Internal;
 
-use Linode\Entity\Region;
+use Linode\Entity\Kernel;
 use Linode\LinodeClient;
 use Linode\ReflectionTrait;
 use PHPUnit\Framework\TestCase;
 
-class RegionRepositoryTest extends TestCase
+class KernelRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var RegionRepository */
+    /** @var KernelRepository */
     protected $repository;
 
     protected function setUp()
     {
         $client = new LinodeClient();
 
-        $this->repository = new RegionRepository($client);
+        $this->repository = new KernelRepository($client);
     }
 
-    public function testBaseApiUri()
+    public function testGetBaseUri()
     {
-        $expected = '/regions';
+        $expected = '/linode/kernels';
 
-        self::assertSame($expected, $this->getConstant($this->repository, 'BASE_API_URI'));
+        self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
     public function testGetSupportedFields()
     {
         $expected = [
             'id',
-            'country',
+            'label',
+            'version',
+            'architecture',
+            'kvm',
+            'xen',
+            'pvops',
         ];
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
@@ -49,6 +54,6 @@ class RegionRepositoryTest extends TestCase
 
     public function testJsonToEntity()
     {
-        self::assertInstanceOf(Region::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
+        self::assertInstanceOf(Kernel::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }
 }

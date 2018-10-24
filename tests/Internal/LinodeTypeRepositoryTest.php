@@ -9,7 +9,7 @@
 //
 //----------------------------------------------------------------------
 
-namespace Linode\Repository;
+namespace Linode\Internal;
 
 use Linode\Entity\LinodeType;
 use Linode\LinodeClient;
@@ -30,11 +30,11 @@ class LinodeTypeRepositoryTest extends TestCase
         $this->repository = new LinodeTypeRepository($client);
     }
 
-    public function testBaseApiUri()
+    public function testGetBaseUri()
     {
         $expected = '/linode/types';
 
-        self::assertSame($expected, $this->getConstant($this->repository, 'BASE_API_URI'));
+        self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
     public function testGetSupportedFields()

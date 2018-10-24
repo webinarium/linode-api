@@ -11,7 +11,7 @@
 
 /** @noinspection PhpUndefinedFieldInspection */
 
-namespace Linode\Repository;
+namespace Linode\Internal;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
@@ -139,8 +139,10 @@ class AbstractRepositoryTest extends TestCase
         $this->setProperty($linodeClient, 'client', $client);
 
         $this->repository = new class($linodeClient) extends AbstractRepository {
-            // Overload to fake.
-            protected const BASE_API_URI = '/test';
+            protected function getBaseUri(): string
+            {
+                return '/test';
+            }
 
             protected function getSupportedFields(): array
             {
@@ -366,5 +368,33 @@ class AbstractRepositoryTest extends TestCase
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $this->repository->query('days');
+    }
+
+    public function testCheckParametersSupportSuccess()
+    {
+        $parameters = [
+            'season' => 'Summer',
+            'days'   => 31,
+        ];
+
+        $this->callMethod($this->repository, 'checkParametersSupport', [$parameters]);
+        self::assertTrue(true);
+    }
+
+    public function testCheckParametersSupportException()
+    {
+        $this->expectException(LinodeException::class);
+        $this->expectExceptionCode(400);
+        $this->expectExceptionMessage('Unknown field(s): year, city');
+
+        $parameters = [
+            'season' => 'Summer',
+            'year'   => 2004,
+            'days'   => 31,
+            'city'   => 'Auckland',
+        ];
+
+        $this->callMethod($this->repository, 'checkParametersSupport', [$parameters]);
+        self::assertTrue(true);
     }
 }
