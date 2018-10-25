@@ -17,6 +17,7 @@ use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Linode\Exception\LinodeException;
+use Linode\Internal\Domains\DomainRepository;
 use Linode\Internal\KernelRepository;
 use Linode\Internal\LinodeTypeRepository;
 use Linode\Internal\RegionRepository;
@@ -30,6 +31,7 @@ class LinodeClientTest extends TestCase
     {
         $object = new LinodeClient();
 
+        self::assertInstanceOf(DomainRepository::class, $object->domains);
         self::assertInstanceOf(KernelRepository::class, $object->kernels);
         self::assertInstanceOf(LinodeTypeRepository::class, $object->linodeTypes);
         self::assertInstanceOf(RegionRepository::class, $object->regions);

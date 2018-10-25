@@ -16,6 +16,7 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
 use Linode\Exception\LinodeException;
+use Linode\Internal\Domains\DomainRepository;
 use Linode\Internal\KernelRepository;
 use Linode\Internal\LinodeTypeRepository;
 use Linode\Internal\RegionRepository;
@@ -24,9 +25,10 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * Linode API client.
  *
- * @property Repository\KernelRepositoryInterface     $kernels
- * @property Repository\LinodeTypeRepositoryInterface $linodeTypes
- * @property Repository\RegionRepositoryInterface     $regions
+ * @property Repository\Domains\DomainRepositoryInterface $domains
+ * @property Repository\KernelRepositoryInterface         $kernels
+ * @property Repository\LinodeTypeRepositoryInterface     $linodeTypes
+ * @property Repository\RegionRepositoryInterface         $regions
  */
 class LinodeClient
 {
@@ -66,6 +68,9 @@ class LinodeClient
     public function __get(string $name)
     {
         switch ($name) {
+
+            case 'domains':
+                return new DomainRepository($this);
 
             case 'kernels':
                 return new KernelRepository($this);
