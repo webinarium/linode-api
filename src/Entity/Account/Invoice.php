@@ -1,0 +1,45 @@
+<?php
+
+//----------------------------------------------------------------------
+//
+//  Copyright (C) 2018 Artem Rodygin
+//
+//  You should have received a copy of the MIT License along with
+//  this file. If not, see <http://opensource.org/licenses/MIT>.
+//
+//----------------------------------------------------------------------
+
+namespace Linode\Entity\Account;
+
+use Linode\Entity\Entity;
+use Linode\Internal\Account\InvoiceItemRepository;
+
+/**
+ * Account Invoice object.
+ *
+ * @property int    $id    The Invoice's unique ID.
+ * @property string $date  When this Invoice was generated.
+ * @property string $label The Invoice's display label.
+ * @property float  $total The amount of the Invoice in US Dollars.
+ * @property \Linode\Repository\Account\InvoiceItemRepositoryInterface $items Items of the invoice.
+ */
+class Invoice extends Entity
+{
+    // Available fields.
+    public const FIELD_ID    = 'id';
+    public const FIELD_DATE  = 'date';
+    public const FIELD_LABEL = 'label';
+    public const FIELD_TOTAL = 'total';
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __get(string $name)
+    {
+        if ($name === 'items') {
+            return new InvoiceItemRepository($this->client, $this->id);
+        }
+
+        return parent::__get($name);
+    }
+}

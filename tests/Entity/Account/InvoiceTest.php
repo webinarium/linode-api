@@ -9,13 +9,13 @@
 //
 //----------------------------------------------------------------------
 
-namespace Linode\Entity\Domains;
+namespace Linode\Entity\Account;
 
-use Linode\Internal\Domains\DomainRecordRepository;
+use Linode\Internal\Account\InvoiceItemRepository;
 use Linode\LinodeClient;
 use PHPUnit\Framework\TestCase;
 
-class DomainTest extends TestCase
+class InvoiceTest extends TestCase
 {
     protected $client;
 
@@ -26,8 +26,8 @@ class DomainTest extends TestCase
 
     public function testProperties()
     {
-        $entity = new Domain($this->client, ['id' => 123]);
+        $entity = new Invoice($this->client, ['id' => 123]);
 
-        self::assertInstanceOf(DomainRecordRepository::class, $entity->records);
+        self::assertInstanceOf(InvoiceItemRepository::class, $entity->items);
     }
 }
