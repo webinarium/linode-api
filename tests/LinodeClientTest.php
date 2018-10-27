@@ -21,6 +21,9 @@ use Linode\Exception\LinodeException;
 use Linode\Internal\Domains\DomainRepository;
 use Linode\Internal\KernelRepository;
 use Linode\Internal\LinodeTypeRepository;
+use Linode\Internal\Networking\IPAddressRepository;
+use Linode\Internal\Networking\IPv6PoolRepository;
+use Linode\Internal\Networking\IPv6RangeRepository;
 use Linode\Internal\RegionRepository;
 use PHPUnit\Framework\TestCase;
 
@@ -34,8 +37,11 @@ class LinodeClientTest extends TestCase
 
         self::assertInstanceOf(Account::class, $object->account);
         self::assertInstanceOf(DomainRepository::class, $object->domains);
+        self::assertInstanceOf(IPAddressRepository::class, $object->ips);
+        self::assertInstanceOf(IPv6PoolRepository::class, $object->ipv6_pools);
+        self::assertInstanceOf(IPv6RangeRepository::class, $object->ipv6_ranges);
         self::assertInstanceOf(KernelRepository::class, $object->kernels);
-        self::assertInstanceOf(LinodeTypeRepository::class, $object->linodeTypes);
+        self::assertInstanceOf(LinodeTypeRepository::class, $object->linode_types);
         self::assertInstanceOf(RegionRepository::class, $object->regions);
 
         /** @noinspection PhpUndefinedFieldInspection */

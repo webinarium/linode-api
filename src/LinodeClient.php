@@ -20,17 +20,23 @@ use Linode\Exception\LinodeException;
 use Linode\Internal\Domains\DomainRepository;
 use Linode\Internal\KernelRepository;
 use Linode\Internal\LinodeTypeRepository;
+use Linode\Internal\Networking\IPAddressRepository;
+use Linode\Internal\Networking\IPv6PoolRepository;
+use Linode\Internal\Networking\IPv6RangeRepository;
 use Linode\Internal\RegionRepository;
 use Psr\Http\Message\ResponseInterface;
 
 /**
  * Linode API client.
  *
- * @property Entity\Account                               $account
- * @property Repository\Domains\DomainRepositoryInterface $domains
- * @property Repository\KernelRepositoryInterface         $kernels
- * @property Repository\LinodeTypeRepositoryInterface     $linodeTypes
- * @property Repository\RegionRepositoryInterface         $regions
+ * @property Entity\Account                                     $account
+ * @property Repository\Domains\DomainRepositoryInterface       $domains
+ * @property Repository\Networking\IPAddressRepositoryInterface $ips
+ * @property Repository\Networking\IPv6PoolRepositoryInterface  $ipv6_pools
+ * @property Repository\Networking\IPv6RangeRepositoryInterface $ipv6_ranges
+ * @property Repository\KernelRepositoryInterface               $kernels
+ * @property Repository\LinodeTypeRepositoryInterface           $linode_types
+ * @property Repository\RegionRepositoryInterface               $regions
  */
 class LinodeClient
 {
@@ -77,10 +83,19 @@ class LinodeClient
             case 'domains':
                 return new DomainRepository($this);
 
+            case 'ips':
+                return new IPAddressRepository($this);
+
+            case 'ipv6_pools':
+                return new IPv6PoolRepository($this);
+
+            case 'ipv6_ranges':
+                return new IPv6RangeRepository($this);
+
             case 'kernels':
                 return new KernelRepository($this);
 
-            case 'linodeTypes':
+            case 'linode_types':
                 return new LinodeTypeRepository($this);
 
             case 'regions':
