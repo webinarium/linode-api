@@ -19,6 +19,7 @@ use Linode\Entity\Account;
 use Linode\Exception\LinodeException;
 use Linode\Internal\Domains\DomainRepository;
 use Linode\Internal\KernelRepository;
+use Linode\Internal\LinodeRepository;
 use Linode\Internal\LinodeTypeRepository;
 use Linode\Internal\Networking\IPAddressRepository;
 use Linode\Internal\Networking\IPv6PoolRepository;
@@ -35,6 +36,7 @@ use Psr\Http\Message\ResponseInterface;
  * @property Repository\Networking\IPv6PoolRepositoryInterface  $ipv6_pools
  * @property Repository\Networking\IPv6RangeRepositoryInterface $ipv6_ranges
  * @property Repository\KernelRepositoryInterface               $kernels
+ * @property Repository\LinodeRepositoryInterface               $linodes
  * @property Repository\LinodeTypeRepositoryInterface           $linode_types
  * @property Repository\RegionRepositoryInterface               $regions
  */
@@ -94,6 +96,9 @@ class LinodeClient
 
             case 'kernels':
                 return new KernelRepository($this);
+
+            case 'linodes':
+                return new LinodeRepository($this);
 
             case 'linode_types':
                 return new LinodeTypeRepository($this);

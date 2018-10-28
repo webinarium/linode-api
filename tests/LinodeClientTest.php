@@ -20,6 +20,7 @@ use Linode\Entity\Account;
 use Linode\Exception\LinodeException;
 use Linode\Internal\Domains\DomainRepository;
 use Linode\Internal\KernelRepository;
+use Linode\Internal\LinodeRepository;
 use Linode\Internal\LinodeTypeRepository;
 use Linode\Internal\Networking\IPAddressRepository;
 use Linode\Internal\Networking\IPv6PoolRepository;
@@ -41,6 +42,7 @@ class LinodeClientTest extends TestCase
         self::assertInstanceOf(IPv6PoolRepository::class, $object->ipv6_pools);
         self::assertInstanceOf(IPv6RangeRepository::class, $object->ipv6_ranges);
         self::assertInstanceOf(KernelRepository::class, $object->kernels);
+        self::assertInstanceOf(LinodeRepository::class, $object->linodes);
         self::assertInstanceOf(LinodeTypeRepository::class, $object->linode_types);
         self::assertInstanceOf(RegionRepository::class, $object->regions);
 
