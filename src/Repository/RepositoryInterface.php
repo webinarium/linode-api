@@ -41,9 +41,9 @@ interface RepositoryInterface
      *
      * @throws \Linode\Exception\LinodeException
      *
-     * @return LinodeCollection
+     * @return EntityCollection
      */
-    public function findAll(string $orderBy = null, string $orderDir = self::SORT_ASC): LinodeCollection;
+    public function findAll(string $orderBy = null, string $orderDir = self::SORT_ASC): EntityCollection;
 
     /**
      * Finds entities by specified filters.
@@ -54,9 +54,9 @@ interface RepositoryInterface
      *
      * @throws \Linode\Exception\LinodeException
      *
-     * @return LinodeCollection
+     * @return EntityCollection
      */
-    public function findBy(array $criteria, string $orderBy = null, string $orderDir = self::SORT_ASC): LinodeCollection;
+    public function findBy(array $criteria, string $orderBy = null, string $orderDir = self::SORT_ASC): EntityCollection;
 
     /**
      * Finds an entity by specified filters. If entity is not found, return `null`.
@@ -80,7 +80,7 @@ interface RepositoryInterface
      *
      * @throws \Linode\Exception\LinodeException
      *
-     * @return LinodeCollection
+     * @return EntityCollection
      */
-    public function query(string $query, array $parameters = [], string $orderBy = null, string $orderDir = self::SORT_ASC): LinodeCollection;
+    public function query(string $query, array $parameters = [], string $orderBy = null, string $orderDir = self::SORT_ASC): EntityCollection;
 }

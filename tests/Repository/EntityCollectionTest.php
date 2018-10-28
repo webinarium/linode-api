@@ -21,7 +21,7 @@ use Linode\LinodeClient;
 use Linode\ReflectionTrait;
 use PHPUnit\Framework\TestCase;
 
-class LinodeCollectionTest extends TestCase
+class EntityCollectionTest extends TestCase
 {
     use ReflectionTrait;
 
@@ -74,9 +74,9 @@ class LinodeCollectionTest extends TestCase
                 return '/test';
             }
 
-            public function getCollection(): LinodeCollection
+            public function getCollection(): EntityCollection
             {
-                return new LinodeCollection(
+                return new EntityCollection(
                     function (int $page) {
                         return $this->client->api($this->client::REQUEST_GET, $this->getBaseUri(), ['page' => $page]);
                     },

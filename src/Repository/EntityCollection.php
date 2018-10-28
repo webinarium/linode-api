@@ -14,7 +14,7 @@ namespace Linode\Repository;
 /**
  * A collection of entities.
  */
-class LinodeCollection implements \Countable, \Iterator
+class EntityCollection implements \Countable, \Iterator
 {
     /** @var callable */
     protected $apiHandler;
@@ -38,7 +38,7 @@ class LinodeCollection implements \Countable, \Iterator
     protected $entitiesData;
 
     /**
-     * LinodeCollection constructor.
+     * EntityCollection constructor.
      *
      * @param callable $apiHandler    Function to make an API call (@see ApiTrait::api()).
      * @param callable $entityFactory Function to create entities using JSON (@see AbstractRepository::jsonToEntity()).

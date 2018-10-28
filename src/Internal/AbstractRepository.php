@@ -15,7 +15,7 @@ use GuzzleHttp\Psr7\Response;
 use Linode\Entity\Entity;
 use Linode\Exception\LinodeException;
 use Linode\LinodeClient;
-use Linode\Repository\LinodeCollection;
+use Linode\Repository\EntityCollection;
 use Linode\Repository\RepositoryInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
@@ -64,7 +64,7 @@ abstract class AbstractRepository implements RepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findAll(string $orderBy = null, string $orderDir = self::SORT_ASC): LinodeCollection
+    public function findAll(string $orderBy = null, string $orderDir = self::SORT_ASC): EntityCollection
     {
         return $this->findBy([], $orderBy, $orderDir);
     }
@@ -72,14 +72,14 @@ abstract class AbstractRepository implements RepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findBy(array $criteria, string $orderBy = null, string $orderDir = self::SORT_ASC): LinodeCollection
+    public function findBy(array $criteria, string $orderBy = null, string $orderDir = self::SORT_ASC): EntityCollection
     {
         if ($orderBy !== null) {
             $criteria['+order_by'] = $orderBy;
             $criteria['+order']    = $orderDir;
         }
 
-        return new LinodeCollection(
+        return new EntityCollection(
             function (int $page) use ($criteria) {
                 return $this->client->api($this->client::REQUEST_GET, $this->getBaseUri(), ['page' => $page], $criteria);
             },
@@ -110,7 +110,7 @@ abstract class AbstractRepository implements RepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function query(string $query, array $parameters = [], string $orderBy = null, string $orderDir = self::SORT_ASC): LinodeCollection
+    public function query(string $query, array $parameters = [], string $orderBy = null, string $orderDir = self::SORT_ASC): EntityCollection
     {
         try {
             $parser   = new ExpressionLanguage();
