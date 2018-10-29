@@ -58,4 +58,16 @@ class Notification extends Entity
     public const SEVERITY_MINOR    = 'minor';
     public const SEVERITY_MAJOR    = 'major';
     public const SEVERITY_CRITICAL = 'critical';
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __get(string $name)
+    {
+        if ($name === 'entity') {
+            return new LinodeEntity($this->client, $this->data['entity']);
+        }
+
+        return parent::__get($name);
+    }
 }

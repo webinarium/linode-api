@@ -48,5 +48,6 @@ class AccountInformationTest extends TestCase
         $entity = new AccountInformation($this->client, $data);
 
         self::assertInstanceOf(CreditCard::class, $entity->credit_card);
+        self::assertSame('Linode LLC', $entity->company);
     }
 }
