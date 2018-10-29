@@ -52,7 +52,7 @@ abstract class AbstractRepository implements RepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function find($id): ?Entity
+    public function find($id): Entity
     {
         $response = $this->client->api($this->client::REQUEST_GET, sprintf('%s/%s', $this->getBaseUri(), $id));
         $contents = $response->getBody()->getContents();

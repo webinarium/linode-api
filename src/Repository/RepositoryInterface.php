@@ -29,9 +29,9 @@ interface RepositoryInterface
      *
      * @throws \Linode\Exception\LinodeException
      *
-     * @return null|Entity
+     * @return Entity
      */
-    public function find($id): ?Entity;
+    public function find($id): Entity;
 
     /**
      * Finds all entities.
