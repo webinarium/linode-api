@@ -25,6 +25,7 @@ use Linode\Internal\Networking\IPAddressRepository;
 use Linode\Internal\Networking\IPv6PoolRepository;
 use Linode\Internal\Networking\IPv6RangeRepository;
 use Linode\Internal\RegionRepository;
+use Linode\Internal\StackScriptRepository;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -39,6 +40,7 @@ use Psr\Http\Message\ResponseInterface;
  * @property Repository\LinodeRepositoryInterface               $linodes
  * @property Repository\LinodeTypeRepositoryInterface           $linode_types
  * @property Repository\RegionRepositoryInterface               $regions
+ * @property Repository\StackScriptRepositoryInterface          $stackscripts
  */
 class LinodeClient
 {
@@ -105,6 +107,9 @@ class LinodeClient
 
             case 'regions':
                 return new RegionRepository($this);
+
+            case 'stackscripts':
+                return new StackScriptRepository($this);
         }
 
         return null;

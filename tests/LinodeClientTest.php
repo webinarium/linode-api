@@ -26,6 +26,7 @@ use Linode\Internal\Networking\IPAddressRepository;
 use Linode\Internal\Networking\IPv6PoolRepository;
 use Linode\Internal\Networking\IPv6RangeRepository;
 use Linode\Internal\RegionRepository;
+use Linode\Internal\StackScriptRepository;
 use PHPUnit\Framework\TestCase;
 
 class LinodeClientTest extends TestCase
@@ -45,6 +46,7 @@ class LinodeClientTest extends TestCase
         self::assertInstanceOf(LinodeRepository::class, $object->linodes);
         self::assertInstanceOf(LinodeTypeRepository::class, $object->linode_types);
         self::assertInstanceOf(RegionRepository::class, $object->regions);
+        self::assertInstanceOf(StackScriptRepository::class, $object->stackscripts);
 
         /** @noinspection PhpUndefinedFieldInspection */
         self::assertNull($object->unknown);
