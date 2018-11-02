@@ -20,18 +20,28 @@ use Linode\Internal\Account\NotificationRepository;
 use Linode\Internal\Account\OAuthClientRepository;
 use Linode\Internal\Account\PaymentRepository;
 use Linode\Internal\Account\UserRepository;
+use Linode\Internal\Managed\ManagedContactRepository;
+use Linode\Internal\Managed\ManagedCredentialRepository;
+use Linode\Internal\Managed\ManagedIssueRepository;
+use Linode\Internal\Managed\ManagedLinodeSettingsRepository;
+use Linode\Internal\Managed\ManagedServiceRepository;
 use Linode\LinodeClient;
 use Linode\Repository\RepositoryInterface;
 
 /**
  * Current user account.
  *
- * @property \Linode\Repository\Account\EventRepositoryInterface        $events
- * @property \Linode\Repository\Account\InvoiceRepositoryInterface      $invoices
- * @property \Linode\Repository\Account\NotificationRepositoryInterface $notifications
- * @property \Linode\Repository\Account\OAuthClientRepositoryInterface  $oauth_clients
- * @property \Linode\Repository\Account\PaymentRepositoryInterface      $payments
- * @property \Linode\Repository\Account\UserRepositoryInterface         $users
+ * @property \Linode\Repository\Account\EventRepositoryInterface                 $events
+ * @property \Linode\Repository\Account\InvoiceRepositoryInterface               $invoices
+ * @property \Linode\Repository\Managed\ManagedContactRepositoryInterface        $managed_contacts
+ * @property \Linode\Repository\Managed\ManagedCredentialRepositoryInterface     $managed_credentials
+ * @property \Linode\Repository\Managed\ManagedIssueRepositoryInterface          $managed_issues
+ * @property \Linode\Repository\Managed\ManagedLinodeSettingsRepositoryInterface $managed_linode_settings
+ * @property \Linode\Repository\Managed\ManagedServiceRepositoryInterface        $managed_services
+ * @property \Linode\Repository\Account\NotificationRepositoryInterface          $notifications
+ * @property \Linode\Repository\Account\OAuthClientRepositoryInterface           $oauth_clients
+ * @property \Linode\Repository\Account\PaymentRepositoryInterface               $payments
+ * @property \Linode\Repository\Account\UserRepositoryInterface                  $users
  */
 class Account
 {
@@ -63,6 +73,21 @@ class Account
 
             case 'invoices':
                 return new InvoiceRepository($this->client);
+
+            case 'managed_contacts':
+                return new ManagedContactRepository($this->client);
+
+            case 'managed_credentials':
+                return new ManagedCredentialRepository($this->client);
+
+            case 'managed_issues':
+                return new ManagedIssueRepository($this->client);
+
+            case 'managed_linode_settings':
+                return new ManagedLinodeSettingsRepository($this->client);
+
+            case 'managed_services':
+                return new ManagedServiceRepository($this->client);
 
             case 'notifications':
                 return new NotificationRepository($this->client);

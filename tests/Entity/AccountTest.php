@@ -22,6 +22,11 @@ use Linode\Internal\Account\NotificationRepository;
 use Linode\Internal\Account\OAuthClientRepository;
 use Linode\Internal\Account\PaymentRepository;
 use Linode\Internal\Account\UserRepository;
+use Linode\Internal\Managed\ManagedContactRepository;
+use Linode\Internal\Managed\ManagedCredentialRepository;
+use Linode\Internal\Managed\ManagedIssueRepository;
+use Linode\Internal\Managed\ManagedLinodeSettingsRepository;
+use Linode\Internal\Managed\ManagedServiceRepository;
 use Linode\LinodeClient;
 use PHPUnit\Framework\TestCase;
 
@@ -41,6 +46,11 @@ class AccountTest extends TestCase
 
         self::assertInstanceOf(EventRepository::class, $entity->events);
         self::assertInstanceOf(InvoiceRepository::class, $entity->invoices);
+        self::assertInstanceOf(ManagedContactRepository::class, $entity->managed_contacts);
+        self::assertInstanceOf(ManagedCredentialRepository::class, $entity->managed_credentials);
+        self::assertInstanceOf(ManagedIssueRepository::class, $entity->managed_issues);
+        self::assertInstanceOf(ManagedLinodeSettingsRepository::class, $entity->managed_linode_settings);
+        self::assertInstanceOf(ManagedServiceRepository::class, $entity->managed_services);
         self::assertInstanceOf(NotificationRepository::class, $entity->notifications);
         self::assertInstanceOf(OAuthClientRepository::class, $entity->oauth_clients);
         self::assertInstanceOf(PaymentRepository::class, $entity->payments);
