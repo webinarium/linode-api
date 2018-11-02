@@ -21,6 +21,7 @@ use Linode\Internal\Domains\DomainRepository;
 use Linode\Internal\KernelRepository;
 use Linode\Internal\LinodeRepository;
 use Linode\Internal\LinodeTypeRepository;
+use Linode\Internal\Longview\LongviewSubscriptionRepository;
 use Linode\Internal\Networking\IPAddressRepository;
 use Linode\Internal\Networking\IPv6PoolRepository;
 use Linode\Internal\Networking\IPv6RangeRepository;
@@ -31,16 +32,17 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * Linode API client.
  *
- * @property Entity\Account                                     $account
- * @property Repository\Domains\DomainRepositoryInterface       $domains
- * @property Repository\Networking\IPAddressRepositoryInterface $ips
- * @property Repository\Networking\IPv6PoolRepositoryInterface  $ipv6_pools
- * @property Repository\Networking\IPv6RangeRepositoryInterface $ipv6_ranges
- * @property Repository\KernelRepositoryInterface               $kernels
- * @property Repository\LinodeRepositoryInterface               $linodes
- * @property Repository\LinodeTypeRepositoryInterface           $linode_types
- * @property Repository\RegionRepositoryInterface               $regions
- * @property Repository\StackScriptRepositoryInterface          $stackscripts
+ * @property Entity\Account                                              $account
+ * @property Repository\Domains\DomainRepositoryInterface                $domains
+ * @property Repository\Networking\IPAddressRepositoryInterface          $ips
+ * @property Repository\Networking\IPv6PoolRepositoryInterface           $ipv6_pools
+ * @property Repository\Networking\IPv6RangeRepositoryInterface          $ipv6_ranges
+ * @property Repository\KernelRepositoryInterface                        $kernels
+ * @property Repository\LinodeRepositoryInterface                        $linodes
+ * @property Repository\LinodeTypeRepositoryInterface                    $linode_types
+ * @property Repository\Longview\LongviewSubscriptionRepositoryInterface $longview_subscriptions
+ * @property Repository\RegionRepositoryInterface                        $regions
+ * @property Repository\StackScriptRepositoryInterface                   $stackscripts
  */
 class LinodeClient
 {
@@ -104,6 +106,9 @@ class LinodeClient
 
             case 'linode_types':
                 return new LinodeTypeRepository($this);
+
+            case 'longview_subscriptions':
+                return new LongviewSubscriptionRepository($this);
 
             case 'regions':
                 return new RegionRepository($this);

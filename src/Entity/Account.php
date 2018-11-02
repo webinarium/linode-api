@@ -20,6 +20,7 @@ use Linode\Internal\Account\NotificationRepository;
 use Linode\Internal\Account\OAuthClientRepository;
 use Linode\Internal\Account\PaymentRepository;
 use Linode\Internal\Account\UserRepository;
+use Linode\Internal\Longview\LongviewClientRepository;
 use Linode\Internal\Managed\ManagedContactRepository;
 use Linode\Internal\Managed\ManagedCredentialRepository;
 use Linode\Internal\Managed\ManagedIssueRepository;
@@ -33,6 +34,7 @@ use Linode\Repository\RepositoryInterface;
  *
  * @property \Linode\Repository\Account\EventRepositoryInterface                 $events
  * @property \Linode\Repository\Account\InvoiceRepositoryInterface               $invoices
+ * @property \Linode\Repository\Longview\LongviewClientRepositoryInterface       $longviews_clients
  * @property \Linode\Repository\Managed\ManagedContactRepositoryInterface        $managed_contacts
  * @property \Linode\Repository\Managed\ManagedCredentialRepositoryInterface     $managed_credentials
  * @property \Linode\Repository\Managed\ManagedIssueRepositoryInterface          $managed_issues
@@ -73,6 +75,9 @@ class Account
 
             case 'invoices':
                 return new InvoiceRepository($this->client);
+
+            case 'longviews_clients':
+                return new LongviewClientRepository($this->client);
 
             case 'managed_contacts':
                 return new ManagedContactRepository($this->client);

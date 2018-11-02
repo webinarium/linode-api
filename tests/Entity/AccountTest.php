@@ -22,6 +22,7 @@ use Linode\Internal\Account\NotificationRepository;
 use Linode\Internal\Account\OAuthClientRepository;
 use Linode\Internal\Account\PaymentRepository;
 use Linode\Internal\Account\UserRepository;
+use Linode\Internal\Longview\LongviewClientRepository;
 use Linode\Internal\Managed\ManagedContactRepository;
 use Linode\Internal\Managed\ManagedCredentialRepository;
 use Linode\Internal\Managed\ManagedIssueRepository;
@@ -46,6 +47,7 @@ class AccountTest extends TestCase
 
         self::assertInstanceOf(EventRepository::class, $entity->events);
         self::assertInstanceOf(InvoiceRepository::class, $entity->invoices);
+        self::assertInstanceOf(LongviewClientRepository::class, $entity->longviews_clients);
         self::assertInstanceOf(ManagedContactRepository::class, $entity->managed_contacts);
         self::assertInstanceOf(ManagedCredentialRepository::class, $entity->managed_credentials);
         self::assertInstanceOf(ManagedIssueRepository::class, $entity->managed_issues);
