@@ -12,6 +12,7 @@
 namespace Linode\Entity\Linode;
 
 use Linode\Entity\Entity;
+use Linode\Entity\TimeValue;
 
 /**
  * CPU, IO, IPv4, and IPv6 statistics.
@@ -19,11 +20,11 @@ use Linode\Entity\Entity;
  * Graph data, if available, is in "[timestamp, reading]" array format.
  * Timestamp is a UNIX timestamp in EST.
  *
- * @property string       $title The title for this data set.
- * @property int[][]      $cpu   Percentage of CPU used.
- * @property IOStats      $io    Input/Output statistics.
- * @property NetworkStats $netv4 IPv4 statistics.
- * @property NetworkStats $netv6 IPv6 statistics.
+ * @property string            $title The title for this data set.
+ * @property array|TimeValue[] $cpu   Percentage of CPU used.
+ * @property IOStats           $io    Input/Output statistics.
+ * @property NetworkStats      $netv4 IPv4 statistics.
+ * @property NetworkStats      $netv6 IPv6 statistics.
  */
 class LinodeStats extends Entity
 {
@@ -33,6 +34,11 @@ class LinodeStats extends Entity
     public function __get(string $name)
     {
         switch ($name) {
+
+            case 'cpu':
+                return array_map(function ($data) {
+                    return new TimeValue((int) $data[0], (float) $data[1]);
+                }, $this->data['cpu']);
 
             case 'io':
                 return new IOStats($this->client, $this->data['io']);
