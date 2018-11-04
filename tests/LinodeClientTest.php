@@ -26,6 +26,7 @@ use Linode\Internal\Longview\LongviewSubscriptionRepository;
 use Linode\Internal\Networking\IPAddressRepository;
 use Linode\Internal\Networking\IPv6PoolRepository;
 use Linode\Internal\Networking\IPv6RangeRepository;
+use Linode\Internal\NodeBalancers\NodeBalancerRepository;
 use Linode\Internal\RegionRepository;
 use Linode\Internal\StackScriptRepository;
 use PHPUnit\Framework\TestCase;
@@ -47,6 +48,7 @@ class LinodeClientTest extends TestCase
         self::assertInstanceOf(LinodeRepository::class, $object->linodes);
         self::assertInstanceOf(LinodeTypeRepository::class, $object->linode_types);
         self::assertInstanceOf(LongviewSubscriptionRepository::class, $object->longview_subscriptions);
+        self::assertInstanceOf(NodeBalancerRepository::class, $object->node_balancers);
         self::assertInstanceOf(RegionRepository::class, $object->regions);
         self::assertInstanceOf(StackScriptRepository::class, $object->stackscripts);
 

@@ -25,6 +25,7 @@ use Linode\Internal\Longview\LongviewSubscriptionRepository;
 use Linode\Internal\Networking\IPAddressRepository;
 use Linode\Internal\Networking\IPv6PoolRepository;
 use Linode\Internal\Networking\IPv6RangeRepository;
+use Linode\Internal\NodeBalancers\NodeBalancerRepository;
 use Linode\Internal\RegionRepository;
 use Linode\Internal\StackScriptRepository;
 use Psr\Http\Message\ResponseInterface;
@@ -41,6 +42,7 @@ use Psr\Http\Message\ResponseInterface;
  * @property Repository\LinodeRepositoryInterface                        $linodes
  * @property Repository\LinodeTypeRepositoryInterface                    $linode_types
  * @property Repository\Longview\LongviewSubscriptionRepositoryInterface $longview_subscriptions
+ * @property Repository\NodeBalancers\NodeBalancerRepositoryInterface    $node_balancers
  * @property Repository\RegionRepositoryInterface                        $regions
  * @property Repository\StackScriptRepositoryInterface                   $stackscripts
  */
@@ -109,6 +111,9 @@ class LinodeClient
 
             case 'longview_subscriptions':
                 return new LongviewSubscriptionRepository($this);
+
+            case 'node_balancers':
+                return new NodeBalancerRepository($this);
 
             case 'regions':
                 return new RegionRepository($this);
