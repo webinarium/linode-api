@@ -19,6 +19,7 @@ use GuzzleHttp\Psr7\Response;
 use Linode\Entity\Account;
 use Linode\Exception\LinodeException;
 use Linode\Internal\Domains\DomainRepository;
+use Linode\Internal\ImageRepository;
 use Linode\Internal\KernelRepository;
 use Linode\Internal\LinodeRepository;
 use Linode\Internal\LinodeTypeRepository;
@@ -41,6 +42,7 @@ class LinodeClientTest extends TestCase
 
         self::assertInstanceOf(Account::class, $object->account);
         self::assertInstanceOf(DomainRepository::class, $object->domains);
+        self::assertInstanceOf(ImageRepository::class, $object->images);
         self::assertInstanceOf(IPAddressRepository::class, $object->ips);
         self::assertInstanceOf(IPv6PoolRepository::class, $object->ipv6_pools);
         self::assertInstanceOf(IPv6RangeRepository::class, $object->ipv6_ranges);

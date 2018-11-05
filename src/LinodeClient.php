@@ -18,6 +18,7 @@ use GuzzleHttp\Psr7\Response;
 use Linode\Entity\Account;
 use Linode\Exception\LinodeException;
 use Linode\Internal\Domains\DomainRepository;
+use Linode\Internal\ImageRepository;
 use Linode\Internal\KernelRepository;
 use Linode\Internal\LinodeRepository;
 use Linode\Internal\LinodeTypeRepository;
@@ -35,6 +36,7 @@ use Psr\Http\Message\ResponseInterface;
  *
  * @property Entity\Account                                              $account
  * @property Repository\Domains\DomainRepositoryInterface                $domains
+ * @property Repository\ImageRepositoryInterface                         $images
  * @property Repository\Networking\IPAddressRepositoryInterface          $ips
  * @property Repository\Networking\IPv6PoolRepositoryInterface           $ipv6_pools
  * @property Repository\Networking\IPv6RangeRepositoryInterface          $ipv6_ranges
@@ -90,6 +92,9 @@ class LinodeClient
 
             case 'domains':
                 return new DomainRepository($this);
+
+            case 'images':
+                return new ImageRepository($this);
 
             case 'ips':
                 return new IPAddressRepository($this);
