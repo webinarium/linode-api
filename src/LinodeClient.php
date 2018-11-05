@@ -29,6 +29,7 @@ use Linode\Internal\Networking\IPv6RangeRepository;
 use Linode\Internal\NodeBalancers\NodeBalancerRepository;
 use Linode\Internal\RegionRepository;
 use Linode\Internal\StackScriptRepository;
+use Linode\Internal\VolumeRepository;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -47,6 +48,7 @@ use Psr\Http\Message\ResponseInterface;
  * @property Repository\NodeBalancers\NodeBalancerRepositoryInterface    $node_balancers
  * @property Repository\RegionRepositoryInterface                        $regions
  * @property Repository\StackScriptRepositoryInterface                   $stackscripts
+ * @property Repository\VolumeRepositoryInterface                        $volumes
  */
 class LinodeClient
 {
@@ -125,6 +127,9 @@ class LinodeClient
 
             case 'stackscripts':
                 return new StackScriptRepository($this);
+
+            case 'volumes':
+                return new VolumeRepository($this);
         }
 
         return null;

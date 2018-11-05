@@ -14,6 +14,7 @@ namespace Linode\Entity;
 use Linode\Internal\Linode\ConfigurationProfileRepository;
 use Linode\Internal\Linode\DiskRepository;
 use Linode\Internal\Linode\LinodeNetworkRepository;
+use Linode\Internal\Linode\LinodeVolumeRepository;
 
 /**
  * A Linode instance.
@@ -57,6 +58,7 @@ use Linode\Internal\Linode\LinodeNetworkRepository;
  * @property \Linode\Repository\Linode\ConfigurationProfileRepositoryInterface $configs Configuration profiles.
  * @property \Linode\Repository\Linode\DiskRepositoryInterface                 $disks   Disks.
  * @property \Linode\Repository\Linode\LinodeNetworkRepositoryInterface        $ips     Network information.
+ * @property \Linode\Repository\Linode\LinodeVolumeRepositoryInterface         $volumes Volumes.
  */
 class Linode extends Entity
 {
@@ -128,6 +130,9 @@ class Linode extends Entity
 
             case 'ips':
                 return new LinodeNetworkRepository($this->client, $this->id);
+
+            case 'volumes':
+                return new LinodeVolumeRepository($this->client, $this->id);
         }
 
         return parent::__get($name);

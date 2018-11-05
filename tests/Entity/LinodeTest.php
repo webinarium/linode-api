@@ -14,6 +14,7 @@ namespace Linode\Entity;
 use Linode\Internal\Linode\ConfigurationProfileRepository;
 use Linode\Internal\Linode\DiskRepository;
 use Linode\Internal\Linode\LinodeNetworkRepository;
+use Linode\Internal\Linode\LinodeVolumeRepository;
 use Linode\LinodeClient;
 use PHPUnit\Framework\TestCase;
 
@@ -33,5 +34,6 @@ class LinodeTest extends TestCase
         self::assertInstanceOf(ConfigurationProfileRepository::class, $entity->configs);
         self::assertInstanceOf(DiskRepository::class, $entity->disks);
         self::assertInstanceOf(LinodeNetworkRepository::class, $entity->ips);
+        self::assertInstanceOf(LinodeVolumeRepository::class, $entity->volumes);
     }
 }
