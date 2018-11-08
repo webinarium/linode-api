@@ -28,7 +28,7 @@ use Linode\Internal\Domains\DomainRecordRepository;
  * @property string   $status      Used to control whether this Domain is currently being rendered
  *                                 (@see `STATUS_...` constants).
  * @property string   $soa_email   Start of Authority email address. This is required for master Domains.
- * @property string   $group       The group this Domain belongs to. This is for display purposes only (@deprecated).
+ * @property string   $group       The group this Domain belongs to. This is for display purposes only.
  * @property string   $description A description for this Domain. This is for display purposes only.
  * @property int      $ttl_sec     "Time to Live" - the amount of time in seconds that this Domain's records may
  *                                 be cached by resolvers or other domain servers (@see `TIME_...` constants).

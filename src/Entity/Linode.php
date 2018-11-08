@@ -49,7 +49,7 @@ use Linode\Internal\Linode\LinodeVolumeRepository;
  *                                                  5 boot jobs issued within 15 minutes.
  * @property string               $created          When this Linode was created.
  * @property string               $updated          When this Linode was last updated.
- * @property string               $group            A property denoting a group label for this Linode (@deprecated).
+ * @property string               $group            A property denoting a group label for this Linode.
  * @property string[]             $tags             An array of tags applied to this object. Tags are for organizational
  *                                                  purposes only.
  * @property Linode\LinodeSpecs   $specs            Information about the resources available to this Linode.
