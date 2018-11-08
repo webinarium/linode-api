@@ -30,6 +30,7 @@ use Linode\Internal\Networking\IPv6RangeRepository;
 use Linode\Internal\NodeBalancers\NodeBalancerRepository;
 use Linode\Internal\RegionRepository;
 use Linode\Internal\StackScriptRepository;
+use Linode\Internal\Tags\TagRepository;
 use Linode\Internal\VolumeRepository;
 use PHPUnit\Framework\TestCase;
 
@@ -54,6 +55,7 @@ class LinodeClientTest extends TestCase
         self::assertInstanceOf(NodeBalancerRepository::class, $object->node_balancers);
         self::assertInstanceOf(RegionRepository::class, $object->regions);
         self::assertInstanceOf(StackScriptRepository::class, $object->stackscripts);
+        self::assertInstanceOf(TagRepository::class, $object->tags);
         self::assertInstanceOf(VolumeRepository::class, $object->volumes);
 
         /** @noinspection PhpUndefinedFieldInspection */
