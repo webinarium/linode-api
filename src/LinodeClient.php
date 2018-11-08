@@ -29,6 +29,7 @@ use Linode\Internal\Networking\IPv6RangeRepository;
 use Linode\Internal\NodeBalancers\NodeBalancerRepository;
 use Linode\Internal\RegionRepository;
 use Linode\Internal\StackScriptRepository;
+use Linode\Internal\Support\SupportTicketRepository;
 use Linode\Internal\Tags\TagRepository;
 use Linode\Internal\VolumeRepository;
 use Psr\Http\Message\ResponseInterface;
@@ -50,6 +51,7 @@ use Psr\Http\Message\ResponseInterface;
  * @property Repository\RegionRepositoryInterface                        $regions
  * @property Repository\StackScriptRepositoryInterface                   $stackscripts
  * @property Repository\Tags\TagRepositoryInterface                      $tags
+ * @property Repository\Support\SupportTicketRepositoryInterface         $tickets
  * @property Repository\VolumeRepositoryInterface                        $volumes
  */
 class LinodeClient
@@ -132,6 +134,9 @@ class LinodeClient
 
             case 'tags':
                 return new TagRepository($this);
+
+            case 'tickets':
+                return new SupportTicketRepository($this);
 
             case 'volumes':
                 return new VolumeRepository($this);
