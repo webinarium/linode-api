@@ -16,6 +16,7 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
 use Linode\Entity\Account;
+use Linode\Entity\Profile;
 use Linode\Exception\LinodeException;
 use Linode\Internal\Domains\DomainRepository;
 use Linode\Internal\ImageRepository;
@@ -48,6 +49,7 @@ use Psr\Http\Message\ResponseInterface;
  * @property Repository\LinodeTypeRepositoryInterface                    $linode_types
  * @property Repository\Longview\LongviewSubscriptionRepositoryInterface $longview_subscriptions
  * @property Repository\NodeBalancers\NodeBalancerRepositoryInterface    $node_balancers
+ * @property Entity\Profile                                              $profile
  * @property Repository\RegionRepositoryInterface                        $regions
  * @property Repository\StackScriptRepositoryInterface                   $stackscripts
  * @property Repository\Tags\TagRepositoryInterface                      $tags
@@ -87,7 +89,7 @@ class LinodeClient
      *
      * @param string $name Repository name.
      *
-     * @return null|Account|Repository\RepositoryInterface
+     * @return null|Account|Profile|Repository\RepositoryInterface
      */
     public function __get(string $name)
     {
@@ -125,6 +127,9 @@ class LinodeClient
 
             case 'node_balancers':
                 return new NodeBalancerRepository($this);
+
+            case 'profile':
+                return new Profile($this);
 
             case 'regions':
                 return new RegionRepository($this);

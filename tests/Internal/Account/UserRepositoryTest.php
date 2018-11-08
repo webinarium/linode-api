@@ -346,7 +346,7 @@ JSON;
                 GlobalGrant::FIELD_ADD_LINODES           => true,
                 GlobalGrant::FIELD_ADD_LONGVIEW          => true,
                 GlobalGrant::FIELD_LONGVIEW_SUBSCRIPTION => true,
-                GlobalGrant::FIELD_ACCOUNT_ACCESS        => GlobalGrant::READ_ONLY,
+                GlobalGrant::FIELD_ACCOUNT_ACCESS        => GlobalGrant::ACCESS_READ_ONLY,
                 GlobalGrant::FIELD_CANCEL_ACCOUNT        => false,
                 GlobalGrant::FIELD_ADD_DOMAINS           => true,
                 GlobalGrant::FIELD_ADD_STACKSCRIPTS      => true,
@@ -357,7 +357,7 @@ JSON;
             UserGrant::FIELD_LINODE => [
                 [
                     Grant::FIELD_ID          => 123,
-                    Grant::FIELD_PERMISSIONS => Grant::READ_ONLY,
+                    Grant::FIELD_PERMISSIONS => Grant::ACCESS_READ_ONLY,
                 ],
             ],
         ]);

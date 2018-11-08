@@ -17,6 +17,7 @@ use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Linode\Entity\Account;
+use Linode\Entity\Profile;
 use Linode\Exception\LinodeException;
 use Linode\Internal\Domains\DomainRepository;
 use Linode\Internal\ImageRepository;
@@ -54,6 +55,7 @@ class LinodeClientTest extends TestCase
         self::assertInstanceOf(LinodeTypeRepository::class, $object->linode_types);
         self::assertInstanceOf(LongviewSubscriptionRepository::class, $object->longview_subscriptions);
         self::assertInstanceOf(NodeBalancerRepository::class, $object->node_balancers);
+        self::assertInstanceOf(Profile::class, $object->profile);
         self::assertInstanceOf(RegionRepository::class, $object->regions);
         self::assertInstanceOf(StackScriptRepository::class, $object->stackscripts);
         self::assertInstanceOf(TagRepository::class, $object->tags);
