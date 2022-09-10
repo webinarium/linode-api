@@ -19,21 +19,25 @@ use Linode\ReflectionTrait;
 use Linode\Repository\Domains\DomainRecordRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class DomainRecordRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\Domains\DomainRecordRepository
+ */
+final class DomainRecordRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var DomainRecordRepository */
-    protected $repository;
+    protected DomainRecordRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new DomainRecordRepository($client, 123);
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $request = [
             'json' => [
@@ -43,32 +47,32 @@ class DomainRecordRepositoryTest extends TestCase
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 456,
-                "type": "A",
-                "name": "test",
-                "target": "12.34.56.78",
-                "priority": 50,
-                "weight": 50,
-                "port": 80,
-                "service": null,
-                "protocol": null,
-                "ttl_sec": 604800,
-                "tag": null
-            }
-JSON;
+                        {
+                            "id": 456,
+                            "type": "A",
+                            "name": "test",
+                            "target": "12.34.56.78",
+                            "priority": 50,
+                            "weight": 50,
+                            "port": 80,
+                            "service": null,
+                            "protocol": null,
+                            "ttl_sec": 604800,
+                            "tag": null
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/domains/123/records', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->create([
             DomainRecord::FIELD_TYPE => DomainRecord::TYPE_A,
             DomainRecord::FIELD_NAME => 'test',
@@ -79,7 +83,7 @@ JSON;
         self::assertSame('test', $entity->name);
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $request = [
             'json' => [
@@ -89,32 +93,32 @@ JSON;
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 456,
-                "type": "A",
-                "name": "test",
-                "target": "12.34.56.78",
-                "priority": 50,
-                "weight": 50,
-                "port": 80,
-                "service": null,
-                "protocol": null,
-                "ttl_sec": 604800,
-                "tag": null
-            }
-JSON;
+                        {
+                            "id": 456,
+                            "type": "A",
+                            "name": "test",
+                            "target": "12.34.56.78",
+                            "priority": 50,
+                            "weight": 50,
+                            "port": 80,
+                            "service": null,
+                            "protocol": null,
+                            "ttl_sec": 604800,
+                            "tag": null
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['PUT', 'https://api.linode.com/v4/domains/123/records/456', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->update(456, [
             DomainRecord::FIELD_TYPE => DomainRecord::TYPE_A,
             DomainRecord::FIELD_NAME => 'test',
@@ -125,32 +129,32 @@ JSON;
         self::assertSame('test', $entity->name);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['DELETE', 'https://api.linode.com/v4/domains/123/records/456', [], new Response(200, [], null)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $repository->delete(456);
 
         self::assertTrue(true);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/domains/123/records';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'id',
@@ -169,7 +173,7 @@ JSON;
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(DomainRecord::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

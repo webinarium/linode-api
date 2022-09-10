@@ -25,23 +25,14 @@ interface DomainRepositoryInterface extends RepositoryInterface
      * registrar to Linode's nameservers so that the records hosted here are
      * used.
      *
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return Domain
      */
     public function create(array $parameters): Domain;
 
     /**
      * Update information about a Domain in Linode's DNS Manager.
      *
-     * @param int   $id
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return Domain
      */
     public function update(int $id, array $parameters): Domain;
 
@@ -49,8 +40,6 @@ interface DomainRepositoryInterface extends RepositoryInterface
      * Deletes a Domain from Linode's DNS Manager. The Domain will be removed
      * from Linode's nameservers shortly after this operation completes. This
      * also deletes all associated Domain Records.
-     *
-     * @param int $id
      *
      * @throws \Linode\Exception\LinodeException
      */
@@ -65,12 +54,7 @@ interface DomainRepositoryInterface extends RepositoryInterface
      *   - 2600:3c00::5e
      *   - 2600:3c00::5f
      *
-     * @param string $domain
-     * @param string $remote_nameserver
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return Domain
      */
     public function import(string $domain, string $remote_nameserver): Domain;
 }

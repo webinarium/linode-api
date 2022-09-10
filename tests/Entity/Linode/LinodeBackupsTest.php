@@ -14,16 +14,21 @@ namespace Linode\Entity\Linode;
 use Linode\LinodeClient;
 use PHPUnit\Framework\TestCase;
 
-class LinodeBackupsTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Entity\Linode\LinodeBackups
+ */
+final class LinodeBackupsTest extends TestCase
 {
-    protected $client;
+    protected LinodeClient $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client = $this->createMock(LinodeClient::class);
     }
 
-    public function testProperties()
+    public function testProperties(): void
     {
         $data = [
             'enabled'  => true,

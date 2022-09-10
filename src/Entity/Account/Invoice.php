@@ -17,10 +17,10 @@ use Linode\Internal\Account\InvoiceItemRepository;
 /**
  * Account Invoice object.
  *
- * @property int    $id    The Invoice's unique ID.
- * @property string $date  When this Invoice was generated.
- * @property string $label The Invoice's display label.
- * @property float  $total The amount of the Invoice in US Dollars.
+ * @property int                                                       $id    The Invoice's unique ID.
+ * @property string                                                    $date  When this Invoice was generated.
+ * @property string                                                    $label The Invoice's display label.
+ * @property float                                                     $total The amount of the Invoice in US Dollars.
  * @property \Linode\Repository\Account\InvoiceItemRepositoryInterface $items Items of the invoice.
  */
 class Invoice extends Entity
@@ -34,12 +34,11 @@ class Invoice extends Entity
     /**
      * {@inheritdoc}
      */
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
-        if ($name === 'items') {
-            return new InvoiceItemRepository($this->client, $this->id);
-        }
-
-        return parent::__get($name);
+        return match ($name) {
+            'items' => new InvoiceItemRepository($this->client, $this->id),
+            default => parent::__get($name),
+        };
     }
 }

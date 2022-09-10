@@ -21,30 +21,19 @@ interface StackScriptRepositoryInterface extends RepositoryInterface
     /**
      * Creates a StackScript in your Account.
      *
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return StackScript
      */
     public function create(array $parameters): StackScript;
 
     /**
      * Updates a StackScript.
      *
-     * @param int   $id
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return StackScript
      */
     public function update(int $id, array $parameters): StackScript;
 
     /**
      * Deletes a private StackScript you have permission to `read_write`. You cannot delete a public StackScript.
-     *
-     * @param int $id
      *
      * @throws \Linode\Exception\LinodeException
      */

@@ -14,30 +14,35 @@ namespace Linode\Internal;
 use Linode\Entity\Kernel;
 use Linode\LinodeClient;
 use Linode\ReflectionTrait;
+use Linode\Repository\KernelRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class KernelRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\KernelRepository
+ */
+final class KernelRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var KernelRepository */
-    protected $repository;
+    protected KernelRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new KernelRepository($client);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/linode/kernels';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'id',
@@ -52,7 +57,7 @@ class KernelRepositoryTest extends TestCase
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(Kernel::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

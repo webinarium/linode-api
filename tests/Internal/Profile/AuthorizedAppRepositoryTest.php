@@ -19,46 +19,50 @@ use Linode\ReflectionTrait;
 use Linode\Repository\Profile\AuthorizedAppRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class AuthorizedAppRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\Profile\AuthorizedAppRepository
+ */
+final class AuthorizedAppRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var AuthorizedAppRepository */
-    protected $repository;
+    protected AuthorizedAppRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new AuthorizedAppRepository($client);
     }
 
-    public function testRevoke()
+    public function testRevoke(): void
     {
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['DELETE', 'https://api.linode.com/v4/profile/apps/123', [], new Response(200, [], null)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $repository->revoke(123);
 
         self::assertTrue(true);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/profile/apps';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'id',
@@ -73,7 +77,7 @@ class AuthorizedAppRepositoryTest extends TestCase
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(AuthorizedApp::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

@@ -20,21 +20,25 @@ use Linode\ReflectionTrait;
 use Linode\Repository\Managed\ManagedLinodeSettingsRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class ManagedLinodeSettingsRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\Managed\ManagedLinodeSettingsRepository
+ */
+final class ManagedLinodeSettingsRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var ManagedLinodeSettingsRepository */
-    protected $repository;
+    protected ManagedLinodeSettingsRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new ManagedLinodeSettingsRepository($client);
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $request = [
             'json' => [
@@ -48,30 +52,30 @@ class ManagedLinodeSettingsRepositoryTest extends TestCase
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 123,
-                "label": "linode123",
-                "group": "linodes",
-                "ssh": {
-                    "access": true,
-                    "user": "linode",
-                    "ip": "12.34.56.78",
-                    "port": 22
-                }
-            }
-JSON;
+                        {
+                            "id": 123,
+                            "label": "linode123",
+                            "group": "linodes",
+                            "ssh": {
+                                "access": true,
+                                "user": "linode",
+                                "ip": "12.34.56.78",
+                                "port": 22
+                            }
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['PUT', 'https://api.linode.com/v4/managed/linode-settings/123', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->update(123, [
             ManagedLinodeSettings::FIELD_SSH => [
                 SSHSettings::FIELD_ACCESS => true,
@@ -86,14 +90,14 @@ JSON;
         self::assertSame('linode123', $entity->label);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/managed/linode-settings';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'id',
@@ -105,7 +109,7 @@ JSON;
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(ManagedLinodeSettings::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

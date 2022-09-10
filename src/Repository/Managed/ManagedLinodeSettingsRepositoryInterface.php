@@ -22,12 +22,7 @@ interface ManagedLinodeSettingsRepositoryInterface extends RepositoryInterface
     /**
      * Updates a single Linode's Managed settings.
      *
-     * @param int   $id
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return ManagedLinodeSettings
      */
     public function update(int $id, array $parameters): ManagedLinodeSettings;
 }

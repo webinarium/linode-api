@@ -14,16 +14,21 @@ namespace Linode\Entity;
 use Linode\LinodeClient;
 use PHPUnit\Framework\TestCase;
 
-class StackScriptTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Entity\StackScript
+ */
+final class StackScriptTest extends TestCase
 {
-    protected $client;
+    protected LinodeClient $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client = $this->createMock(LinodeClient::class);
     }
 
-    public function testProperties()
+    public function testProperties(): void
     {
         $data = [
             'id'                  => 10079,

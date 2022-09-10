@@ -18,28 +18,32 @@ use Linode\ReflectionTrait;
 use Linode\Repository\Networking\IPv6RangeRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class IPv6RangeRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\Networking\IPv6RangeRepository
+ */
+final class IPv6RangeRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var IPv6RangeRepository */
-    protected $repository;
+    protected IPv6RangeRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new IPv6RangeRepository($client);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/networking/ipv6/ranges';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'range',
@@ -49,7 +53,7 @@ class IPv6RangeRepositoryTest extends TestCase
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(IPv6Range::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

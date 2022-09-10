@@ -20,21 +20,25 @@ use Linode\ReflectionTrait;
 use Linode\Repository\Managed\ManagedContactRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class ManagedContactRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\Managed\ManagedContactRepository
+ */
+final class ManagedContactRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var ManagedContactRepository */
-    protected $repository;
+    protected ManagedContactRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new ManagedContactRepository($client);
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $request = [
             'json' => [
@@ -49,30 +53,30 @@ class ManagedContactRepositoryTest extends TestCase
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 567,
-                "name": "John Doe",
-                "email": "john.doe@example.org",
-                "phone": {
-                    "primary": "123-456-7890",
-                    "secondary": null
-                },
-                "group": "on-call",
-                "updated": "2018-01-01T00:01:01"
-            }
-JSON;
+                        {
+                            "id": 567,
+                            "name": "John Doe",
+                            "email": "john.doe@example.org",
+                            "phone": {
+                                "primary": "123-456-7890",
+                                "secondary": null
+                            },
+                            "group": "on-call",
+                            "updated": "2018-01-01T00:01:01"
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/managed/contacts', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->create([
             ManagedContact::FIELD_NAME  => 'John Doe',
             ManagedContact::FIELD_EMAIL => 'john.doe@example.org',
@@ -88,7 +92,7 @@ JSON;
         self::assertSame('John Doe', $entity->name);
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $request = [
             'json' => [
@@ -103,30 +107,30 @@ JSON;
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 567,
-                "name": "John Doe",
-                "email": "john.doe@example.org",
-                "phone": {
-                    "primary": "123-456-7890",
-                    "secondary": null
-                },
-                "group": "on-call",
-                "updated": "2018-01-01T00:01:01"
-            }
-JSON;
+                        {
+                            "id": 567,
+                            "name": "John Doe",
+                            "email": "john.doe@example.org",
+                            "phone": {
+                                "primary": "123-456-7890",
+                                "secondary": null
+                            },
+                            "group": "on-call",
+                            "updated": "2018-01-01T00:01:01"
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['PUT', 'https://api.linode.com/v4/managed/contacts/567', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->update(567, [
             ManagedContact::FIELD_NAME  => 'John Doe',
             ManagedContact::FIELD_EMAIL => 'john.doe@example.org',
@@ -142,32 +146,32 @@ JSON;
         self::assertSame('John Doe', $entity->name);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['DELETE', 'https://api.linode.com/v4/managed/contacts/567', [], new Response(200, [], null)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $repository->delete(567);
 
         self::assertTrue(true);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/managed/contacts';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'id',
@@ -180,7 +184,7 @@ JSON;
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(ManagedContact::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

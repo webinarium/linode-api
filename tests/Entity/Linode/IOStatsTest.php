@@ -15,16 +15,21 @@ use Linode\Entity\TimeValue;
 use Linode\LinodeClient;
 use PHPUnit\Framework\TestCase;
 
-class IOStatsTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Entity\Linode\IOStats
+ */
+final class IOStatsTest extends TestCase
 {
-    protected $client;
+    protected LinodeClient $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client = $this->createMock(LinodeClient::class);
     }
 
-    public function testProperties()
+    public function testProperties(): void
     {
         $data = [
             'io'   => [
@@ -47,7 +52,6 @@ class IOStatsTest extends TestCase
         self::assertSame(1521484800000, $entity->swap[0]->time);
         self::assertSame(0.42, $entity->swap[0]->value);
 
-        /** @noinspection PhpUndefinedFieldInspection */
         self::assertNull($entity->unknown);
     }
 }

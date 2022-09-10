@@ -15,16 +15,21 @@ use Linode\Entity\Networking\IPAddress;
 use Linode\LinodeClient;
 use PHPUnit\Framework\TestCase;
 
-class IPv4InformationTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Entity\Linode\IPv4Information
+ */
+final class IPv4InformationTest extends TestCase
 {
-    protected $client;
+    protected LinodeClient $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client = $this->createMock(LinodeClient::class);
     }
 
-    public function testProperties()
+    public function testProperties(): void
     {
         $entity = new IPv4Information($this->client, [
             'public'  => [
@@ -83,7 +88,6 @@ class IPv4InformationTest extends TestCase
         self::assertSame('97.107.143.141', $entity->shared[0]->address);
         self::assertTrue($entity->shared[0]->public);
 
-        /** @noinspection PhpUndefinedFieldInspection */
         self::assertNull($entity->unknown);
     }
 }

@@ -36,12 +36,11 @@ class LongviewClient extends Entity
     /**
      * {@inheritdoc}
      */
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
-        if ($name === 'apps') {
-            return new LongviewApps($this->client, $this->data['apps']);
-        }
-
-        return parent::__get($name);
+        return match ($name) {
+            'apps'  => new LongviewApps($this->client, $this->data['apps']),
+            default => parent::__get($name),
+        };
     }
 }

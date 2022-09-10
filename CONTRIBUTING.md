@@ -16,7 +16,7 @@ Contributions are accepted via Pull Requests on [Github](https://github.com/webi
 ## Running Tests
 
 ``` bash
-./bin/phpunit --coverage-text
+XDEBUG_MODE=coverage ./bin/phpunit --coverage-text
 ```
 
 ## Running PHP CS Fixer

@@ -23,8 +23,6 @@ interface LinodeNetworkRepositoryInterface
      * Returns networking information for a single Linode.
      *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return Linode\NetworkInformation
      */
     public function getNetworkInformation(): Linode\NetworkInformation;
 
@@ -32,11 +30,7 @@ interface LinodeNetworkRepositoryInterface
      * View information about the specified IP address associated
      * with the specified Linode.
      *
-     * @param string $id
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return IPAddress
      */
     public function find(string $id): IPAddress;
 
@@ -47,12 +41,7 @@ interface LinodeNetworkRepositoryInterface
      * IP Address you must request one - please open a support ticket.
      * You may not add more than one private IPv4 address to a single Linode.
      *
-     * @param bool   $public
-     * @param string $type
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return IPAddress
      */
     public function allocate(bool $public, string $type = IPAddress::TYPE_IP4): IPAddress;
 
@@ -60,12 +49,7 @@ interface LinodeNetworkRepositoryInterface
      * Updates a particular IP Address associated with this Linode.
      * Only allows setting/resetting reverse DNS.
      *
-     * @param string $id
-     * @param array  $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return IPAddress
      */
     public function update(string $id, array $parameters): IPAddress;
 
@@ -73,8 +57,6 @@ interface LinodeNetworkRepositoryInterface
      * Deletes a public IPv4 address associated with this Linode. This will
      * fail if it is the Linode's last remaining public IPv4 address. Private
      * IPv4 addresses cannot be removed via this endpoint.
-     *
-     * @param string $id
      *
      * @throws \Linode\Exception\LinodeException
      */

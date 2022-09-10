@@ -19,21 +19,25 @@ use Linode\ReflectionTrait;
 use Linode\Repository\Profile\SSHKeyRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class SSHKeyRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\Profile\SSHKeyRepository
+ */
+final class SSHKeyRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var SSHKeyRepository */
-    protected $repository;
+    protected SSHKeyRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new SSHKeyRepository($client);
     }
 
-    public function testAdd()
+    public function testAdd(): void
     {
         $request = [
             'json' => [
@@ -43,25 +47,25 @@ class SSHKeyRepositoryTest extends TestCase
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 42,
-                "label": "My SSH Key",
-                "ssh_key": "string",
-                "created": "2018-01-01T00:01:01"
-            }
-JSON;
+                        {
+                            "id": 42,
+                            "label": "My SSH Key",
+                            "ssh_key": "string",
+                            "created": "2018-01-01T00:01:01"
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/profile/sshkeys', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->add([
             SSHKey::FIELD_LABEL   => 'My SSH Key',
             SSHKey::FIELD_SSH_KEY => 'string',
@@ -72,7 +76,7 @@ JSON;
         self::assertSame('My SSH Key', $entity->label);
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $request = [
             'json' => [
@@ -81,25 +85,25 @@ JSON;
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 42,
-                "label": "My SSH Key",
-                "ssh_key": "string",
-                "created": "2018-01-01T00:01:01"
-            }
-JSON;
+                        {
+                            "id": 42,
+                            "label": "My SSH Key",
+                            "ssh_key": "string",
+                            "created": "2018-01-01T00:01:01"
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['PUT', 'https://api.linode.com/v4/profile/sshkeys/42', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->update(42, [
             SSHKey::FIELD_LABEL => 'My SSH Key',
         ]);
@@ -109,32 +113,32 @@ JSON;
         self::assertSame('My SSH Key', $entity->label);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['DELETE', 'https://api.linode.com/v4/profile/sshkeys/42', [], new Response(200, [], null)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $repository->delete(42);
 
         self::assertTrue(true);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/profile/sshkeys';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'id',
@@ -146,7 +150,7 @@ JSON;
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(SSHKey::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

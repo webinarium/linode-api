@@ -24,31 +24,20 @@ interface ManagedCredentialRepositoryInterface extends RepositoryInterface
      * to allow Linode special forces to access your Managed Services and resolve
      * issues.
      *
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return ManagedCredential
      */
     public function create(array $parameters): ManagedCredential;
 
     /**
      * Updates information about a Managed Credential.
      *
-     * @param int   $id
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return ManagedCredential
      */
     public function update(int $id, array $parameters): ManagedCredential;
 
     /**
      * Deletes a Managed Credential. Linode special forces will no longer
      * have access to this Credential when attempting to resolve issues.
-     *
-     * @param int $id
      *
      * @throws \Linode\Exception\LinodeException
      */

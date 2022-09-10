@@ -26,11 +26,7 @@ interface UserRepositoryInterface extends RepositoryInterface
      * determined by whether or not they are restricted, and what grants they
      * have been given.
      *
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return User
      */
     public function create(array $parameters): User;
 
@@ -40,12 +36,7 @@ interface UserRepositoryInterface extends RepositoryInterface
      * no grants will be configured by default and you must then set up grants
      * in order for the User to access anything on the Account.
      *
-     * @param string $username
-     * @param array  $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return User
      */
     public function update(string $username, array $parameters): User;
 
@@ -53,8 +44,6 @@ interface UserRepositoryInterface extends RepositoryInterface
      * Deletes a User. The deleted User will be immediately logged out and
      * may no longer log in or perform any actions. All of the User's Grants
      * will be removed.
-     *
-     * @param string $username
      *
      * @throws \Linode\Exception\LinodeException
      */
@@ -67,14 +56,12 @@ interface UserRepositoryInterface extends RepositoryInterface
      * `/profile/grants` endpoint, but will not see entities that they have
      * no access to.
      *
-     * @param string $username
-     *
-     * @throws \Linode\Exception\LinodeException
-     *
      * @return null|UserGrant Returns `null` when this is an unrestricted User,
      *                        and therefore has no grants to return. This User
      *                        may access everything on the Account and perform
      *                        all actions.
+     *
+     * @throws \Linode\Exception\LinodeException
      */
     public function getUserGrants(string $username): ?UserGrant;
 
@@ -84,12 +71,7 @@ interface UserRepositoryInterface extends RepositoryInterface
      * include the grant for every entity on the Account in this request; any
      * that are not included will remain unchanged.
      *
-     * @param string $username
-     * @param array  $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return UserGrant
      */
     public function setUserGrants(string $username, array $parameters): UserGrant;
 }

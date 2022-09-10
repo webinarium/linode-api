@@ -22,17 +22,14 @@ use Linode\Repository\Linode\DiskRepositoryInterface;
  */
 class DiskRepository extends AbstractRepository implements DiskRepositoryInterface
 {
-    /** @var int The ID of the Linode whose Disk to look up. */
-    protected $linodeId;
-
     /**
      * {@inheritdoc}
+     *
+     * @param int $linodeId The ID of the Linode whose Disk to look up
      */
-    public function __construct(LinodeClient $client, int $id)
+    public function __construct(LinodeClient $client, protected int $linodeId)
     {
         parent::__construct($client);
-
-        $this->linodeId = $id;
     }
 
     /**

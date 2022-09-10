@@ -14,16 +14,21 @@ namespace Linode\Entity\Linode;
 use Linode\LinodeClient;
 use PHPUnit\Framework\TestCase;
 
-class DevicesTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Entity\Linode\Devices
+ */
+final class DevicesTest extends TestCase
 {
-    protected $client;
+    protected LinodeClient $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client = $this->createMock(LinodeClient::class);
     }
 
-    public function testProperties()
+    public function testProperties(): void
     {
         $entity = new Devices($this->client, [
             'sda' => [
@@ -92,7 +97,6 @@ class DevicesTest extends TestCase
         self::assertSame(124458, $entity->sdh->disk_id);
         self::assertNull($entity->sdh->volume_id);
 
-        /** @noinspection PhpUndefinedFieldInspection */
         self::assertNull($entity->unknown);
     }
 }

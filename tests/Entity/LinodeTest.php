@@ -18,16 +18,21 @@ use Linode\Internal\Linode\LinodeVolumeRepository;
 use Linode\LinodeClient;
 use PHPUnit\Framework\TestCase;
 
-class LinodeTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Entity\Linode
+ */
+final class LinodeTest extends TestCase
 {
-    protected $client;
+    protected LinodeClient $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client = $this->createMock(LinodeClient::class);
     }
 
-    public function testProperties()
+    public function testProperties(): void
     {
         $entity = new Linode($this->client, ['id' => 123]);
 

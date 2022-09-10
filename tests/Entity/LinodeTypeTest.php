@@ -14,16 +14,21 @@ namespace Linode\Entity;
 use Linode\LinodeClient;
 use PHPUnit\Framework\TestCase;
 
-class LinodeTypeTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Entity\LinodeType
+ */
+final class LinodeTypeTest extends TestCase
 {
-    protected $client;
+    protected LinodeClient $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client = $this->createMock(LinodeClient::class);
     }
 
-    public function testPrice()
+    public function testPrice(): void
     {
         $data = [
             'id'          => 'g6-standard-2',

@@ -21,12 +21,10 @@ class QueryCompiler
     /**
      * Applies specified parameters to the query.
      *
-     * @param string $query      Query string.
-     * @param array  $parameters Query parameters.
+     * @param string $query      query string
+     * @param array  $parameters query parameters
      *
      * @throws \Exception
-     *
-     * @return string
      */
     public function apply(string $query, array $parameters): string
     {
@@ -56,11 +54,9 @@ class QueryCompiler
     /**
      * Compiles specified AST node of the query into Linode API filter.
      *
-     * @param Node $node
+     * @return array filters generated for the node
      *
      * @throws \Exception
-     *
-     * @return array Filters generated for the node.
      */
     public function compile(Node $node): array
     {

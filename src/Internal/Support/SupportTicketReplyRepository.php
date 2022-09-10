@@ -22,17 +22,14 @@ use Linode\Repository\Support\SupportTicketReplyRepositoryInterface;
  */
 class SupportTicketReplyRepository extends AbstractRepository implements SupportTicketReplyRepositoryInterface
 {
-    /** @var int The ID of the Support Ticket we are accessing Replies for. */
-    protected $ticketId;
-
     /**
      * {@inheritdoc}
+     *
+     * @param int $ticketId The ID of the Support Ticket we are accessing Replies for
      */
-    public function __construct(LinodeClient $client, int $id)
+    public function __construct(LinodeClient $client, protected int $ticketId)
     {
         parent::__construct($client);
-
-        $this->ticketId = $id;
     }
 
     /**

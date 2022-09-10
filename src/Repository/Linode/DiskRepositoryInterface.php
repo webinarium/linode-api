@@ -24,23 +24,14 @@ interface DiskRepositoryInterface extends RepositoryInterface
      * an Image for a list of available public images, or use one of your own),
      * and optionally provide a StackScript to deploy with this Disk.
      *
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return Disk
      */
     public function create(array $parameters): Disk;
 
     /**
      * Updates a Disk that you have permission to `read_write`.
      *
-     * @param int   $id
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return Disk
      */
     public function update(int $id, array $parameters): Disk;
 
@@ -48,8 +39,6 @@ interface DiskRepositoryInterface extends RepositoryInterface
      * Deletes a Disk you have permission to `read_write`.
      *
      * WARNING! Deleting a Disk is a destructive action and cannot be undone.
-     *
-     * @param int $id
      *
      * @throws \Linode\Exception\LinodeException
      */
@@ -66,18 +55,12 @@ interface DiskRepositoryInterface extends RepositoryInterface
      * The Disk must not be in use. If the Disk is in use, the request will
      * succeed but the resize will ultimately fail.
      *
-     * @param int $id
-     * @param int $size
-     *
      * @throws \Linode\Exception\LinodeException
      */
     public function resize(int $id, int $size): void;
 
     /**
      * Resets the password of a Disk you have permission to `read_write`.
-     *
-     * @param int    $id
-     * @param string $password
      *
      * @throws \Linode\Exception\LinodeException
      */

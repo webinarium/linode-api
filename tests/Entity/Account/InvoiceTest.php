@@ -15,16 +15,21 @@ use Linode\Internal\Account\InvoiceItemRepository;
 use Linode\LinodeClient;
 use PHPUnit\Framework\TestCase;
 
-class InvoiceTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Entity\Account\Invoice
+ */
+final class InvoiceTest extends TestCase
 {
-    protected $client;
+    protected LinodeClient $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client = $this->createMock(LinodeClient::class);
     }
 
-    public function testProperties()
+    public function testProperties(): void
     {
         $entity = new Invoice($this->client, ['id' => 123]);
 

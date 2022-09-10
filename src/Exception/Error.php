@@ -16,19 +16,11 @@ namespace Linode\Exception;
  */
 class Error
 {
-    protected $reason;
-    protected $field;
-
     /**
      * Error constructor.
-     *
-     * @param string      $reason
-     * @param null|string $field
      */
-    public function __construct(string $reason, ?string $field)
+    public function __construct(protected string $reason, protected ?string $field)
     {
-        $this->reason = $reason;
-        $this->field  = $field;
     }
 
     /**
@@ -36,8 +28,6 @@ class Error
      * changing the data you sent in the request, but in some cases you will be instructed to
      * open a Support Ticket or perform some other action before you can complete the request
      * successfully.
-     *
-     * @return string
      */
     public function getReason(): string
     {
@@ -48,8 +38,6 @@ class Error
      * The field in the request that caused this error. This may be a path, separated by
      * periods in the case of nested fields. In some cases this may come back as "null" if the
      * error is not specific to any single element of the request.
-     *
-     * @return null|string
      */
     public function getField(): ?string
     {

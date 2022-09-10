@@ -20,27 +20,16 @@ use Linode\Repository\RepositoryInterface;
 interface SSHKeyRepositoryInterface extends RepositoryInterface
 {
     /**
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return SSHKey
      */
     public function add(array $parameters): SSHKey;
 
     /**
-     * @param int   $id
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return SSHKey
      */
     public function update(int $id, array $parameters): SSHKey;
 
     /**
-     * @param int $id
-     *
      * @throws \Linode\Exception\LinodeException
      */
     public function delete(int $id): void;

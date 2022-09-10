@@ -24,15 +24,13 @@ interface IPAddressRepositoryInterface extends RepositoryInterface
      * configured to support additional addresses - please open a support
      * ticket requesting additional addresses before attempting allocation.
      *
-     * @param int    $linode_id The ID of a Linode you you have access to that this address
-     *                          will be allocated to.
-     * @param bool   $public    Whether to create a public or private IPv4 address.
+     * @param int    $linode_id the ID of a Linode you you have access to that this address
+     *                          will be allocated to
+     * @param bool   $public    whether to create a public or private IPv4 address
      * @param string $type      The type of address you are requesting. Only IPv4 addresses
      *                          may be allocated through this endpoint.
      *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return IPAddress
      */
     public function allocate(int $linode_id, bool $public, string $type = IPAddress::TYPE_IP4): IPAddress;
 
@@ -43,12 +41,7 @@ interface IPAddressRepositoryInterface extends RepositoryInterface
      * If you set the RDNS to `null` for public IPv4 addresses, it will
      * be reset to the default _members.linode.com_  RDNS value.
      *
-     * @param string $id
-     * @param array  $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return IPAddress
      */
     public function update(string $id, array $parameters): IPAddress;
 
@@ -73,7 +66,7 @@ interface IPAddressRepositoryInterface extends RepositoryInterface
      * than the one it lists in its response. This can be used to allow one
      * Linode to begin serving requests should another become unresponsive.
      *
-     * @param int      $linode_id The ID of the Linode that the addresses will be shared with.
+     * @param int      $linode_id the ID of the Linode that the addresses will be shared with
      * @param string[] $ips       A list of IPs that will be shared with this Linode. When
      *                            this is finished, the given Linode will be able to bring up
      *                            these addresses in addition to the Linodes that these

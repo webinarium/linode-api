@@ -15,22 +15,30 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 
-class LinodeExceptionTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Exception\LinodeException
+ */
+final class LinodeExceptionTest extends TestCase
 {
-    public function testWithErrors()
+    public function testWithErrors(): void
     {
         $stream = $this->createMock(StreamInterface::class);
         $stream
             ->method('getContents')
-            ->willReturn('{"errors": [{"reason": "Length must be 1-128 characters", "field": "label"}, {"reason": "Domain is required", "field": "redirect_uri"}]}');
+            ->willReturn('{"errors": [{"reason": "Length must be 1-128 characters", "field": "label"}, {"reason": "Domain is required", "field": "redirect_uri"}]}')
+        ;
 
         $response = $this->createMock(ResponseInterface::class);
         $response
             ->method('getStatusCode')
-            ->willReturn(400);
+            ->willReturn(400)
+        ;
         $response
             ->method('getBody')
-            ->willReturn($stream);
+            ->willReturn($stream)
+        ;
 
         /** @var ResponseInterface $response */
         $exception = new LinodeException($response);
@@ -48,20 +56,23 @@ class LinodeExceptionTest extends TestCase
         self::assertSame('redirect_uri', $error2->getField());
     }
 
-    public function testEmptyErrors()
+    public function testEmptyErrors(): void
     {
         $stream = $this->createMock(StreamInterface::class);
         $stream
             ->method('getContents')
-            ->willReturn(null);
+            ->willReturn(null)
+        ;
 
         $response = $this->createMock(ResponseInterface::class);
         $response
             ->method('getStatusCode')
-            ->willReturn(400);
+            ->willReturn(400)
+        ;
         $response
             ->method('getBody')
-            ->willReturn($stream);
+            ->willReturn($stream)
+        ;
 
         /** @var ResponseInterface $response */
         $exception = new LinodeException($response);

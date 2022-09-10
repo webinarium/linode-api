@@ -19,21 +19,25 @@ use Linode\ReflectionTrait;
 use Linode\Repository\Tags\TagRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class TagRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\Tags\TagRepository
+ */
+final class TagRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var TagRepository */
-    protected $repository;
+    protected TagRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new TagRepository($client);
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $request = [
             'json' => [
@@ -42,22 +46,22 @@ class TagRepositoryTest extends TestCase
         ];
 
         $response = <<<'JSON'
-            {
-                "label": "example tag"
-            }
-JSON;
+                        {
+                            "label": "example tag"
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/tags', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->create([
             Tag::FIELD_LABEL => 'example tag',
         ]);
@@ -66,32 +70,32 @@ JSON;
         self::assertSame('example tag', $entity->label);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['DELETE', 'https://api.linode.com/v4/tags/example tag', [], new Response(200, [], null)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $repository->delete('example tag');
 
         self::assertTrue(true);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/tags';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'label',
@@ -100,7 +104,7 @@ JSON;
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(Tag::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

@@ -34,12 +34,11 @@ class ManagedLinodeSettings extends Entity
     /**
      * {@inheritdoc}
      */
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
-        if ($name === self::FIELD_SSH) {
-            return new SSHSettings($this->client, $this->data[self::FIELD_SSH]);
-        }
-
-        return parent::__get($name);
+        return match ($name) {
+            self::FIELD_SSH => new SSHSettings($this->client, $this->data[self::FIELD_SSH]),
+            default         => parent::__get($name),
+        };
     }
 }

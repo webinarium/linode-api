@@ -14,30 +14,35 @@ namespace Linode\Internal\Account;
 use Linode\Entity\Account\InvoiceItem;
 use Linode\LinodeClient;
 use Linode\ReflectionTrait;
+use Linode\Repository\Account\InvoiceItemRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class InvoiceItemRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\Account\InvoiceItemRepository
+ */
+final class InvoiceItemRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var InvoiceItemRepository */
-    protected $repository;
+    protected InvoiceItemRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new InvoiceItemRepository($client, 123);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/account/invoices/123/items';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'label',
@@ -52,7 +57,7 @@ class InvoiceItemRepositoryTest extends TestCase
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(InvoiceItem::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

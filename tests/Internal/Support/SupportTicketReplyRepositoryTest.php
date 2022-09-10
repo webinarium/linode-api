@@ -19,21 +19,25 @@ use Linode\ReflectionTrait;
 use Linode\Repository\Support\SupportTicketReplyRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class SupportTicketReplyRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\Support\SupportTicketReplyRepository
+ */
+final class SupportTicketReplyRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var SupportTicketReplyRepository */
-    protected $repository;
+    protected SupportTicketReplyRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new SupportTicketReplyRepository($client, 11223344);
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $request = [
             'json' => [
@@ -42,27 +46,27 @@ class SupportTicketReplyRepositoryTest extends TestCase
         ];
 
         $response = <<<'JSON'
-            {
-                "created": "2015-06-02T14:31:41",
-                "created_by": "John Q. Linode",
-                "description": "Thank you for your help. I was able to figure out what the problem was and I successfully reset my password. You guys are the best!",
-                "from_linode": true,
-                "gravatar_id": "474a1b7373ae0be4132649e69c36ce30",
-                "id": 11223345
-            }
-JSON;
+                        {
+                            "created": "2015-06-02T14:31:41",
+                            "created_by": "John Q. Linode",
+                            "description": "Thank you for your help. I was able to figure out what the problem was and I successfully reset my password. You guys are the best!",
+                            "from_linode": true,
+                            "gravatar_id": "474a1b7373ae0be4132649e69c36ce30",
+                            "id": 11223345
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/support/tickets/11223344/replies', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->create([
             SupportTicketReply::FIELD_DESCRIPTION => 'Thank you for your help. I was able to figure out what the problem was and I successfully reset my password. You guys are the best!',
         ]);
@@ -72,14 +76,14 @@ JSON;
         self::assertSame('John Q. Linode', $entity->created_by);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/support/tickets/11223344/replies';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'id',
@@ -93,7 +97,7 @@ JSON;
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(SupportTicketReply::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

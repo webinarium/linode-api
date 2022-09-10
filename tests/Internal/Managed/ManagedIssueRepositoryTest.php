@@ -14,37 +14,42 @@ namespace Linode\Internal\Managed;
 use Linode\Entity\Managed\ManagedIssue;
 use Linode\LinodeClient;
 use Linode\ReflectionTrait;
+use Linode\Repository\Managed\ManagedIssueRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class ManagedIssueRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\Managed\ManagedIssueRepository
+ */
+final class ManagedIssueRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var ManagedIssueRepository */
-    protected $repository;
+    protected ManagedIssueRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new ManagedIssueRepository($client);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/managed/issues';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [];
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(ManagedIssue::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

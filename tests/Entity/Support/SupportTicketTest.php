@@ -16,16 +16,21 @@ use Linode\Internal\Support\SupportTicketReplyRepository;
 use Linode\LinodeClient;
 use PHPUnit\Framework\TestCase;
 
-class SupportTicketTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Entity\Support\SupportTicket
+ */
+final class SupportTicketTest extends TestCase
 {
-    protected $client;
+    protected LinodeClient $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client = $this->createMock(LinodeClient::class);
     }
 
-    public function testProperties()
+    public function testProperties(): void
     {
         $data = [
             'id'          => 11223344,

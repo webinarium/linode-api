@@ -31,17 +31,21 @@ use Linode\Internal\Managed\ManagedServiceRepository;
 use Linode\LinodeClient;
 use PHPUnit\Framework\TestCase;
 
-class AccountTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Entity\Account
+ */
+final class AccountTest extends TestCase
 {
-    /** @var LinodeClient|\PHPUnit\Framework\MockObject\MockObject */
-    protected $client;
+    protected LinodeClient $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client = $this->createMock(LinodeClient::class);
     }
 
-    public function testProperties()
+    public function testProperties(): void
     {
         $entity = new Account($this->client);
 
@@ -58,43 +62,42 @@ class AccountTest extends TestCase
         self::assertInstanceOf(PaymentRepository::class, $entity->payments);
         self::assertInstanceOf(UserRepository::class, $entity->users);
 
-        /** @noinspection PhpUndefinedFieldInspection */
         self::assertNull($entity->unknown);
     }
 
-    public function testGetAccountInformation()
+    public function testGetAccountInformation(): void
     {
         $response = <<<'JSON'
-            {
-                "address_1": "123 Main Street",
-                "address_2": "Suite A",
-                "balance": 200,
-                "city": "Philadelphia",
-                "credit_card": {
-                    "last_four": 1111,
-                    "expiry": "11/2022"
-                },
-                "company": "Linode LLC",
-                "country": "US",
-                "email": "john.smith@linode.com",
-                "first_name": "John",
-                "last_name": "Smith",
-                "phone": "215-555-1212",
-                "state": "Pennsylvania",
-                "tax_id": "ATU99999999",
-                "zip": 19102
-            }
-JSON;
+                        {
+                            "address_1": "123 Main Street",
+                            "address_2": "Suite A",
+                            "balance": 200,
+                            "city": "Philadelphia",
+                            "credit_card": {
+                                "last_four": 1111,
+                                "expiry": "11/2022"
+                            },
+                            "company": "Linode LLC",
+                            "country": "US",
+                            "email": "john.smith@linode.com",
+                            "first_name": "John",
+                            "last_name": "Smith",
+                            "phone": "215-555-1212",
+                            "state": "Pennsylvania",
+                            "tax_id": "ATU99999999",
+                            "zip": 19102
+                        }
+            JSON;
 
         $this->client
             ->method('api')
             ->willReturnMap([
                 ['GET', '/account', [], [], new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         $account = new Account($this->client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $account->getAccountInformation();
 
         self::assertInstanceOf(AccountInformation::class, $entity);
@@ -103,7 +106,7 @@ JSON;
         self::assertSame('11/2022', $entity->credit_card->expiry);
     }
 
-    public function testSetAccountInformation()
+    public function testSetAccountInformation(): void
     {
         $request = [
             'address_1'  => '123 Main Street',
@@ -121,36 +124,36 @@ JSON;
         ];
 
         $response = <<<'JSON'
-            {
-                "address_1": "123 Main Street",
-                "address_2": "Suite A",
-                "balance": 200,
-                "city": "Philadelphia",
-                "credit_card": {
-                    "last_four": 1111,
-                    "expiry": "11/2022"
-                },
-                "company": "Linode LLC",
-                "country": "US",
-                "email": "john.smith@linode.com",
-                "first_name": "John",
-                "last_name": "Smith",
-                "phone": "215-555-1212",
-                "state": "Pennsylvania",
-                "tax_id": "ATU99999999",
-                "zip": 19102
-            }
-JSON;
+                        {
+                            "address_1": "123 Main Street",
+                            "address_2": "Suite A",
+                            "balance": 200,
+                            "city": "Philadelphia",
+                            "credit_card": {
+                                "last_four": 1111,
+                                "expiry": "11/2022"
+                            },
+                            "company": "Linode LLC",
+                            "country": "US",
+                            "email": "john.smith@linode.com",
+                            "first_name": "John",
+                            "last_name": "Smith",
+                            "phone": "215-555-1212",
+                            "state": "Pennsylvania",
+                            "tax_id": "ATU99999999",
+                            "zip": 19102
+                        }
+            JSON;
 
         $this->client
             ->method('api')
             ->willReturnMap([
                 ['PUT', '/account', $request, [], new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         $account = new Account($this->client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $account->setAccountInformation([
             AccountInformation::FIELD_ADDRESS_1  => '123 Main Street',
             AccountInformation::FIELD_ADDRESS_2  => 'Suite A',
@@ -172,7 +175,7 @@ JSON;
         self::assertSame('11/2022', $entity->credit_card->expiry);
     }
 
-    public function testUpdateCreditCard()
+    public function testUpdateCreditCard(): void
     {
         $request = [
             'card_number'  => '4111111111111111',
@@ -184,36 +187,36 @@ JSON;
             ->method('api')
             ->willReturnMap([
                 ['POST', '/account/credit-card', $request, [], new Response(200, [], null)],
-            ]);
+            ])
+        ;
 
         $account = new Account($this->client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $account->updateCreditCard('4111111111111111', '12', '2020');
 
         self::assertTrue(true);
     }
 
-    public function testGetAccountSettings()
+    public function testGetAccountSettings(): void
     {
         $response = <<<'JSON'
-            {
-                "managed": true,
-                "longview_subscription": "longview-30",
-                "network_helper": false,
-                "backups_enabled": true
-            }
-JSON;
+                        {
+                            "managed": true,
+                            "longview_subscription": "longview-30",
+                            "network_helper": false,
+                            "backups_enabled": true
+                        }
+            JSON;
 
         $this->client
             ->method('api')
             ->willReturnMap([
                 ['GET', '/account/settings', [], [], new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         $account = new Account($this->client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $account->getAccountSettings();
 
         self::assertInstanceOf(AccountSettings::class, $entity);
@@ -221,7 +224,7 @@ JSON;
         self::assertTrue($entity->backups_enabled);
     }
 
-    public function testSetAccountSettings()
+    public function testSetAccountSettings(): void
     {
         $request = [
             'longview_subscription' => 'longview-30',
@@ -230,23 +233,23 @@ JSON;
         ];
 
         $response = <<<'JSON'
-            {
-                "managed": true,
-                "longview_subscription": "longview-30",
-                "network_helper": false,
-                "backups_enabled": true
-            }
-JSON;
+                        {
+                            "managed": true,
+                            "longview_subscription": "longview-30",
+                            "network_helper": false,
+                            "backups_enabled": true
+                        }
+            JSON;
 
         $this->client
             ->method('api')
             ->willReturnMap([
                 ['PUT', '/account/settings', $request, [], new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         $account = new Account($this->client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $account->setAccountSettings([
             AccountSettings::FIELD_LONGVIEW_SUBSCRIPTION => 'longview-30',
             AccountSettings::FIELD_NETWORK_HELPER        => false,
@@ -258,25 +261,25 @@ JSON;
         self::assertTrue($entity->backups_enabled);
     }
 
-    public function testGetNetworkUtilization()
+    public function testGetNetworkUtilization(): void
     {
         $response = <<<'JSON'
-            {
-                "billable": 0,
-                "quota": 9141,
-                "used": 2
-            }
-JSON;
+                        {
+                            "billable": 0,
+                            "quota": 9141,
+                            "used": 2
+                        }
+            JSON;
 
         $this->client
             ->method('api')
             ->willReturnMap([
                 ['GET', '/account/transfer', [], [], new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         $account = new Account($this->client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $account->getNetworkUtilization();
 
         self::assertInstanceOf(NetworkUtilization::class, $entity);

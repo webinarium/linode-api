@@ -24,30 +24,19 @@ interface ManagedContactRepositoryInterface extends RepositoryInterface
      * special forces can contact in the course of attempting to resolve an issue
      * with a Managed Service.
      *
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return ManagedContact
      */
     public function create(array $parameters): ManagedContact;
 
     /**
      * Updates information about a Managed Contact.
      *
-     * @param int   $id
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return ManagedContact
      */
     public function update(int $id, array $parameters): ManagedContact;
 
     /**
      * Deletes a Managed Contact.
-     *
-     * @param int $id
      *
      * @throws \Linode\Exception\LinodeException
      */

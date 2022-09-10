@@ -48,12 +48,11 @@ class LinodeType extends Entity
     /**
      * {@inheritdoc}
      */
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
-        if ($name === 'price') {
-            return new Price($this->client, $this->data[$name] ?? []);
-        }
-
-        return parent::__get($name);
+        return match ($name) {
+            'price' => new Price($this->client, $this->data[$name] ?? []),
+            default => parent::__get($name),
+        };
     }
 }

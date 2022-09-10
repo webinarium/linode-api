@@ -1,8 +1,8 @@
 # Linode API Client Library
 
-[![PHP](https://img.shields.io/badge/PHP-7.1%2B-blue.svg)](https://secure.php.net/migration71)
+[![PHP](https://img.shields.io/badge/PHP-8.1%2B-blue.svg)](https://secure.php.net/migration81)
 [![Latest Stable Version](https://poser.pugx.org/webinarium/linode-api/v/stable)](https://packagist.org/packages/webinarium/linode-api)
-[![Build Status](https://travis-ci.org/webinarium/linode-api.svg?branch=master)](https://travis-ci.org/webinarium/linode-api)
+[![Build Status](https://travis-ci.com/webinarium/linode-api.svg?branch=master)](https://travis-ci.com/github/webinarium/linode-api)
 [![Code Coverage](https://scrutinizer-ci.com/g/webinarium/linode-api/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/webinarium/linode-api/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/webinarium/linode-api/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/webinarium/linode-api/?branch=master)
 
@@ -11,7 +11,7 @@ The library is up-to-date with API [4.0.6](https://developers.linode.com/changel
 
 ## Requirements
 
-PHP needs to be a minimum version of PHP 7.1.
+PHP needs to be a minimum version of PHP 8.1.
 
 ## Installation
 
@@ -417,7 +417,7 @@ $repository->delete($linode->id);
 
 ```bash
 ./bin/php-cs-fixer fix
-./bin/phpunit --coverage-text
+XDEBUG_MODE=coverage ./bin/phpunit --coverage-text
 ```
 
 ## Contributing

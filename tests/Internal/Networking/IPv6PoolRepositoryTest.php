@@ -18,28 +18,32 @@ use Linode\ReflectionTrait;
 use Linode\Repository\Networking\IPv6PoolRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class IPv6PoolRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\Networking\IPv6PoolRepository
+ */
+final class IPv6PoolRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var IPv6PoolRepository */
-    protected $repository;
+    protected IPv6PoolRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new IPv6PoolRepository($client);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/networking/ipv6/pools';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'range',
@@ -49,7 +53,7 @@ class IPv6PoolRepositoryTest extends TestCase
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(IPv6Pool::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

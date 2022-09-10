@@ -22,17 +22,14 @@ use Linode\Repository\Tags\TaggedObjectRepositoryInterface;
  */
 class TaggedObjectRepository extends AbstractRepository implements TaggedObjectRepositoryInterface
 {
-    /** @var string The ID of the Tag we are accessing Objects for. */
-    protected $tag;
-
     /**
      * {@inheritdoc}
+     *
+     * @param string $tag The ID of the Tag we are accessing Objects for
      */
-    public function __construct(LinodeClient $client, string $tag)
+    public function __construct(LinodeClient $client, protected string $tag)
     {
         parent::__construct($client);
-
-        $this->tag = $tag;
     }
 
     /**

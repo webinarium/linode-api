@@ -15,16 +15,21 @@ use Linode\Internal\Tags\TaggedObjectRepository;
 use Linode\LinodeClient;
 use PHPUnit\Framework\TestCase;
 
-class TagTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Entity\Tag
+ */
+final class TagTest extends TestCase
 {
-    protected $client;
+    protected LinodeClient $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client = $this->createMock(LinodeClient::class);
     }
 
-    public function testProperties()
+    public function testProperties(): void
     {
         $entity = new Tag($this->client, ['label' => 'example tag']);
 

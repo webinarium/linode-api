@@ -22,17 +22,14 @@ use Linode\Repository\Account\InvoiceItemRepositoryInterface;
  */
 class InvoiceItemRepository extends AbstractRepository implements InvoiceItemRepositoryInterface
 {
-    /** @var int The ID of the Invoice we are accessing InvoiceItems for. */
-    protected $invoiceId;
-
     /**
      * {@inheritdoc}
+     *
+     * @param int $invoiceId The ID of the Invoice we are accessing InvoiceItems for
      */
-    public function __construct(LinodeClient $client, int $id)
+    public function __construct(LinodeClient $client, protected int $invoiceId)
     {
         parent::__construct($client);
-
-        $this->invoiceId = $id;
     }
 
     /**

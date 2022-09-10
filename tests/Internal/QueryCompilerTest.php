@@ -14,23 +14,26 @@ namespace Linode\Internal;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
-class QueryCompilerTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\QueryCompiler
+ */
+final class QueryCompilerTest extends TestCase
 {
-    /** @var QueryCompiler */
-    protected $compiler;
+    protected QueryCompiler $compiler;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->compiler = new QueryCompiler();
     }
 
-    public function testApply()
+    public function testApply(): void
     {
         $expected = '(class == "standard" or size <= 2500) and (vcpus >= 12 and vcpus <= 20 and is_public == true)';
 
         $query = '(class == :class or size <= :maxsize) and (vcpus >= :min and vcpus <= :max and is_public == :public)';
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $actual = $this->compiler->apply($query, [
             'class'   => 'standard',
             'min'     => 12,
@@ -42,14 +45,13 @@ class QueryCompilerTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    public function testApplyException()
+    public function testApplyException(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Parameter "class" contains non-scalar value');
 
         $query = '(class == :class or size <= :maxsize) and (vcpus >= :min and vcpus <= :max and is_public == :public)';
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $this->compiler->apply($query, [
             'class'   => ['standard'],
             'min'     => 12,
@@ -59,7 +61,7 @@ class QueryCompilerTest extends TestCase
         ]);
     }
 
-    public function testCompileEqual()
+    public function testCompileEqual(): void
     {
         $expected = [
             'label' => 'My gold-master image',
@@ -70,11 +72,10 @@ class QueryCompilerTest extends TestCase
         $parser = new ExpressionLanguage();
         $ast    = $parser->parse($query, ['label'])->getNodes();
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         self::assertSame($expected, $this->compiler->compile($ast));
     }
 
-    public function testCompileNotEqual()
+    public function testCompileNotEqual(): void
     {
         $expected = [
             'is_public' => [
@@ -87,11 +88,10 @@ class QueryCompilerTest extends TestCase
         $parser = new ExpressionLanguage();
         $ast    = $parser->parse($query, ['is_public'])->getNodes();
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         self::assertSame($expected, $this->compiler->compile($ast));
     }
 
-    public function testCompileLessThan()
+    public function testCompileLessThan(): void
     {
         $expected = [
             'size' => [
@@ -104,11 +104,10 @@ class QueryCompilerTest extends TestCase
         $parser = new ExpressionLanguage();
         $ast    = $parser->parse($query, ['size'])->getNodes();
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         self::assertSame($expected, $this->compiler->compile($ast));
     }
 
-    public function testCompileLessThanOrEqual()
+    public function testCompileLessThanOrEqual(): void
     {
         $expected = [
             'size' => [
@@ -121,11 +120,10 @@ class QueryCompilerTest extends TestCase
         $parser = new ExpressionLanguage();
         $ast    = $parser->parse($query, ['size'])->getNodes();
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         self::assertSame($expected, $this->compiler->compile($ast));
     }
 
-    public function testCompileGreaterThan()
+    public function testCompileGreaterThan(): void
     {
         $expected = [
             'size' => [
@@ -138,11 +136,10 @@ class QueryCompilerTest extends TestCase
         $parser = new ExpressionLanguage();
         $ast    = $parser->parse($query, ['size'])->getNodes();
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         self::assertSame($expected, $this->compiler->compile($ast));
     }
 
-    public function testCompileGreaterThanOrEqual()
+    public function testCompileGreaterThanOrEqual(): void
     {
         $expected = [
             'size' => [
@@ -155,11 +152,10 @@ class QueryCompilerTest extends TestCase
         $parser = new ExpressionLanguage();
         $ast    = $parser->parse($query, ['size'])->getNodes();
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         self::assertSame($expected, $this->compiler->compile($ast));
     }
 
-    public function testCompileContains()
+    public function testCompileContains(): void
     {
         $expected = [
             'created' => [
@@ -172,11 +168,10 @@ class QueryCompilerTest extends TestCase
         $parser = new ExpressionLanguage();
         $ast    = $parser->parse($query, ['created'])->getNodes();
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         self::assertSame($expected, $this->compiler->compile($ast));
     }
 
-    public function testCompileInvalidExpression()
+    public function testCompileInvalidExpression(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Invalid expression');
@@ -186,11 +181,10 @@ class QueryCompilerTest extends TestCase
         $parser = new ExpressionLanguage();
         $ast    = $parser->parse($query, ['label'])->getNodes();
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $this->compiler->compile($ast);
     }
 
-    public function testCompileUnknownOperator()
+    public function testCompileUnknownOperator(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Unknown operator "+"');
@@ -200,11 +194,10 @@ class QueryCompilerTest extends TestCase
         $parser = new ExpressionLanguage();
         $ast    = $parser->parse($query, ['label'])->getNodes();
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $this->compiler->compile($ast);
     }
 
-    public function testCompileLeftOperand()
+    public function testCompileLeftOperand(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Left operand for the "==" operator must be a field name');
@@ -214,11 +207,10 @@ class QueryCompilerTest extends TestCase
         $parser = new ExpressionLanguage();
         $ast    = $parser->parse($query, ['label'])->getNodes();
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $this->compiler->compile($ast);
     }
 
-    public function testCompileRightOperand()
+    public function testCompileRightOperand(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Right operand for the "==" operator must be a constant value');
@@ -228,11 +220,10 @@ class QueryCompilerTest extends TestCase
         $parser = new ExpressionLanguage();
         $ast    = $parser->parse($query, ['label', 'image'])->getNodes();
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $this->compiler->compile($ast);
     }
 
-    public function testCompileAnd()
+    public function testCompileAnd(): void
     {
         $expected = [
             '+and' => [
@@ -246,11 +237,10 @@ class QueryCompilerTest extends TestCase
         $parser = new ExpressionLanguage();
         $ast    = $parser->parse($query, ['vcpus', 'class'])->getNodes();
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         self::assertSame($expected, $this->compiler->compile($ast));
     }
 
-    public function testCompileOr()
+    public function testCompileOr(): void
     {
         $expected = [
             '+or' => [
@@ -264,11 +254,10 @@ class QueryCompilerTest extends TestCase
         $parser = new ExpressionLanguage();
         $ast    = $parser->parse($query, ['vcpus', 'class'])->getNodes();
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         self::assertSame($expected, $this->compiler->compile($ast));
     }
 
-    public function testCompileComplexQuery()
+    public function testCompileComplexQuery(): void
     {
         $expected = [
             '+and' => [
@@ -300,7 +289,6 @@ class QueryCompilerTest extends TestCase
         $parser = new ExpressionLanguage();
         $ast    = $parser->parse($query, ['vcpus', 'class'])->getNodes();
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         self::assertSame($expected, $this->compiler->compile($ast));
     }
 }

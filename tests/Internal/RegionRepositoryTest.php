@@ -14,30 +14,35 @@ namespace Linode\Internal;
 use Linode\Entity\Region;
 use Linode\LinodeClient;
 use Linode\ReflectionTrait;
+use Linode\Repository\RegionRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class RegionRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\RegionRepository
+ */
+final class RegionRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var RegionRepository */
-    protected $repository;
+    protected RegionRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new RegionRepository($client);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/regions';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'id',
@@ -47,7 +52,7 @@ class RegionRepositoryTest extends TestCase
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(Region::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

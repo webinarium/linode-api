@@ -21,19 +21,19 @@ use Linode\Internal\NodeBalancers\NodeBalancerConfigRepository;
  * accepts traffic. The traffic should be routed to the NodeBalancer's ip address,
  * the NodeBalancer will handle routing individual requests to backends.
  *
- * @property int          $id                   This NodeBalancer's unique ID.
- * @property string       $label                This NodeBalancer's label. These must be unique on your Account.
- * @property string       $region               The Region where this NodeBalancer is located. NodeBalancers only
- *                                              support backends in the same Region.
- * @property string       $hostname             This NodeBalancer's hostname, ending with ".nodebalancer.linode.com".
- * @property string       $ipv4                 This NodeBalancer's public IPv4 address.
- * @property string       $ipv6                 This NodeBalancer's public IPv6 address.
- * @property int          $client_conn_throttle Throttle connections per second. Set to 0 (zero) to disable throttling.
- * @property string       $created              When this NodeBalancer was created.
- * @property string       $updated              When this NodeBalancer was last updated.
- * @property NodeTransfer $transfer             Information about the amount of transfer this NodeBalancer has had
- *                                              so far this month.
- * @property \Linode\Repository\NodeBalancers\NodeBalancerConfigRepositoryInterface $configs Configs of the NodeBalancer.
+ * @property int                                                                    $id                   This NodeBalancer's unique ID.
+ * @property string                                                                 $label                This NodeBalancer's label. These must be unique on your Account.
+ * @property string                                                                 $region               The Region where this NodeBalancer is located. NodeBalancers only
+ *                                                                                                        support backends in the same Region.
+ * @property string                                                                 $hostname             This NodeBalancer's hostname, ending with ".nodebalancer.linode.com".
+ * @property string                                                                 $ipv4                 This NodeBalancer's public IPv4 address.
+ * @property string                                                                 $ipv6                 This NodeBalancer's public IPv6 address.
+ * @property int                                                                    $client_conn_throttle Throttle connections per second. Set to 0 (zero) to disable throttling.
+ * @property string                                                                 $created              When this NodeBalancer was created.
+ * @property string                                                                 $updated              When this NodeBalancer was last updated.
+ * @property NodeTransfer                                                           $transfer             Information about the amount of transfer this NodeBalancer has had
+ *                                                                                                        so far this month.
+ * @property \Linode\Repository\NodeBalancers\NodeBalancerConfigRepositoryInterface $configs              Configs of the NodeBalancer.
  */
 class NodeBalancer extends Entity
 {
@@ -52,16 +52,12 @@ class NodeBalancer extends Entity
     /**
      * {@inheritdoc}
      */
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
-        if ($name === 'transfer') {
-            return new NodeTransfer($this->client, $this->data[$name]);
-        }
-
-        if ($name === 'configs') {
-            return new NodeBalancerConfigRepository($this->client, $this->id);
-        }
-
-        return parent::__get($name);
+        return match ($name) {
+            'transfer' => new NodeTransfer($this->client, $this->data[$name]),
+            'configs'  => new NodeBalancerConfigRepository($this->client, $this->id),
+            default    => parent::__get($name),
+        };
     }
 }

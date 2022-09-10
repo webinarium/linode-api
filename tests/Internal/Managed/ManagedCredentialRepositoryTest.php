@@ -19,21 +19,25 @@ use Linode\ReflectionTrait;
 use Linode\Repository\Managed\ManagedCredentialRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class ManagedCredentialRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\Managed\ManagedCredentialRepository
+ */
+final class ManagedCredentialRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var ManagedCredentialRepository */
-    protected $repository;
+    protected ManagedCredentialRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new ManagedCredentialRepository($client);
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $request = [
             'json' => [
@@ -44,23 +48,23 @@ class ManagedCredentialRepositoryTest extends TestCase
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 9991,
-                "label": "prod-password-1"
-            }
-JSON;
+                        {
+                            "id": 9991,
+                            "label": "prod-password-1"
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/managed/credentials', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->create([
             ManagedCredential::FIELD_LABEL    => 'prod-password-1',
             ManagedCredential::FIELD_USERNAME => 'johndoe',
@@ -72,7 +76,7 @@ JSON;
         self::assertSame('prod-password-1', $entity->label);
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $request = [
             'json' => [
@@ -81,23 +85,23 @@ JSON;
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 9991,
-                "label": "prod-password-1"
-            }
-JSON;
+                        {
+                            "id": 9991,
+                            "label": "prod-password-1"
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['PUT', 'https://api.linode.com/v4/managed/credentials/9991', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->update(9991, [
             ManagedCredential::FIELD_LABEL => 'prod-password-1',
         ]);
@@ -107,32 +111,32 @@ JSON;
         self::assertSame('prod-password-1', $entity->label);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/managed/credentials/9991/revoke', [], new Response(200, [], null)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $repository->delete(9991);
 
         self::assertTrue(true);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/managed/credentials';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'id',
@@ -144,7 +148,7 @@ JSON;
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(ManagedCredential::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

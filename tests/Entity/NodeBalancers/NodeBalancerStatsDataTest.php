@@ -15,16 +15,21 @@ use Linode\Entity\TimeValue;
 use Linode\LinodeClient;
 use PHPUnit\Framework\TestCase;
 
-class NodeBalancerStatsDataTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Entity\NodeBalancers\NodeBalancerStatsData
+ */
+final class NodeBalancerStatsDataTest extends TestCase
 {
-    protected $client;
+    protected LinodeClient $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client = $this->createMock(LinodeClient::class);
     }
 
-    public function testProperties()
+    public function testProperties(): void
     {
         $data = [
             'connections' => [
@@ -51,7 +56,6 @@ class NodeBalancerStatsDataTest extends TestCase
         self::assertCount(1, $entity->traffic->in);
         self::assertCount(1, $entity->traffic->out);
 
-        /** @noinspection PhpUndefinedFieldInspection */
         self::assertNull($entity->unknown);
     }
 }

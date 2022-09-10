@@ -14,16 +14,21 @@ namespace Linode\Entity\Profile;
 use Linode\LinodeClient;
 use PHPUnit\Framework\TestCase;
 
-class ProfileInformationTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Entity\Profile\ProfileInformation
+ */
+final class ProfileInformationTest extends TestCase
 {
-    protected $client;
+    protected LinodeClient $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client = $this->createMock(LinodeClient::class);
     }
 
-    public function testProperties()
+    public function testProperties(): void
     {
         $data = [
             'uid'                  => 1234,

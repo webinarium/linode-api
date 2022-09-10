@@ -19,21 +19,25 @@ use Linode\ReflectionTrait;
 use Linode\Repository\Support\SupportTicketRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class SupportTicketRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\Support\SupportTicketRepository
+ */
+final class SupportTicketRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var SupportTicketRepository */
-    protected $repository;
+    protected SupportTicketRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new SupportTicketRepository($client);
     }
 
-    public function testOpen()
+    public function testOpen(): void
     {
         $request = [
             'json' => [
@@ -48,42 +52,42 @@ class SupportTicketRepositoryTest extends TestCase
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 11223344,
-                "attachments": [
-                    "screenshot.jpg",
-                    "screenshot.txt"
-                ],
-                "closed": "2015-06-04T16:07:03",
-                "closable": false,
-                "description": "I'm having trouble setting the root password on my Linode. I tried following the instructions but something is not working and I'm not sure what I'm doing wrong. Can you please help me figure out how I can reset it?\n",
-                "entity": {
-                    "id": 10400,
-                    "label": "linode123456",
-                    "type": "linode",
-                    "url": "/v4/linode/instances/123456"
-                },
-                "gravatar_id": "474a1b7373ae0be4132649e69c36ce30",
-                "opened": "2015-06-04T14:16:44",
-                "opened_by": "some_user",
-                "status": "open",
-                "summary": "Having trouble resetting root password on my Linode\n",
-                "updated": "2015-06-04T16:07:03",
-                "updated_by": "some_other_user"
-            }
-JSON;
+                        {
+                            "id": 11223344,
+                            "attachments": [
+                                "screenshot.jpg",
+                                "screenshot.txt"
+                            ],
+                            "closed": "2015-06-04T16:07:03",
+                            "closable": false,
+                            "description": "I'm having trouble setting the root password on my Linode. I tried following the instructions but something is not working and I'm not sure what I'm doing wrong. Can you please help me figure out how I can reset it?\n",
+                            "entity": {
+                                "id": 10400,
+                                "label": "linode123456",
+                                "type": "linode",
+                                "url": "/v4/linode/instances/123456"
+                            },
+                            "gravatar_id": "474a1b7373ae0be4132649e69c36ce30",
+                            "opened": "2015-06-04T14:16:44",
+                            "opened_by": "some_user",
+                            "status": "open",
+                            "summary": "Having trouble resetting root password on my Linode\n",
+                            "updated": "2015-06-04T16:07:03",
+                            "updated_by": "some_other_user"
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/support/tickets', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->open([
             SupportTicket::FIELD_DESCRIPTION       => 'I\'m having trouble setting the root password on my Linode. I tried following the instructions but something is not working and I\'m not sure what I\'m doing wrong. Can you please help me figure out how I can reset it?',
             SupportTicket::FIELD_DOMAIN_ID         => null,
@@ -99,32 +103,32 @@ JSON;
         self::assertSame("Having trouble resetting root password on my Linode\n", $entity->summary);
     }
 
-    public function testClose()
+    public function testClose(): void
     {
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/support/tickets/11223344/close', [], new Response(200, [], null)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $repository->close(11223344);
 
         self::assertTrue(true);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/support/tickets';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'id',
@@ -148,7 +152,7 @@ JSON;
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(SupportTicket::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

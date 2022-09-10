@@ -40,7 +40,7 @@ class Devices extends Entity
     /**
      * {@inheritdoc}
      */
-    public function __get(string $name)
+    public function __get(string $name): ?Device
     {
         if (array_key_exists($name, $this->data)) {
             return new Device($this->client, $this->data[$name]);

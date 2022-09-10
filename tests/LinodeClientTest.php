@@ -35,12 +35,18 @@ use Linode\Internal\Support\SupportTicketRepository;
 use Linode\Internal\Tags\TagRepository;
 use Linode\Internal\VolumeRepository;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ResponseInterface;
 
-class LinodeClientTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\LinodeClient
+ */
+final class LinodeClientTest extends TestCase
 {
     use ReflectionTrait;
 
-    public function testProperties()
+    public function testProperties(): void
     {
         $object = new LinodeClient();
 
@@ -62,14 +68,13 @@ class LinodeClientTest extends TestCase
         self::assertInstanceOf(SupportTicketRepository::class, $object->tickets);
         self::assertInstanceOf(VolumeRepository::class, $object->volumes);
 
-        /** @noinspection PhpUndefinedFieldInspection */
         self::assertNull($object->unknown);
     }
 
-    public function testApiGetAnonymous()
+    public function testApiGetAnonymous(): void
     {
         $client = new class() extends Client {
-            public function request($method, $uri = '', array $options = [])
+            public function request($method, $uri = '', array $options = []): Response
             {
                 return new Response(200, [], json_encode($options));
             }
@@ -77,11 +82,9 @@ class LinodeClientTest extends TestCase
 
         $object = $this->mockLinodeClient($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $response = $object->api('GET', '/test');
         self::assertSame([], json_decode($response->getBody()->getContents(), true));
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $response = $object->api('GET', '/test', ['page' => 2, 'page_size' => 25]);
         self::assertSame([
             'query' => [
@@ -90,7 +93,6 @@ class LinodeClientTest extends TestCase
             ],
         ], json_decode($response->getBody()->getContents(), true));
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $response = $object->api('GET', '/test', [], ['class' => 'standard', 'vcpus' => 1]);
         self::assertSame([
             'headers' => [
@@ -98,7 +100,6 @@ class LinodeClientTest extends TestCase
             ],
         ], json_decode($response->getBody()->getContents(), true));
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $response = $object->api('GET', '/test', ['page' => 2, 'page_size' => 25], ['class' => 'standard', 'vcpus' => 1]);
         self::assertSame([
             'headers' => [
@@ -111,10 +112,10 @@ class LinodeClientTest extends TestCase
         ], json_decode($response->getBody()->getContents(), true));
     }
 
-    public function testApiGet()
+    public function testApiGet(): void
     {
         $client = new class() extends Client {
-            public function request($method, $uri = '', array $options = [])
+            public function request($method, $uri = '', array $options = []): Response
             {
                 return new Response(200, [], json_encode($options));
             }
@@ -122,7 +123,6 @@ class LinodeClientTest extends TestCase
 
         $object = $this->mockLinodeClient($client, 'secret');
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $response = $object->api('GET', '/test');
         self::assertSame([
             'headers' => [
@@ -130,7 +130,6 @@ class LinodeClientTest extends TestCase
             ],
         ], json_decode($response->getBody()->getContents(), true));
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $response = $object->api('GET', '/test', ['page' => 2, 'page_size' => 25]);
         self::assertSame([
             'headers' => [
@@ -142,7 +141,6 @@ class LinodeClientTest extends TestCase
             ],
         ], json_decode($response->getBody()->getContents(), true));
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $response = $object->api('GET', '/test', [], ['class' => 'standard', 'vcpus' => 1]);
         self::assertSame([
             'headers' => [
@@ -151,7 +149,6 @@ class LinodeClientTest extends TestCase
             ],
         ], json_decode($response->getBody()->getContents(), true));
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $response = $object->api('GET', '/test', ['page' => 2, 'page_size' => 25], ['class' => 'standard', 'vcpus' => 1]);
         self::assertSame([
             'headers' => [
@@ -165,10 +162,10 @@ class LinodeClientTest extends TestCase
         ], json_decode($response->getBody()->getContents(), true));
     }
 
-    public function testApiPost()
+    public function testApiPost(): void
     {
         $client = new class() extends Client {
-            public function request($method, $uri = '', array $options = [])
+            public function request($method, $uri = '', array $options = []): Response
             {
                 return new Response(200, [], json_encode($options));
             }
@@ -176,7 +173,6 @@ class LinodeClientTest extends TestCase
 
         $object = $this->mockLinodeClient($client, 'secret');
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $response = $object->api('POST', '/test');
         self::assertSame([
             'headers' => [
@@ -184,7 +180,6 @@ class LinodeClientTest extends TestCase
             ],
         ], json_decode($response->getBody()->getContents(), true));
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $response = $object->api('POST', '/test', ['domain' => 'example.com', 'type' => 'master']);
         self::assertSame([
             'headers' => [
@@ -196,7 +191,6 @@ class LinodeClientTest extends TestCase
             ],
         ], json_decode($response->getBody()->getContents(), true));
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $response = $object->api('POST', '/test', [], ['class' => 'standard', 'vcpus' => 1]);
         self::assertSame([
             'headers' => [
@@ -204,7 +198,6 @@ class LinodeClientTest extends TestCase
             ],
         ], json_decode($response->getBody()->getContents(), true));
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $response = $object->api('POST', '/test', ['domain' => 'example.com', 'type' => 'master'], ['class' => 'standard', 'vcpus' => 1]);
         self::assertSame([
             'headers' => [
@@ -217,10 +210,10 @@ class LinodeClientTest extends TestCase
         ], json_decode($response->getBody()->getContents(), true));
     }
 
-    public function testApiPut()
+    public function testApiPut(): void
     {
         $client = new class() extends Client {
-            public function request($method, $uri = '', array $options = [])
+            public function request($method, $uri = '', array $options = []): Response
             {
                 return new Response(200, [], json_encode($options));
             }
@@ -228,7 +221,6 @@ class LinodeClientTest extends TestCase
 
         $object = $this->mockLinodeClient($client, 'secret');
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $response = $object->api('PUT', '/test');
         self::assertSame([
             'headers' => [
@@ -236,7 +228,6 @@ class LinodeClientTest extends TestCase
             ],
         ], json_decode($response->getBody()->getContents(), true));
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $response = $object->api('PUT', '/test', ['domain' => 'example.com', 'type' => 'master']);
         self::assertSame([
             'headers' => [
@@ -248,7 +239,6 @@ class LinodeClientTest extends TestCase
             ],
         ], json_decode($response->getBody()->getContents(), true));
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $response = $object->api('PUT', '/test', [], ['class' => 'standard', 'vcpus' => 1]);
         self::assertSame([
             'headers' => [
@@ -256,7 +246,6 @@ class LinodeClientTest extends TestCase
             ],
         ], json_decode($response->getBody()->getContents(), true));
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $response = $object->api('PUT', '/test', ['domain' => 'example.com', 'type' => 'master'], ['class' => 'standard', 'vcpus' => 1]);
         self::assertSame([
             'headers' => [
@@ -269,10 +258,10 @@ class LinodeClientTest extends TestCase
         ], json_decode($response->getBody()->getContents(), true));
     }
 
-    public function testApiDelete()
+    public function testApiDelete(): void
     {
         $client = new class() extends Client {
-            public function request($method, $uri = '', array $options = [])
+            public function request($method, $uri = '', array $options = []): Response
             {
                 return new Response(200, [], json_encode($options));
             }
@@ -280,7 +269,6 @@ class LinodeClientTest extends TestCase
 
         $object = $this->mockLinodeClient($client, 'secret');
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $response = $object->api('DELETE', '/test');
         self::assertSame([
             'headers' => [
@@ -288,7 +276,6 @@ class LinodeClientTest extends TestCase
             ],
         ], json_decode($response->getBody()->getContents(), true));
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $response = $object->api('DELETE', '/test', ['domain' => 'example.com', 'type' => 'master']);
         self::assertSame([
             'headers' => [
@@ -296,7 +283,6 @@ class LinodeClientTest extends TestCase
             ],
         ], json_decode($response->getBody()->getContents(), true));
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $response = $object->api('DELETE', '/test', [], ['class' => 'standard', 'vcpus' => 1]);
         self::assertSame([
             'headers' => [
@@ -304,7 +290,6 @@ class LinodeClientTest extends TestCase
             ],
         ], json_decode($response->getBody()->getContents(), true));
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $response = $object->api('DELETE', '/test', ['domain' => 'example.com', 'type' => 'master'], ['class' => 'standard', 'vcpus' => 1]);
         self::assertSame([
             'headers' => [
@@ -313,14 +298,14 @@ class LinodeClientTest extends TestCase
         ], json_decode($response->getBody()->getContents(), true));
     }
 
-    public function testApiClientException()
+    public function testApiClientException(): void
     {
         $this->expectException(LinodeException::class);
         $this->expectExceptionCode(400);
         $this->expectExceptionMessage('Unknown error');
 
         $client = new class() extends Client {
-            public function request($method, $uri = '', array $options = [])
+            public function request($method, $uri = '', array $options = []): ResponseInterface
             {
                 $request  = new Request($method, $uri);
                 $response = new Response(400);
@@ -331,18 +316,17 @@ class LinodeClientTest extends TestCase
 
         $object = $this->mockLinodeClient($client, 'secret');
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $object->api('GET', '/client');
     }
 
-    public function testApiGuzzleException()
+    public function testApiGuzzleException(): void
     {
         $this->expectException(LinodeException::class);
         $this->expectExceptionCode(500);
         $this->expectExceptionMessage('Unknown error');
 
         $client = new class() extends Client {
-            public function request($method, $uri = '', array $options = [])
+            public function request($method, $uri = '', array $options = []): ResponseInterface
             {
                 throw new TransferException('Invalid URI');
             }
@@ -350,11 +334,10 @@ class LinodeClientTest extends TestCase
 
         $object = $this->mockLinodeClient($client, 'secret');
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $object->api('GET', '/guzzle');
     }
 
-    protected function mockLinodeClient(Client $client, string $access_token = null)
+    protected function mockLinodeClient(Client $client, string $access_token = null): LinodeClient
     {
         $object = new LinodeClient($access_token);
         $this->setProperty($object, 'client', $client);

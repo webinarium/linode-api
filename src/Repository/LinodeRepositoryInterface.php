@@ -23,23 +23,14 @@ interface LinodeRepositoryInterface extends RepositoryInterface
      * to complete successfully, your User must have the `add_linodes` grant.
      * Creating a new Linode will incur a charge on your Account.
      *
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return Linode
      */
     public function create(array $parameters): Linode;
 
     /**
      * Updates a Linode that you have permission to `read_write`.
      *
-     * @param int   $id
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return Linode
      */
     public function update(int $id, array $parameters): Linode;
 
@@ -47,8 +38,6 @@ interface LinodeRepositoryInterface extends RepositoryInterface
      * Deletes a Linode you have permission to `read_write`.
      *
      * WARNING! Deleting a Linode is a destructive action and cannot be undone.
-     *
-     * @param int $id
      *
      * @throws \Linode\Exception\LinodeException
      */
@@ -63,9 +52,6 @@ interface LinodeRepositoryInterface extends RepositoryInterface
      * If cloning to an existing Linode, any actions currently running or
      * queued must be completed first before you can clone to it.
      *
-     * @param int   $id
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
      */
     public function clone(int $id, array $parameters): void;
@@ -77,12 +63,7 @@ interface LinodeRepositoryInterface extends RepositoryInterface
      * on the Linode, and then deploy a new `image` to the Linode with the given
      * attributes.
      *
-     * @param int   $id
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return Linode
      */
     public function rebuild(int $id, array $parameters): Linode;
 
@@ -90,9 +71,6 @@ interface LinodeRepositoryInterface extends RepositoryInterface
      * Resizes a Linode you have the `read_write` permission to a different
      * Type. If any actions are currently running or queued, those actions must
      * be completed first before you can initiate a resize.
-     *
-     * @param int    $id
-     * @param string $type
      *
      * @throws \Linode\Exception\LinodeException
      */
@@ -107,8 +85,6 @@ interface LinodeRepositoryInterface extends RepositoryInterface
      * If any actions are currently running or queued, those actions must be
      * completed first before you can initiate a mutate.
      *
-     * @param int $id
-     *
      * @throws \Linode\Exception\LinodeException
      */
     public function mutate(int $id): void;
@@ -119,8 +95,6 @@ interface LinodeRepositoryInterface extends RepositoryInterface
      * will be returned from `/account/notifications`. This endpoint initiates
      * the scheduled migration, which will shut the Linode down, migrate it,
      * and then bring it back to its original state.
-     *
-     * @param int $id
      *
      * @throws \Linode\Exception\LinodeException
      */
@@ -134,9 +108,6 @@ interface LinodeRepositoryInterface extends RepositoryInterface
      * - If there is more than one Config profile and none were the last to be booted (because the
      *   Linode was never booted or the last booted config was deleted) an error will be returned.
      *
-     * @param int      $id
-     * @param null|int $config_id
-     *
      * @throws \Linode\Exception\LinodeException
      */
     public function boot(int $id, int $config_id = null): void;
@@ -145,9 +116,6 @@ interface LinodeRepositoryInterface extends RepositoryInterface
      * Reboots a Linode you have permission to modify. If any actions are currently running or
      * queued, those actions must be completed first before you can initiate a reboot.
      *
-     * @param int      $id
-     * @param null|int $config_id
-     *
      * @throws \Linode\Exception\LinodeException
      */
     public function reboot(int $id, int $config_id = null): void;
@@ -155,8 +123,6 @@ interface LinodeRepositoryInterface extends RepositoryInterface
     /**
      * Shuts down a Linode you have permission to modify. If any actions are currently running or
      * queued, those actions must be completed first before you can initiate a shutdown.
-     *
-     * @param int $id
      *
      * @throws \Linode\Exception\LinodeException
      */
@@ -170,23 +136,16 @@ interface LinodeRepositoryInterface extends RepositoryInterface
      * formatting disks to use different filesystems, copying data between
      * disks, and downloading files from a disk via SSH and SFTP.
      *
-     * @param int   $id
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
      */
     public function rescue(int $id, array $parameters): void;
 
     /**
-     * @param int $id
-     *
      * @throws \Linode\Exception\LinodeException
      */
     public function enableBackups(int $id): void;
 
     /**
-     * @param int $id
-     *
      * @throws \Linode\Exception\LinodeException
      */
     public function cancelBackups(int $id): void;
@@ -197,54 +156,36 @@ interface LinodeRepositoryInterface extends RepositoryInterface
      * WARNING! If you already have a snapshot of this Linode, this is a destructive
      * action. The previous snapshot will be deleted.
      *
-     * @param int    $id
-     * @param string $label
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return Linode\Backup
      */
     public function createSnapshot(int $id, string $label): Linode\Backup;
 
     /**
      * Restores a Linode's Backup to the specified Linode.
      *
-     * @param int  $source_id The ID of the Linode that the Backup belongs to.
-     * @param int  $backup_id The ID of the Backup to restore.
-     * @param int  $target_id The ID of the Linode to restore a Backup to.
-     * @param bool $overwrite If `true`, deletes all Disks and Configs on the target Linode before restoring.
+     * @param int  $source_id the ID of the Linode that the Backup belongs to
+     * @param int  $backup_id the ID of the Backup to restore
+     * @param int  $target_id the ID of the Linode to restore a Backup to
+     * @param bool $overwrite if `true`, deletes all Disks and Configs on the target Linode before restoring
      *
      * @throws \Linode\Exception\LinodeException
      */
     public function restoreBackup(int $source_id, int $backup_id, int $target_id, bool $overwrite = true): void;
 
     /**
-     * @param int $id
-     * @param int $backup_id
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return Linode\Backup
      */
     public function getBackup(int $id, int $backup_id): Linode\Backup;
 
     /**
-     * @param int $id
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return array
      */
     public function getAllBackups(int $id): array;
 
     /**
      * View the Linode's current statistics for the past 24 hours.
      *
-     * @param int $id
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return Linode\LinodeStats
      */
     public function getCurrentStats(int $id): Linode\LinodeStats;
 
@@ -253,13 +194,7 @@ interface LinodeRepositoryInterface extends RepositoryInterface
      * values must be either a date in the past, or the current month. If the
      * current month, statistics will be retrieved for the past 30 days.
      *
-     * @param int $id
-     * @param int $year
-     * @param int $month
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return Linode\LinodeStats
      */
     public function getMonthlyStats(int $id, int $year, int $month): Linode\LinodeStats;
 }

@@ -22,30 +22,19 @@ interface DomainRecordRepositoryInterface extends RepositoryInterface
     /**
      * Adds a new Domain Record to the zonefile this Domain represents.
      *
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return DomainRecord
      */
     public function create(array $parameters): DomainRecord;
 
     /**
      * Updates a single Record on this Domain.
      *
-     * @param int   $id
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return DomainRecord
      */
     public function update(int $id, array $parameters): DomainRecord;
 
     /**
      * Deletes a Record on this Domain.
-     *
-     * @param int $id
      *
      * @throws \Linode\Exception\LinodeException
      */

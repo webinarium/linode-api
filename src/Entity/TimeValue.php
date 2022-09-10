@@ -19,27 +19,17 @@ namespace Linode\Entity;
  */
 class TimeValue
 {
-    protected $time;
-    protected $value;
-
     /**
      * TimeValue constructor.
-     *
-     * @param int   $time
-     * @param float $value
      */
-    public function __construct(int $time, float $value)
+    public function __construct(protected int $time, protected float $value)
     {
-        $this->time  = $time;
-        $this->value = $value;
     }
 
     /**
      * Checks whether the specified property exists.
      *
-     * @param string $name Property name.
-     *
-     * @return bool
+     * @param string $name property name
      */
     public function __isset(string $name): bool
     {
@@ -49,20 +39,16 @@ class TimeValue
     /**
      * Returns current value of the specified property, or `null` if the property doesn't exist.
      *
-     * @param string $name Property name.
+     * @param string $name property name
      *
      * @return null|float|int
      */
     public function __get(string $name)
     {
-        if ($name === 'time') {
-            return $this->time;
-        }
-
-        if ($name === 'value') {
-            return $this->value;
-        }
-
-        return null;
+        return match ($name) {
+            'time'  => $this->time,
+            'value' => $this->value,
+            default => null,
+        };
     }
 }

@@ -19,8 +19,6 @@ use Linode\Repository\RepositoryInterface;
 interface AuthorizedAppRepositoryInterface extends RepositoryInterface
 {
     /**
-     * @param int $id
-     *
      * @throws \Linode\Exception\LinodeException
      */
     public function revoke(int $id): void;

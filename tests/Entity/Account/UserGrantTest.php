@@ -14,16 +14,21 @@ namespace Linode\Entity\Account;
 use Linode\LinodeClient;
 use PHPUnit\Framework\TestCase;
 
-class UserGrantTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Entity\Account\UserGrant
+ */
+final class UserGrantTest extends TestCase
 {
-    protected $client;
+    protected LinodeClient $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client = $this->createMock(LinodeClient::class);
     }
 
-    public function testProperties()
+    public function testProperties(): void
     {
         $entity = new UserGrant($this->client, [
             'global'       => [
@@ -133,7 +138,6 @@ class UserGrantTest extends TestCase
         self::assertSame('read_only', $entity->volume[0]->permissions);
         self::assertSame('example-entity', $entity->volume[0]->label);
 
-        /** @noinspection PhpUndefinedFieldInspection */
         self::assertNull($entity->unknown);
     }
 }

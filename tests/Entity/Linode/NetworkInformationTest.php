@@ -14,16 +14,21 @@ namespace Linode\Entity\Linode;
 use Linode\LinodeClient;
 use PHPUnit\Framework\TestCase;
 
-class NetworkInformationTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Entity\Linode\NetworkInformation
+ */
+final class NetworkInformationTest extends TestCase
 {
-    protected $client;
+    protected LinodeClient $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client = $this->createMock(LinodeClient::class);
     }
 
-    public function testProperties()
+    public function testProperties(): void
     {
         $data = [
             'ipv4' => [
@@ -105,7 +110,6 @@ class NetworkInformationTest extends TestCase
         self::assertInstanceOf(IPv6Information::class, $entity->ipv6);
         self::assertSame('2600:3c01::02:5000::', $entity->ipv6->global->range);
 
-        /** @noinspection PhpUndefinedFieldInspection */
         self::assertNull($entity->unknown);
     }
 }

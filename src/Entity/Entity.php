@@ -18,27 +18,20 @@ use Linode\LinodeClient;
  */
 abstract class Entity
 {
-    protected $client;
-    protected $data;
-
     /**
      * Entity constructor.
      *
-     * @param LinodeClient $client Linode API client.
-     * @param array        $data   JSON data retrieved from Linode.
+     * @param LinodeClient $client linode API client
+     * @param array        $data   JSON data retrieved from Linode
      */
-    public function __construct(LinodeClient $client, array $data = [])
+    public function __construct(protected LinodeClient $client, protected array $data = [])
     {
-        $this->client = $client;
-        $this->data   = $data;
     }
 
     /**
      * Checks whether the specified property exists in the entity.
      *
-     * @param string $name Property name.
-     *
-     * @return bool
+     * @param string $name property name
      */
     public function __isset(string $name): bool
     {
@@ -48,19 +41,17 @@ abstract class Entity
     /**
      * Returns current value of the specified property, or `null` if the property doesn't exist.
      *
-     * @param string $name Property name.
+     * @param string $name property name
      *
      * @return null|mixed
      */
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
         return $this->data[$name] ?? null;
     }
 
     /**
      * Converts the entity into an array.
-     *
-     * @return array
      */
     public function toArray(): array
     {

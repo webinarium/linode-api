@@ -16,16 +16,21 @@ use Linode\Entity\Networking\IPv6Pool;
 use Linode\LinodeClient;
 use PHPUnit\Framework\TestCase;
 
-class IPv6InformationTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Entity\Linode\IPv6Information
+ */
+final class IPv6InformationTest extends TestCase
 {
-    protected $client;
+    protected LinodeClient $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client = $this->createMock(LinodeClient::class);
     }
 
-    public function testProperties()
+    public function testProperties(): void
     {
         $data = [
             'link_local' => [
@@ -67,7 +72,6 @@ class IPv6InformationTest extends TestCase
         self::assertInstanceOf(IPv6Pool::class, $entity->global);
         self::assertSame('2600:3c01::02:5000::', $entity->global->range);
 
-        /** @noinspection PhpUndefinedFieldInspection */
         self::assertNull($entity->unknown);
     }
 }

@@ -59,12 +59,11 @@ class ProfileInformation extends Entity
     /**
      * {@inheritdoc}
      */
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
-        if ($name === 'referrals') {
-            return new ProfileReferrals($this->client, $this->data['referrals']);
-        }
-
-        return parent::__get($name);
+        return match ($name) {
+            'referrals' => new ProfileReferrals($this->client, $this->data['referrals']),
+            default     => parent::__get($name),
+        };
     }
 }

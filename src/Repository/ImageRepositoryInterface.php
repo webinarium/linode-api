@@ -24,23 +24,14 @@ interface ImageRepositoryInterface extends RepositoryInterface
      *
      * Images are limited to three per Account.
      *
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return Image
      */
     public function create(array $parameters): Image;
 
     /**
      * Updates a private Image that you have permission to `read_write`.
      *
-     * @param string $id
-     * @param array  $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return Image
      */
     public function update(string $id, array $parameters): Image;
 
@@ -48,8 +39,6 @@ interface ImageRepositoryInterface extends RepositoryInterface
      * Deletes a private Image you have permission to `read_write`.
      *
      * WARNING! Deleting an Image is a destructive action and cannot be undone.
-     *
-     * @param string $id
      *
      * @throws \Linode\Exception\LinodeException
      */

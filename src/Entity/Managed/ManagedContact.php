@@ -36,12 +36,11 @@ class ManagedContact extends Entity
     /**
      * {@inheritdoc}
      */
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
-        if ($name === self::FIELD_PHONE) {
-            return new Phone($this->client, $this->data[self::FIELD_PHONE]);
-        }
-
-        return parent::__get($name);
+        return match ($name) {
+            self::FIELD_PHONE => new Phone($this->client, $this->data[self::FIELD_PHONE]),
+            default           => parent::__get($name),
+        };
     }
 }

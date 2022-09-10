@@ -22,21 +22,25 @@ use Linode\ReflectionTrait;
 use Linode\Repository\Linode\ConfigurationProfileRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class ConfigurationProfileRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\Linode\ConfigurationProfileRepository
+ */
+final class ConfigurationProfileRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var ConfigurationProfileRepository */
-    protected $repository;
+    protected ConfigurationProfileRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new ConfigurationProfileRepository($client, 123);
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $request = [
             'json' => [
@@ -92,70 +96,70 @@ class ConfigurationProfileRepositoryTest extends TestCase
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 456,
-                "kernel": "linode/latest-64bit",
-                "comments": "This is my main Config",
-                "memory_limit": 2048,
-                "run_level": "default",
-                "virt_mode": "paravirt",
-                "helpers": {
-                    "updatedb_disabled": true,
-                    "distro": true,
-                    "modules_dep": true,
-                    "network": true,
-                    "devtmpfs_automount": false
-                },
-                "label": "My Config",
-                "devices": {
-                    "sda": {
-                        "disk_id": 124458,
-                        "volume_id": null
-                    },
-                    "sdb": {
-                        "disk_id": 124458,
-                        "volume_id": null
-                    },
-                    "sdc": {
-                        "disk_id": 124458,
-                        "volume_id": null
-                    },
-                    "sdd": {
-                        "disk_id": 124458,
-                        "volume_id": null
-                    },
-                    "sde": {
-                        "disk_id": 124458,
-                        "volume_id": null
-                    },
-                    "sdf": {
-                        "disk_id": 124458,
-                        "volume_id": null
-                    },
-                    "sdg": {
-                        "disk_id": 124458,
-                        "volume_id": null
-                    },
-                    "sdh": {
-                        "disk_id": 124458,
-                        "volume_id": null
-                    }
-                },
-                "root_device": "/dev/sda"
-            }
-JSON;
+                        {
+                            "id": 456,
+                            "kernel": "linode/latest-64bit",
+                            "comments": "This is my main Config",
+                            "memory_limit": 2048,
+                            "run_level": "default",
+                            "virt_mode": "paravirt",
+                            "helpers": {
+                                "updatedb_disabled": true,
+                                "distro": true,
+                                "modules_dep": true,
+                                "network": true,
+                                "devtmpfs_automount": false
+                            },
+                            "label": "My Config",
+                            "devices": {
+                                "sda": {
+                                    "disk_id": 124458,
+                                    "volume_id": null
+                                },
+                                "sdb": {
+                                    "disk_id": 124458,
+                                    "volume_id": null
+                                },
+                                "sdc": {
+                                    "disk_id": 124458,
+                                    "volume_id": null
+                                },
+                                "sdd": {
+                                    "disk_id": 124458,
+                                    "volume_id": null
+                                },
+                                "sde": {
+                                    "disk_id": 124458,
+                                    "volume_id": null
+                                },
+                                "sdf": {
+                                    "disk_id": 124458,
+                                    "volume_id": null
+                                },
+                                "sdg": {
+                                    "disk_id": 124458,
+                                    "volume_id": null
+                                },
+                                "sdh": {
+                                    "disk_id": 124458,
+                                    "volume_id": null
+                                }
+                            },
+                            "root_device": "/dev/sda"
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/linode/instances/123/configs', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->create([
             ConfigurationProfile::FIELD_KERNEL       => 'linode/latest-64bit',
             ConfigurationProfile::FIELD_COMMENTS     => 'This is my main Config',
@@ -212,7 +216,7 @@ JSON;
         self::assertSame('linode/latest-64bit', $entity->kernel);
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $request = [
             'json' => [
@@ -268,70 +272,70 @@ JSON;
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 456,
-                "kernel": "linode/latest-64bit",
-                "comments": "This is my main Config",
-                "memory_limit": 2048,
-                "run_level": "default",
-                "virt_mode": "paravirt",
-                "helpers": {
-                    "updatedb_disabled": true,
-                    "distro": true,
-                    "modules_dep": true,
-                    "network": true,
-                    "devtmpfs_automount": false
-                },
-                "label": "My Config",
-                "devices": {
-                    "sda": {
-                        "disk_id": 124458,
-                        "volume_id": null
-                    },
-                    "sdb": {
-                        "disk_id": 124458,
-                        "volume_id": null
-                    },
-                    "sdc": {
-                        "disk_id": 124458,
-                        "volume_id": null
-                    },
-                    "sdd": {
-                        "disk_id": 124458,
-                        "volume_id": null
-                    },
-                    "sde": {
-                        "disk_id": 124458,
-                        "volume_id": null
-                    },
-                    "sdf": {
-                        "disk_id": 124458,
-                        "volume_id": null
-                    },
-                    "sdg": {
-                        "disk_id": 124458,
-                        "volume_id": null
-                    },
-                    "sdh": {
-                        "disk_id": 124458,
-                        "volume_id": null
-                    }
-                },
-                "root_device": "/dev/sda"
-            }
-JSON;
+                        {
+                            "id": 456,
+                            "kernel": "linode/latest-64bit",
+                            "comments": "This is my main Config",
+                            "memory_limit": 2048,
+                            "run_level": "default",
+                            "virt_mode": "paravirt",
+                            "helpers": {
+                                "updatedb_disabled": true,
+                                "distro": true,
+                                "modules_dep": true,
+                                "network": true,
+                                "devtmpfs_automount": false
+                            },
+                            "label": "My Config",
+                            "devices": {
+                                "sda": {
+                                    "disk_id": 124458,
+                                    "volume_id": null
+                                },
+                                "sdb": {
+                                    "disk_id": 124458,
+                                    "volume_id": null
+                                },
+                                "sdc": {
+                                    "disk_id": 124458,
+                                    "volume_id": null
+                                },
+                                "sdd": {
+                                    "disk_id": 124458,
+                                    "volume_id": null
+                                },
+                                "sde": {
+                                    "disk_id": 124458,
+                                    "volume_id": null
+                                },
+                                "sdf": {
+                                    "disk_id": 124458,
+                                    "volume_id": null
+                                },
+                                "sdg": {
+                                    "disk_id": 124458,
+                                    "volume_id": null
+                                },
+                                "sdh": {
+                                    "disk_id": 124458,
+                                    "volume_id": null
+                                }
+                            },
+                            "root_device": "/dev/sda"
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['PUT', 'https://api.linode.com/v4/linode/instances/123/configs/456', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->update(456, [
             ConfigurationProfile::FIELD_KERNEL       => 'linode/latest-64bit',
             ConfigurationProfile::FIELD_COMMENTS     => 'This is my main Config',
@@ -388,32 +392,32 @@ JSON;
         self::assertSame('linode/latest-64bit', $entity->kernel);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['DELETE', 'https://api.linode.com/v4/linode/instances/123/configs/456', [], new Response(200, [], null)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $repository->delete(456);
 
         self::assertTrue(true);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/linode/instances/123/configs';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'id',
@@ -431,7 +435,7 @@ JSON;
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(ConfigurationProfile::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

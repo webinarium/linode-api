@@ -14,30 +14,35 @@ namespace Linode\Internal\Linode;
 use Linode\Entity\Volume;
 use Linode\LinodeClient;
 use Linode\ReflectionTrait;
+use Linode\Repository\Linode\LinodeVolumeRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class LinodeVolumeRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\Linode\LinodeVolumeRepository
+ */
+final class LinodeVolumeRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var LinodeVolumeRepository */
-    protected $repository;
+    protected LinodeVolumeRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new LinodeVolumeRepository($client, 123);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/linode/instances/123/volumes';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'id',
@@ -51,7 +56,7 @@ class LinodeVolumeRepositoryTest extends TestCase
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(Volume::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

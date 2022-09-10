@@ -47,75 +47,43 @@ use Linode\Repository\RepositoryInterface;
  */
 class Account
 {
-    protected $client;
-
     /**
      * Account constructor.
      *
-     * @param LinodeClient $client Linode API client.
+     * @param LinodeClient $client linode API client
      */
-    public function __construct(LinodeClient $client)
+    public function __construct(protected LinodeClient $client)
     {
-        $this->client = $client;
     }
 
     /**
      * Returns requested repository.
      *
-     * @param string $name Repository name.
-     *
-     * @return null|RepositoryInterface
+     * @param string $name repository name
      */
-    public function __get(string $name)
+    public function __get(string $name): ?RepositoryInterface
     {
-        switch ($name) {
-
-            case 'events':
-                return new EventRepository($this->client);
-
-            case 'invoices':
-                return new InvoiceRepository($this->client);
-
-            case 'longviews_clients':
-                return new LongviewClientRepository($this->client);
-
-            case 'managed_contacts':
-                return new ManagedContactRepository($this->client);
-
-            case 'managed_credentials':
-                return new ManagedCredentialRepository($this->client);
-
-            case 'managed_issues':
-                return new ManagedIssueRepository($this->client);
-
-            case 'managed_linode_settings':
-                return new ManagedLinodeSettingsRepository($this->client);
-
-            case 'managed_services':
-                return new ManagedServiceRepository($this->client);
-
-            case 'notifications':
-                return new NotificationRepository($this->client);
-
-            case 'oauth_clients':
-                return new OAuthClientRepository($this->client);
-
-            case 'payments':
-                return new PaymentRepository($this->client);
-
-            case 'users':
-                return new UserRepository($this->client);
-        }
-
-        return null;
+        return match ($name) {
+            'events'                  => new EventRepository($this->client),
+            'invoices'                => new InvoiceRepository($this->client),
+            'longviews_clients'       => new LongviewClientRepository($this->client),
+            'managed_contacts'        => new ManagedContactRepository($this->client),
+            'managed_credentials'     => new ManagedCredentialRepository($this->client),
+            'managed_issues'          => new ManagedIssueRepository($this->client),
+            'managed_linode_settings' => new ManagedLinodeSettingsRepository($this->client),
+            'managed_services'        => new ManagedServiceRepository($this->client),
+            'notifications'           => new NotificationRepository($this->client),
+            'oauth_clients'           => new OAuthClientRepository($this->client),
+            'payments'                => new PaymentRepository($this->client),
+            'users'                   => new UserRepository($this->client),
+            default                   => null,
+        };
     }
 
     /**
      * Returns the contact and billing information related to your Account.
      *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return AccountInformation
      */
     public function getAccountInformation(): AccountInformation
     {
@@ -129,11 +97,7 @@ class Account
     /**
      * Updates contact and billing information related to your Account.
      *
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return AccountInformation
      */
     public function setAccountInformation(array $parameters): AccountInformation
     {
@@ -152,8 +116,8 @@ class Account
      * new credit card.
      *
      * @param string $card_number  Your credit card number. No spaces or dashes allowed.
-     * @param string $expiry_month A value from 1-12 representing the expiration month of your credit card.
-     * @param string $expiry_year  A four-digit integer representing the expiration year of your credit card.
+     * @param string $expiry_month a value from 1-12 representing the expiration month of your credit card
+     * @param string $expiry_year  a four-digit integer representing the expiration year of your credit card
      *
      * @throws \Linode\Exception\LinodeException
      */
@@ -173,8 +137,6 @@ class Account
      * subscription, Longview subscription, and network helper.
      *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return AccountSettings
      */
     public function getAccountSettings(): AccountSettings
     {
@@ -188,11 +150,7 @@ class Account
     /**
      * Updates your Account settings.
      *
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return AccountSettings
      */
     public function setAccountSettings(array $parameters): AccountSettings
     {
@@ -207,8 +165,6 @@ class Account
      * Returns a Transfer object showing your network utilization, in GB, for the current month.
      *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return NetworkUtilization
      */
     public function getNetworkUtilization(): NetworkUtilization
     {

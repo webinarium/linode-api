@@ -9,15 +9,18 @@
 //
 //----------------------------------------------------------------------
 
-/** @noinspection PhpUndefinedFieldInspection */
-
 namespace Linode\Entity;
 
 use PHPUnit\Framework\TestCase;
 
-class TimeValueTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Entity\TimeValue
+ */
+final class TimeValueTest extends TestCase
 {
-    public function testIsSet()
+    public function testIsSet(): void
     {
         $entity = new TimeValue(1521483600000, 0.42);
 
@@ -26,7 +29,7 @@ class TimeValueTest extends TestCase
         self::assertFalse(isset($entity->unknown));
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $entity = new TimeValue(1521483600000, 0.42);
 

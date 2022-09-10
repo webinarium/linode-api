@@ -23,17 +23,14 @@ use Linode\Repository\NodeBalancers\NodeBalancerConfigRepositoryInterface;
  */
 class NodeBalancerConfigRepository extends AbstractRepository implements NodeBalancerConfigRepositoryInterface
 {
-    /** @var int The ID of the NodeBalancer we are accessing Configs for. */
-    protected $nodeBalancerId;
-
     /**
      * {@inheritdoc}
+     *
+     * @param int $nodeBalancerId The ID of the NodeBalancer we are accessing Configs for
      */
-    public function __construct(LinodeClient $client, int $id)
+    public function __construct(LinodeClient $client, protected int $nodeBalancerId)
     {
         parent::__construct($client);
-
-        $this->nodeBalancerId = $id;
     }
 
     /**

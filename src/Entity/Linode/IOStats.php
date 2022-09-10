@@ -28,12 +28,10 @@ class IOStats extends Entity
     /**
      * {@inheritdoc}
      */
-    public function __get(string $name)
+    public function __get(string $name): ?array
     {
         if (array_key_exists($name, $this->data)) {
-            return array_map(function ($data) {
-                return new TimeValue((int) $data[0], (float) $data[1]);
-            }, $this->data[$name]);
+            return array_map(fn ($data) => new TimeValue((int) $data[0], (float) $data[1]), $this->data[$name]);
         }
 
         return null;

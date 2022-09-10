@@ -21,21 +21,25 @@ use Linode\ReflectionTrait;
 use Linode\Repository\NodeBalancers\NodeBalancerConfigRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class NodeBalancerConfigRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\NodeBalancers\NodeBalancerConfigRepository
+ */
+final class NodeBalancerConfigRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var NodeBalancerConfigRepository */
-    protected $repository;
+    protected NodeBalancerConfigRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new NodeBalancerConfigRepository($client, 12345);
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $request = [
             'json' => [
@@ -57,43 +61,43 @@ class NodeBalancerConfigRepositoryTest extends TestCase
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 4567,
-                "port": 80,
-                "protocol": "http",
-                "algorithm": "roundrobin",
-                "stickiness": "http_cookie",
-                "check": "http_body",
-                "check_interval": 90,
-                "check_timeout": 10,
-                "check_attempts": 3,
-                "check_path": "/test",
-                "check_body": "it works",
-                "check_passive": true,
-                "cipher_suite": "recommended",
-                "nodebalancer_id": 12345,
-                "ssl_commonname": null,
-                "ssl_fingerprint": null,
-                "ssl_cert": null,
-                "ssl_key": null,
-                "nodes_status": {
-                    "up": 4,
-                    "down": 0
-                }
-            }
-JSON;
+                        {
+                            "id": 4567,
+                            "port": 80,
+                            "protocol": "http",
+                            "algorithm": "roundrobin",
+                            "stickiness": "http_cookie",
+                            "check": "http_body",
+                            "check_interval": 90,
+                            "check_timeout": 10,
+                            "check_attempts": 3,
+                            "check_path": "/test",
+                            "check_body": "it works",
+                            "check_passive": true,
+                            "cipher_suite": "recommended",
+                            "nodebalancer_id": 12345,
+                            "ssl_commonname": null,
+                            "ssl_fingerprint": null,
+                            "ssl_cert": null,
+                            "ssl_key": null,
+                            "nodes_status": {
+                                "up": 4,
+                                "down": 0
+                            }
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/nodebalancers/12345/configs', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->create([
             NodeBalancerConfig::FIELD_PORT           => 80,
             NodeBalancerConfig::FIELD_PROTOCOL       => 'http',
@@ -116,7 +120,7 @@ JSON;
         self::assertSame('roundrobin', $entity->algorithm);
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $request = [
             'json' => [
@@ -138,43 +142,43 @@ JSON;
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 4567,
-                "port": 80,
-                "protocol": "http",
-                "algorithm": "roundrobin",
-                "stickiness": "http_cookie",
-                "check": "http_body",
-                "check_interval": 90,
-                "check_timeout": 10,
-                "check_attempts": 3,
-                "check_path": "/test",
-                "check_body": "it works",
-                "check_passive": true,
-                "cipher_suite": "recommended",
-                "nodebalancer_id": 12345,
-                "ssl_commonname": null,
-                "ssl_fingerprint": null,
-                "ssl_cert": null,
-                "ssl_key": null,
-                "nodes_status": {
-                    "up": 4,
-                    "down": 0
-                }
-            }
-JSON;
+                        {
+                            "id": 4567,
+                            "port": 80,
+                            "protocol": "http",
+                            "algorithm": "roundrobin",
+                            "stickiness": "http_cookie",
+                            "check": "http_body",
+                            "check_interval": 90,
+                            "check_timeout": 10,
+                            "check_attempts": 3,
+                            "check_path": "/test",
+                            "check_body": "it works",
+                            "check_passive": true,
+                            "cipher_suite": "recommended",
+                            "nodebalancer_id": 12345,
+                            "ssl_commonname": null,
+                            "ssl_fingerprint": null,
+                            "ssl_cert": null,
+                            "ssl_key": null,
+                            "nodes_status": {
+                                "up": 4,
+                                "down": 0
+                            }
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['PUT', 'https://api.linode.com/v4/nodebalancers/12345/configs/4567', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->update(4567, [
             NodeBalancerConfig::FIELD_PORT           => 80,
             NodeBalancerConfig::FIELD_PROTOCOL       => 'http',
@@ -197,25 +201,25 @@ JSON;
         self::assertSame('roundrobin', $entity->algorithm);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['DELETE', 'https://api.linode.com/v4/nodebalancers/12345/configs/4567', [], new Response(200, [], null)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $repository->delete(4567);
 
         self::assertTrue(true);
     }
 
-    public function testRebuild()
+    public function testRebuild(): void
     {
         $request = [
             'json' => [
@@ -249,35 +253,35 @@ JSON;
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 12345,
-                "label": "balancer12345",
-                "region": "us-east",
-                "hostname": "nb-207-192-68-16.newark.nodebalancer.linode.com",
-                "ipv4": "12.34.56.78",
-                "ipv6": null,
-                "created": "2018-01-01T00:01:01.000Z",
-                "updated": "2018-03-01T00:01:01.000Z",
-                "client_conn_throttle": 0,
-                "transfer": {
-                    "total": 32.46078109741211,
-                    "out": 3.5487728118896484,
-                    "in": 28.91200828552246
-                }
-            }
-JSON;
+                        {
+                            "id": 12345,
+                            "label": "balancer12345",
+                            "region": "us-east",
+                            "hostname": "nb-207-192-68-16.newark.nodebalancer.linode.com",
+                            "ipv4": "12.34.56.78",
+                            "ipv6": null,
+                            "created": "2018-01-01T00:01:01.000Z",
+                            "updated": "2018-03-01T00:01:01.000Z",
+                            "client_conn_throttle": 0,
+                            "transfer": {
+                                "total": 32.46078109741211,
+                                "out": 3.5487728118896484,
+                                "in": 28.91200828552246
+                            }
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/nodebalancers/12345/configs/4567/rebuild', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->rebuild(4567, [
             NodeBalancer::FIELD_CONFIGS => [
                 [
@@ -312,14 +316,14 @@ JSON;
         self::assertSame('balancer12345', $entity->label);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/nodebalancers/12345/configs';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'id',
@@ -345,7 +349,7 @@ JSON;
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(NodeBalancerConfig::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

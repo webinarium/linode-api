@@ -19,21 +19,25 @@ use Linode\ReflectionTrait;
 use Linode\Repository\StackScriptRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class StackScriptRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\StackScriptRepository
+ */
+final class StackScriptRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var StackScriptRepository */
-    protected $repository;
+    protected StackScriptRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new StackScriptRepository($client);
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $request = [
             'json' => [
@@ -50,42 +54,42 @@ class StackScriptRepositoryTest extends TestCase
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 10079,
-                "username": "myuser",
-                "user_gravatar_id": "a445b305abda30ebc766bc7fda037c37",
-                "label": "a-stackscript",
-                "description": "This StackScript installs and configures MySQL\n",
-                "images": [
-                    "linode/debian9",
-                    "linode/debian8"
-                ],
-                "deployments_total": 12,
-                "deployments_active": 1,
-                "is_public": true,
-                "created": "2018-01-01T00:01:01",
-                "updated": "2018-01-01T00:01:01",
-                "rev_note": "Set up MySQL",
-                "script": "\"#!/bin/bash\"\n",
-                "user_defined_fields": {
-                    "label": "Enter the DB password",
-                    "name": "DB_PASSWORD",
-                    "example": "hunter2"
-                }
-            }
-JSON;
+                        {
+                            "id": 10079,
+                            "username": "myuser",
+                            "user_gravatar_id": "a445b305abda30ebc766bc7fda037c37",
+                            "label": "a-stackscript",
+                            "description": "This StackScript installs and configures MySQL\n",
+                            "images": [
+                                "linode/debian9",
+                                "linode/debian8"
+                            ],
+                            "deployments_total": 12,
+                            "deployments_active": 1,
+                            "is_public": true,
+                            "created": "2018-01-01T00:01:01",
+                            "updated": "2018-01-01T00:01:01",
+                            "rev_note": "Set up MySQL",
+                            "script": "\"#!/bin/bash\"\n",
+                            "user_defined_fields": {
+                                "label": "Enter the DB password",
+                                "name": "DB_PASSWORD",
+                                "example": "hunter2"
+                            }
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/linode/stackscripts', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->create([
             StackScript::FIELD_LABEL       => 'a-stackscript',
             StackScript::FIELD_DESCRIPTION => "This StackScript installs and configures MySQL\n",
@@ -103,7 +107,7 @@ JSON;
         self::assertSame('a-stackscript', $entity->label);
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $request = [
             'json' => [
@@ -120,42 +124,42 @@ JSON;
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 10079,
-                "username": "myuser",
-                "user_gravatar_id": "a445b305abda30ebc766bc7fda037c37",
-                "label": "a-stackscript",
-                "description": "This StackScript installs and configures MySQL\n",
-                "images": [
-                    "linode/debian9",
-                    "linode/debian8"
-                ],
-                "deployments_total": 12,
-                "deployments_active": 1,
-                "is_public": true,
-                "created": "2018-01-01T00:01:01",
-                "updated": "2018-01-01T00:01:01",
-                "rev_note": "Set up MySQL",
-                "script": "\"#!/bin/bash\"\n",
-                "user_defined_fields": {
-                    "label": "Enter the DB password",
-                    "name": "DB_PASSWORD",
-                    "example": "hunter2"
-                }
-            }
-JSON;
+                        {
+                            "id": 10079,
+                            "username": "myuser",
+                            "user_gravatar_id": "a445b305abda30ebc766bc7fda037c37",
+                            "label": "a-stackscript",
+                            "description": "This StackScript installs and configures MySQL\n",
+                            "images": [
+                                "linode/debian9",
+                                "linode/debian8"
+                            ],
+                            "deployments_total": 12,
+                            "deployments_active": 1,
+                            "is_public": true,
+                            "created": "2018-01-01T00:01:01",
+                            "updated": "2018-01-01T00:01:01",
+                            "rev_note": "Set up MySQL",
+                            "script": "\"#!/bin/bash\"\n",
+                            "user_defined_fields": {
+                                "label": "Enter the DB password",
+                                "name": "DB_PASSWORD",
+                                "example": "hunter2"
+                            }
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['PUT', 'https://api.linode.com/v4/linode/stackscripts/10079', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->update(10079, [
             StackScript::FIELD_LABEL       => 'a-stackscript',
             StackScript::FIELD_DESCRIPTION => "This StackScript installs and configures MySQL\n",
@@ -173,32 +177,32 @@ JSON;
         self::assertSame('a-stackscript', $entity->label);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['DELETE', 'https://api.linode.com/v4/linode/stackscripts/10079', [], new Response(200, [], null)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $repository->delete(10079);
 
         self::assertTrue(true);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/linode/stackscripts';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'id',
@@ -220,7 +224,7 @@ JSON;
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(StackScript::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

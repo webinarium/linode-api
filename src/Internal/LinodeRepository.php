@@ -216,9 +216,8 @@ class LinodeRepository extends AbstractRepository implements LinodeRepositoryInt
     {
         $response = $this->client->api($this->client::REQUEST_GET, sprintf('%s/%s/backups', $this->getBaseUri(), $id));
         $contents = $response->getBody()->getContents();
-        $json     = json_decode($contents, true);
 
-        return $json;
+        return json_decode($contents, true);
     }
 
     /**

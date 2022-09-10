@@ -14,16 +14,21 @@ namespace Linode\Entity\NodeBalancers;
 use Linode\LinodeClient;
 use PHPUnit\Framework\TestCase;
 
-class NodeBalancerStatsTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Entity\NodeBalancers\NodeBalancerStats
+ */
+final class NodeBalancerStatsTest extends TestCase
 {
-    protected $client;
+    protected LinodeClient $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client = $this->createMock(LinodeClient::class);
     }
 
-    public function testProperties()
+    public function testProperties(): void
     {
         $data = [
             'data'  => [
@@ -49,7 +54,6 @@ class NodeBalancerStatsTest extends TestCase
         self::assertInstanceOf(NodeBalancerStatsData::class, $entity->data);
         self::assertInstanceOf(NodeTraffic::class, $entity->data->traffic);
 
-        /** @noinspection PhpUndefinedFieldInspection */
         self::assertNull($entity->unknown);
     }
 }

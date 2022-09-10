@@ -22,11 +22,7 @@ interface SupportTicketReplyRepositoryInterface extends RepositoryInterface
     /**
      * Adds a reply to an existing Support Ticket.
      *
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return SupportTicketReply
      */
     public function create(array $parameters): SupportTicketReply;
 }

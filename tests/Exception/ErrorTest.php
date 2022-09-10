@@ -13,9 +13,14 @@ namespace Linode\Exception;
 
 use PHPUnit\Framework\TestCase;
 
-class ErrorTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Exception\Error
+ */
+final class ErrorTest extends TestCase
 {
-    public function testWithField()
+    public function testWithField(): void
     {
         $error = new Error('This field is required', 'name');
 
@@ -23,7 +28,7 @@ class ErrorTest extends TestCase
         self::assertSame('name', $error->getField());
     }
 
-    public function testWithoutField()
+    public function testWithoutField(): void
     {
         $error = new Error('This field is required', null);
 

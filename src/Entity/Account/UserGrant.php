@@ -43,16 +43,14 @@ class UserGrant extends Entity
     /**
      * {@inheritdoc}
      */
-    public function __get(string $name)
+    public function __get(string $name): null|array|GlobalGrant
     {
         if ($name === self::FIELD_GLOBAL) {
             return new GlobalGrant($this->client, $this->data[self::FIELD_GLOBAL]);
         }
 
         if (array_key_exists($name, $this->data)) {
-            return array_map(function ($data) {
-                return new Grant($this->client, $data);
-            }, $this->data[$name]);
+            return array_map(fn ($data) => new Grant($this->client, $data), $this->data[$name]);
         }
 
         return null;

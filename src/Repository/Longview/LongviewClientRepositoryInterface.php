@@ -25,11 +25,7 @@ interface LongviewClientRepositoryInterface extends RepositoryInterface
      * Client application on your Linode using the returning `install_code`
      * and `api_key`.
      *
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return LongviewClient
      */
     public function create(array $parameters): LongviewClient;
 
@@ -38,12 +34,7 @@ interface LongviewClientRepositoryInterface extends RepositoryInterface
      * server; use the Longview Client application on your Linode for
      * monitoring configuration.
      *
-     * @param int   $id
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return LongviewClient
      */
     public function update(int $id, array $parameters): LongviewClient;
 
@@ -53,8 +44,6 @@ interface LongviewClientRepositoryInterface extends RepositoryInterface
      * Linode - you must do that manually.
      *
      * WARNING! All information stored for this client will be lost.
-     *
-     * @param int $id
      *
      * @throws \Linode\Exception\LinodeException
      */

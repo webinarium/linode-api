@@ -14,30 +14,35 @@ namespace Linode\Internal\Account;
 use Linode\Entity\Account\Notification;
 use Linode\LinodeClient;
 use Linode\ReflectionTrait;
+use Linode\Repository\Account\NotificationRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class NotificationRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\Account\NotificationRepository
+ */
+final class NotificationRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var NotificationRepository */
-    protected $repository;
+    protected NotificationRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new NotificationRepository($client);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/account/notifications';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'label',
@@ -51,7 +56,7 @@ class NotificationRepositoryTest extends TestCase
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(Notification::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

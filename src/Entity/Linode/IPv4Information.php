@@ -24,12 +24,10 @@ class IPv4Information extends Entity
     /**
      * {@inheritdoc}
      */
-    public function __get(string $name)
+    public function __get(string $name): ?array
     {
         if (array_key_exists($name, $this->data)) {
-            return array_map(function ($data) {
-                return new IPAddress($this->client, $data);
-            }, $this->data[$name]);
+            return array_map(fn ($data) => new IPAddress($this->client, $data), $this->data[$name]);
         }
 
         return null;

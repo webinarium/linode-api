@@ -9,8 +9,6 @@
 //
 //----------------------------------------------------------------------
 
-/** @noinspection PhpUndefinedFieldInspection */
-
 namespace Linode\Internal;
 
 use GuzzleHttp\Client;
@@ -21,14 +19,18 @@ use Linode\LinodeClient;
 use Linode\ReflectionTrait;
 use PHPUnit\Framework\TestCase;
 
-class AbstractRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\AbstractRepository
+ */
+final class AbstractRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var AbstractRepository */
-    protected $repository;
+    protected AbstractRepository $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $entity = [
             'name'   => 'February',
@@ -133,7 +135,8 @@ class AbstractRepositoryTest extends TestCase
                 ['GET', 'https://api.linode.com/v4/test', ['headers' => ['X-Filter' => '{"days":31,"+order_by":"name","+order":"asc"}'], 'query' => ['page' => 1]], new Response(200, [], json_encode($filteredAndSorted))],
                 ['GET', 'https://api.linode.com/v4/test', ['headers' => ['X-Filter' => '{"days":28}'], 'query' => ['page' => 1]], new Response(200, [], json_encode($single))],
                 ['GET', 'https://api.linode.com/v4/test', ['headers' => ['X-Filter' => '{"days":29}'], 'query' => ['page' => 1]], new Response(200, [], json_encode($zero))],
-            ]);
+            ])
+        ;
 
         $linodeClient = new LinodeClient();
         $this->setProperty($linodeClient, 'client', $client);
@@ -156,18 +159,16 @@ class AbstractRepositoryTest extends TestCase
         };
     }
 
-    public function testFind()
+    public function testFind(): void
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $this->repository->find(2);
 
         self::assertInstanceOf(Entity::class, $entity);
         self::assertSame('February', $entity->name);
     }
 
-    public function testFindAll()
+    public function testFindAll(): void
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
         $collection = $this->repository->findAll();
 
         self::assertCount(12, $collection);
@@ -193,9 +194,8 @@ class AbstractRepositoryTest extends TestCase
         }
     }
 
-    public function testFindAllSorted()
+    public function testFindAllSorted(): void
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
         $collection = $this->repository->findAll('name');
 
         self::assertCount(12, $collection);
@@ -221,9 +221,8 @@ class AbstractRepositoryTest extends TestCase
         }
     }
 
-    public function testFindBy()
+    public function testFindBy(): void
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
         $collection = $this->repository->findBy([
             'days' => 31,
         ]);
@@ -246,9 +245,8 @@ class AbstractRepositoryTest extends TestCase
         }
     }
 
-    public function testFindBySorted()
+    public function testFindBySorted(): void
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
         $collection = $this->repository->findBy([
             'days' => 31,
         ], 'name');
@@ -271,7 +269,7 @@ class AbstractRepositoryTest extends TestCase
         }
     }
 
-    public function testFindOneBy()
+    public function testFindOneBy(): void
     {
         $data = [
             'name'   => 'February',
@@ -279,7 +277,6 @@ class AbstractRepositoryTest extends TestCase
             'days'   => 28,
         ];
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $this->repository->findOneBy([
             'days' => 28,
         ]);
@@ -288,9 +285,8 @@ class AbstractRepositoryTest extends TestCase
         self::assertSame($data, $entity->toArray());
     }
 
-    public function testFindOneByZero()
+    public function testFindOneByZero(): void
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $this->repository->findOneBy([
             'days' => 29,
         ]);
@@ -298,21 +294,19 @@ class AbstractRepositoryTest extends TestCase
         self::assertNull($entity);
     }
 
-    public function testFindOneByException()
+    public function testFindOneByException(): void
     {
         $this->expectException(LinodeException::class);
         $this->expectExceptionCode(400);
         $this->expectExceptionMessage('More than one entity was found');
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $this->repository->findOneBy([
             'days' => 31,
         ]);
     }
 
-    public function testQuery()
+    public function testQuery(): void
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
         $collection = $this->repository->query('days == :number', [
             'number' => 31,
         ]);
@@ -335,9 +329,8 @@ class AbstractRepositoryTest extends TestCase
         }
     }
 
-    public function testQuerySorted()
+    public function testQuerySorted(): void
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
         $collection = $this->repository->query('days == :number', [
             'number' => 31,
         ], 'name');
@@ -360,17 +353,16 @@ class AbstractRepositoryTest extends TestCase
         }
     }
 
-    public function testQueryException()
+    public function testQueryException(): void
     {
         $this->expectException(LinodeException::class);
         $this->expectExceptionCode(400);
         $this->expectExceptionMessage('Invalid expression');
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $this->repository->query('days');
     }
 
-    public function testCheckParametersSupportSuccess()
+    public function testCheckParametersSupportSuccess(): void
     {
         $parameters = [
             'season' => 'Summer',
@@ -381,7 +373,7 @@ class AbstractRepositoryTest extends TestCase
         self::assertTrue(true);
     }
 
-    public function testCheckParametersSupportException()
+    public function testCheckParametersSupportException(): void
     {
         $this->expectException(LinodeException::class);
         $this->expectExceptionCode(400);

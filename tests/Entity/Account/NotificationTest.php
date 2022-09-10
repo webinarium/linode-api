@@ -15,16 +15,21 @@ use Linode\Entity\LinodeEntity;
 use Linode\LinodeClient;
 use PHPUnit\Framework\TestCase;
 
-class NotificationTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Entity\Account\Notification
+ */
+final class NotificationTest extends TestCase
 {
-    protected $client;
+    protected LinodeClient $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client = $this->createMock(LinodeClient::class);
     }
 
-    public function testProperties()
+    public function testProperties(): void
     {
         $data = [
             'entity'   => [

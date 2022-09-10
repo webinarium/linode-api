@@ -68,99 +68,56 @@ class LinodeClient
     protected const BASE_API_URI = 'https://api.linode.com/v4';
 
     /** @var Client HTTP client. */
-    protected $client;
-
-    /** @var null|string API access token (PAT or retrieved via OAuth). */
-    protected $access_token;
+    protected Client $client;
 
     /**
      * LinodeClient constructor.
      *
-     * @param null|string $access_token API access token (PAT or retrieved via OAuth).
+     * @param null|string $access_token API access token (PAT or retrieved via OAuth)
      */
-    public function __construct(string $access_token = null)
+    public function __construct(protected ?string $access_token = null)
     {
-        $this->client       = new Client();
-        $this->access_token = $access_token;
+        $this->client = new Client();
     }
 
     /**
      * Returns specified repository.
      *
-     * @param string $name Repository name.
-     *
-     * @return null|Account|Profile|Repository\RepositoryInterface
+     * @param string $name repository name
      */
-    public function __get(string $name)
+    public function __get(string $name): null|Account|Profile|Repository\RepositoryInterface
     {
-        switch ($name) {
-
-            case 'account':
-                return new Account($this);
-
-            case 'domains':
-                return new DomainRepository($this);
-
-            case 'images':
-                return new ImageRepository($this);
-
-            case 'ips':
-                return new IPAddressRepository($this);
-
-            case 'ipv6_pools':
-                return new IPv6PoolRepository($this);
-
-            case 'ipv6_ranges':
-                return new IPv6RangeRepository($this);
-
-            case 'kernels':
-                return new KernelRepository($this);
-
-            case 'linodes':
-                return new LinodeRepository($this);
-
-            case 'linode_types':
-                return new LinodeTypeRepository($this);
-
-            case 'longview_subscriptions':
-                return new LongviewSubscriptionRepository($this);
-
-            case 'node_balancers':
-                return new NodeBalancerRepository($this);
-
-            case 'profile':
-                return new Profile($this);
-
-            case 'regions':
-                return new RegionRepository($this);
-
-            case 'stackscripts':
-                return new StackScriptRepository($this);
-
-            case 'tags':
-                return new TagRepository($this);
-
-            case 'tickets':
-                return new SupportTicketRepository($this);
-
-            case 'volumes':
-                return new VolumeRepository($this);
-        }
-
-        return null;
+        return match ($name) {
+            'account'                => new Account($this),
+            'domains'                => new DomainRepository($this),
+            'images'                 => new ImageRepository($this),
+            'ips'                    => new IPAddressRepository($this),
+            'ipv6_pools'             => new IPv6PoolRepository($this),
+            'ipv6_ranges'            => new IPv6RangeRepository($this),
+            'kernels'                => new KernelRepository($this),
+            'linodes'                => new LinodeRepository($this),
+            'linode_types'           => new LinodeTypeRepository($this),
+            'longview_subscriptions' => new LongviewSubscriptionRepository($this),
+            'node_balancers'         => new NodeBalancerRepository($this),
+            'profile'                => new Profile($this),
+            'regions'                => new RegionRepository($this),
+            'stackscripts'           => new StackScriptRepository($this),
+            'tags'                   => new TagRepository($this),
+            'tickets'                => new SupportTicketRepository($this),
+            'volumes'                => new VolumeRepository($this),
+            default                  => null,
+        };
     }
 
     /**
      * Performs a request to specified API endpoint.
      *
-     * @param string $method     Request method.
-     * @param string $uri        Relative URI to API endpoint.
-     * @param array  $parameters Optional parameters.
-     * @param array  $filters    Optional filters.
+     * @param string $method     request method
+     * @param string $uri        relative URI to API endpoint
+     * @param array  $parameters optional parameters
+     * @param array  $filters    optional filters
      *
      * @throws LinodeException
-     *
-     * @return ResponseInterface
      */
     public function api(string $method, string $uri, array $parameters = [], array $filters = []): ResponseInterface
     {
@@ -189,7 +146,7 @@ class LinodeClient
         catch (ClientException $exception) {
             throw new LinodeException($exception->getResponse());
         }
-        catch (GuzzleException $exception) {
+        catch (GuzzleException) {
             throw new LinodeException(new Response(500));
         }
     }

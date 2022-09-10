@@ -47,14 +47,11 @@ class Backup extends Entity
     /**
      * {@inheritdoc}
      */
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
-        if ($name === 'disks') {
-            return array_map(function ($data) {
-                return new BackupDisk($this->client, $data);
-            }, $this->data[$name]);
-        }
-
-        return parent::__get($name);
+        return match ($name) {
+            'disks' => array_map(fn ($data) => new BackupDisk($this->client, $data), $this->data[$name]),
+            default => parent::__get($name),
+        };
     }
 }

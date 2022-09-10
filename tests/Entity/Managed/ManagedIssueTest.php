@@ -14,16 +14,21 @@ namespace Linode\Entity\Managed;
 use Linode\LinodeClient;
 use PHPUnit\Framework\TestCase;
 
-class ManagedIssueTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Entity\Managed\ManagedIssue
+ */
+final class ManagedIssueTest extends TestCase
 {
-    protected $client;
+    protected LinodeClient $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client = $this->createMock(LinodeClient::class);
     }
 
-    public function testProperties()
+    public function testProperties(): void
     {
         $data = [
             'id'       => 823,

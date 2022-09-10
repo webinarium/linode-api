@@ -36,17 +36,13 @@ abstract class AbstractRepository implements RepositoryInterface
     protected const SUCCESS_OK         = 200;
     protected const SUCCESS_NO_CONTENT = 204;
 
-    /** @var LinodeClient */
-    protected $client;
-
     /**
      * AbstractRepository constructor.
      *
-     * @param LinodeClient $client Linode API client.
+     * @param LinodeClient $client linode API client
      */
-    public function __construct(LinodeClient $client)
+    public function __construct(protected LinodeClient $client)
     {
-        $this->client = $client;
     }
 
     /**
@@ -80,12 +76,9 @@ abstract class AbstractRepository implements RepositoryInterface
         }
 
         return new EntityCollection(
-            function (int $page) use ($criteria) {
-                return $this->client->api($this->client::REQUEST_GET, $this->getBaseUri(), ['page' => $page], $criteria);
-            },
-            function (array $json) {
-                return $this->jsonToEntity($json);
-            });
+            fn (int $page) => $this->client->api($this->client::REQUEST_GET, $this->getBaseUri(), ['page' => $page], $criteria),
+            fn (array $json) => $this->jsonToEntity($json)
+        );
     }
 
     /**
@@ -101,6 +94,7 @@ abstract class AbstractRepository implements RepositoryInterface
 
         if (count($collection) !== 1) {
             $errors = ['errors' => [['reason' => 'More than one entity was found']]];
+
             throw new LinodeException(new Response(self::ERROR_BAD_REQUEST, [], json_encode($errors)));
         }
 
@@ -122,6 +116,7 @@ abstract class AbstractRepository implements RepositoryInterface
         }
         catch (\Throwable $exception) {
             $errors = ['errors' => [['reason' => $exception->getMessage()]]];
+
             throw new LinodeException(new Response(self::ERROR_BAD_REQUEST, [], json_encode($errors)));
         }
 
@@ -131,8 +126,6 @@ abstract class AbstractRepository implements RepositoryInterface
     /**
      * Verifies that all specified parameters are supported by the repository.
      * An exception is raised when unsupported parameter was found.
-     *
-     * @param array $parameters
      *
      * @throws LinodeException
      */
@@ -145,14 +138,13 @@ abstract class AbstractRepository implements RepositoryInterface
 
         if (count($unknown) !== 0) {
             $errors = ['errors' => [['reason' => sprintf('Unknown field(s): %s', implode(', ', $unknown))]]];
+
             throw new LinodeException(new Response(self::ERROR_BAD_REQUEST, [], json_encode($errors)));
         }
     }
 
     /**
      * Returns base URI to the repository-specific API.
-     *
-     * @return string
      */
     abstract protected function getBaseUri(): string;
 
@@ -165,10 +157,6 @@ abstract class AbstractRepository implements RepositoryInterface
 
     /**
      * Creates a repository-specific entity using specified JSON data.
-     *
-     * @param array $json
-     *
-     * @return Entity
      */
     abstract protected function jsonToEntity(array $json): Entity;
 }

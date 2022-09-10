@@ -31,25 +31,14 @@ class LinodeStats extends Entity
     /**
      * {@inheritdoc}
      */
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
-        switch ($name) {
-
-            case 'cpu':
-                return array_map(function ($data) {
-                    return new TimeValue((int) $data[0], (float) $data[1]);
-                }, $this->data['cpu']);
-
-            case 'io':
-                return new IOStats($this->client, $this->data['io']);
-
-            case 'netv4':
-                return new NetworkStats($this->client, $this->data['netv4']);
-
-            case 'netv6':
-                return new NetworkStats($this->client, $this->data['netv6']);
-        }
-
-        return parent::__get($name);
+        return match ($name) {
+            'cpu'   => array_map(fn ($data) => new TimeValue((int) $data[0], (float) $data[1]), $this->data['cpu']),
+            'io'    => new IOStats($this->client, $this->data['io']),
+            'netv4' => new NetworkStats($this->client, $this->data['netv4']),
+            'netv6' => new NetworkStats($this->client, $this->data['netv6']),
+            default => parent::__get($name),
+        };
     }
 }

@@ -15,16 +15,21 @@ use Linode\Internal\NodeBalancers\NodeBalancerNodeRepository;
 use Linode\LinodeClient;
 use PHPUnit\Framework\TestCase;
 
-class NodeBalancerConfigTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Entity\NodeBalancers\NodeBalancerConfig
+ */
+final class NodeBalancerConfigTest extends TestCase
 {
-    protected $client;
+    protected LinodeClient $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client = $this->createMock(LinodeClient::class);
     }
 
-    public function testProperties()
+    public function testProperties(): void
     {
         $data = [
             'id'              => 4567,

@@ -26,18 +26,18 @@ use Psr\Http\Message\ResponseInterface;
 class LinodeException extends \Exception
 {
     /** @var Error[] */
-    protected $errors = [];
+    protected array $errors = [];
 
     /**
      * LinodeException constructor.
      *
-     * @param ResponseInterface $response Failed response.
-     * @param null|\Throwable   $previous The previous throwable used for the exception chaining.
+     * @param ResponseInterface $response failed response
+     * @param null|\Throwable   $previous the previous throwable used for the exception chaining
      */
     public function __construct(ResponseInterface $response, \Throwable $previous = null)
     {
         $code = $response->getStatusCode();
-        $json = json_decode($response->getBody()->getContents(), true);
+        $json = json_decode($response->getBody()->getContents() ?? '', true);
 
         $errors = $json['errors'] ?? [['reason' => 'Unknown error']];
 

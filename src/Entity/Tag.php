@@ -17,7 +17,7 @@ use Linode\Internal\Tags\TaggedObjectRepository;
  * A tag that has been applied to an object on your Account. Tags are
  * currently for organizational purposes only.
  *
- * @property string $label A Label used for organization of objects on your Account.
+ * @property string                                                  $label   A Label used for organization of objects on your Account.
  * @property \Linode\Repository\Tags\TaggedObjectRepositoryInterface $objects Tagged objects.
  */
 class Tag extends Entity
@@ -28,12 +28,11 @@ class Tag extends Entity
     /**
      * {@inheritdoc}
      */
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
-        if ($name === 'objects') {
-            return new TaggedObjectRepository($this->client, $this->label);
-        }
-
-        return parent::__get($name);
+        return match ($name) {
+            'objects' => new TaggedObjectRepository($this->client, $this->label),
+            default   => parent::__get($name),
+        };
     }
 }

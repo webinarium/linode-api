@@ -23,21 +23,25 @@ use Linode\ReflectionTrait;
 use Linode\Repository\NodeBalancers\NodeBalancerRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class NodeBalancerRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\NodeBalancers\NodeBalancerRepository
+ */
+final class NodeBalancerRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var NodeBalancerRepository */
-    protected $repository;
+    protected NodeBalancerRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new NodeBalancerRepository($client);
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $request = [
             'json' => [
@@ -74,35 +78,35 @@ class NodeBalancerRepositoryTest extends TestCase
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 12345,
-                "label": "balancer12345",
-                "region": "us-east",
-                "hostname": "nb-207-192-68-16.newark.nodebalancer.linode.com",
-                "ipv4": "12.34.56.78",
-                "ipv6": null,
-                "created": "2018-01-01T00:01:01.000Z",
-                "updated": "2018-03-01T00:01:01.000Z",
-                "client_conn_throttle": 0,
-                "transfer": {
-                    "total": 32.46078109741211,
-                    "out": 3.5487728118896484,
-                    "in": 28.91200828552246
-                }
-            }
-JSON;
+                        {
+                            "id": 12345,
+                            "label": "balancer12345",
+                            "region": "us-east",
+                            "hostname": "nb-207-192-68-16.newark.nodebalancer.linode.com",
+                            "ipv4": "12.34.56.78",
+                            "ipv6": null,
+                            "created": "2018-01-01T00:01:01.000Z",
+                            "updated": "2018-03-01T00:01:01.000Z",
+                            "client_conn_throttle": 0,
+                            "transfer": {
+                                "total": 32.46078109741211,
+                                "out": 3.5487728118896484,
+                                "in": 28.91200828552246
+                            }
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/nodebalancers', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->create([
             NodeBalancer::FIELD_REGION               => 'us-east',
             NodeBalancer::FIELD_LABEL                => 'balancer12345',
@@ -140,7 +144,7 @@ JSON;
         self::assertSame('balancer12345', $entity->label);
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $request = [
             'json' => [
@@ -150,35 +154,35 @@ JSON;
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 12345,
-                "label": "balancer12345",
-                "region": "us-east",
-                "hostname": "nb-207-192-68-16.newark.nodebalancer.linode.com",
-                "ipv4": "12.34.56.78",
-                "ipv6": null,
-                "created": "2018-01-01T00:01:01.000Z",
-                "updated": "2018-03-01T00:01:01.000Z",
-                "client_conn_throttle": 0,
-                "transfer": {
-                    "total": 32.46078109741211,
-                    "out": 3.5487728118896484,
-                    "in": 28.91200828552246
-                }
-            }
-JSON;
+                        {
+                            "id": 12345,
+                            "label": "balancer12345",
+                            "region": "us-east",
+                            "hostname": "nb-207-192-68-16.newark.nodebalancer.linode.com",
+                            "ipv4": "12.34.56.78",
+                            "ipv6": null,
+                            "created": "2018-01-01T00:01:01.000Z",
+                            "updated": "2018-03-01T00:01:01.000Z",
+                            "client_conn_throttle": 0,
+                            "transfer": {
+                                "total": 32.46078109741211,
+                                "out": 3.5487728118896484,
+                                "in": 28.91200828552246
+                            }
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['PUT', 'https://api.linode.com/v4/nodebalancers/12345', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->update(12345, [
             NodeBalancer::FIELD_LABEL                => 'balancer12345',
             NodeBalancer::FIELD_CLIENT_CONN_THROTTLE => 0,
@@ -189,65 +193,65 @@ JSON;
         self::assertSame('balancer12345', $entity->label);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['DELETE', 'https://api.linode.com/v4/nodebalancers/12345', [], new Response(200, [], null)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $repository->delete(12345);
 
         self::assertTrue(true);
     }
 
-    public function testGetStats()
+    public function testGetStats(): void
     {
         $response = <<<'JSON'
-            {
-                "data": {
-                    "connections": [
-                        [
-                            1526391300000,
-                            0
-                        ]
-                    ],
-                    "traffic": {
-                        "in": [
-                            [
-                                1526391300000,
-                                631.21
-                            ]
-                        ],
-                        "out": [
-                            [
-                                1526391300000,
-                                103.44
-                            ]
-                        ]
-                    }
-                },
-                "title": "linode.com - balancer12345 (12345) - day (5 min avg)"
-            }
-JSON;
+                        {
+                            "data": {
+                                "connections": [
+                                    [
+                                        1526391300000,
+                                        0
+                                    ]
+                                ],
+                                "traffic": {
+                                    "in": [
+                                        [
+                                            1526391300000,
+                                            631.21
+                                        ]
+                                    ],
+                                    "out": [
+                                        [
+                                            1526391300000,
+                                            103.44
+                                        ]
+                                    ]
+                                }
+                            },
+                            "title": "linode.com - balancer12345 (12345) - day (5 min avg)"
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['GET', 'https://api.linode.com/v4/nodebalancers/12345/stats', [], new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->getStats(12345);
 
         self::assertInstanceOf(NodeBalancerStats::class, $entity);
@@ -257,14 +261,14 @@ JSON;
         self::assertSame(631.21, $entity->data->traffic->in[0]->value);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/nodebalancers';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'id',
@@ -280,7 +284,7 @@ JSON;
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(NodeBalancer::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

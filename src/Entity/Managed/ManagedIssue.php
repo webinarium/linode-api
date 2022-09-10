@@ -28,12 +28,11 @@ class ManagedIssue extends Entity
     /**
      * {@inheritdoc}
      */
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
-        if ($name === 'entity') {
-            return new ManagedIssueEntity($this->client, $this->data['entity']);
-        }
-
-        return parent::__get($name);
+        return match ($name) {
+            'entity' => new ManagedIssueEntity($this->client, $this->data['entity']),
+            default  => parent::__get($name),
+        };
     }
 }

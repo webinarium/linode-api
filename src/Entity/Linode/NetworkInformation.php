@@ -22,17 +22,12 @@ class NetworkInformation extends Entity
     /**
      * {@inheritdoc}
      */
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
-        switch ($name) {
-
-            case 'ipv4':
-                return new IPv4Information($this->client, $this->data['ipv4']);
-
-            case 'ipv6':
-                return new IPv6Information($this->client, $this->data['ipv6']);
-        }
-
-        return parent::__get($name);
+        return match ($name) {
+            'ipv4'  => new IPv4Information($this->client, $this->data['ipv4']),
+            'ipv6'  => new IPv6Information($this->client, $this->data['ipv6']),
+            default => parent::__get($name),
+        };
     }
 }

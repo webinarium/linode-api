@@ -14,30 +14,35 @@ namespace Linode\Internal;
 use Linode\Entity\LinodeType;
 use Linode\LinodeClient;
 use Linode\ReflectionTrait;
+use Linode\Repository\LinodeTypeRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class LinodeTypeRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\LinodeTypeRepository
+ */
+final class LinodeTypeRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var LinodeTypeRepository */
-    protected $repository;
+    protected LinodeTypeRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new LinodeTypeRepository($client);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/linode/types';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'id',
@@ -53,7 +58,7 @@ class LinodeTypeRepositoryTest extends TestCase
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(LinodeType::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

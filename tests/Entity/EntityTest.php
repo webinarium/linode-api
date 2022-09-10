@@ -9,23 +9,26 @@
 //
 //----------------------------------------------------------------------
 
-/** @noinspection PhpUndefinedFieldInspection */
-
 namespace Linode\Entity;
 
 use Linode\LinodeClient;
 use PHPUnit\Framework\TestCase;
 
-class EntityTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Entity\Entity
+ */
+final class EntityTest extends TestCase
 {
-    protected $client;
+    protected LinodeClient $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client = $this->createMock(LinodeClient::class);
     }
 
-    public function testIsSet()
+    public function testIsSet(): void
     {
         $data = [
             'id'          => 'g6-standard-1',
@@ -46,7 +49,7 @@ class EntityTest extends TestCase
         self::assertFalse(isset($entity->disk));
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $data = [
             'id'          => 'g6-standard-1',
@@ -66,10 +69,10 @@ class EntityTest extends TestCase
         self::assertSame('standard', $entity->class);
         self::assertSame(2048, $entity->memory);
         self::assertNull($entity->disk);
-        self::assertInternalType('array', $entity->price);
+        self::assertIsArray($entity->price);
     }
 
-    public function testToArray()
+    public function testToArray(): void
     {
         $data = [
             'id'          => 'g6-standard-1',

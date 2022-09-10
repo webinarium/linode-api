@@ -19,21 +19,25 @@ use Linode\ReflectionTrait;
 use Linode\Repository\Networking\IPAddressRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class IPAddressRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\Networking\IPAddressRepository
+ */
+final class IPAddressRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var IPAddressRepository */
-    protected $repository;
+    protected IPAddressRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new IPAddressRepository($client);
     }
 
-    public function testAllocate()
+    public function testAllocate(): void
     {
         $request = [
             'json' => [
@@ -44,30 +48,30 @@ class IPAddressRepositoryTest extends TestCase
         ];
 
         $response = <<<'JSON'
-            {
-                "address": "97.107.143.141",
-                "gateway": "97.107.143.1",
-                "subnet_mask": "255.255.255.0",
-                "prefix": 24,
-                "type": "ipv4",
-                "public": true,
-                "rdns": "test.example.org",
-                "linode_id": 123,
-                "region": "us-east"
-            }
-JSON;
+                        {
+                            "address": "97.107.143.141",
+                            "gateway": "97.107.143.1",
+                            "subnet_mask": "255.255.255.0",
+                            "prefix": 24,
+                            "type": "ipv4",
+                            "public": true,
+                            "rdns": "test.example.org",
+                            "linode_id": 123,
+                            "region": "us-east"
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/networking/ips', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->allocate(123, true, IPAddress::TYPE_IP4);
 
         self::assertInstanceOf(IPAddress::class, $entity);
@@ -76,7 +80,7 @@ JSON;
         self::assertTrue($entity->public);
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $request = [
             'json' => [
@@ -85,30 +89,30 @@ JSON;
         ];
 
         $response = <<<'JSON'
-            {
-                "address": "97.107.143.141",
-                "gateway": "97.107.143.1",
-                "subnet_mask": "255.255.255.0",
-                "prefix": 24,
-                "type": "ipv4",
-                "public": true,
-                "rdns": "test.example.org",
-                "linode_id": 123,
-                "region": "us-east"
-            }
-JSON;
+                        {
+                            "address": "97.107.143.141",
+                            "gateway": "97.107.143.1",
+                            "subnet_mask": "255.255.255.0",
+                            "prefix": 24,
+                            "type": "ipv4",
+                            "public": true,
+                            "rdns": "test.example.org",
+                            "linode_id": 123,
+                            "region": "us-east"
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['PUT', 'https://api.linode.com/v4/networking/ips/97.107.143.141', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->update('97.107.143.141', [
             IPAddress::FIELD_RDNS => 'test.example.org',
         ]);
@@ -119,7 +123,7 @@ JSON;
         self::assertTrue($entity->public);
     }
 
-    public function testAssign()
+    public function testAssign(): void
     {
         $request = [
             'json' => [
@@ -138,12 +142,12 @@ JSON;
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/networking/ipv4/assign', $request, new Response(200, [], null)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $repository->assign('us-east', [
             [
                 IPAddress::FIELD_ADDRESS   => '12.34.56.78',
@@ -154,7 +158,7 @@ JSON;
         self::assertTrue(true);
     }
 
-    public function testShare()
+    public function testShare(): void
     {
         $request = [
             'json' => [
@@ -170,12 +174,12 @@ JSON;
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/networking/ipv4/share', $request, new Response(200, [], null)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $repository->share(123, [
             '12.34.56.78',
         ]);
@@ -183,14 +187,14 @@ JSON;
         self::assertTrue(true);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/networking/ips';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'address',
@@ -207,7 +211,7 @@ JSON;
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(IPAddress::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

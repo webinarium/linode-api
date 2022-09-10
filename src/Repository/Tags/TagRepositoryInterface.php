@@ -24,11 +24,7 @@ interface TagRepositoryInterface extends RepositoryInterface
      *
      * You must be an unrestricted User in order to add or modify Tags.
      *
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return Tag
      */
     public function create(array $parameters): Tag;
 
@@ -36,8 +32,6 @@ interface TagRepositoryInterface extends RepositoryInterface
      * Remove a Tag from all objects and delete it.
      *
      * You must be an unrestricted User in order to add or modify Tags.
-     *
-     * @param string $label
      *
      * @throws \Linode\Exception\LinodeException
      */

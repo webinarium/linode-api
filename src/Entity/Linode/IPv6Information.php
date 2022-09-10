@@ -25,20 +25,13 @@ class IPv6Information extends Entity
     /**
      * {@inheritdoc}
      */
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
-        switch ($name) {
-
-            case 'link_local':
-                return new IPAddress($this->client, $this->data['link_local']);
-
-            case 'slaac':
-                return new IPAddress($this->client, $this->data['slaac']);
-
-            case 'global':
-                return new IPv6Pool($this->client, $this->data['global']);
-        }
-
-        return parent::__get($name);
+        return match ($name) {
+            'link_local' => new IPAddress($this->client, $this->data['link_local']),
+            'slaac'      => new IPAddress($this->client, $this->data['slaac']),
+            'global'     => new IPv6Pool($this->client, $this->data['global']),
+            default      => parent::__get($name),
+        };
     }
 }

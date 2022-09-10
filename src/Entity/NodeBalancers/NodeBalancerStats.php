@@ -24,12 +24,11 @@ class NodeBalancerStats extends Entity
     /**
      * {@inheritdoc}
      */
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
-        if ($name === 'data') {
-            return new NodeBalancerStatsData($this->client, $this->data[$name]);
-        }
-
-        return parent::__get($name);
+        return match ($name) {
+            'data'  => new NodeBalancerStatsData($this->client, $this->data[$name]),
+            default => parent::__get($name),
+        };
     }
 }

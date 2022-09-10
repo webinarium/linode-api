@@ -55,12 +55,11 @@ class AccountInformation extends Entity
     /**
      * {@inheritdoc}
      */
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
-        if ($name === 'credit_card') {
-            return new CreditCard($this->client, $this->data['credit_card']);
-        }
-
-        return parent::__get($name);
+        return match ($name) {
+            'credit_card' => new CreditCard($this->client, $this->data['credit_card']),
+            default       => parent::__get($name),
+        };
     }
 }

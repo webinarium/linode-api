@@ -19,21 +19,25 @@ use Linode\ReflectionTrait;
 use Linode\Repository\Account\PaymentRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class PaymentRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\Account\PaymentRepository
+ */
+final class PaymentRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var PaymentRepository */
-    protected $repository;
+    protected PaymentRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new PaymentRepository($client);
     }
 
-    public function testMakeCreditCardPayment()
+    public function testMakeCreditCardPayment(): void
     {
         $request = [
             'json' => [
@@ -43,31 +47,31 @@ class PaymentRepositoryTest extends TestCase
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 123,
-                "date": "2018-01-15T00:01:01",
-                "usd": "120.50"
-            }
-JSON;
+                        {
+                            "id": 123,
+                            "date": "2018-01-15T00:01:01",
+                            "usd": "120.50"
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/account/payments', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->makeCreditCardPayment('120.50', '123');
 
         self::assertInstanceOf(Payment::class, $entity);
         self::assertSame('120.50', $entity->usd);
     }
 
-    public function testStagePayPalPayment()
+    public function testStagePayPalPayment(): void
     {
         $request = [
             'json' => [
@@ -78,28 +82,28 @@ JSON;
         ];
 
         $response = <<<'JSON'
-            {
-                "payment_id": "PAY-1234567890ABCDEFGHIJKLMN"
-            }
-JSON;
+                        {
+                            "payment_id": "PAY-1234567890ABCDEFGHIJKLMN"
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/account/payments/paypal', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $result = $repository->stagePayPalPayment('120.50', 'https://example.org', 'https://example.org');
 
         self::assertSame('PAY-1234567890ABCDEFGHIJKLMN', $result);
     }
 
-    public function testExecutePayPalPayment()
+    public function testExecutePayPalPayment(): void
     {
         $request = [
             'json' => [
@@ -113,25 +117,25 @@ JSON;
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/account/payments/paypal/execute', $request, new Response(200, [], null)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $repository->executePayPalPayment('ABCDEFGHIJKLM', 'PAY-1234567890ABCDEFGHIJKLMN');
 
         self::assertTrue(true);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/account/payments';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'id',
@@ -142,7 +146,7 @@ JSON;
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(Payment::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

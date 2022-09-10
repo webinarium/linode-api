@@ -19,21 +19,25 @@ use Linode\ReflectionTrait;
 use Linode\Repository\Domains\DomainRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class DomainRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\Domains\DomainRepository
+ */
+final class DomainRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var DomainRepository */
-    protected $repository;
+    protected DomainRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new DomainRepository($client);
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $request = [
             'json' => [
@@ -44,34 +48,34 @@ class DomainRepositoryTest extends TestCase
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 123,
-                "type": "master",
-                "domain": "example.org",
-                "group": null,
-                "status": "active",
-                "description": null,
-                "soa_email": "admin@example.org",
-                "retry_sec": 300,
-                "master_ips": [ ],
-                "axfr_ips": [ ],
-                "expire_sec": 300,
-                "refresh_sec": 300,
-                "ttl_sec": 300
-            }
-JSON;
+                        {
+                            "id": 123,
+                            "type": "master",
+                            "domain": "example.org",
+                            "group": null,
+                            "status": "active",
+                            "description": null,
+                            "soa_email": "admin@example.org",
+                            "retry_sec": 300,
+                            "master_ips": [ ],
+                            "axfr_ips": [ ],
+                            "expire_sec": 300,
+                            "refresh_sec": 300,
+                            "ttl_sec": 300
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/domains', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->create([
             Domain::FIELD_DOMAIN    => 'example.org',
             Domain::FIELD_TYPE      => Domain::TYPE_MASTER,
@@ -84,7 +88,7 @@ JSON;
         self::assertSame('master', $entity->type);
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $request = [
             'json' => [
@@ -95,34 +99,34 @@ JSON;
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 123,
-                "type": "master",
-                "domain": "example.org",
-                "group": null,
-                "status": "active",
-                "description": null,
-                "soa_email": "admin@example.org",
-                "retry_sec": 300,
-                "master_ips": [],
-                "axfr_ips": [],
-                "expire_sec": 300,
-                "refresh_sec": 300,
-                "ttl_sec": 300
-            }
-JSON;
+                        {
+                            "id": 123,
+                            "type": "master",
+                            "domain": "example.org",
+                            "group": null,
+                            "status": "active",
+                            "description": null,
+                            "soa_email": "admin@example.org",
+                            "retry_sec": 300,
+                            "master_ips": [],
+                            "axfr_ips": [],
+                            "expire_sec": 300,
+                            "refresh_sec": 300,
+                            "ttl_sec": 300
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['PUT', 'https://api.linode.com/v4/domains/123', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->update(123, [
             Domain::FIELD_DOMAIN    => 'example.org',
             Domain::FIELD_TYPE      => Domain::TYPE_MASTER,
@@ -135,25 +139,25 @@ JSON;
         self::assertSame('master', $entity->type);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['DELETE', 'https://api.linode.com/v4/domains/123', [], new Response(200, [], null)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $repository->delete(123);
 
         self::assertTrue(true);
     }
 
-    public function testImport()
+    public function testImport(): void
     {
         $request = [
             'json' => [
@@ -163,34 +167,34 @@ JSON;
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 123,
-                "type": "master",
-                "domain": "example.org",
-                "group": null,
-                "status": "active",
-                "description": null,
-                "soa_email": "admin@example.org",
-                "retry_sec": 300,
-                "master_ips": [],
-                "axfr_ips": [],
-                "expire_sec": 300,
-                "refresh_sec": 300,
-                "ttl_sec": 300
-            }
-JSON;
+                        {
+                            "id": 123,
+                            "type": "master",
+                            "domain": "example.org",
+                            "group": null,
+                            "status": "active",
+                            "description": null,
+                            "soa_email": "admin@example.org",
+                            "retry_sec": 300,
+                            "master_ips": [],
+                            "axfr_ips": [],
+                            "expire_sec": 300,
+                            "refresh_sec": 300,
+                            "ttl_sec": 300
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/domains/import', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->import('example.com', 'examplenameserver.com');
 
         self::assertInstanceOf(Domain::class, $entity);
@@ -199,14 +203,14 @@ JSON;
         self::assertSame('master', $entity->type);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/domains';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'id',
@@ -227,7 +231,7 @@ JSON;
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(Domain::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

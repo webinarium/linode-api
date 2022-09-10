@@ -19,21 +19,25 @@ use Linode\ReflectionTrait;
 use Linode\Repository\Profile\PersonalAccessTokenRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class PersonalAccessTokenRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\Profile\PersonalAccessTokenRepository
+ */
+final class PersonalAccessTokenRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var PersonalAccessTokenRepository */
-    protected $repository;
+    protected PersonalAccessTokenRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new PersonalAccessTokenRepository($client);
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $request = [
             'json' => [
@@ -44,27 +48,27 @@ class PersonalAccessTokenRepositoryTest extends TestCase
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 123,
-                "scopes": "*",
-                "created": "2018-01-01T00:01:01.000Z",
-                "label": "linode-cli",
-                "token": "abcdefghijklmnop",
-                "expiry": "2018-01-01T13:46:32"
-            }
-JSON;
+                        {
+                            "id": 123,
+                            "scopes": "*",
+                            "created": "2018-01-01T00:01:01.000Z",
+                            "label": "linode-cli",
+                            "token": "abcdefghijklmnop",
+                            "expiry": "2018-01-01T13:46:32"
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/profile/tokens', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->create([
             PersonalAccessToken::FIELD_SCOPES => '*',
             PersonalAccessToken::FIELD_EXPIRY => null,
@@ -76,7 +80,7 @@ JSON;
         self::assertSame('linode-cli', $entity->label);
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $request = [
             'json' => [
@@ -85,27 +89,27 @@ JSON;
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 123,
-                "scopes": "*",
-                "created": "2018-01-01T00:01:01.000Z",
-                "label": "linode-cli",
-                "token": "abcdefghijklmnop",
-                "expiry": "2018-01-01T13:46:32"
-            }
-JSON;
+                        {
+                            "id": 123,
+                            "scopes": "*",
+                            "created": "2018-01-01T00:01:01.000Z",
+                            "label": "linode-cli",
+                            "token": "abcdefghijklmnop",
+                            "expiry": "2018-01-01T13:46:32"
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['PUT', 'https://api.linode.com/v4/profile/tokens/123', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->update(123, [
             PersonalAccessToken::FIELD_LABEL => 'linode-cli',
         ]);
@@ -115,32 +119,32 @@ JSON;
         self::assertSame('linode-cli', $entity->label);
     }
 
-    public function testRevoke()
+    public function testRevoke(): void
     {
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['DELETE', 'https://api.linode.com/v4/profile/tokens/123', [], new Response(200, [], null)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $repository->revoke(123);
 
         self::assertTrue(true);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/profile/tokens';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'id',
@@ -154,7 +158,7 @@ JSON;
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(PersonalAccessToken::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

@@ -27,12 +27,11 @@ class LinodeBackups extends Entity
     /**
      * {@inheritdoc}
      */
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
-        if ($name === self::FIELD_SCHEDULE) {
-            return new LinodeBackupSchedule($this->client, $this->data[self::FIELD_SCHEDULE]);
-        }
-
-        return parent::__get($name);
+        return match ($name) {
+            self::FIELD_SCHEDULE => new LinodeBackupSchedule($this->client, $this->data[self::FIELD_SCHEDULE]),
+            default              => parent::__get($name),
+        };
     }
 }

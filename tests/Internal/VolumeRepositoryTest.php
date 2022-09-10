@@ -19,21 +19,25 @@ use Linode\ReflectionTrait;
 use Linode\Repository\VolumeRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class VolumeRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\VolumeRepository
+ */
+final class VolumeRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var VolumeRepository */
-    protected $repository;
+    protected VolumeRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new VolumeRepository($client);
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $request = [
             'json' => [
@@ -46,30 +50,30 @@ class VolumeRepositoryTest extends TestCase
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 12345,
-                "label": "my-volume",
-                "filesystem_path": "/dev/disk/by-id/scsi-0Linode_Volume_my-volume",
-                "status": "active",
-                "size": 20,
-                "region": "us-east",
-                "linode_id": 12346,
-                "created": "2018-01-01T00:01:01",
-                "updated": "2018-01-01T00:01:01"
-            }
-JSON;
+                        {
+                            "id": 12345,
+                            "label": "my-volume",
+                            "filesystem_path": "/dev/disk/by-id/scsi-0Linode_Volume_my-volume",
+                            "status": "active",
+                            "size": 20,
+                            "region": "us-east",
+                            "linode_id": 12346,
+                            "created": "2018-01-01T00:01:01",
+                            "updated": "2018-01-01T00:01:01"
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/volumes', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->create([
             Volume::FIELD_REGION    => null,
             Volume::FIELD_LINODE_ID => 12346,
@@ -83,7 +87,7 @@ JSON;
         self::assertSame('my-volume', $entity->label);
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $request = [
             'json' => [
@@ -94,30 +98,30 @@ JSON;
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 12345,
-                "label": "my-volume",
-                "filesystem_path": "/dev/disk/by-id/scsi-0Linode_Volume_my-volume",
-                "status": "active",
-                "size": 30,
-                "region": "us-east",
-                "linode_id": 12346,
-                "created": "2018-01-01T00:01:01",
-                "updated": "2018-01-01T00:01:01"
-            }
-JSON;
+                        {
+                            "id": 12345,
+                            "label": "my-volume",
+                            "filesystem_path": "/dev/disk/by-id/scsi-0Linode_Volume_my-volume",
+                            "status": "active",
+                            "size": 30,
+                            "region": "us-east",
+                            "linode_id": 12346,
+                            "created": "2018-01-01T00:01:01",
+                            "updated": "2018-01-01T00:01:01"
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['PUT', 'https://api.linode.com/v4/volumes/12345', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->update(12345, [
             Volume::FIELD_LABEL     => 'my-volume',
             Volume::FIELD_SIZE      => 30,
@@ -129,25 +133,25 @@ JSON;
         self::assertSame('my-volume', $entity->label);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['DELETE', 'https://api.linode.com/v4/volumes/12345', [], new Response(200, [], null)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $repository->delete(12345);
 
         self::assertTrue(true);
     }
 
-    public function testClone()
+    public function testClone(): void
     {
         $request = [
             'json' => [
@@ -160,12 +164,12 @@ JSON;
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/volumes/12345/clone', $request, new Response(200, [], null)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $repository->clone(12345, [
             Volume::FIELD_LABEL => 'my-volume',
         ]);
@@ -173,7 +177,7 @@ JSON;
         self::assertTrue(true);
     }
 
-    public function testResize()
+    public function testResize(): void
     {
         $request = [
             'json' => [
@@ -186,12 +190,12 @@ JSON;
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/volumes/12345/resize', $request, new Response(200, [], null)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $repository->resize(12345, [
             Volume::FIELD_SIZE => 30,
         ]);
@@ -199,7 +203,7 @@ JSON;
         self::assertTrue(true);
     }
 
-    public function testAttach()
+    public function testAttach(): void
     {
         $request = [
             'json' => [
@@ -209,30 +213,30 @@ JSON;
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 12345,
-                "label": "my-volume",
-                "filesystem_path": "/dev/disk/by-id/scsi-0Linode_Volume_my-volume",
-                "status": "active",
-                "size": 30,
-                "region": "us-east",
-                "linode_id": 12346,
-                "created": "2018-01-01T00:01:01",
-                "updated": "2018-01-01T00:01:01"
-            }
-JSON;
+                        {
+                            "id": 12345,
+                            "label": "my-volume",
+                            "filesystem_path": "/dev/disk/by-id/scsi-0Linode_Volume_my-volume",
+                            "status": "active",
+                            "size": 30,
+                            "region": "us-east",
+                            "linode_id": 12346,
+                            "created": "2018-01-01T00:01:01",
+                            "updated": "2018-01-01T00:01:01"
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/volumes/12345/attach', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->attach(12345, [
             Volume::FIELD_LINODE_ID => 12346,
             Volume::FIELD_CONFIG_ID => 23456,
@@ -243,32 +247,32 @@ JSON;
         self::assertSame('my-volume', $entity->label);
     }
 
-    public function testDetach()
+    public function testDetach(): void
     {
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/volumes/12345/detach', [], new Response(200, [], null)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $repository->detach(12345);
 
         self::assertTrue(true);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/volumes';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'id',
@@ -283,7 +287,7 @@ JSON;
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(Volume::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

@@ -21,19 +21,13 @@ use Linode\Repository\Linode\LinodeNetworkRepositoryInterface;
  */
 class LinodeNetworkRepository implements LinodeNetworkRepositoryInterface
 {
-    /** @var LinodeClient */
-    protected $client;
-
-    /** @var int ID of the Linode to look up. */
-    protected $linodeId;
-
     /**
      * {@inheritdoc}
+     *
+     * @param int $linodeId ID of the Linode to look up
      */
-    public function __construct(LinodeClient $client, int $id)
+    public function __construct(protected LinodeClient $client, protected int $linodeId)
     {
-        $this->client   = $client;
-        $this->linodeId = $id;
     }
 
     /**
@@ -99,8 +93,6 @@ class LinodeNetworkRepository implements LinodeNetworkRepositoryInterface
 
     /**
      * Returns base URI to the repository-specific API.
-     *
-     * @return string
      */
     protected function getBaseUri(): string
     {

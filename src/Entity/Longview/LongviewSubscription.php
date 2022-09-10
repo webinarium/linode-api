@@ -32,12 +32,11 @@ class LongviewSubscription extends Entity
     /**
      * {@inheritdoc}
      */
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
-        if ($name === 'price') {
-            return new Price($this->client, $this->data['price']);
-        }
-
-        return parent::__get($name);
+        return match ($name) {
+            'price' => new Price($this->client, $this->data['price']),
+            default => parent::__get($name),
+        };
     }
 }

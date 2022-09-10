@@ -19,21 +19,25 @@ use Linode\ReflectionTrait;
 use Linode\Repository\Longview\LongviewClientRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class LongviewClientRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\Longview\LongviewClientRepository
+ */
+final class LongviewClientRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var LongviewClientRepository */
-    protected $repository;
+    protected LongviewClientRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new LongviewClientRepository($client);
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $request = [
             'json' => [
@@ -42,32 +46,32 @@ class LongviewClientRepositoryTest extends TestCase
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 789,
-                "label": "client789",
-                "api_key": "BD1B4B54-D752-A76D-5A9BD8A17F39DB61",
-                "install_code": "BD1B5605-BF5E-D385-BA07AD518BE7F321",
-                "apps": {
-                    "apache": true,
-                    "nginx": false,
-                    "mysql": true
-                },
-                "created": "2018-01-01T00:01:01.000Z",
-                "updated": "2018-01-01T00:01:01.000Z"
-            }
-JSON;
+                        {
+                            "id": 789,
+                            "label": "client789",
+                            "api_key": "BD1B4B54-D752-A76D-5A9BD8A17F39DB61",
+                            "install_code": "BD1B5605-BF5E-D385-BA07AD518BE7F321",
+                            "apps": {
+                                "apache": true,
+                                "nginx": false,
+                                "mysql": true
+                            },
+                            "created": "2018-01-01T00:01:01.000Z",
+                            "updated": "2018-01-01T00:01:01.000Z"
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/longview/clients', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->create([
             LongviewClient::FIELD_LABEL => 'client789',
         ]);
@@ -77,7 +81,7 @@ JSON;
         self::assertSame('client789', $entity->label);
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $request = [
             'json' => [
@@ -86,32 +90,32 @@ JSON;
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 789,
-                "label": "client789",
-                "api_key": "BD1B4B54-D752-A76D-5A9BD8A17F39DB61",
-                "install_code": "BD1B5605-BF5E-D385-BA07AD518BE7F321",
-                "apps": {
-                    "apache": true,
-                    "nginx": false,
-                    "mysql": true
-                },
-                "created": "2018-01-01T00:01:01.000Z",
-                "updated": "2018-01-01T00:01:01.000Z"
-            }
-JSON;
+                        {
+                            "id": 789,
+                            "label": "client789",
+                            "api_key": "BD1B4B54-D752-A76D-5A9BD8A17F39DB61",
+                            "install_code": "BD1B5605-BF5E-D385-BA07AD518BE7F321",
+                            "apps": {
+                                "apache": true,
+                                "nginx": false,
+                                "mysql": true
+                            },
+                            "created": "2018-01-01T00:01:01.000Z",
+                            "updated": "2018-01-01T00:01:01.000Z"
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['PUT', 'https://api.linode.com/v4/longview/clients/789', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->update(789, [
             LongviewClient::FIELD_LABEL => 'client789',
         ]);
@@ -121,32 +125,32 @@ JSON;
         self::assertSame('client789', $entity->label);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['DELETE', 'https://api.linode.com/v4/longview/clients/789', [], new Response(200, [], null)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $repository->delete(789);
 
         self::assertTrue(true);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/longview/clients';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'label',
@@ -155,7 +159,7 @@ JSON;
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(LongviewClient::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

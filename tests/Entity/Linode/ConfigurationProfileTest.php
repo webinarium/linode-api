@@ -14,16 +14,21 @@ namespace Linode\Entity\Linode;
 use Linode\LinodeClient;
 use PHPUnit\Framework\TestCase;
 
-class ConfigurationProfileTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Entity\Linode\ConfigurationProfile
+ */
+final class ConfigurationProfileTest extends TestCase
 {
-    protected $client;
+    protected LinodeClient $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client = $this->createMock(LinodeClient::class);
     }
 
-    public function testProperties()
+    public function testProperties(): void
     {
         $entity = new ConfigurationProfile($this->client, [
             'kernel'       => 'linode/latest-64bit',

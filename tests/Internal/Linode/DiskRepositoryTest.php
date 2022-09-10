@@ -19,21 +19,25 @@ use Linode\ReflectionTrait;
 use Linode\Repository\Linode\DiskRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class DiskRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\Linode\DiskRepository
+ */
+final class DiskRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var DiskRepository */
-    protected $repository;
+    protected DiskRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new DiskRepository($client, 123);
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $request = [
             'json' => [
@@ -58,28 +62,28 @@ class DiskRepositoryTest extends TestCase
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 25674,
-                "label": "Debian 9 Disk",
-                "status": "ready",
-                "size": 48640,
-                "filesystem": "ext4",
-                "created": "2018-01-01T00:01:01",
-                "updated": "2018-01-01T00:01:01"
-            }
-JSON;
+                        {
+                            "id": 25674,
+                            "label": "Debian 9 Disk",
+                            "status": "ready",
+                            "size": 48640,
+                            "filesystem": "ext4",
+                            "created": "2018-01-01T00:01:01",
+                            "updated": "2018-01-01T00:01:01"
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/linode/instances/123/disks', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->create([
             Disk::FIELD_SIZE             => 48640,
             Disk::FIELD_LABEL            => 'Debian 9 Disk',
@@ -105,7 +109,7 @@ JSON;
         self::assertSame('Debian 9 Disk', $entity->label);
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $request = [
             'json' => [
@@ -115,28 +119,28 @@ JSON;
         ];
 
         $response = <<<'JSON'
-            {
-                "id": 25674,
-                "label": "Debian 9 Disk",
-                "status": "ready",
-                "size": 48640,
-                "filesystem": "ext4",
-                "created": "2018-01-01T00:01:01",
-                "updated": "2018-01-01T00:01:01"
-            }
-JSON;
+                        {
+                            "id": 25674,
+                            "label": "Debian 9 Disk",
+                            "status": "ready",
+                            "size": 48640,
+                            "filesystem": "ext4",
+                            "created": "2018-01-01T00:01:01",
+                            "updated": "2018-01-01T00:01:01"
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['PUT', 'https://api.linode.com/v4/linode/instances/123/disks/25674', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->update(25674, [
             Disk::FIELD_LABEL      => 'Debian 9 Disk',
             Disk::FIELD_FILESYSTEM => Disk::FILESYSTEM_EXT4,
@@ -147,25 +151,25 @@ JSON;
         self::assertSame('Debian 9 Disk', $entity->label);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['DELETE', 'https://api.linode.com/v4/linode/instances/123/disks/25674', [], new Response(200, [], null)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $repository->delete(25674);
 
         self::assertTrue(true);
     }
 
-    public function testResize()
+    public function testResize(): void
     {
         $request = [
             'json' => [
@@ -178,18 +182,18 @@ JSON;
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/linode/instances/123/disks/25674/resize', $request, new Response(200, [], null)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $repository->resize(25674, 2048);
 
         self::assertTrue(true);
     }
 
-    public function testResetPassword()
+    public function testResetPassword(): void
     {
         $request = [
             'json' => [
@@ -202,25 +206,25 @@ JSON;
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/linode/instances/123/disks/25674/password', $request, new Response(200, [], null)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $repository->resetPassword(25674, 'another@complex^Password123');
 
         self::assertTrue(true);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/linode/instances/123/disks';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'id',
@@ -242,7 +246,7 @@ JSON;
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(Disk::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

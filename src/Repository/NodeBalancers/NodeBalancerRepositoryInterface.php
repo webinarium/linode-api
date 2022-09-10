@@ -24,23 +24,14 @@ interface NodeBalancerRepositoryInterface extends RepositoryInterface
      * Creates a NodeBalancer in the requested Region. This NodeBalancer
      * will not start serving requests until it is configured.
      *
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return NodeBalancer
      */
     public function create(array $parameters): NodeBalancer;
 
     /**
      * Updates information about a NodeBalancer you can access.
      *
-     * @param int   $id
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return NodeBalancer
      */
     public function update(int $id, array $parameters): NodeBalancer;
 
@@ -54,8 +45,6 @@ interface NodeBalancerRepositoryInterface extends RepositoryInterface
      * changed or removed. Deleting a NodeBalancer will cause you to lose access
      * to the IP Addresses assigned to this NodeBalancer.
      *
-     * @param int $id
-     *
      * @throws \Linode\Exception\LinodeException
      */
     public function delete(int $id): void;
@@ -63,11 +52,7 @@ interface NodeBalancerRepositoryInterface extends RepositoryInterface
     /**
      * Returns detailed statistics about the requested NodeBalancer.
      *
-     * @param int $id
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return NodeBalancerStats
      */
     public function getStats(int $id): NodeBalancerStats;
 }

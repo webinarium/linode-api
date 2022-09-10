@@ -19,21 +19,25 @@ use Linode\ReflectionTrait;
 use Linode\Repository\ImageRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class ImageRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\ImageRepository
+ */
+final class ImageRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var ImageRepository */
-    protected $repository;
+    protected ImageRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new ImageRepository($client);
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $request = [
             'json' => [
@@ -44,32 +48,32 @@ class ImageRepositoryTest extends TestCase
         ];
 
         $response = <<<'JSON'
-            {
-                "id": "private/67848373",
-                "label": "My gold-master image",
-                "created": "2018-01-01T00:01:01",
-                "created_by": "somename",
-                "deprecated": false,
-                "description": "The detailed description of my Image.",
-                "is_public": false,
-                "size": 2500,
-                "type": "manual",
-                "expiry": "2018-08-01T00:01:01",
-                "vendor": null
-            }
-JSON;
+                        {
+                            "id": "private/67848373",
+                            "label": "My gold-master image",
+                            "created": "2018-01-01T00:01:01",
+                            "created_by": "somename",
+                            "deprecated": false,
+                            "description": "The detailed description of my Image.",
+                            "is_public": false,
+                            "size": 2500,
+                            "type": "manual",
+                            "expiry": "2018-08-01T00:01:01",
+                            "vendor": null
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/images', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->create([
             Image::FIELD_LABEL       => 'My gold-master image',
             Image::FIELD_DESCRIPTION => 'The detailed description of my Image.',
@@ -81,7 +85,7 @@ JSON;
         self::assertSame('My gold-master image', $entity->label);
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $request = [
             'json' => [
@@ -91,32 +95,32 @@ JSON;
         ];
 
         $response = <<<'JSON'
-            {
-                "id": "private/67848373",
-                "label": "My gold-master image",
-                "created": "2018-01-01T00:01:01",
-                "created_by": "somename",
-                "deprecated": false,
-                "description": "The detailed description of my Image.",
-                "is_public": false,
-                "size": 2500,
-                "type": "manual",
-                "expiry": "2018-08-01T00:01:01",
-                "vendor": null
-            }
-JSON;
+                        {
+                            "id": "private/67848373",
+                            "label": "My gold-master image",
+                            "created": "2018-01-01T00:01:01",
+                            "created_by": "somename",
+                            "deprecated": false,
+                            "description": "The detailed description of my Image.",
+                            "is_public": false,
+                            "size": 2500,
+                            "type": "manual",
+                            "expiry": "2018-08-01T00:01:01",
+                            "vendor": null
+                        }
+            JSON;
 
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['PUT', 'https://api.linode.com/v4/images/private/67848373', $request, new Response(200, [], $response)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $entity = $repository->update('private/67848373', [
             Image::FIELD_LABEL       => 'My gold-master image',
             Image::FIELD_DESCRIPTION => 'The detailed description of my Image.',
@@ -127,32 +131,32 @@ JSON;
         self::assertSame('My gold-master image', $entity->label);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['DELETE', 'https://api.linode.com/v4/images/private/67848373', [], new Response(200, [], null)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $repository->delete('private/67848373');
 
         self::assertTrue(true);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/images';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'id',
@@ -169,7 +173,7 @@ JSON;
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(Image::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

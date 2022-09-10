@@ -22,17 +22,14 @@ use Linode\Repository\Linode\LinodeVolumeRepositoryInterface;
  */
 class LinodeVolumeRepository extends AbstractRepository implements LinodeVolumeRepositoryInterface
 {
-    /** @var int ID of the Linode to look up. */
-    protected $linodeId;
-
     /**
      * {@inheritdoc}
+     *
+     * @param int $linodeId ID of the Linode to look up
      */
-    public function __construct(LinodeClient $client, int $id)
+    public function __construct(LinodeClient $client, protected int $linodeId)
     {
         parent::__construct($client);
-
-        $this->linodeId = $id;
     }
 
     /**

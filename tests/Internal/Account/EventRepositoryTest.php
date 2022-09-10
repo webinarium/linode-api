@@ -19,64 +19,68 @@ use Linode\ReflectionTrait;
 use Linode\Repository\Account\EventRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class EventRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\Account\EventRepository
+ */
+final class EventRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var EventRepository */
-    protected $repository;
+    protected EventRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new EventRepository($client);
     }
 
-    public function testMarkAsSeen()
+    public function testMarkAsSeen(): void
     {
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/account/events/123/seen', [], new Response(200, [], null)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $repository->markAsSeen(123);
 
         self::assertTrue(true);
     }
 
-    public function testMarkAsRead()
+    public function testMarkAsRead(): void
     {
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
                 ['POST', 'https://api.linode.com/v4/account/events/123/read', [], new Response(200, [], null)],
-            ]);
+            ])
+        ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        /** @noinspection PhpUnhandledExceptionInspection */
         $repository->markAsRead(123);
 
         self::assertTrue(true);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/account/events';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'id',
@@ -94,7 +98,7 @@ class EventRepositoryTest extends TestCase
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(Event::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

@@ -18,61 +18,43 @@ trait ReflectionTrait
 {
     /**
      * Calls specified protected method of the object.
-     *
-     * @param mixed  $object
-     * @param string $name
-     * @param array  $args
-     *
-     * @return mixed
      */
-    public function callMethod($object, $name, array $args = [])
+    public function callMethod(mixed $object, string $name, array $args = []): mixed
     {
         try {
             $reflection = new \ReflectionMethod(get_class($object), $name);
-            $reflection->setAccessible(true);
 
             return $reflection->invokeArgs($object, $args);
         }
-        catch (\ReflectionException $e) {
+        catch (\ReflectionException) {
             return null;
         }
     }
 
     /**
      * Sets specified protected property of the object.
-     *
-     * @param mixed  $object
-     * @param string $name
-     * @param mixed  $value
      */
-    public function setProperty($object, $name, $value)
+    public function setProperty(mixed $object, string $name, mixed $value): void
     {
         try {
             $reflection = new \ReflectionProperty(get_class($object), $name);
-            $reflection->setAccessible(true);
             $reflection->setValue($object, $value);
         }
-        catch (\ReflectionException $e) {
+        catch (\ReflectionException) {
         }
     }
 
     /**
      * Gets specified protected property of the object.
-     *
-     * @param mixed  $object
-     * @param string $name
-     *
-     * @return mixed
      */
-    public function getProperty($object, $name)
+    public function getProperty(mixed $object, string $name): mixed
     {
         try {
             $reflection = new \ReflectionProperty(get_class($object), $name);
-            $reflection->setAccessible(true);
 
             return $reflection->getValue($object);
         }
-        catch (\ReflectionException $e) {
+        catch (\ReflectionException) {
             return null;
         }
     }

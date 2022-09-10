@@ -21,7 +21,7 @@ interface EventRepositoryInterface extends RepositoryInterface
     /**
      * Marks all Events up to and including this Event by ID as seen.
      *
-     * @param int $id The ID of the Event to designate as seen.
+     * @param int $id the ID of the Event to designate as seen
      *
      * @throws \Linode\Exception\LinodeException
      */
@@ -30,7 +30,7 @@ interface EventRepositoryInterface extends RepositoryInterface
     /**
      * Marks a single Event as read.
      *
-     * @param int $id The ID of the Event to designate as read.
+     * @param int $id the ID of the Event to designate as read
      *
      * @throws \Linode\Exception\LinodeException
      */

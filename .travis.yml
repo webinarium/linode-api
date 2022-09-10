@@ -1,7 +1,11 @@
 language: php
 
 php:
-    - 7.1
+    - 8.1
+
+env:
+    global:
+        - XDEBUG_MODE=coverage
 
 install:
     - composer install -n

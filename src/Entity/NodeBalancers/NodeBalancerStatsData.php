@@ -26,18 +26,12 @@ class NodeBalancerStatsData extends Entity
     /**
      * {@inheritdoc}
      */
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
-        if ($name === 'connections') {
-            return array_map(function ($data) {
-                return new TimeValue((int) $data[0], (float) $data[1]);
-            }, $this->data[$name]);
-        }
-
-        if ($name === 'traffic') {
-            return new NodeTraffic($this->client, $this->data[$name]);
-        }
-
-        return parent::__get($name);
+        return match ($name) {
+            'connections' => array_map(fn ($data) => new TimeValue((int) $data[0], (float) $data[1]), $this->data[$name]),
+            'traffic'     => new NodeTraffic($this->client, $this->data[$name]),
+            default       => parent::__get($name),
+        };
     }
 }

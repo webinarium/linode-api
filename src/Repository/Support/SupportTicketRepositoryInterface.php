@@ -25,18 +25,12 @@ interface SupportTicketRepositoryInterface extends RepositoryInterface
      * Only one of the ID attributes (`linode_id`, `domain_id`, etc.) can be set
      * on a single Support Ticket.
      *
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return SupportTicket
      */
     public function open(array $parameters): SupportTicket;
 
     /**
      * Closes a Support Ticket you have access to modify.
-     *
-     * @param int $id
      *
      * @throws \Linode\Exception\LinodeException
      */

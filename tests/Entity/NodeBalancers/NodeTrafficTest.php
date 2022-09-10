@@ -15,16 +15,21 @@ use Linode\Entity\TimeValue;
 use Linode\LinodeClient;
 use PHPUnit\Framework\TestCase;
 
-class NodeTrafficTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Entity\NodeBalancers\NodeTraffic
+ */
+final class NodeTrafficTest extends TestCase
 {
-    protected $client;
+    protected LinodeClient $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client = $this->createMock(LinodeClient::class);
     }
 
-    public function testProperties()
+    public function testProperties(): void
     {
         $data = [
             'in'          => [
@@ -47,7 +52,6 @@ class NodeTrafficTest extends TestCase
         self::assertSame(1521484000000, $entity->out[0]->time);
         self::assertSame(3928.91, $entity->out[0]->value);
 
-        /** @noinspection PhpUndefinedFieldInspection */
         self::assertNull($entity->unknown);
     }
 }

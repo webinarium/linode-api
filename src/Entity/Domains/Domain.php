@@ -19,30 +19,30 @@ use Linode\Internal\Domains\DomainRecordRepository;
  * tell your registrar to use Linode's nameservers in order for a domain
  * in our system to be treated as authoritative.
  *
- * @property int      $id          This Domain's unique ID.
- * @property string   $domain      The domain this Domain represents. These must be unique in our system;
- *                                 you cannot have two Domains representing the same domain.
- * @property string   $type        If this Domain represents the authoritative source of information for
- *                                 the domain it describes, or if it is a read-only copy of a master
- *                                 (also called a slave) (@see `TYPE_...` constants).
- * @property string   $status      Used to control whether this Domain is currently being rendered
- *                                 (@see `STATUS_...` constants).
- * @property string   $soa_email   Start of Authority email address. This is required for master Domains.
- * @property string   $group       The group this Domain belongs to. This is for display purposes only.
- * @property string   $description A description for this Domain. This is for display purposes only.
- * @property int      $ttl_sec     "Time to Live" - the amount of time in seconds that this Domain's records may
- *                                 be cached by resolvers or other domain servers (@see `TIME_...` constants).
- * @property int      $refresh_sec The amount of time in seconds before this Domain should be refreshed
- *                                 (@see `TIME_...` constants).
- * @property int      $retry_sec   The interval, in seconds, at which a failed refresh should be retried
- *                                 (@see `TIME_...` constants).
- * @property int      $expire_sec  The amount of time in seconds that may pass before this Domain is no longer
- *                                 authoritative (@see `TIME_...` constants).
- * @property string[] $master_ips  The IP addresses representing the master DNS for this Domain.
- * @property string[] $axfr_ips    The list of IPs that may perform a zone transfer for this Domain.
- *                                 This is potentially dangerous, and should be set to an empty list
- *                                 unless you intend to use it.
- * @property \Linode\Repository\Domains\DomainRecordRepositoryInterface $records Records of the domain.
+ * @property int                                                        $id          This Domain's unique ID.
+ * @property string                                                     $domain      The domain this Domain represents. These must be unique in our system;
+ *                                                                                   you cannot have two Domains representing the same domain.
+ * @property string                                                     $type        If this Domain represents the authoritative source of information for
+ *                                                                                   the domain it describes, or if it is a read-only copy of a master
+ *                                                                                   (also called a slave) (@see `TYPE_...` constants).
+ * @property string                                                     $status      Used to control whether this Domain is currently being rendered
+ *                                                                                   (@see `STATUS_...` constants).
+ * @property string                                                     $soa_email   Start of Authority email address. This is required for master Domains.
+ * @property string                                                     $group       The group this Domain belongs to. This is for display purposes only.
+ * @property string                                                     $description A description for this Domain. This is for display purposes only.
+ * @property int                                                        $ttl_sec     "Time to Live" - the amount of time in seconds that this Domain's records may
+ *                                                                                   be cached by resolvers or other domain servers (@see `TIME_...` constants).
+ * @property int                                                        $refresh_sec The amount of time in seconds before this Domain should be refreshed
+ *                                                                                   (@see `TIME_...` constants).
+ * @property int                                                        $retry_sec   The interval, in seconds, at which a failed refresh should be retried
+ *                                                                                   (@see `TIME_...` constants).
+ * @property int                                                        $expire_sec  The amount of time in seconds that may pass before this Domain is no longer
+ *                                                                                   authoritative (@see `TIME_...` constants).
+ * @property string[]                                                   $master_ips  The IP addresses representing the master DNS for this Domain.
+ * @property string[]                                                   $axfr_ips    The list of IPs that may perform a zone transfer for this Domain.
+ *                                                                                   This is potentially dangerous, and should be set to an empty list
+ *                                                                                   unless you intend to use it.
+ * @property \Linode\Repository\Domains\DomainRecordRepositoryInterface $records     Records of the domain.
  */
 class Domain extends Entity
 {
@@ -88,12 +88,11 @@ class Domain extends Entity
     /**
      * {@inheritdoc}
      */
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
-        if ($name === 'records') {
-            return new DomainRecordRepository($this->client, $this->id);
-        }
-
-        return parent::__get($name);
+        return match ($name) {
+            'records' => new DomainRecordRepository($this->client, $this->id),
+            default   => parent::__get($name),
+        };
     }
 }

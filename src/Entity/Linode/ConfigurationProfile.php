@@ -53,17 +53,12 @@ class ConfigurationProfile extends Entity
     /**
      * {@inheritdoc}
      */
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
-        switch ($name) {
-
-            case 'helpers':
-                return new Helpers($this->client, $this->data['helpers']);
-
-            case 'devices':
-                return new Devices($this->client, $this->data['devices']);
-        }
-
-        return parent::__get($name);
+        return match ($name) {
+            'helpers' => new Helpers($this->client, $this->data['helpers']),
+            'devices' => new Devices($this->client, $this->data['devices']),
+            default   => parent::__get($name),
+        };
     }
 }

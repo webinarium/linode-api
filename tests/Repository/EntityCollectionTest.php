@@ -9,8 +9,6 @@
 //
 //----------------------------------------------------------------------
 
-/** @noinspection PhpUndefinedMethodInspection */
-
 namespace Linode\Repository;
 
 use GuzzleHttp\Client;
@@ -21,13 +19,18 @@ use Linode\LinodeClient;
 use Linode\ReflectionTrait;
 use PHPUnit\Framework\TestCase;
 
-class EntityCollectionTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Repository\EntityCollection
+ */
+final class EntityCollectionTest extends TestCase
 {
     use ReflectionTrait;
 
-    protected $repository;
+    protected RepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $page1 = [
             'page'    => 1,
@@ -63,7 +66,8 @@ class EntityCollectionTest extends TestCase
             ->willReturnMap([
                 ['GET', 'https://api.linode.com/v4/test', ['query' => ['page' => 1]], new Response(200, [], json_encode($page1))],
                 ['GET', 'https://api.linode.com/v4/test', ['query' => ['page' => 2]], new Response(200, [], json_encode($page2))],
-            ]);
+            ])
+        ;
 
         $linodeClient = new LinodeClient();
         $this->setProperty($linodeClient, 'client', $client);
@@ -77,12 +81,9 @@ class EntityCollectionTest extends TestCase
             public function getCollection(): EntityCollection
             {
                 return new EntityCollection(
-                    function (int $page) {
-                        return $this->client->api($this->client::REQUEST_GET, $this->getBaseUri(), ['page' => $page]);
-                    },
-                    function (array $json) {
-                        return $this->jsonToEntity($json);
-                    });
+                    fn (int $page) => $this->client->api($this->client::REQUEST_GET, $this->getBaseUri(), ['page' => $page]),
+                    fn (array $json) => $this->jsonToEntity($json)
+                );
             }
 
             protected function getSupportedFields(): array
@@ -97,14 +98,14 @@ class EntityCollectionTest extends TestCase
         };
     }
 
-    public function testCountable()
+    public function testCountable(): void
     {
         $collection = $this->repository->getCollection();
 
         self::assertCount(12, $collection);
     }
 
-    public function testIterator()
+    public function testIterator(): void
     {
         $expected = [
             'January',

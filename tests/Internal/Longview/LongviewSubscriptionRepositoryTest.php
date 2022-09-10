@@ -14,30 +14,35 @@ namespace Linode\Internal\Longview;
 use Linode\Entity\Longview\LongviewSubscription;
 use Linode\LinodeClient;
 use Linode\ReflectionTrait;
+use Linode\Repository\Longview\LongviewSubscriptionRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class LongviewSubscriptionRepositoryTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversDefaultClass \Linode\Internal\Longview\LongviewSubscriptionRepository
+ */
+final class LongviewSubscriptionRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    /** @var LongviewSubscriptionRepository */
-    protected $repository;
+    protected LongviewSubscriptionRepositoryInterface $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $client = new LinodeClient();
 
         $this->repository = new LongviewSubscriptionRepository($client);
     }
 
-    public function testGetBaseUri()
+    public function testGetBaseUri(): void
     {
         $expected = '/longview/subscriptions';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
 
-    public function testGetSupportedFields()
+    public function testGetSupportedFields(): void
     {
         $expected = [
             'id',
@@ -48,7 +53,7 @@ class LongviewSubscriptionRepositoryTest extends TestCase
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
     }
 
-    public function testJsonToEntity()
+    public function testJsonToEntity(): void
     {
         self::assertInstanceOf(LongviewSubscription::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }

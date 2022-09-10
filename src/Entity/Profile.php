@@ -34,40 +34,28 @@ class Profile
 {
     protected const SUCCESS_NO_CONTENT = 204;
 
-    protected $client;
-
     /**
      * Profile constructor.
      *
-     * @param LinodeClient $client Linode API client.
+     * @param LinodeClient $client linode API client
      */
-    public function __construct(LinodeClient $client)
+    public function __construct(protected LinodeClient $client)
     {
-        $this->client = $client;
     }
 
     /**
      * Returns requested repository.
      *
-     * @param string $name Repository name.
-     *
-     * @return null|RepositoryInterface
+     * @param string $name repository name
      */
-    public function __get(string $name)
+    public function __get(string $name): ?RepositoryInterface
     {
-        switch ($name) {
-
-            case 'apps':
-                return new AuthorizedAppRepository($this->client);
-
-            case 'ssh_keys':
-                return new SSHKeyRepository($this->client);
-
-            case 'tokens':
-                return new PersonalAccessTokenRepository($this->client);
-        }
-
-        return null;
+        return match ($name) {
+            'apps'     => new AuthorizedAppRepository($this->client),
+            'ssh_keys' => new SSHKeyRepository($this->client),
+            'tokens'   => new PersonalAccessTokenRepository($this->client),
+            default    => null,
+        };
     }
 
     /**
@@ -78,8 +66,6 @@ class Profile
      * This endpoint is always accessible, no matter what OAuth scopes the acting token has.
      *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return ProfileInformation
      */
     public function getProfileInformation(): ProfileInformation
     {
@@ -94,11 +80,7 @@ class Profile
      * Update information in your Profile. This endpoint requires the
      * "account:read_write" OAuth Scope.
      *
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return ProfileInformation
      */
     public function setProfileInformation(array $parameters): ProfileInformation
     {
@@ -127,9 +109,9 @@ class Profile
      * Once enabled, logins from untrusted computers will be required to provide
      * a TFA code before they are successful.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @return TwoFactorSecret two Factor secret generated
      *
-     * @return TwoFactorSecret Two Factor secret generated.
+     * @throws \Linode\Exception\LinodeException
      */
     public function enable2FA(): TwoFactorSecret
     {
@@ -149,11 +131,11 @@ class Profile
      * @param string $tfa_code The Two Factor code you generated with your Two Factor secret.
      *                         These codes are time-based, so be sure it is current.
      *
-     * @throws \Linode\Exception\LinodeException
-     *
      * @return string A one-use code that can be used in place of your Two Factor
      *                code, in case you are unable to generate one. Keep this in
      *                a safe place to avoid being locked out of your Account.
+     *
+     * @throws \Linode\Exception\LinodeException
      */
     public function confirm2FA(string $tfa_code): string
     {
@@ -177,8 +159,6 @@ class Profile
      * applications to see what options you should present to the acting User.
      *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return null|UserGrant
      */
     public function getGrants(): ?UserGrant
     {

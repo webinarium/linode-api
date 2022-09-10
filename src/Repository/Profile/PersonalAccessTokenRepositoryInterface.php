@@ -20,27 +20,16 @@ use Linode\Repository\RepositoryInterface;
 interface PersonalAccessTokenRepositoryInterface extends RepositoryInterface
 {
     /**
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return PersonalAccessToken
      */
     public function create(array $parameters): PersonalAccessToken;
 
     /**
-     * @param int   $id
-     * @param array $parameters
-     *
      * @throws \Linode\Exception\LinodeException
-     *
-     * @return PersonalAccessToken
      */
     public function update(int $id, array $parameters): PersonalAccessToken;
 
     /**
-     * @param int $id
-     *
      * @throws \Linode\Exception\LinodeException
      */
     public function revoke(int $id): void;

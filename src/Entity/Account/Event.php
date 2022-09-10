@@ -118,12 +118,11 @@ class Event extends Entity
     /**
      * {@inheritdoc}
      */
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
-        if ($name === 'entity') {
-            return new LinodeEntity($this->client, $this->data['entity']);
-        }
-
-        return parent::__get($name);
+        return match ($name) {
+            'entity' => new LinodeEntity($this->client, $this->data['entity']),
+            default  => parent::__get($name),
+        };
     }
 }

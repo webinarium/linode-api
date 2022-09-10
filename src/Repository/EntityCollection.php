@@ -23,25 +23,28 @@ class EntityCollection implements \Countable, \Iterator
     protected $entityFactory;
 
     /** @var int Current page (one-based index). */
-    protected $currentPage;
+    protected int $currentPage;
+
+    /** @var int Current entity (zero-based index). */
+    protected int $currentEntity;
 
     /** @var int Total number of pages. */
-    protected $totalPages;
+    protected int $totalPages;
 
     /** @var int Total number of entities. */
-    protected $totalEntities;
+    protected int $totalEntities;
 
     /** @var int Number of loaded entities. */
-    protected $loadedEntities;
+    protected int $loadedEntities;
 
-    /** @var \SplFixedArray Entities (JSON objects). */
-    protected $entitiesData;
+    /** @var null|\SplFixedArray Entities (JSON objects). */
+    protected ?\SplFixedArray $entitiesData;
 
     /**
      * EntityCollection constructor.
      *
-     * @param callable $apiHandler    Function to make an API call (@see ApiTrait::api()).
-     * @param callable $entityFactory Function to create entities using JSON (@see AbstractRepository::jsonToEntity()).
+     * @param callable $apiHandler    function to make an API call (@see ApiTrait::api())
+     * @param callable $entityFactory function to create entities using JSON (@see AbstractRepository::jsonToEntity())
      */
     public function __construct(callable $apiHandler, callable $entityFactory)
     {
@@ -49,6 +52,7 @@ class EntityCollection implements \Countable, \Iterator
         $this->entityFactory = $entityFactory;
 
         $this->currentPage    = 0;
+        $this->currentEntity  = 0;
         $this->totalPages     = 0;
         $this->totalEntities  = 0;
         $this->loadedEntities = 0;
@@ -60,7 +64,7 @@ class EntityCollection implements \Countable, \Iterator
     /**
      * {@inheritdoc}
      */
-    public function count()
+    public function count(): int
     {
         return $this->totalEntities;
     }
@@ -68,17 +72,17 @@ class EntityCollection implements \Countable, \Iterator
     /**
      * {@inheritdoc}
      */
-    public function key()
+    public function key(): int
     {
-        return $this->entitiesData->key();
+        return $this->currentEntity;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function current()
+    public function current(): mixed
     {
-        $json = $this->entitiesData->current();
+        $json = $this->entitiesData[$this->currentEntity];
 
         return ($this->entityFactory)($json);
     }
@@ -86,19 +90,19 @@ class EntityCollection implements \Countable, \Iterator
     /**
      * {@inheritdoc}
      */
-    public function valid()
+    public function valid(): bool
     {
-        return $this->entitiesData->valid();
+        return $this->currentEntity >= 0 && $this->currentEntity < $this->totalEntities;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function next()
+    public function next(): void
     {
-        $this->entitiesData->next();
+        $this->currentEntity++;
 
-        if ($this->entitiesData->key() >= $this->loadedEntities && $this->loadedEntities < $this->totalEntities) {
+        if ($this->currentEntity >= $this->loadedEntities && $this->loadedEntities < $this->totalEntities) {
             $this->loadPage();
         }
     }
@@ -106,15 +110,15 @@ class EntityCollection implements \Countable, \Iterator
     /**
      * {@inheritdoc}
      */
-    public function rewind()
+    public function rewind(): void
     {
-        $this->entitiesData->rewind();
+        $this->currentEntity = 0;
     }
 
     /**
      * Loads next page of data.
      */
-    protected function loadPage()
+    protected function loadPage(): void
     {
         /** @var \Psr\Http\Message\ResponseInterface $response */
         $response = ($this->apiHandler)(++$this->currentPage);

@@ -22,17 +22,14 @@ use Linode\Repository\Domains\DomainRecordRepositoryInterface;
  */
 class DomainRecordRepository extends AbstractRepository implements DomainRecordRepositoryInterface
 {
-    /** @var int The ID of the Domain we are accessing Records for. */
-    protected $domainId;
-
     /**
      * {@inheritdoc}
+     *
+     * @param int $domainId The ID of the Domain we are accessing Records for
      */
-    public function __construct(LinodeClient $client, int $id)
+    public function __construct(LinodeClient $client, protected int $domainId)
     {
         parent::__construct($client);
-
-        $this->domainId = $id;
     }
 
     /**
