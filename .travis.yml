@@ -7,10 +7,13 @@ env:
     global:
         - XDEBUG_MODE=coverage
 
+before_install:
+    - echo "error_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+
 install:
     - composer install -n
 
 script:
     - ./bin/phpunit --coverage-clover=coverage.clover
-    - wget https://scrutinizer-ci.com/ocular.phar
-    - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+    - composer global require scrutinizer/ocular
+    - php ~/.config/composer/vendor/bin/ocular code-coverage:upload --format=php-clover coverage.clover
