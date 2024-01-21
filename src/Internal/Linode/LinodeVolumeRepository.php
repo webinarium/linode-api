@@ -17,14 +17,9 @@ use Linode\Internal\AbstractRepository;
 use Linode\LinodeClient;
 use Linode\Repository\Linode\LinodeVolumeRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class LinodeVolumeRepository extends AbstractRepository implements LinodeVolumeRepositoryInterface
 {
     /**
-     * {@inheritdoc}
-     *
      * @param int $linodeId ID of the Linode to look up
      */
     public function __construct(LinodeClient $client, protected int $linodeId)
@@ -32,17 +27,11 @@ class LinodeVolumeRepository extends AbstractRepository implements LinodeVolumeR
         parent::__construct($client);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return sprintf('/linode/instances/%s/volumes', $this->linodeId);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -55,9 +44,6 @@ class LinodeVolumeRepository extends AbstractRepository implements LinodeVolumeR
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new Volume($this->client, $json);

@@ -16,6 +16,4 @@ use Linode\Repository\RepositoryInterface;
 /**
  * Linode volume repository.
  */
-interface LinodeVolumeRepositoryInterface extends RepositoryInterface
-{
-}
+interface LinodeVolumeRepositoryInterface extends RepositoryInterface {}

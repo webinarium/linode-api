@@ -17,14 +17,9 @@ use Linode\Internal\AbstractRepository;
 use Linode\LinodeClient;
 use Linode\Repository\Linode\DiskRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class DiskRepository extends AbstractRepository implements DiskRepositoryInterface
 {
     /**
-     * {@inheritdoc}
-     *
      * @param int $linodeId The ID of the Linode whose Disk to look up
      */
     public function __construct(LinodeClient $client, protected int $linodeId)
@@ -32,9 +27,6 @@ class DiskRepository extends AbstractRepository implements DiskRepositoryInterfa
         parent::__construct($client);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function create(array $parameters): Disk
     {
         $this->checkParametersSupport($parameters);
@@ -46,9 +38,6 @@ class DiskRepository extends AbstractRepository implements DiskRepositoryInterfa
         return new Disk($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function update(int $id, array $parameters): Disk
     {
         $this->checkParametersSupport($parameters);
@@ -60,17 +49,11 @@ class DiskRepository extends AbstractRepository implements DiskRepositoryInterfa
         return new Disk($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete(int $id): void
     {
         $this->client->api($this->client::REQUEST_DELETE, sprintf('%s/%s', $this->getBaseUri(), $id));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function resize(int $id, int $size): void
     {
         $parameters = [
@@ -80,9 +63,6 @@ class DiskRepository extends AbstractRepository implements DiskRepositoryInterfa
         $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/resize', $this->getBaseUri(), $id), $parameters);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function resetPassword(int $id, string $password): void
     {
         $parameters = [
@@ -92,17 +72,11 @@ class DiskRepository extends AbstractRepository implements DiskRepositoryInterfa
         $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/password', $this->getBaseUri(), $id), $parameters);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return sprintf('/linode/instances/%s/disks', $this->linodeId);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -123,9 +97,6 @@ class DiskRepository extends AbstractRepository implements DiskRepositoryInterfa
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new Disk($this->client, $json);

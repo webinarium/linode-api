@@ -33,9 +33,6 @@ class ManagedContact extends Entity
     public const FIELD_PHONE = 'phone';
     public const FIELD_GROUP = 'group';
 
-    /**
-     * {@inheritdoc}
-     */
     public function __get(string $name): mixed
     {
         return match ($name) {

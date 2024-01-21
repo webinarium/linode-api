@@ -12,6 +12,7 @@
 namespace Linode\Repository\Linode;
 
 use Linode\Entity\Linode\Disk;
+use Linode\Exception\LinodeException;
 use Linode\Repository\RepositoryInterface;
 
 /**
@@ -24,14 +25,14 @@ interface DiskRepositoryInterface extends RepositoryInterface
      * an Image for a list of available public images, or use one of your own),
      * and optionally provide a StackScript to deploy with this Disk.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function create(array $parameters): Disk;
 
     /**
      * Updates a Disk that you have permission to `read_write`.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function update(int $id, array $parameters): Disk;
 
@@ -40,7 +41,7 @@ interface DiskRepositoryInterface extends RepositoryInterface
      *
      * WARNING! Deleting a Disk is a destructive action and cannot be undone.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function delete(int $id): void;
 
@@ -55,14 +56,14 @@ interface DiskRepositoryInterface extends RepositoryInterface
      * The Disk must not be in use. If the Disk is in use, the request will
      * succeed but the resize will ultimately fail.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function resize(int $id, int $size): void;
 
     /**
      * Resets the password of a Disk you have permission to `read_write`.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function resetPassword(int $id, string $password): void;
 }

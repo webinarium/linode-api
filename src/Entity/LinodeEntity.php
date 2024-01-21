@@ -21,6 +21,4 @@ namespace Linode\Entity;
  *                         a relative URL, it is relative to the domain you retrieved the
  *                         object from.
  */
-class LinodeEntity extends Entity
-{
-}
+class LinodeEntity extends Entity {}

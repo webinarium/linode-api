@@ -16,14 +16,8 @@ use Linode\Entity\Profile\PersonalAccessToken;
 use Linode\Internal\AbstractRepository;
 use Linode\Repository\Profile\PersonalAccessTokenRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class PersonalAccessTokenRepository extends AbstractRepository implements PersonalAccessTokenRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function create(array $parameters): PersonalAccessToken
     {
         $this->checkParametersSupport($parameters);
@@ -35,9 +29,6 @@ class PersonalAccessTokenRepository extends AbstractRepository implements Person
         return new PersonalAccessToken($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function update(int $id, array $parameters): PersonalAccessToken
     {
         $this->checkParametersSupport($parameters);
@@ -49,25 +40,16 @@ class PersonalAccessTokenRepository extends AbstractRepository implements Person
         return new PersonalAccessToken($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function revoke(int $id): void
     {
         $this->client->api($this->client::REQUEST_DELETE, sprintf('%s/%s', $this->getBaseUri(), $id));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return '/profile/tokens';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -80,9 +62,6 @@ class PersonalAccessTokenRepository extends AbstractRepository implements Person
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new PersonalAccessToken($this->client, $json);

@@ -16,14 +16,8 @@ use Linode\Entity\Tag;
 use Linode\Internal\AbstractRepository;
 use Linode\Repository\Tags\TagRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class TagRepository extends AbstractRepository implements TagRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function create(array $parameters): Tag
     {
         $this->checkParametersSupport($parameters);
@@ -35,25 +29,16 @@ class TagRepository extends AbstractRepository implements TagRepositoryInterface
         return new Tag($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete(string $label): void
     {
         $this->client->api($this->client::REQUEST_DELETE, sprintf('%s/%s', $this->getBaseUri(), $label));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return '/tags';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -61,9 +46,6 @@ class TagRepository extends AbstractRepository implements TagRepositoryInterface
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new Tag($this->client, $json);

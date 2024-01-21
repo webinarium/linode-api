@@ -12,6 +12,7 @@
 namespace Linode\Repository\Support;
 
 use Linode\Entity\Support\SupportTicketReply;
+use Linode\Exception\LinodeException;
 use Linode\Repository\RepositoryInterface;
 
 /**
@@ -22,7 +23,7 @@ interface SupportTicketReplyRepositoryInterface extends RepositoryInterface
     /**
      * Adds a reply to an existing Support Ticket.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function create(array $parameters): SupportTicketReply;
 }

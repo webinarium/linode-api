@@ -12,6 +12,7 @@
 namespace Linode\Repository;
 
 use Linode\Entity\Volume;
+use Linode\Exception\LinodeException;
 
 /**
  * Volume repository.
@@ -23,14 +24,14 @@ interface VolumeRepositoryInterface extends RepositoryInterface
      * your User must have the `add_volumes` grant. Creating a new Volume will start
      * accruing additional charges on your account.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function create(array $parameters): Volume;
 
     /**
      * Updates a Volume that you have permission to `read_write`.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function update(int $id, array $parameters): Volume;
 
@@ -42,7 +43,7 @@ interface VolumeRepositoryInterface extends RepositoryInterface
      * Deleting stops billing for the Volume. You will be billed for time used within
      * the billing period the Volume was active.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function delete(int $id): void;
 
@@ -52,7 +53,7 @@ interface VolumeRepositoryInterface extends RepositoryInterface
      * will have the same size and data as the source Volume. Creating a new
      * Volume will incur a charge on your Account.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function clone(int $id, array $parameters): void;
 
@@ -63,7 +64,7 @@ interface VolumeRepositoryInterface extends RepositoryInterface
      *
      * WARNING! Volumes can only be resized up.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function resize(int $id, array $parameters): void;
 
@@ -74,7 +75,7 @@ interface VolumeRepositoryInterface extends RepositoryInterface
      * permission to the Linode. Additionally, the Volume and Linode must be
      * located in the same Region.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function attach(int $id, array $parameters): Volume;
 
@@ -83,7 +84,7 @@ interface VolumeRepositoryInterface extends RepositoryInterface
      * for this request to complete successfully, your User must have `read_write`
      * access to the Volume and `read_write` access to the Linode.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function detach(int $id): void;
 }

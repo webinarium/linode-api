@@ -16,22 +16,13 @@ use Linode\Entity\Networking\IPv6Range;
 use Linode\Internal\AbstractRepository;
 use Linode\Repository\Networking\IPv6RangeRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class IPv6RangeRepository extends AbstractRepository implements IPv6RangeRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return '/networking/ipv6/ranges';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -40,9 +31,6 @@ class IPv6RangeRepository extends AbstractRepository implements IPv6RangeReposit
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new IPv6Range($this->client, $json);

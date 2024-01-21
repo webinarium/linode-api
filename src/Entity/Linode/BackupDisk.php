@@ -20,6 +20,4 @@ use Linode\Entity\Entity;
  * @property string $filesystem The Disk filesystem (@see `Disk::FILESYSTEM_...` constants).
  * @property string $label      The Disk label.
  */
-class BackupDisk extends Entity
-{
-}
+class BackupDisk extends Entity {}

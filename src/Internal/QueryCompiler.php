@@ -32,15 +32,13 @@ class QueryCompiler
         $replacements = [];
 
         foreach ($parameters as $key => $value) {
-
             if (!is_scalar($value)) {
                 throw new \Exception(sprintf('Parameter "%s" contains non-scalar value', $key));
             }
 
             if (is_string($value)) {
                 $value = '"' . $value . '"';
-            }
-            elseif (is_bool($value)) {
+            } elseif (is_bool($value)) {
                 $value = $value ? 'true' : 'false';
             }
 
@@ -62,21 +60,18 @@ class QueryCompiler
     {
         $operator = $node->attributes['operator'] ?? null;
 
-        if ($operator === null) {
+        if (null === $operator) {
             throw new \Exception('Invalid expression');
         }
 
         switch ($operator) {
-
             case 'and':
-
                 return ['+and' => [
                     $this->compile($node->nodes['left']),
                     $this->compile($node->nodes['right']),
                 ]];
 
             case 'or':
-
                 return ['+or' => [
                     $this->compile($node->nodes['left']),
                     $this->compile($node->nodes['right']),
@@ -89,15 +84,14 @@ class QueryCompiler
             case '>':
             case '>=':
             case '~':
-
                 $name  = $node->nodes['left']->attributes['name']   ?? null;
                 $value = $node->nodes['right']->attributes['value'] ?? null;
 
-                if ($name === null) {
+                if (null === $name) {
                     throw new \Exception(sprintf('Left operand for the "%s" operator must be a field name', $operator));
                 }
 
-                if ($value === null) {
+                if (null === $value) {
                     throw new \Exception(sprintf('Right operand for the "%s" operator must be a constant value', $operator));
                 }
 
@@ -110,7 +104,7 @@ class QueryCompiler
                     '~'  => '+contains',
                 ];
 
-                return ($operator === '==')
+                return ('==' === $operator)
                     ? [$name => $value]
                     : [$name => [$operators[$operator] => $value]];
 

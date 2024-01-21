@@ -16,22 +16,13 @@ use Linode\Entity\Entity;
 use Linode\Internal\AbstractRepository;
 use Linode\Repository\Account\NotificationRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class NotificationRepository extends AbstractRepository implements NotificationRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return '/account/notifications';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -44,9 +35,6 @@ class NotificationRepository extends AbstractRepository implements NotificationR
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new Notification($this->client, $json);

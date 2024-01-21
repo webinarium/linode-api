@@ -24,9 +24,6 @@ class LinodeBackups extends Entity
     // Available fields.
     public const FIELD_SCHEDULE = 'schedule';
 
-    /**
-     * {@inheritdoc}
-     */
     public function __get(string $name): mixed
     {
         return match ($name) {

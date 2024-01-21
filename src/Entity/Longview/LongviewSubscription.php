@@ -29,9 +29,6 @@ class LongviewSubscription extends Entity
     public const FIELD_LABEL            = 'label';
     public const FIELD_CLIENTS_INCLUDED = 'clients_included';
 
-    /**
-     * {@inheritdoc}
-     */
     public function __get(string $name): mixed
     {
         return match ($name) {

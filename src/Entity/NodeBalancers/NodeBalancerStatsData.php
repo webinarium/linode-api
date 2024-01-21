@@ -23,13 +23,10 @@ use Linode\Entity\TimeValue;
  */
 class NodeBalancerStatsData extends Entity
 {
-    /**
-     * {@inheritdoc}
-     */
     public function __get(string $name): mixed
     {
         return match ($name) {
-            'connections' => array_map(fn ($data) => new TimeValue((int) $data[0], (float) $data[1]), $this->data[$name]),
+            'connections' => array_map(static fn ($data) => new TimeValue((int) $data[0], (float) $data[1]), $this->data[$name]),
             'traffic'     => new NodeTraffic($this->client, $this->data[$name]),
             default       => parent::__get($name),
         };

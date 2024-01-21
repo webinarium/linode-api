@@ -124,29 +124,26 @@ class LinodeClient
         try {
             $options = [];
 
-            if ($this->access_token !== null) {
+            if (null !== $this->access_token) {
                 $options['headers']['Authorization'] = 'Bearer ' . $this->access_token;
             }
 
-            if (count($filters) !== 0 && $method === self::REQUEST_GET) {
+            if (0 !== count($filters) && self::REQUEST_GET === $method) {
                 $options['headers']['X-Filter'] = json_encode($filters);
             }
 
-            if (count($parameters) !== 0) {
-                if ($method === self::REQUEST_GET) {
+            if (0 !== count($parameters)) {
+                if (self::REQUEST_GET === $method) {
                     $options['query'] = $parameters;
-                }
-                elseif ($method === self::REQUEST_POST || $method === self::REQUEST_PUT) {
+                } elseif (self::REQUEST_POST === $method || self::REQUEST_PUT === $method) {
                     $options['json'] = $parameters;
                 }
             }
 
             return $this->client->request($method, self::BASE_API_URI . $uri, $options);
-        }
-        catch (ClientException $exception) {
+        } catch (ClientException $exception) {
             throw new LinodeException($exception->getResponse());
-        }
-        catch (GuzzleException) {
+        } catch (GuzzleException) {
             throw new LinodeException(new Response(500));
         }
     }

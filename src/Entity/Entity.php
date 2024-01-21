@@ -24,9 +24,7 @@ abstract class Entity
      * @param LinodeClient $client linode API client
      * @param array        $data   JSON data retrieved from Linode
      */
-    public function __construct(protected LinodeClient $client, protected array $data = [])
-    {
-    }
+    public function __construct(protected LinodeClient $client, protected array $data = []) {}
 
     /**
      * Checks whether the specified property exists in the entity.

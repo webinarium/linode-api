@@ -15,14 +15,8 @@ use Linode\Entity\Entity;
 use Linode\Entity\StackScript;
 use Linode\Repository\StackScriptRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class StackScriptRepository extends AbstractRepository implements StackScriptRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function create(array $parameters): StackScript
     {
         $this->checkParametersSupport($parameters);
@@ -34,9 +28,6 @@ class StackScriptRepository extends AbstractRepository implements StackScriptRep
         return new StackScript($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function update(int $id, array $parameters): StackScript
     {
         $this->checkParametersSupport($parameters);
@@ -48,25 +39,16 @@ class StackScriptRepository extends AbstractRepository implements StackScriptRep
         return new StackScript($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete(int $id): void
     {
         $this->client->api($this->client::REQUEST_DELETE, sprintf('%s/%s', $this->getBaseUri(), $id));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return '/linode/stackscripts';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -87,9 +69,6 @@ class StackScriptRepository extends AbstractRepository implements StackScriptRep
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new StackScript($this->client, $json);

@@ -14,6 +14,4 @@ namespace Linode\Repository;
 /**
  * Linode type repository.
  */
-interface LinodeTypeRepositoryInterface extends RepositoryInterface
-{
-}
+interface LinodeTypeRepositoryInterface extends RepositoryInterface {}

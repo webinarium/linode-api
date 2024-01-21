@@ -12,6 +12,7 @@
 namespace Linode\Repository\Managed;
 
 use Linode\Entity\Managed\ManagedCredential;
+use Linode\Exception\LinodeException;
 use Linode\Repository\RepositoryInterface;
 
 /**
@@ -24,14 +25,14 @@ interface ManagedCredentialRepositoryInterface extends RepositoryInterface
      * to allow Linode special forces to access your Managed Services and resolve
      * issues.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function create(array $parameters): ManagedCredential;
 
     /**
      * Updates information about a Managed Credential.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function update(int $id, array $parameters): ManagedCredential;
 
@@ -39,7 +40,7 @@ interface ManagedCredentialRepositoryInterface extends RepositoryInterface
      * Deletes a Managed Credential. Linode special forces will no longer
      * have access to this Credential when attempting to resolve issues.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function delete(int $id): void;
 }

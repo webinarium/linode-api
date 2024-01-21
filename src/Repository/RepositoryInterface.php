@@ -12,6 +12,7 @@
 namespace Linode\Repository;
 
 use Linode\Entity\Entity;
+use Linode\Exception\LinodeException;
 
 /**
  * A repository to work with Linode entities of the same type.
@@ -27,7 +28,7 @@ interface RepositoryInterface
      *
      * @param int|string $id entity ID
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function find(int|string $id): Entity;
 
@@ -37,7 +38,7 @@ interface RepositoryInterface
      * @param null|string $orderBy  optional property name, which the collection should be sorted by
      * @param string      $orderDir optional sort direction (ignored when `orderBy` is `null`)
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function findAll(string $orderBy = null, string $orderDir = self::SORT_ASC): EntityCollection;
 
@@ -48,7 +49,7 @@ interface RepositoryInterface
      * @param null|string $orderBy  optional property name, which the collection should be sorted by
      * @param string      $orderDir optional sort direction (ignored when `orderBy` is `null`)
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function findBy(array $criteria, string $orderBy = null, string $orderDir = self::SORT_ASC): EntityCollection;
 
@@ -58,7 +59,7 @@ interface RepositoryInterface
      *
      * @param array $criteria list of filters
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function findOneBy(array $criteria): ?Entity;
 
@@ -70,7 +71,7 @@ interface RepositoryInterface
      * @param null|string $orderBy    optional property name, which the collection should be sorted by
      * @param string      $orderDir   optional sort direction (ignored when `orderBy` is `null`)
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function query(string $query, array $parameters = [], string $orderBy = null, string $orderDir = self::SORT_ASC): EntityCollection;
 }

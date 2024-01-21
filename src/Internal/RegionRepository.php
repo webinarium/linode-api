@@ -15,22 +15,13 @@ use Linode\Entity\Entity;
 use Linode\Entity\Region;
 use Linode\Repository\RegionRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class RegionRepository extends AbstractRepository implements RegionRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return '/regions';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -39,9 +30,6 @@ class RegionRepository extends AbstractRepository implements RegionRepositoryInt
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new Region($this->client, $json);

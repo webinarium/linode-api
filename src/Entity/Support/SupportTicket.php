@@ -14,25 +14,26 @@ namespace Linode\Entity\Support;
 use Linode\Entity\Entity;
 use Linode\Entity\LinodeEntity;
 use Linode\Internal\Support\SupportTicketReplyRepository;
+use Linode\Repository\Support\SupportTicketReplyRepositoryInterface;
 
 /**
  * A Support Ticket opened on your Account.
  *
- * @property int                                                              $id          The ID of the Support Ticket.
- * @property string                                                           $summary     The summary or title for this Ticket.
- * @property string                                                           $opened_by   The User who opened this Ticket.
- * @property string                                                           $opened      The date and time this Ticket was created.
- * @property string                                                           $description The full details of the issue or question.
- * @property LinodeEntity                                                     $entity      The entity this Ticket was opened for.
- * @property string                                                           $gravatar_id The Gravatar ID of the User who opened this Ticket.
- * @property string                                                           $status      The current status of this Ticket (@see `STATUS_...` constants).
- * @property bool                                                             $closable    Whether the Support Ticket may be closed.
- * @property string[]                                                         $attachments A list of filenames representing attached files associated
- *                                                                                         with this Ticket.
- * @property string                                                           $updated_by  The User who last updated this Ticket.
- * @property string                                                           $updated     The date and time this Ticket was last updated.
- * @property string                                                           $closed      The date and time this Ticket was closed.
- * @property \Linode\Repository\Support\SupportTicketReplyRepositoryInterface $replies     Replies to the ticket.
+ * @property int                                   $id          The ID of the Support Ticket.
+ * @property string                                $summary     The summary or title for this Ticket.
+ * @property string                                $opened_by   The User who opened this Ticket.
+ * @property string                                $opened      The date and time this Ticket was created.
+ * @property string                                $description The full details of the issue or question.
+ * @property LinodeEntity                          $entity      The entity this Ticket was opened for.
+ * @property string                                $gravatar_id The Gravatar ID of the User who opened this Ticket.
+ * @property string                                $status      The current status of this Ticket (@see `STATUS_...` constants).
+ * @property bool                                  $closable    Whether the Support Ticket may be closed.
+ * @property string[]                              $attachments A list of filenames representing attached files associated
+ *                                                              with this Ticket.
+ * @property string                                $updated_by  The User who last updated this Ticket.
+ * @property string                                $updated     The date and time this Ticket was last updated.
+ * @property string                                $closed      The date and time this Ticket was closed.
+ * @property SupportTicketReplyRepositoryInterface $replies     Replies to the ticket.
  */
 class SupportTicket extends Entity
 {
@@ -61,9 +62,6 @@ class SupportTicket extends Entity
     public const STATUS_OPEN   = 'open';
     public const STATUS_CLOSED = 'closed';
 
-    /**
-     * {@inheritdoc}
-     */
     public function __get(string $name): mixed
     {
         return match ($name) {

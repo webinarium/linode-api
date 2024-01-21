@@ -16,6 +16,4 @@ use Linode\Repository\RepositoryInterface;
 /**
  * Invoice item repository.
  */
-interface InvoiceItemRepositoryInterface extends RepositoryInterface
-{
-}
+interface InvoiceItemRepositoryInterface extends RepositoryInterface {}

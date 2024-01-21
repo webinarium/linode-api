@@ -42,8 +42,7 @@ final class EntityTest extends TestCase
             ],
         ];
 
-        $entity = new class($this->client, $data) extends Entity {
-        };
+        $entity = new class($this->client, $data) extends Entity {};
 
         self::assertTrue(isset($entity->class));
         self::assertFalse(isset($entity->disk));
@@ -63,8 +62,7 @@ final class EntityTest extends TestCase
             ],
         ];
 
-        $entity = new class($this->client, $data) extends Entity {
-        };
+        $entity = new class($this->client, $data) extends Entity {};
 
         self::assertSame('standard', $entity->class);
         self::assertSame(2048, $entity->memory);
@@ -86,8 +84,7 @@ final class EntityTest extends TestCase
             ],
         ];
 
-        $entity = new class($this->client, $data) extends Entity {
-        };
+        $entity = new class($this->client, $data) extends Entity {};
 
         self::assertSame($data, $entity->toArray());
     }

@@ -16,14 +16,8 @@ use Linode\Entity\Managed\ManagedService;
 use Linode\Internal\AbstractRepository;
 use Linode\Repository\Managed\ManagedServiceRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class ManagedServiceRepository extends AbstractRepository implements ManagedServiceRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function create(array $parameters): ManagedService
     {
         $this->checkParametersSupport($parameters);
@@ -35,9 +29,6 @@ class ManagedServiceRepository extends AbstractRepository implements ManagedServ
         return new ManagedService($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function update(int $id, array $parameters): ManagedService
     {
         $this->checkParametersSupport($parameters);
@@ -49,17 +40,11 @@ class ManagedServiceRepository extends AbstractRepository implements ManagedServ
         return new ManagedService($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete(int $id): void
     {
         $this->client->api($this->client::REQUEST_DELETE, sprintf('%s/%s', $this->getBaseUri(), $id));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function disable(int $id): ManagedService
     {
         $response = $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/disable', $this->getBaseUri(), $id));
@@ -69,9 +54,6 @@ class ManagedServiceRepository extends AbstractRepository implements ManagedServ
         return new ManagedService($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function enable(int $id): ManagedService
     {
         $response = $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/enable', $this->getBaseUri(), $id));
@@ -81,17 +63,11 @@ class ManagedServiceRepository extends AbstractRepository implements ManagedServ
         return new ManagedService($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return '/managed/services';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -109,9 +85,6 @@ class ManagedServiceRepository extends AbstractRepository implements ManagedServ
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new ManagedService($this->client, $json);

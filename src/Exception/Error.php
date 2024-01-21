@@ -19,9 +19,7 @@ class Error
     /**
      * Error constructor.
      */
-    public function __construct(protected string $reason, protected ?string $field)
-    {
-    }
+    public function __construct(protected string $reason, protected ?string $field) {}
 
     /**
      * What happened to cause this error. In most cases, this can be fixed immediately by

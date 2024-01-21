@@ -13,6 +13,7 @@ namespace Linode\Repository\Account;
 
 use Linode\Entity\Account\User;
 use Linode\Entity\Account\UserGrant;
+use Linode\Exception\LinodeException;
 use Linode\Repository\RepositoryInterface;
 
 /**
@@ -26,7 +27,7 @@ interface UserRepositoryInterface extends RepositoryInterface
      * determined by whether or not they are restricted, and what grants they
      * have been given.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function create(array $parameters): User;
 
@@ -36,7 +37,7 @@ interface UserRepositoryInterface extends RepositoryInterface
      * no grants will be configured by default and you must then set up grants
      * in order for the User to access anything on the Account.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function update(string $username, array $parameters): User;
 
@@ -45,7 +46,7 @@ interface UserRepositoryInterface extends RepositoryInterface
      * may no longer log in or perform any actions. All of the User's Grants
      * will be removed.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function delete(string $username): void;
 
@@ -61,7 +62,7 @@ interface UserRepositoryInterface extends RepositoryInterface
      *                        may access everything on the Account and perform
      *                        all actions.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function getUserGrants(string $username): ?UserGrant;
 
@@ -71,7 +72,7 @@ interface UserRepositoryInterface extends RepositoryInterface
      * include the grant for every entity on the Account in this request; any
      * that are not included will remain unchanged.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function setUserGrants(string $username, array $parameters): UserGrant;
 }

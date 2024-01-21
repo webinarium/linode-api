@@ -17,14 +17,8 @@ use Linode\Entity\Entity;
 use Linode\Internal\AbstractRepository;
 use Linode\Repository\Account\UserRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class UserRepository extends AbstractRepository implements UserRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function create(array $parameters): User
     {
         $this->checkParametersSupport($parameters);
@@ -36,9 +30,6 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
         return new User($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function update(string $username, array $parameters): User
     {
         $this->checkParametersSupport($parameters);
@@ -50,22 +41,16 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
         return new User($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete(string $username): void
     {
         $this->client->api($this->client::REQUEST_DELETE, sprintf('%s/%s', $this->getBaseUri(), $username));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getUserGrants(string $username): ?UserGrant
     {
         $response = $this->client->api($this->client::REQUEST_GET, sprintf('%s/%s/grants', $this->getBaseUri(), $username));
 
-        if ($response->getStatusCode() === self::SUCCESS_NO_CONTENT) {
+        if (self::SUCCESS_NO_CONTENT === $response->getStatusCode()) {
             return null;
         }
 
@@ -75,9 +60,6 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
         return new UserGrant($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUserGrants(string $username, array $parameters): UserGrant
     {
         $response = $this->client->api($this->client::REQUEST_PUT, sprintf('%s/%s/grants', $this->getBaseUri(), $username), $parameters);
@@ -87,17 +69,11 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
         return new UserGrant($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return '/account/users';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -108,9 +84,6 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new User($this->client, $json);

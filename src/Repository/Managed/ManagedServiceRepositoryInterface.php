@@ -12,6 +12,7 @@
 namespace Linode\Repository\Managed;
 
 use Linode\Entity\Managed\ManagedService;
+use Linode\Exception\LinodeException;
 use Linode\Repository\RepositoryInterface;
 
 /**
@@ -23,35 +24,35 @@ interface ManagedServiceRepositoryInterface extends RepositoryInterface
      * Creates a Managed Service. Linode Managed will being monitoring this
      * service and reporting and attempting to resolve any Issues.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function create(array $parameters): ManagedService;
 
     /**
      * Updates information about a Managed Service.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function update(int $id, array $parameters): ManagedService;
 
     /**
      * Deletes a Managed Service. This service will no longer be monitored by Linode Managed.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function delete(int $id): void;
 
     /**
      * Temporarily disables monitoring of a Managed Service.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function disable(int $id): ManagedService;
 
     /**
      * Enables monitoring of a Managed Service.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function enable(int $id): ManagedService;
 }

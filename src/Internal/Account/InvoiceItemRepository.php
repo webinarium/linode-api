@@ -17,14 +17,9 @@ use Linode\Internal\AbstractRepository;
 use Linode\LinodeClient;
 use Linode\Repository\Account\InvoiceItemRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class InvoiceItemRepository extends AbstractRepository implements InvoiceItemRepositoryInterface
 {
     /**
-     * {@inheritdoc}
-     *
      * @param int $invoiceId The ID of the Invoice we are accessing InvoiceItems for
      */
     public function __construct(LinodeClient $client, protected int $invoiceId)
@@ -32,17 +27,11 @@ class InvoiceItemRepository extends AbstractRepository implements InvoiceItemRep
         parent::__construct($client);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return sprintf('/account/invoices/%s/items', $this->invoiceId);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -56,9 +45,6 @@ class InvoiceItemRepository extends AbstractRepository implements InvoiceItemRep
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new InvoiceItem($this->client, $json);

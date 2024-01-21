@@ -16,6 +16,4 @@ use Linode\Repository\RepositoryInterface;
 /**
  * Managed issue repository.
  */
-interface ManagedIssueRepositoryInterface extends RepositoryInterface
-{
-}
+interface ManagedIssueRepositoryInterface extends RepositoryInterface {}

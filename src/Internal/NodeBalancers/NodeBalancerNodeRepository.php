@@ -17,14 +17,9 @@ use Linode\Internal\AbstractRepository;
 use Linode\LinodeClient;
 use Linode\Repository\NodeBalancers\NodeBalancerNodeRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class NodeBalancerNodeRepository extends AbstractRepository implements NodeBalancerNodeRepositoryInterface
 {
     /**
-     * {@inheritdoc}
-     *
      * @param int $nodeBalancerId       The ID of the NodeBalancer we are accessing nodes for
      * @param int $nodeBalancerConfigId The ID of the NodeBalancer config we are accessing nodes for
      */
@@ -33,9 +28,6 @@ class NodeBalancerNodeRepository extends AbstractRepository implements NodeBalan
         parent::__construct($client);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function create(array $parameters): NodeBalancerNode
     {
         $this->checkParametersSupport($parameters);
@@ -47,9 +39,6 @@ class NodeBalancerNodeRepository extends AbstractRepository implements NodeBalan
         return new NodeBalancerNode($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function update(int $id, array $parameters): NodeBalancerNode
     {
         $this->checkParametersSupport($parameters);
@@ -61,25 +50,16 @@ class NodeBalancerNodeRepository extends AbstractRepository implements NodeBalan
         return new NodeBalancerNode($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete(int $id): void
     {
         $this->client->api($this->client::REQUEST_DELETE, sprintf('%s/%s', $this->getBaseUri(), $id));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return sprintf('/nodebalancers/%s/configs/%s/nodes', $this->nodeBalancerId, $this->nodeBalancerConfigId);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -92,9 +72,6 @@ class NodeBalancerNodeRepository extends AbstractRepository implements NodeBalan
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new NodeBalancerNode($this->client, $json);

@@ -16,6 +16,4 @@ use Linode\Repository\RepositoryInterface;
 /**
  * Notification repository.
  */
-interface NotificationRepositoryInterface extends RepositoryInterface
-{
-}
+interface NotificationRepositoryInterface extends RepositoryInterface {}

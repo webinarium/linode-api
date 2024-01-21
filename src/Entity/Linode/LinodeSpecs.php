@@ -32,6 +32,4 @@ use Linode\Entity\Entity;
  *                         for more information.
  * @property int $transfer The amount of network transfer this Linode is allotted each month.
  */
-class LinodeSpecs extends Entity
-{
-}
+class LinodeSpecs extends Entity {}

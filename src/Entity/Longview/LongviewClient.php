@@ -33,9 +33,6 @@ class LongviewClient extends Entity
     // Available fields.
     public const FIELD_LABEL = 'label';
 
-    /**
-     * {@inheritdoc}
-     */
     public function __get(string $name): mixed
     {
         return match ($name) {

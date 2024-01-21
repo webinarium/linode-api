@@ -16,22 +16,13 @@ use Linode\Entity\Longview\LongviewSubscription;
 use Linode\Internal\AbstractRepository;
 use Linode\Repository\Longview\LongviewSubscriptionRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class LongviewSubscriptionRepository extends AbstractRepository implements LongviewSubscriptionRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return '/longview/subscriptions';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -41,9 +32,6 @@ class LongviewSubscriptionRepository extends AbstractRepository implements Longv
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new LongviewSubscription($this->client, $json);

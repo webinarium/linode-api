@@ -16,23 +16,13 @@ use Linode\Entity\Networking\IPAddress;
 use Linode\LinodeClient;
 use Linode\Repository\Linode\LinodeNetworkRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class LinodeNetworkRepository implements LinodeNetworkRepositoryInterface
 {
     /**
-     * {@inheritdoc}
-     *
      * @param int $linodeId ID of the Linode to look up
      */
-    public function __construct(protected LinodeClient $client, protected int $linodeId)
-    {
-    }
+    public function __construct(protected LinodeClient $client, protected int $linodeId) {}
 
-    /**
-     * {@inheritdoc}
-     */
     public function getNetworkInformation(): Linode\NetworkInformation
     {
         $response = $this->client->api($this->client::REQUEST_GET, $this->getBaseUri());
@@ -42,9 +32,6 @@ class LinodeNetworkRepository implements LinodeNetworkRepositoryInterface
         return new Linode\NetworkInformation($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function find(string $id): IPAddress
     {
         $response = $this->client->api($this->client::REQUEST_GET, sprintf('%s/%s', $this->getBaseUri(), $id));
@@ -54,9 +41,6 @@ class LinodeNetworkRepository implements LinodeNetworkRepositoryInterface
         return new IPAddress($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function allocate(bool $public, string $type = IPAddress::TYPE_IP4): IPAddress
     {
         $parameters = [
@@ -71,9 +55,6 @@ class LinodeNetworkRepository implements LinodeNetworkRepositoryInterface
         return new IPAddress($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function update(string $id, array $parameters): IPAddress
     {
         $response = $this->client->api($this->client::REQUEST_PUT, sprintf('%s/%s', $this->getBaseUri(), $id), $parameters);
@@ -83,9 +64,6 @@ class LinodeNetworkRepository implements LinodeNetworkRepositoryInterface
         return new IPAddress($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete(string $id): void
     {
         $this->client->api($this->client::REQUEST_DELETE, sprintf('%s/%s', $this->getBaseUri(), $id));

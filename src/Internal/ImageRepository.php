@@ -15,14 +15,8 @@ use Linode\Entity\Entity;
 use Linode\Entity\Image;
 use Linode\Repository\ImageRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class ImageRepository extends AbstractRepository implements ImageRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function create(array $parameters): Image
     {
         $this->checkParametersSupport($parameters);
@@ -34,9 +28,6 @@ class ImageRepository extends AbstractRepository implements ImageRepositoryInter
         return new Image($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function update(string $id, array $parameters): Image
     {
         $this->checkParametersSupport($parameters);
@@ -48,25 +39,16 @@ class ImageRepository extends AbstractRepository implements ImageRepositoryInter
         return new Image($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete(string $id): void
     {
         $this->client->api($this->client::REQUEST_DELETE, sprintf('%s/%s', $this->getBaseUri(), $id));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return '/images';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -82,9 +64,6 @@ class ImageRepository extends AbstractRepository implements ImageRepositoryInter
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new Image($this->client, $json);

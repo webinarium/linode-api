@@ -18,6 +18,4 @@ use Linode\Entity\Entity;
  * @property bool $nginx  If `true`, the Nginx Longview Client module is monitoring Nginx on your server.
  * @property bool $mysql  If `true`, the MySQL Longview Client modules is monitoring MySQL on your server.
  */
-class LongviewApps extends Entity
-{
-}
+class LongviewApps extends Entity {}

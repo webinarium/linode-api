@@ -16,14 +16,8 @@ use Linode\Entity\Entity;
 use Linode\Internal\AbstractRepository;
 use Linode\Repository\Account\OAuthClientRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class OAuthClientRepository extends AbstractRepository implements OAuthClientRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function create(array $parameters): OAuthClient
     {
         $this->checkParametersSupport($parameters);
@@ -35,9 +29,6 @@ class OAuthClientRepository extends AbstractRepository implements OAuthClientRep
         return new OAuthClient($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function update(string $id, array $parameters): OAuthClient
     {
         $this->checkParametersSupport($parameters);
@@ -49,17 +40,11 @@ class OAuthClientRepository extends AbstractRepository implements OAuthClientRep
         return new OAuthClient($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete(string $id): void
     {
         $this->client->api($this->client::REQUEST_DELETE, sprintf('%s/%s', $this->getBaseUri(), $id));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function resetSecret(string $id): OAuthClient
     {
         $response = $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/reset-secret', $this->getBaseUri(), $id));
@@ -69,17 +54,11 @@ class OAuthClientRepository extends AbstractRepository implements OAuthClientRep
         return new OAuthClient($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return '/account/oauth-clients';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -93,9 +72,6 @@ class OAuthClientRepository extends AbstractRepository implements OAuthClientRep
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new OAuthClient($this->client, $json);

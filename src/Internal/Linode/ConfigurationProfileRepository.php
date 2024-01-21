@@ -17,14 +17,9 @@ use Linode\Internal\AbstractRepository;
 use Linode\LinodeClient;
 use Linode\Repository\Linode\ConfigurationProfileRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class ConfigurationProfileRepository extends AbstractRepository implements ConfigurationProfileRepositoryInterface
 {
     /**
-     * {@inheritdoc}
-     *
      * @param int $linodeId The ID of the Linode whose Configuration profile to look up
      */
     public function __construct(LinodeClient $client, protected int $linodeId)
@@ -32,9 +27,6 @@ class ConfigurationProfileRepository extends AbstractRepository implements Confi
         parent::__construct($client);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function create(array $parameters): ConfigurationProfile
     {
         $this->checkParametersSupport($parameters);
@@ -46,9 +38,6 @@ class ConfigurationProfileRepository extends AbstractRepository implements Confi
         return new ConfigurationProfile($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function update(int $id, array $parameters): ConfigurationProfile
     {
         $this->checkParametersSupport($parameters);
@@ -60,25 +49,16 @@ class ConfigurationProfileRepository extends AbstractRepository implements Confi
         return new ConfigurationProfile($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete(int $id): void
     {
         $this->client->api($this->client::REQUEST_DELETE, sprintf('%s/%s', $this->getBaseUri(), $id));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return sprintf('/linode/instances/%s/configs', $this->linodeId);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -95,9 +75,6 @@ class ConfigurationProfileRepository extends AbstractRepository implements Confi
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new ConfigurationProfile($this->client, $json);

@@ -21,6 +21,4 @@ use Linode\Entity\Entity;
  * @property int $down The number of backends considered to be "DOWN" and unhealthy. These
  *                     are not in rotation, and not serving requests.
  */
-class NodesStatus extends Entity
-{
-}
+class NodesStatus extends Entity {}

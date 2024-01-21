@@ -115,9 +115,6 @@ class Event extends Entity
     public const STATUS_SCHEDULED    = 'scheduled';
     public const STATUS_STARTED      = 'started';
 
-    /**
-     * {@inheritdoc}
-     */
     public function __get(string $name): mixed
     {
         return match ($name) {

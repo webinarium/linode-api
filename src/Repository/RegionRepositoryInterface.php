@@ -14,6 +14,4 @@ namespace Linode\Repository;
 /**
  * Region repository.
  */
-interface RegionRepositoryInterface extends RepositoryInterface
-{
-}
+interface RegionRepositoryInterface extends RepositoryInterface {}

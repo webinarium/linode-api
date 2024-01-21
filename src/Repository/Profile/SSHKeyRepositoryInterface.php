@@ -12,6 +12,7 @@
 namespace Linode\Repository\Profile;
 
 use Linode\Entity\Profile\SSHKey;
+use Linode\Exception\LinodeException;
 use Linode\Repository\RepositoryInterface;
 
 /**
@@ -20,17 +21,17 @@ use Linode\Repository\RepositoryInterface;
 interface SSHKeyRepositoryInterface extends RepositoryInterface
 {
     /**
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function add(array $parameters): SSHKey;
 
     /**
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function update(int $id, array $parameters): SSHKey;
 
     /**
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function delete(int $id): void;
 }

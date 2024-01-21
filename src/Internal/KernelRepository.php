@@ -15,22 +15,13 @@ use Linode\Entity\Entity;
 use Linode\Entity\Kernel;
 use Linode\Repository\KernelRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class KernelRepository extends AbstractRepository implements KernelRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return '/linode/kernels';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -44,9 +35,6 @@ class KernelRepository extends AbstractRepository implements KernelRepositoryInt
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new Kernel($this->client, $json);

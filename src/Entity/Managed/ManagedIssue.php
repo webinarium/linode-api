@@ -25,9 +25,6 @@ use Linode\Entity\Entity;
  */
 class ManagedIssue extends Entity
 {
-    /**
-     * {@inheritdoc}
-     */
     public function __get(string $name): mixed
     {
         return match ($name) {

@@ -11,6 +11,8 @@
 
 namespace Linode\Repository;
 
+use Psr\Http\Message\ResponseInterface;
+
 /**
  * A collection of entities.
  */
@@ -61,25 +63,16 @@ class EntityCollection implements \Countable, \Iterator
         $this->loadPage();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function count(): int
     {
         return $this->totalEntities;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function key(): int
     {
         return $this->currentEntity;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function current(): mixed
     {
         $json = $this->entitiesData[$this->currentEntity];
@@ -87,17 +80,11 @@ class EntityCollection implements \Countable, \Iterator
         return ($this->entityFactory)($json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function valid(): bool
     {
         return $this->currentEntity >= 0 && $this->currentEntity < $this->totalEntities;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function next(): void
     {
         $this->currentEntity++;
@@ -107,9 +94,6 @@ class EntityCollection implements \Countable, \Iterator
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rewind(): void
     {
         $this->currentEntity = 0;
@@ -120,14 +104,13 @@ class EntityCollection implements \Countable, \Iterator
      */
     protected function loadPage(): void
     {
-        /** @var \Psr\Http\Message\ResponseInterface $response */
+        /** @var ResponseInterface $response */
         $response = ($this->apiHandler)(++$this->currentPage);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
         // Whether we are loading for the first time.
-        if ($this->entitiesData === null) {
-
+        if (null === $this->entitiesData) {
             $this->totalPages    = $json['pages']   ?? 1;
             $this->totalEntities = $json['results'] ?? 0;
 

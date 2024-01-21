@@ -20,6 +20,4 @@ use Linode\Entity\Entity;
  * @property float $out   The total outbound transfer, in MB.
  * @property float $total The total transfer, in MB.
  */
-class NodeTransfer extends Entity
-{
-}
+class NodeTransfer extends Entity {}

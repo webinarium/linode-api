@@ -11,6 +11,7 @@
 
 namespace Linode\Repository\Account;
 
+use Linode\Exception\LinodeException;
 use Linode\Repository\RepositoryInterface;
 
 /**
@@ -23,7 +24,7 @@ interface EventRepositoryInterface extends RepositoryInterface
      *
      * @param int $id the ID of the Event to designate as seen
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function markAsSeen(int $id): void;
 
@@ -32,7 +33,7 @@ interface EventRepositoryInterface extends RepositoryInterface
      *
      * @param int $id the ID of the Event to designate as read
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function markAsRead(int $id): void;
 }

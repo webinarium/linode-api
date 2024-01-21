@@ -17,14 +17,9 @@ use Linode\Internal\AbstractRepository;
 use Linode\LinodeClient;
 use Linode\Repository\Domains\DomainRecordRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class DomainRecordRepository extends AbstractRepository implements DomainRecordRepositoryInterface
 {
     /**
-     * {@inheritdoc}
-     *
      * @param int $domainId The ID of the Domain we are accessing Records for
      */
     public function __construct(LinodeClient $client, protected int $domainId)
@@ -32,9 +27,6 @@ class DomainRecordRepository extends AbstractRepository implements DomainRecordR
         parent::__construct($client);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function create(array $parameters): DomainRecord
     {
         $this->checkParametersSupport($parameters);
@@ -46,9 +38,6 @@ class DomainRecordRepository extends AbstractRepository implements DomainRecordR
         return new DomainRecord($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function update(int $id, array $parameters): DomainRecord
     {
         $this->checkParametersSupport($parameters);
@@ -60,25 +49,16 @@ class DomainRecordRepository extends AbstractRepository implements DomainRecordR
         return new DomainRecord($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete(int $id): void
     {
         $this->client->api($this->client::REQUEST_DELETE, sprintf('%s/%s', $this->getBaseUri(), $id));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return sprintf('/domains/%s/records', $this->domainId);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -96,9 +76,6 @@ class DomainRecordRepository extends AbstractRepository implements DomainRecordR
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new DomainRecord($this->client, $json);

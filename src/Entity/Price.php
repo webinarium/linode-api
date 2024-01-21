@@ -17,6 +17,4 @@ namespace Linode\Entity;
  * @property float $hourly  Cost (in US dollars) per hour.
  * @property float $monthly Cost (in US dollars) per month.
  */
-class Price extends Entity
-{
-}
+class Price extends Entity {}

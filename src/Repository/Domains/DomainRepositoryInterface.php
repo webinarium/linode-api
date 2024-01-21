@@ -12,6 +12,7 @@
 namespace Linode\Repository\Domains;
 
 use Linode\Entity\Domains\Domain;
+use Linode\Exception\LinodeException;
 use Linode\Repository\RepositoryInterface;
 
 /**
@@ -25,14 +26,14 @@ interface DomainRepositoryInterface extends RepositoryInterface
      * registrar to Linode's nameservers so that the records hosted here are
      * used.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function create(array $parameters): Domain;
 
     /**
      * Update information about a Domain in Linode's DNS Manager.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function update(int $id, array $parameters): Domain;
 
@@ -41,7 +42,7 @@ interface DomainRepositoryInterface extends RepositoryInterface
      * from Linode's nameservers shortly after this operation completes. This
      * also deletes all associated Domain Records.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function delete(int $id): void;
 
@@ -54,7 +55,7 @@ interface DomainRepositoryInterface extends RepositoryInterface
      *   - 2600:3c00::5e
      *   - 2600:3c00::5f
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function import(string $domain, string $remote_nameserver): Domain;
 }

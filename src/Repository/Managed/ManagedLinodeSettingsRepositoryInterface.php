@@ -12,6 +12,7 @@
 namespace Linode\Repository\Managed;
 
 use Linode\Entity\Managed\ManagedLinodeSettings;
+use Linode\Exception\LinodeException;
 use Linode\Repository\RepositoryInterface;
 
 /**
@@ -22,7 +23,7 @@ interface ManagedLinodeSettingsRepositoryInterface extends RepositoryInterface
     /**
      * Updates a single Linode's Managed settings.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function update(int $id, array $parameters): ManagedLinodeSettings;
 }

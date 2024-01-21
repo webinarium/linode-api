@@ -21,9 +21,6 @@ use Linode\Entity\Networking\IPAddress;
  */
 class IPv4Information extends Entity
 {
-    /**
-     * {@inheritdoc}
-     */
     public function __get(string $name): ?array
     {
         if (array_key_exists($name, $this->data)) {

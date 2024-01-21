@@ -12,6 +12,7 @@
 namespace Linode\Repository\Longview;
 
 use Linode\Entity\Longview\LongviewClient;
+use Linode\Exception\LinodeException;
 use Linode\Repository\RepositoryInterface;
 
 /**
@@ -25,7 +26,7 @@ interface LongviewClientRepositoryInterface extends RepositoryInterface
      * Client application on your Linode using the returning `install_code`
      * and `api_key`.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function create(array $parameters): LongviewClient;
 
@@ -34,7 +35,7 @@ interface LongviewClientRepositoryInterface extends RepositoryInterface
      * server; use the Longview Client application on your Linode for
      * monitoring configuration.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function update(int $id, array $parameters): LongviewClient;
 
@@ -45,7 +46,7 @@ interface LongviewClientRepositoryInterface extends RepositoryInterface
      *
      * WARNING! All information stored for this client will be lost.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function delete(int $id): void;
 }

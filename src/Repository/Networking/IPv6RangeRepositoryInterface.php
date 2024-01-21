@@ -16,6 +16,4 @@ use Linode\Repository\RepositoryInterface;
 /**
  * IPv6Range repository.
  */
-interface IPv6RangeRepositoryInterface extends RepositoryInterface
-{
-}
+interface IPv6RangeRepositoryInterface extends RepositoryInterface {}

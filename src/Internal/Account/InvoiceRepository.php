@@ -16,22 +16,13 @@ use Linode\Entity\Entity;
 use Linode\Internal\AbstractRepository;
 use Linode\Repository\Account\InvoiceRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class InvoiceRepository extends AbstractRepository implements InvoiceRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return '/account/invoices';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -42,9 +33,6 @@ class InvoiceRepository extends AbstractRepository implements InvoiceRepositoryI
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new Invoice($this->client, $json);

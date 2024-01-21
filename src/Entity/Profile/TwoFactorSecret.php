@@ -21,6 +21,4 @@ use Linode\Entity\Entity;
  *                          this will be required to confirm TFA an actually enable it.
  * @property string $expiry When this Two Factor secret expires.
  */
-class TwoFactorSecret extends Entity
-{
-}
+class TwoFactorSecret extends Entity {}

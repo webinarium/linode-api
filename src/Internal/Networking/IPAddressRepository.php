@@ -16,14 +16,8 @@ use Linode\Entity\Networking\IPAddress;
 use Linode\Internal\AbstractRepository;
 use Linode\Repository\Networking\IPAddressRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class IPAddressRepository extends AbstractRepository implements IPAddressRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function allocate(int $linode_id, bool $public, string $type = IPAddress::TYPE_IP4): IPAddress
     {
         $parameters = [
@@ -39,9 +33,6 @@ class IPAddressRepository extends AbstractRepository implements IPAddressReposit
         return new IPAddress($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function update(string $id, array $parameters): IPAddress
     {
         $this->checkParametersSupport($parameters);
@@ -53,9 +44,6 @@ class IPAddressRepository extends AbstractRepository implements IPAddressReposit
         return new IPAddress($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function assign(string $region, array $assignments): void
     {
         $parameters = [
@@ -66,9 +54,6 @@ class IPAddressRepository extends AbstractRepository implements IPAddressReposit
         $this->client->api($this->client::REQUEST_POST, '/networking/ipv4/assign', $parameters);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function share(int $linode_id, array $ips): void
     {
         $parameters = [
@@ -79,17 +64,11 @@ class IPAddressRepository extends AbstractRepository implements IPAddressReposit
         $this->client->api($this->client::REQUEST_POST, '/networking/ipv4/share', $parameters);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return '/networking/ips';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -105,9 +84,6 @@ class IPAddressRepository extends AbstractRepository implements IPAddressReposit
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new IPAddress($this->client, $json);

@@ -12,6 +12,7 @@
 namespace Linode\Repository;
 
 use Linode\Entity\Image;
+use Linode\Exception\LinodeException;
 
 /**
  * Image repository.
@@ -24,14 +25,14 @@ interface ImageRepositoryInterface extends RepositoryInterface
      *
      * Images are limited to three per Account.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function create(array $parameters): Image;
 
     /**
      * Updates a private Image that you have permission to `read_write`.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function update(string $id, array $parameters): Image;
 
@@ -40,7 +41,7 @@ interface ImageRepositoryInterface extends RepositoryInterface
      *
      * WARNING! Deleting an Image is a destructive action and cannot be undone.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function delete(string $id): void;
 }

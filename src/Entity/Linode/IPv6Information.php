@@ -22,9 +22,6 @@ use Linode\Entity\Networking\IPv6Pool;
  */
 class IPv6Information extends Entity
 {
-    /**
-     * {@inheritdoc}
-     */
     public function __get(string $name): mixed
     {
         return match ($name) {

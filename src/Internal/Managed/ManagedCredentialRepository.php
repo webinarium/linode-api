@@ -16,14 +16,8 @@ use Linode\Entity\Managed\ManagedCredential;
 use Linode\Internal\AbstractRepository;
 use Linode\Repository\Managed\ManagedCredentialRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class ManagedCredentialRepository extends AbstractRepository implements ManagedCredentialRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function create(array $parameters): ManagedCredential
     {
         $this->checkParametersSupport($parameters);
@@ -35,9 +29,6 @@ class ManagedCredentialRepository extends AbstractRepository implements ManagedC
         return new ManagedCredential($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function update(int $id, array $parameters): ManagedCredential
     {
         $this->checkParametersSupport($parameters);
@@ -49,25 +40,16 @@ class ManagedCredentialRepository extends AbstractRepository implements ManagedC
         return new ManagedCredential($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete(int $id): void
     {
         $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/revoke', $this->getBaseUri(), $id));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return '/managed/credentials';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -78,9 +60,6 @@ class ManagedCredentialRepository extends AbstractRepository implements ManagedC
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new ManagedCredential($this->client, $json);

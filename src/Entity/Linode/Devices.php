@@ -37,9 +37,6 @@ class Devices extends Entity
     public const FIELD_SDG = 'sdg';
     public const FIELD_SDH = 'sdh';
 
-    /**
-     * {@inheritdoc}
-     */
     public function __get(string $name): ?Device
     {
         if (array_key_exists($name, $this->data)) {

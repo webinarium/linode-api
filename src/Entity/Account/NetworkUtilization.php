@@ -20,6 +20,4 @@ use Linode\Entity\Entity;
  * @property int $used     The amount of network usage you have used this billing cycle.
  * @property int $billable The amount of your transfer pool that is billable this billing cycle.
  */
-class NetworkUtilization extends Entity
-{
-}
+class NetworkUtilization extends Entity {}

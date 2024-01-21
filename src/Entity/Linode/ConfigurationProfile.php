@@ -50,9 +50,6 @@ class ConfigurationProfile extends Entity
     public const VIRT_MODE_PARAVIRT = 'paravirt';
     public const VIRT_MODE_FULLVIRT = 'fullvirt';
 
-    /**
-     * {@inheritdoc}
-     */
     public function __get(string $name): mixed
     {
         return match ($name) {

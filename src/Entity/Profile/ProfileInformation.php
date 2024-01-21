@@ -56,9 +56,6 @@ class ProfileInformation extends Entity
     public const LISH_AUTH_METHOD_KEYS_ONLY     = 'keys_only';
     public const LISH_AUTH_METHOD_DISABLED      = 'disabled';
 
-    /**
-     * {@inheritdoc}
-     */
     public function __get(string $name): mixed
     {
         return match ($name) {

@@ -14,6 +14,7 @@ namespace Linode\Entity;
 use Linode\Entity\Account\AccountInformation;
 use Linode\Entity\Account\AccountSettings;
 use Linode\Entity\Account\NetworkUtilization;
+use Linode\Exception\LinodeException;
 use Linode\Internal\Account\EventRepository;
 use Linode\Internal\Account\InvoiceRepository;
 use Linode\Internal\Account\NotificationRepository;
@@ -27,23 +28,26 @@ use Linode\Internal\Managed\ManagedIssueRepository;
 use Linode\Internal\Managed\ManagedLinodeSettingsRepository;
 use Linode\Internal\Managed\ManagedServiceRepository;
 use Linode\LinodeClient;
+use Linode\Repository\Account as AccountRepository;
+use Linode\Repository\Longview as LongviewRepository;
+use Linode\Repository\Managed as ManagedRepository;
 use Linode\Repository\RepositoryInterface;
 
 /**
  * Current user account.
  *
- * @property \Linode\Repository\Account\EventRepositoryInterface                 $events
- * @property \Linode\Repository\Account\InvoiceRepositoryInterface               $invoices
- * @property \Linode\Repository\Longview\LongviewClientRepositoryInterface       $longviews_clients
- * @property \Linode\Repository\Managed\ManagedContactRepositoryInterface        $managed_contacts
- * @property \Linode\Repository\Managed\ManagedCredentialRepositoryInterface     $managed_credentials
- * @property \Linode\Repository\Managed\ManagedIssueRepositoryInterface          $managed_issues
- * @property \Linode\Repository\Managed\ManagedLinodeSettingsRepositoryInterface $managed_linode_settings
- * @property \Linode\Repository\Managed\ManagedServiceRepositoryInterface        $managed_services
- * @property \Linode\Repository\Account\NotificationRepositoryInterface          $notifications
- * @property \Linode\Repository\Account\OAuthClientRepositoryInterface           $oauth_clients
- * @property \Linode\Repository\Account\PaymentRepositoryInterface               $payments
- * @property \Linode\Repository\Account\UserRepositoryInterface                  $users
+ * @property AccountRepository\EventRepositoryInterface                 $events
+ * @property AccountRepository\InvoiceRepositoryInterface               $invoices
+ * @property LongviewRepository\LongviewClientRepositoryInterface       $longviews_clients
+ * @property ManagedRepository\ManagedContactRepositoryInterface        $managed_contacts
+ * @property ManagedRepository\ManagedCredentialRepositoryInterface     $managed_credentials
+ * @property ManagedRepository\ManagedIssueRepositoryInterface          $managed_issues
+ * @property ManagedRepository\ManagedLinodeSettingsRepositoryInterface $managed_linode_settings
+ * @property ManagedRepository\ManagedServiceRepositoryInterface        $managed_services
+ * @property AccountRepository\NotificationRepositoryInterface          $notifications
+ * @property AccountRepository\OAuthClientRepositoryInterface           $oauth_clients
+ * @property AccountRepository\PaymentRepositoryInterface               $payments
+ * @property AccountRepository\UserRepositoryInterface                  $users
  */
 class Account
 {
@@ -52,9 +56,7 @@ class Account
      *
      * @param LinodeClient $client linode API client
      */
-    public function __construct(protected LinodeClient $client)
-    {
-    }
+    public function __construct(protected LinodeClient $client) {}
 
     /**
      * Returns requested repository.
@@ -83,7 +85,7 @@ class Account
     /**
      * Returns the contact and billing information related to your Account.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function getAccountInformation(): AccountInformation
     {
@@ -97,7 +99,7 @@ class Account
     /**
      * Updates contact and billing information related to your Account.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function setAccountInformation(array $parameters): AccountInformation
     {
@@ -119,7 +121,7 @@ class Account
      * @param string $expiry_month a value from 1-12 representing the expiration month of your credit card
      * @param string $expiry_year  a four-digit integer representing the expiration year of your credit card
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function updateCreditCard(string $card_number, string $expiry_month, string $expiry_year): void
     {
@@ -136,7 +138,7 @@ class Account
      * Returns information related to your Account settings: Managed service
      * subscription, Longview subscription, and network helper.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function getAccountSettings(): AccountSettings
     {
@@ -150,7 +152,7 @@ class Account
     /**
      * Updates your Account settings.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function setAccountSettings(array $parameters): AccountSettings
     {
@@ -164,7 +166,7 @@ class Account
     /**
      * Returns a Transfer object showing your network utilization, in GB, for the current month.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function getNetworkUtilization(): NetworkUtilization
     {

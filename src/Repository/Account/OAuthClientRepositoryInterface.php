@@ -12,6 +12,7 @@
 namespace Linode\Repository\Account;
 
 use Linode\Entity\Account\OAuthClient;
+use Linode\Exception\LinodeException;
 use Linode\Repository\RepositoryInterface;
 
 /**
@@ -24,7 +25,7 @@ interface OAuthClientRepositoryInterface extends RepositoryInterface
      * (using their Linode account) to log in to your own application, and optionally grant
      * your application some amount of access to their Linodes or other entities.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function create(array $parameters): OAuthClient;
 
@@ -33,7 +34,7 @@ interface OAuthClientRepositoryInterface extends RepositoryInterface
      * especially useful to update the `redirect_uri` of your client in the event
      * that the callback url changed in your application.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function update(string $id, array $parameters): OAuthClient;
 
@@ -43,7 +44,7 @@ interface OAuthClientRepositoryInterface extends RepositoryInterface
      * and all tokens issued to this client will be invalidated (meaning that
      * if your application was using a token, it will no longer work).
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function delete(string $id): void;
 
@@ -55,7 +56,7 @@ interface OAuthClientRepositoryInterface extends RepositoryInterface
      * secret if you lost the original. The old secret is expired immediately,
      * and logins to your client with the old secret will fail.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function resetSecret(string $id): OAuthClient;
 }

@@ -18,14 +18,9 @@ use Linode\Internal\AbstractRepository;
 use Linode\LinodeClient;
 use Linode\Repository\NodeBalancers\NodeBalancerConfigRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class NodeBalancerConfigRepository extends AbstractRepository implements NodeBalancerConfigRepositoryInterface
 {
     /**
-     * {@inheritdoc}
-     *
      * @param int $nodeBalancerId The ID of the NodeBalancer we are accessing Configs for
      */
     public function __construct(LinodeClient $client, protected int $nodeBalancerId)
@@ -33,9 +28,6 @@ class NodeBalancerConfigRepository extends AbstractRepository implements NodeBal
         parent::__construct($client);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function create(array $parameters): NodeBalancerConfig
     {
         $this->checkParametersSupport($parameters);
@@ -47,9 +39,6 @@ class NodeBalancerConfigRepository extends AbstractRepository implements NodeBal
         return new NodeBalancerConfig($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function update(int $id, array $parameters): NodeBalancerConfig
     {
         $this->checkParametersSupport($parameters);
@@ -61,17 +50,11 @@ class NodeBalancerConfigRepository extends AbstractRepository implements NodeBal
         return new NodeBalancerConfig($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete(int $id): void
     {
         $this->client->api($this->client::REQUEST_DELETE, sprintf('%s/%s', $this->getBaseUri(), $id));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rebuild(int $id, array $parameters): NodeBalancer
     {
         $response = $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/rebuild', $this->getBaseUri(), $id), $parameters);
@@ -81,17 +64,11 @@ class NodeBalancerConfigRepository extends AbstractRepository implements NodeBal
         return new NodeBalancer($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return sprintf('/nodebalancers/%s/configs', $this->nodeBalancerId);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -116,9 +93,6 @@ class NodeBalancerConfigRepository extends AbstractRepository implements NodeBal
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new NodeBalancerConfig($this->client, $json);

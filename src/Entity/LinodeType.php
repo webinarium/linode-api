@@ -45,9 +45,6 @@ class LinodeType extends Entity
     public const CLASS_STANDARD = 'standard';
     public const CLASS_HIGHMEM  = 'highmem';
 
-    /**
-     * {@inheritdoc}
-     */
     public function __get(string $name): mixed
     {
         return match ($name) {

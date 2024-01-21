@@ -31,9 +31,6 @@ class ManagedLinodeSettings extends Entity
     public const FIELD_GROUP = 'group';
     public const FIELD_SSH   = 'ssh';
 
-    /**
-     * {@inheritdoc}
-     */
     public function __get(string $name): mixed
     {
         return match ($name) {

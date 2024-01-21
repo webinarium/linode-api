@@ -17,14 +17,9 @@ use Linode\Internal\AbstractRepository;
 use Linode\LinodeClient;
 use Linode\Repository\Tags\TaggedObjectRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class TaggedObjectRepository extends AbstractRepository implements TaggedObjectRepositoryInterface
 {
     /**
-     * {@inheritdoc}
-     *
      * @param string $tag The ID of the Tag we are accessing Objects for
      */
     public function __construct(LinodeClient $client, protected string $tag)
@@ -32,17 +27,11 @@ class TaggedObjectRepository extends AbstractRepository implements TaggedObjectR
         parent::__construct($client);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return sprintf('/tags/%s', $this->tag);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -60,9 +49,6 @@ class TaggedObjectRepository extends AbstractRepository implements TaggedObjectR
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new Linode($this->client, $json);

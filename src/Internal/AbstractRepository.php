@@ -41,13 +41,8 @@ abstract class AbstractRepository implements RepositoryInterface
      *
      * @param LinodeClient $client linode API client
      */
-    public function __construct(protected LinodeClient $client)
-    {
-    }
+    public function __construct(protected LinodeClient $client) {}
 
-    /**
-     * {@inheritdoc}
-     */
     public function find($id): Entity
     {
         $response = $this->client->api($this->client::REQUEST_GET, sprintf('%s/%s', $this->getBaseUri(), $id));
@@ -57,20 +52,14 @@ abstract class AbstractRepository implements RepositoryInterface
         return $this->jsonToEntity($json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function findAll(string $orderBy = null, string $orderDir = self::SORT_ASC): EntityCollection
     {
         return $this->findBy([], $orderBy, $orderDir);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function findBy(array $criteria, string $orderBy = null, string $orderDir = self::SORT_ASC): EntityCollection
     {
-        if ($orderBy !== null) {
+        if (null !== $orderBy) {
             $criteria['+order_by'] = $orderBy;
             $criteria['+order']    = $orderDir;
         }
@@ -81,18 +70,15 @@ abstract class AbstractRepository implements RepositoryInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function findOneBy(array $criteria): ?Entity
     {
         $collection = $this->findBy($criteria);
 
-        if (count($collection) === 0) {
+        if (0 === count($collection)) {
             return null;
         }
 
-        if (count($collection) !== 1) {
+        if (1 !== count($collection)) {
             $errors = ['errors' => [['reason' => 'More than one entity was found']]];
 
             throw new LinodeException(new Response(self::ERROR_BAD_REQUEST, [], json_encode($errors)));
@@ -101,9 +87,6 @@ abstract class AbstractRepository implements RepositoryInterface
         return $collection->current();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function query(string $query, array $parameters = [], string $orderBy = null, string $orderDir = self::SORT_ASC): EntityCollection
     {
         try {
@@ -113,8 +96,7 @@ abstract class AbstractRepository implements RepositoryInterface
             $query    = $compiler->apply($query, $parameters);
             $ast      = $parser->parse($query, $this->getSupportedFields())->getNodes();
             $criteria = $compiler->compile($ast);
-        }
-        catch (\Throwable $exception) {
+        } catch (\Throwable $exception) {
             $errors = ['errors' => [['reason' => $exception->getMessage()]]];
 
             throw new LinodeException(new Response(self::ERROR_BAD_REQUEST, [], json_encode($errors)));
@@ -136,7 +118,7 @@ abstract class AbstractRepository implements RepositoryInterface
 
         $unknown = array_diff($provided, $supported);
 
-        if (count($unknown) !== 0) {
+        if (0 !== count($unknown)) {
             $errors = ['errors' => [['reason' => sprintf('Unknown field(s): %s', implode(', ', $unknown))]]];
 
             throw new LinodeException(new Response(self::ERROR_BAD_REQUEST, [], json_encode($errors)));

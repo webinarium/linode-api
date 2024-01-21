@@ -17,14 +17,9 @@ use Linode\Internal\AbstractRepository;
 use Linode\LinodeClient;
 use Linode\Repository\Support\SupportTicketReplyRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class SupportTicketReplyRepository extends AbstractRepository implements SupportTicketReplyRepositoryInterface
 {
     /**
-     * {@inheritdoc}
-     *
      * @param int $ticketId The ID of the Support Ticket we are accessing Replies for
      */
     public function __construct(LinodeClient $client, protected int $ticketId)
@@ -32,9 +27,6 @@ class SupportTicketReplyRepository extends AbstractRepository implements Support
         parent::__construct($client);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function create(array $parameters): SupportTicketReply
     {
         $this->checkParametersSupport($parameters);
@@ -46,17 +38,11 @@ class SupportTicketReplyRepository extends AbstractRepository implements Support
         return new SupportTicketReply($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return sprintf('/support/tickets/%s/replies', $this->ticketId);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -69,9 +55,6 @@ class SupportTicketReplyRepository extends AbstractRepository implements Support
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new SupportTicketReply($this->client, $json);

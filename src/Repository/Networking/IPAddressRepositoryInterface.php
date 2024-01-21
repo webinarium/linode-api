@@ -12,6 +12,7 @@
 namespace Linode\Repository\Networking;
 
 use Linode\Entity\Networking\IPAddress;
+use Linode\Exception\LinodeException;
 use Linode\Repository\RepositoryInterface;
 
 /**
@@ -30,7 +31,7 @@ interface IPAddressRepositoryInterface extends RepositoryInterface
      * @param string $type      The type of address you are requesting. Only IPv4 addresses
      *                          may be allocated through this endpoint.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function allocate(int $linode_id, bool $public, string $type = IPAddress::TYPE_IP4): IPAddress;
 
@@ -41,7 +42,7 @@ interface IPAddressRepositoryInterface extends RepositoryInterface
      * If you set the RDNS to `null` for public IPv4 addresses, it will
      * be reset to the default _members.linode.com_  RDNS value.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function update(string $id, array $parameters): IPAddress;
 
@@ -57,7 +58,7 @@ interface IPAddressRepositoryInterface extends RepositoryInterface
      *                            access to all IPs being assigned and all Linodes being
      *                            assigned to in order for the assignments to succeed.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function assign(string $region, array $assignments): void;
 
@@ -73,7 +74,7 @@ interface IPAddressRepositoryInterface extends RepositoryInterface
      *                            addresses belong to. You must have access to all of these
      *                            addresses and they must be in the same Region as the Linode.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function share(int $linode_id, array $ips): void;
 }

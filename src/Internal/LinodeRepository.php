@@ -15,14 +15,8 @@ use Linode\Entity\Entity;
 use Linode\Entity\Linode;
 use Linode\Repository\LinodeRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class LinodeRepository extends AbstractRepository implements LinodeRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function create(array $parameters): Linode
     {
         $this->checkParametersSupport($parameters);
@@ -34,9 +28,6 @@ class LinodeRepository extends AbstractRepository implements LinodeRepositoryInt
         return new Linode($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function update(int $id, array $parameters): Linode
     {
         $this->checkParametersSupport($parameters);
@@ -48,17 +39,11 @@ class LinodeRepository extends AbstractRepository implements LinodeRepositoryInt
         return new Linode($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete(int $id): void
     {
         $this->client->api($this->client::REQUEST_DELETE, sprintf('%s/%s', $this->getBaseUri(), $id));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function clone(int $id, array $parameters): void
     {
         $this->checkParametersSupport($parameters);
@@ -66,9 +51,6 @@ class LinodeRepository extends AbstractRepository implements LinodeRepositoryInt
         $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/clone', $this->getBaseUri(), $id), $parameters);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rebuild(int $id, array $parameters): Linode
     {
         $this->checkParametersSupport($parameters);
@@ -80,9 +62,6 @@ class LinodeRepository extends AbstractRepository implements LinodeRepositoryInt
         return new Linode($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function resize(int $id, string $type): void
     {
         $parameters = [
@@ -92,25 +71,16 @@ class LinodeRepository extends AbstractRepository implements LinodeRepositoryInt
         $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/resize', $this->getBaseUri(), $id), $parameters);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function mutate(int $id): void
     {
         $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/mutate', $this->getBaseUri(), $id));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function migrate(int $id): void
     {
         $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/migrate', $this->getBaseUri(), $id));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function boot(int $id, int $config_id = null): void
     {
         $parameters = [
@@ -120,9 +90,6 @@ class LinodeRepository extends AbstractRepository implements LinodeRepositoryInt
         $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/boot', $this->getBaseUri(), $id), $parameters);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function reboot(int $id, int $config_id = null): void
     {
         $parameters = [
@@ -132,17 +99,11 @@ class LinodeRepository extends AbstractRepository implements LinodeRepositoryInt
         $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/reboot', $this->getBaseUri(), $id), $parameters);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function shutdown(int $id): void
     {
         $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/shutdown', $this->getBaseUri(), $id));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rescue(int $id, array $parameters): void
     {
         $this->checkParametersSupport($parameters);
@@ -150,25 +111,16 @@ class LinodeRepository extends AbstractRepository implements LinodeRepositoryInt
         $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/rescue', $this->getBaseUri(), $id), $parameters);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function enableBackups(int $id): void
     {
         $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/backups/enable', $this->getBaseUri(), $id));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function cancelBackups(int $id): void
     {
         $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/backups/cancel', $this->getBaseUri(), $id));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createSnapshot(int $id, string $label): Linode\Backup
     {
         $parameters = [
@@ -182,9 +134,6 @@ class LinodeRepository extends AbstractRepository implements LinodeRepositoryInt
         return new Linode\Backup($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function restoreBackup(int $source_id, int $backup_id, int $target_id, bool $overwrite = true): void
     {
         $parameters = [
@@ -197,9 +146,6 @@ class LinodeRepository extends AbstractRepository implements LinodeRepositoryInt
         $this->client->api($this->client::REQUEST_POST, $uri, $parameters);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBackup(int $id, int $backup_id): Linode\Backup
     {
         $response = $this->client->api($this->client::REQUEST_GET, sprintf('%s/%s/backups/%s', $this->getBaseUri(), $id, $backup_id));
@@ -209,9 +155,6 @@ class LinodeRepository extends AbstractRepository implements LinodeRepositoryInt
         return new Linode\Backup($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getAllBackups(int $id): array
     {
         $response = $this->client->api($this->client::REQUEST_GET, sprintf('%s/%s/backups', $this->getBaseUri(), $id));
@@ -220,9 +163,6 @@ class LinodeRepository extends AbstractRepository implements LinodeRepositoryInt
         return json_decode($contents, true);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCurrentStats(int $id): Linode\LinodeStats
     {
         $response = $this->client->api($this->client::REQUEST_GET, sprintf('%s/%s/stats', $this->getBaseUri(), $id));
@@ -232,9 +172,6 @@ class LinodeRepository extends AbstractRepository implements LinodeRepositoryInt
         return new Linode\LinodeStats($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getMonthlyStats(int $id, int $year, int $month): Linode\LinodeStats
     {
         $response = $this->client->api($this->client::REQUEST_GET, sprintf('%s/%s/stats/%s/%02s', $this->getBaseUri(), $id, $year, $month));
@@ -244,17 +181,11 @@ class LinodeRepository extends AbstractRepository implements LinodeRepositoryInt
         return new Linode\LinodeStats($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return '/linode/instances';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -292,9 +223,6 @@ class LinodeRepository extends AbstractRepository implements LinodeRepositoryInt
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new Linode($this->client, $json);

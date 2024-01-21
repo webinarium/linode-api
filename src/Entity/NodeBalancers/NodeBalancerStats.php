@@ -21,9 +21,6 @@ use Linode\Entity\Entity;
  */
 class NodeBalancerStats extends Entity
 {
-    /**
-     * {@inheritdoc}
-     */
     public function __get(string $name): mixed
     {
         return match ($name) {

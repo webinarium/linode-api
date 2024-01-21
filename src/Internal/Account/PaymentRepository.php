@@ -16,14 +16,8 @@ use Linode\Entity\Entity;
 use Linode\Internal\AbstractRepository;
 use Linode\Repository\Account\PaymentRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class PaymentRepository extends AbstractRepository implements PaymentRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function makeCreditCardPayment(string $usd, string $cvv): Payment
     {
         $parameters = [
@@ -38,9 +32,6 @@ class PaymentRepository extends AbstractRepository implements PaymentRepositoryI
         return new Payment($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function stagePayPalPayment(string $usd, string $redirect_url, string $cancel_url): string
     {
         $parameters = [
@@ -56,9 +47,6 @@ class PaymentRepository extends AbstractRepository implements PaymentRepositoryI
         return $json['payment_id'];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function executePayPalPayment(string $payer_id, string $payment_id): void
     {
         $parameters = [
@@ -69,17 +57,11 @@ class PaymentRepository extends AbstractRepository implements PaymentRepositoryI
         $this->client->api($this->client::REQUEST_POST, sprintf('%s/paypal/execute', $this->getBaseUri()), $parameters);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return '/account/payments';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -89,9 +71,6 @@ class PaymentRepository extends AbstractRepository implements PaymentRepositoryI
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new Payment($this->client, $json);

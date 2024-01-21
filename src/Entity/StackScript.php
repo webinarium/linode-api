@@ -52,9 +52,6 @@ class StackScript extends Entity
     public const FIELD_SCRIPT              = 'script';
     public const FIELD_USER_DEFINED_FIELDS = 'user_defined_fields';
 
-    /**
-     * {@inheritdoc}
-     */
     public function __get(string $name): mixed
     {
         return match ($name) {

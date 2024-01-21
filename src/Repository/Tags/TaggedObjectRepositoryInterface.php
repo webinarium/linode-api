@@ -16,6 +16,4 @@ use Linode\Repository\RepositoryInterface;
 /**
  * Tagged object repository.
  */
-interface TaggedObjectRepositoryInterface extends RepositoryInterface
-{
-}
+interface TaggedObjectRepositoryInterface extends RepositoryInterface {}

@@ -15,22 +15,13 @@ use Linode\Entity\Entity;
 use Linode\Entity\LinodeType;
 use Linode\Repository\LinodeTypeRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class LinodeTypeRepository extends AbstractRepository implements LinodeTypeRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return '/linode/types';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -45,9 +36,6 @@ class LinodeTypeRepository extends AbstractRepository implements LinodeTypeRepos
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new LinodeType($this->client, $json);

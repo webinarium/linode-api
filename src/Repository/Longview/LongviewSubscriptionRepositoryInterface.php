@@ -16,6 +16,4 @@ use Linode\Repository\RepositoryInterface;
 /**
  * Longview subscription repository.
  */
-interface LongviewSubscriptionRepositoryInterface extends RepositoryInterface
-{
-}
+interface LongviewSubscriptionRepositoryInterface extends RepositoryInterface {}

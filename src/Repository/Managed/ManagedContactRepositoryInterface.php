@@ -12,6 +12,7 @@
 namespace Linode\Repository\Managed;
 
 use Linode\Entity\Managed\ManagedContact;
+use Linode\Exception\LinodeException;
 use Linode\Repository\RepositoryInterface;
 
 /**
@@ -24,21 +25,21 @@ interface ManagedContactRepositoryInterface extends RepositoryInterface
      * special forces can contact in the course of attempting to resolve an issue
      * with a Managed Service.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function create(array $parameters): ManagedContact;
 
     /**
      * Updates information about a Managed Contact.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function update(int $id, array $parameters): ManagedContact;
 
     /**
      * Deletes a Managed Contact.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function delete(int $id): void;
 }

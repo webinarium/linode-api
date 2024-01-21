@@ -14,10 +14,12 @@ namespace Linode\Entity;
 use Linode\Entity\Account\UserGrant;
 use Linode\Entity\Profile\ProfileInformation;
 use Linode\Entity\Profile\TwoFactorSecret;
+use Linode\Exception\LinodeException;
 use Linode\Internal\Profile\AuthorizedAppRepository;
 use Linode\Internal\Profile\PersonalAccessTokenRepository;
 use Linode\Internal\Profile\SSHKeyRepository;
 use Linode\LinodeClient;
+use Linode\Repository\Profile as ProfileRepository;
 use Linode\Repository\RepositoryInterface;
 
 /**
@@ -26,9 +28,9 @@ use Linode\Repository\RepositoryInterface;
  * regardless of requested scopes, and can be used to populate User information
  * in third-party applications.
  *
- * @property \Linode\Repository\Profile\AuthorizedAppRepositoryInterface       $apps
- * @property \Linode\Repository\Profile\SSHKeyRepositoryInterface              $ssh_keys
- * @property \Linode\Repository\Profile\PersonalAccessTokenRepositoryInterface $tokens
+ * @property ProfileRepository\AuthorizedAppRepositoryInterface       $apps
+ * @property ProfileRepository\SSHKeyRepositoryInterface              $ssh_keys
+ * @property ProfileRepository\PersonalAccessTokenRepositoryInterface $tokens
  */
 class Profile
 {
@@ -39,9 +41,7 @@ class Profile
      *
      * @param LinodeClient $client linode API client
      */
-    public function __construct(protected LinodeClient $client)
-    {
-    }
+    public function __construct(protected LinodeClient $client) {}
 
     /**
      * Returns requested repository.
@@ -65,7 +65,7 @@ class Profile
      *
      * This endpoint is always accessible, no matter what OAuth scopes the acting token has.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function getProfileInformation(): ProfileInformation
     {
@@ -80,7 +80,7 @@ class Profile
      * Update information in your Profile. This endpoint requires the
      * "account:read_write" OAuth Scope.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function setProfileInformation(array $parameters): ProfileInformation
     {
@@ -96,7 +96,7 @@ class Profile
      * login attempts from untrusted computers will only require a password
      * before being successful. This is less secure, and is discouraged.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function disable2FA(): void
     {
@@ -111,7 +111,7 @@ class Profile
      *
      * @return TwoFactorSecret two Factor secret generated
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function enable2FA(): TwoFactorSecret
     {
@@ -135,7 +135,7 @@ class Profile
      *                code, in case you are unable to generate one. Keep this in
      *                a safe place to avoid being locked out of your Account.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function confirm2FA(string $tfa_code): string
     {
@@ -158,13 +158,13 @@ class Profile
      * access to. This endpoint is useful when writing third-party OAuth
      * applications to see what options you should present to the acting User.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function getGrants(): ?UserGrant
     {
         $response = $this->client->api($this->client::REQUEST_GET, '/profile/grants');
 
-        if ($response->getStatusCode() === self::SUCCESS_NO_CONTENT) {
+        if (self::SUCCESS_NO_CONTENT === $response->getStatusCode()) {
             return null;
         }
 

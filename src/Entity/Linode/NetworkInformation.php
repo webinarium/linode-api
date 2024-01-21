@@ -19,9 +19,6 @@ use Linode\Entity\Entity;
  */
 class NetworkInformation extends Entity
 {
-    /**
-     * {@inheritdoc}
-     */
     public function __get(string $name): mixed
     {
         return match ($name) {

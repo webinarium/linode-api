@@ -16,14 +16,8 @@ use Linode\Entity\Managed\ManagedContact;
 use Linode\Internal\AbstractRepository;
 use Linode\Repository\Managed\ManagedContactRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class ManagedContactRepository extends AbstractRepository implements ManagedContactRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function create(array $parameters): ManagedContact
     {
         $this->checkParametersSupport($parameters);
@@ -35,9 +29,6 @@ class ManagedContactRepository extends AbstractRepository implements ManagedCont
         return new ManagedContact($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function update(int $id, array $parameters): ManagedContact
     {
         $this->checkParametersSupport($parameters);
@@ -49,25 +40,16 @@ class ManagedContactRepository extends AbstractRepository implements ManagedCont
         return new ManagedContact($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete(int $id): void
     {
         $this->client->api($this->client::REQUEST_DELETE, sprintf('%s/%s', $this->getBaseUri(), $id));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return '/managed/contacts';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -79,9 +61,6 @@ class ManagedContactRepository extends AbstractRepository implements ManagedCont
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new ManagedContact($this->client, $json);

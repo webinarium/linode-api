@@ -16,14 +16,8 @@ use Linode\Entity\Support\SupportTicket;
 use Linode\Internal\AbstractRepository;
 use Linode\Repository\Support\SupportTicketRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class SupportTicketRepository extends AbstractRepository implements SupportTicketRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function open(array $parameters): SupportTicket
     {
         $this->checkParametersSupport($parameters);
@@ -35,25 +29,16 @@ class SupportTicketRepository extends AbstractRepository implements SupportTicke
         return new SupportTicket($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function close(int $id): void
     {
         $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/close', $this->getBaseUri(), $id));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return '/support/tickets';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -76,9 +61,6 @@ class SupportTicketRepository extends AbstractRepository implements SupportTicke
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new SupportTicket($this->client, $json);

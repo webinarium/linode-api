@@ -44,9 +44,6 @@ class Backup extends Entity
     public const TYPE_AUTO     = 'auto';
     public const TYPE_SNAPSHOT = 'snapshot';
 
-    /**
-     * {@inheritdoc}
-     */
     public function __get(string $name): mixed
     {
         return match ($name) {

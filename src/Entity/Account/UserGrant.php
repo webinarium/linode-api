@@ -40,12 +40,9 @@ class UserGrant extends Entity
     public const FIELD_STACKSCRIPT  = 'stackscript';
     public const FIELD_VOLUME       = 'volume';
 
-    /**
-     * {@inheritdoc}
-     */
     public function __get(string $name): null|array|GlobalGrant
     {
-        if ($name === self::FIELD_GLOBAL) {
+        if (self::FIELD_GLOBAL === $name) {
             return new GlobalGrant($this->client, $this->data[self::FIELD_GLOBAL]);
         }
 

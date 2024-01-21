@@ -27,6 +27,4 @@ use Linode\Entity\Entity;
  * @property int    $credit    The amount of account credit in US Dollars issued to you through
  *                             the referral program.
  */
-class ProfileReferrals extends Entity
-{
-}
+class ProfileReferrals extends Entity {}

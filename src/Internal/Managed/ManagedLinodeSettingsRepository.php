@@ -16,14 +16,8 @@ use Linode\Entity\Managed\ManagedLinodeSettings;
 use Linode\Internal\AbstractRepository;
 use Linode\Repository\Managed\ManagedLinodeSettingsRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class ManagedLinodeSettingsRepository extends AbstractRepository implements ManagedLinodeSettingsRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function update(int $id, array $parameters): ManagedLinodeSettings
     {
         $this->checkParametersSupport($parameters);
@@ -35,17 +29,11 @@ class ManagedLinodeSettingsRepository extends AbstractRepository implements Mana
         return new ManagedLinodeSettings($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return '/managed/linode-settings';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -56,9 +44,6 @@ class ManagedLinodeSettingsRepository extends AbstractRepository implements Mana
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new ManagedLinodeSettings($this->client, $json);

@@ -14,6 +14,4 @@ namespace Linode\Repository;
 /**
  * Kernel repository.
  */
-interface KernelRepositoryInterface extends RepositoryInterface
-{
-}
+interface KernelRepositoryInterface extends RepositoryInterface {}

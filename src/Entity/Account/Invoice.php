@@ -13,15 +13,16 @@ namespace Linode\Entity\Account;
 
 use Linode\Entity\Entity;
 use Linode\Internal\Account\InvoiceItemRepository;
+use Linode\Repository\Account\InvoiceItemRepositoryInterface;
 
 /**
  * Account Invoice object.
  *
- * @property int                                                       $id    The Invoice's unique ID.
- * @property string                                                    $date  When this Invoice was generated.
- * @property string                                                    $label The Invoice's display label.
- * @property float                                                     $total The amount of the Invoice in US Dollars.
- * @property \Linode\Repository\Account\InvoiceItemRepositoryInterface $items Items of the invoice.
+ * @property int                            $id    The Invoice's unique ID.
+ * @property string                         $date  When this Invoice was generated.
+ * @property string                         $label The Invoice's display label.
+ * @property float                          $total The amount of the Invoice in US Dollars.
+ * @property InvoiceItemRepositoryInterface $items Items of the invoice.
  */
 class Invoice extends Entity
 {
@@ -31,9 +32,6 @@ class Invoice extends Entity
     public const FIELD_LABEL = 'label';
     public const FIELD_TOTAL = 'total';
 
-    /**
-     * {@inheritdoc}
-     */
     public function __get(string $name): mixed
     {
         return match ($name) {

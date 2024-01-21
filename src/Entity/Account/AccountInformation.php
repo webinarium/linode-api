@@ -52,9 +52,6 @@ class AccountInformation extends Entity
     public const FIELD_ZIP        = 'zip';
     public const FIELD_COUNTRY    = 'country';
 
-    /**
-     * {@inheritdoc}
-     */
     public function __get(string $name): mixed
     {
         return match ($name) {

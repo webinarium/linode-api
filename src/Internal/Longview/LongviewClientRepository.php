@@ -16,14 +16,8 @@ use Linode\Entity\Longview\LongviewClient;
 use Linode\Internal\AbstractRepository;
 use Linode\Repository\Longview\LongviewClientRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class LongviewClientRepository extends AbstractRepository implements LongviewClientRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function create(array $parameters): LongviewClient
     {
         $this->checkParametersSupport($parameters);
@@ -35,9 +29,6 @@ class LongviewClientRepository extends AbstractRepository implements LongviewCli
         return new LongviewClient($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function update(int $id, array $parameters): LongviewClient
     {
         $this->checkParametersSupport($parameters);
@@ -49,25 +40,16 @@ class LongviewClientRepository extends AbstractRepository implements LongviewCli
         return new LongviewClient($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete(int $id): void
     {
         $this->client->api($this->client::REQUEST_DELETE, sprintf('%s/%s', $this->getBaseUri(), $id));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return '/longview/clients';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -75,9 +57,6 @@ class LongviewClientRepository extends AbstractRepository implements LongviewCli
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new LongviewClient($this->client, $json);

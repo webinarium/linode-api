@@ -16,14 +16,8 @@ use Linode\Entity\Entity;
 use Linode\Internal\AbstractRepository;
 use Linode\Repository\Domains\DomainRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class DomainRepository extends AbstractRepository implements DomainRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function create(array $parameters): Domain
     {
         $this->checkParametersSupport($parameters);
@@ -35,9 +29,6 @@ class DomainRepository extends AbstractRepository implements DomainRepositoryInt
         return new Domain($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function update(int $id, array $parameters): Domain
     {
         $this->checkParametersSupport($parameters);
@@ -49,17 +40,11 @@ class DomainRepository extends AbstractRepository implements DomainRepositoryInt
         return new Domain($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete(int $id): void
     {
         $this->client->api($this->client::REQUEST_DELETE, sprintf('%s/%s', $this->getBaseUri(), $id));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function import(string $domain, string $remote_nameserver): Domain
     {
         $parameters = [
@@ -74,17 +59,11 @@ class DomainRepository extends AbstractRepository implements DomainRepositoryInt
         return new Domain($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return '/domains';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -104,9 +83,6 @@ class DomainRepository extends AbstractRepository implements DomainRepositoryInt
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new Domain($this->client, $json);

@@ -59,9 +59,6 @@ class Notification extends Entity
     public const SEVERITY_MAJOR    = 'major';
     public const SEVERITY_CRITICAL = 'critical';
 
-    /**
-     * {@inheritdoc}
-     */
     public function __get(string $name): mixed
     {
         return match ($name) {

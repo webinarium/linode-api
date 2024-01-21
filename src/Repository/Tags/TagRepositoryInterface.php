@@ -12,6 +12,7 @@
 namespace Linode\Repository\Tags;
 
 use Linode\Entity\Tag;
+use Linode\Exception\LinodeException;
 use Linode\Repository\RepositoryInterface;
 
 /**
@@ -24,7 +25,7 @@ interface TagRepositoryInterface extends RepositoryInterface
      *
      * You must be an unrestricted User in order to add or modify Tags.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function create(array $parameters): Tag;
 
@@ -33,7 +34,7 @@ interface TagRepositoryInterface extends RepositoryInterface
      *
      * You must be an unrestricted User in order to add or modify Tags.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function delete(string $label): void;
 }

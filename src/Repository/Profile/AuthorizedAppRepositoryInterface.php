@@ -11,6 +11,7 @@
 
 namespace Linode\Repository\Profile;
 
+use Linode\Exception\LinodeException;
 use Linode\Repository\RepositoryInterface;
 
 /**
@@ -19,7 +20,7 @@ use Linode\Repository\RepositoryInterface;
 interface AuthorizedAppRepositoryInterface extends RepositoryInterface
 {
     /**
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function revoke(int $id): void;
 }

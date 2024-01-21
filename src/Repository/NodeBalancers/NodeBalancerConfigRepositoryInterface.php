@@ -13,6 +13,7 @@ namespace Linode\Repository\NodeBalancers;
 
 use Linode\Entity\NodeBalancers\NodeBalancer;
 use Linode\Entity\NodeBalancers\NodeBalancerConfig;
+use Linode\Exception\LinodeException;
 use Linode\Repository\RepositoryInterface;
 
 /**
@@ -25,14 +26,14 @@ interface NodeBalancerConfigRepositoryInterface extends RepositoryInterface
      * accept traffic on a new port. You will need to add NodeBalancer Nodes
      * to the new Config before it can actually serve requests.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function create(array $parameters): NodeBalancerConfig;
 
     /**
      * Updates the configuration for a single port on a NodeBalancer.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function update(int $id, array $parameters): NodeBalancerConfig;
 
@@ -46,7 +47,7 @@ interface NodeBalancerConfigRepositoryInterface extends RepositoryInterface
      * associated NodeBalancerNodes, but the Linodes they were routing
      * traffic to will be unchanged and will not be removed.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function delete(int $id): void;
 
@@ -54,7 +55,7 @@ interface NodeBalancerConfigRepositoryInterface extends RepositoryInterface
      * Rebuilds a NodeBalancer Config and its Nodes that you have
      * permission to modify.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function rebuild(int $id, array $parameters): NodeBalancer;
 }

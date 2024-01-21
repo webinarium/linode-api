@@ -17,14 +17,8 @@ use Linode\Entity\NodeBalancers\NodeBalancerStats;
 use Linode\Internal\AbstractRepository;
 use Linode\Repository\NodeBalancers\NodeBalancerRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class NodeBalancerRepository extends AbstractRepository implements NodeBalancerRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function create(array $parameters): NodeBalancer
     {
         $this->checkParametersSupport($parameters);
@@ -36,9 +30,6 @@ class NodeBalancerRepository extends AbstractRepository implements NodeBalancerR
         return new NodeBalancer($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function update(int $id, array $parameters): NodeBalancer
     {
         $this->checkParametersSupport($parameters);
@@ -50,17 +41,11 @@ class NodeBalancerRepository extends AbstractRepository implements NodeBalancerR
         return new NodeBalancer($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete(int $id): void
     {
         $this->client->api($this->client::REQUEST_DELETE, sprintf('%s/%s', $this->getBaseUri(), $id));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getStats(int $id): NodeBalancerStats
     {
         $response = $this->client->api($this->client::REQUEST_GET, sprintf('%s/%s/stats', $this->getBaseUri(), $id));
@@ -70,17 +55,11 @@ class NodeBalancerRepository extends AbstractRepository implements NodeBalancerR
         return new NodeBalancerStats($this->client, $json);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return '/nodebalancers';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -95,9 +74,6 @@ class NodeBalancerRepository extends AbstractRepository implements NodeBalancerR
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new NodeBalancer($this->client, $json);

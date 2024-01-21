@@ -19,6 +19,4 @@ use Linode\Entity\Entity;
  * @property string $last_four The last four digits of the credit card.
  * @property string $expiry    The expiration month and year of the credit card.
  */
-class CreditCard extends Entity
-{
-}
+class CreditCard extends Entity {}

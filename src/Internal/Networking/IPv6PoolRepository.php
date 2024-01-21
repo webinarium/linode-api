@@ -16,22 +16,13 @@ use Linode\Entity\Networking\IPv6Pool;
 use Linode\Internal\AbstractRepository;
 use Linode\Repository\Networking\IPv6PoolRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class IPv6PoolRepository extends AbstractRepository implements IPv6PoolRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return '/networking/ipv6/pools';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -40,9 +31,6 @@ class IPv6PoolRepository extends AbstractRepository implements IPv6PoolRepositor
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new IPv6Pool($this->client, $json);

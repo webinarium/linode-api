@@ -15,50 +15,51 @@ use Linode\Internal\Linode\ConfigurationProfileRepository;
 use Linode\Internal\Linode\DiskRepository;
 use Linode\Internal\Linode\LinodeNetworkRepository;
 use Linode\Internal\Linode\LinodeVolumeRepository;
+use Linode\Repository\Linode as LinodeRepository;
 
 /**
  * A Linode instance.
  *
- * @property int                                                               $id               This Linode's ID which must be provided for all operations impacting
- *                                                                                               this Linode.
- * @property string                                                            $label            The Linode's label is for display purposes only. If no label is
- *                                                                                               provided for a Linode, a default will be assigned.
- * @property string                                                            $region           This is the location where the Linode was deployed. This cannot be
- *                                                                                               changed without opening a support ticket.
- * @property string                                                            $image            An Image ID. Official Linode Images start with `linode/`, while your
- *                                                                                               Images start with `private/`.
- * @property string                                                            $type             This is the Linode Type (@see `LinodeType` class) that this Linode
- *                                                                                               was deployed with.
- * @property string                                                            $status           A brief description of this Linode's current state. This field may
- *                                                                                               change without direct action from you. For instance, the status will
- *                                                                                               change to "running" when the boot process completes
- *                                                                                               (@see `STATUS_...` constants).
- * @property string[]                                                          $ipv4             This Linode's IPv4 Addresses. Each Linode is assigned a single
- *                                                                                               public IPv4 address upon creation, and may get a single private IPv4
- *                                                                                               address if needed. You may need to open a support ticket to get
- *                                                                                               additional IPv4 addresses.
- * @property string                                                            $ipv6             This Linode's IPv6 SLAAC addresses. This address is specific to
- *                                                                                               a Linode, and may not be shared.
- * @property string                                                            $hypervisor       The virtualization software powering this Linode
- *                                                                                               (@see `HYPERVISOR_...` constants).
- * @property bool                                                              $watchdog_enabled The watchdog, named Lassie, is a Shutdown Watchdog that monitors
- *                                                                                               your Linode and will reboot it if it powers off unexpectedly. It
- *                                                                                               works by issuing a boot job when your Linode powers off without
- *                                                                                               a shutdown job being responsible.
- *                                                                                               To prevent a loop, Lassie will give up if there have been more than
- *                                                                                               5 boot jobs issued within 15 minutes.
- * @property string                                                            $created          When this Linode was created.
- * @property string                                                            $updated          When this Linode was last updated.
- * @property string                                                            $group            A property denoting a group label for this Linode.
- * @property string[]                                                          $tags             An array of tags applied to this object. Tags are for organizational
- *                                                                                               purposes only.
- * @property Linode\LinodeSpecs                                                $specs            Information about the resources available to this Linode.
- * @property Linode\LinodeAlerts                                               $alerts           Information about this Linode's notification thresholds.
- * @property Linode\LinodeBackups                                              $backups          Information about this Linode's backups status.
- * @property \Linode\Repository\Linode\ConfigurationProfileRepositoryInterface $configs          Configuration profiles.
- * @property \Linode\Repository\Linode\DiskRepositoryInterface                 $disks            Disks.
- * @property \Linode\Repository\Linode\LinodeNetworkRepositoryInterface        $ips              Network information.
- * @property \Linode\Repository\Linode\LinodeVolumeRepositoryInterface         $volumes          Volumes.
+ * @property int                                                      $id               This Linode's ID which must be provided for all operations impacting
+ *                                                                                      this Linode.
+ * @property string                                                   $label            The Linode's label is for display purposes only. If no label is
+ *                                                                                      provided for a Linode, a default will be assigned.
+ * @property string                                                   $region           This is the location where the Linode was deployed. This cannot be
+ *                                                                                      changed without opening a support ticket.
+ * @property string                                                   $image            An Image ID. Official Linode Images start with `linode/`, while your
+ *                                                                                      Images start with `private/`.
+ * @property string                                                   $type             This is the Linode Type (@see `LinodeType` class) that this Linode
+ *                                                                                      was deployed with.
+ * @property string                                                   $status           A brief description of this Linode's current state. This field may
+ *                                                                                      change without direct action from you. For instance, the status will
+ *                                                                                      change to "running" when the boot process completes
+ *                                                                                      (@see `STATUS_...` constants).
+ * @property string[]                                                 $ipv4             This Linode's IPv4 Addresses. Each Linode is assigned a single
+ *                                                                                      public IPv4 address upon creation, and may get a single private IPv4
+ *                                                                                      address if needed. You may need to open a support ticket to get
+ *                                                                                      additional IPv4 addresses.
+ * @property string                                                   $ipv6             This Linode's IPv6 SLAAC addresses. This address is specific to
+ *                                                                                      a Linode, and may not be shared.
+ * @property string                                                   $hypervisor       The virtualization software powering this Linode
+ *                                                                                      (@see `HYPERVISOR_...` constants).
+ * @property bool                                                     $watchdog_enabled The watchdog, named Lassie, is a Shutdown Watchdog that monitors
+ *                                                                                      your Linode and will reboot it if it powers off unexpectedly. It
+ *                                                                                      works by issuing a boot job when your Linode powers off without
+ *                                                                                      a shutdown job being responsible.
+ *                                                                                      To prevent a loop, Lassie will give up if there have been more than
+ *                                                                                      5 boot jobs issued within 15 minutes.
+ * @property string                                                   $created          When this Linode was created.
+ * @property string                                                   $updated          When this Linode was last updated.
+ * @property string                                                   $group            A property denoting a group label for this Linode.
+ * @property string[]                                                 $tags             An array of tags applied to this object. Tags are for organizational
+ *                                                                                      purposes only.
+ * @property Linode\LinodeSpecs                                       $specs            Information about the resources available to this Linode.
+ * @property Linode\LinodeAlerts                                      $alerts           Information about this Linode's notification thresholds.
+ * @property Linode\LinodeBackups                                     $backups          Information about this Linode's backups status.
+ * @property LinodeRepository\ConfigurationProfileRepositoryInterface $configs          Configuration profiles.
+ * @property LinodeRepository\DiskRepositoryInterface                 $disks            Disks.
+ * @property LinodeRepository\LinodeNetworkRepositoryInterface        $ips              Network information.
+ * @property LinodeRepository\LinodeVolumeRepositoryInterface         $volumes          Volumes.
  */
 class Linode extends Entity
 {
@@ -115,9 +116,6 @@ class Linode extends Entity
     public const HYPERVISOR_XEN   = 'xen';
     public const HYPERVISOR_PVOPS = 'pvops';
 
-    /**
-     * {@inheritdoc}
-     */
     public function __get(string $name): mixed
     {
         return match ($name) {

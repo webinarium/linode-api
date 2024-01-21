@@ -12,6 +12,7 @@
 namespace Linode\Repository\Profile;
 
 use Linode\Entity\Profile\PersonalAccessToken;
+use Linode\Exception\LinodeException;
 use Linode\Repository\RepositoryInterface;
 
 /**
@@ -20,17 +21,17 @@ use Linode\Repository\RepositoryInterface;
 interface PersonalAccessTokenRepositoryInterface extends RepositoryInterface
 {
     /**
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function create(array $parameters): PersonalAccessToken;
 
     /**
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function update(int $id, array $parameters): PersonalAccessToken;
 
     /**
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function revoke(int $id): void;
 }

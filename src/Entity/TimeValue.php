@@ -22,9 +22,7 @@ class TimeValue
     /**
      * TimeValue constructor.
      */
-    public function __construct(protected int $time, protected float $value)
-    {
-    }
+    public function __construct(protected int $time, protected float $value) {}
 
     /**
      * Checks whether the specified property exists.
@@ -33,7 +31,7 @@ class TimeValue
      */
     public function __isset(string $name): bool
     {
-        return $name === 'time' || $name === 'value';
+        return 'time' === $name || 'value' === $name;
     }
 
     /**

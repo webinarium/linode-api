@@ -16,30 +16,18 @@ use Linode\Entity\Profile\AuthorizedApp;
 use Linode\Internal\AbstractRepository;
 use Linode\Repository\Profile\AuthorizedAppRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class AuthorizedAppRepository extends AbstractRepository implements AuthorizedAppRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function revoke(int $id): void
     {
         $this->client->api($this->client::REQUEST_DELETE, sprintf('%s/%s', $this->getBaseUri(), $id));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return '/profile/apps';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -53,9 +41,6 @@ class AuthorizedAppRepository extends AbstractRepository implements AuthorizedAp
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new AuthorizedApp($this->client, $json);

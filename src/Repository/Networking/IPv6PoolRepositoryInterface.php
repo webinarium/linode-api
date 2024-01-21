@@ -16,6 +16,4 @@ use Linode\Repository\RepositoryInterface;
 /**
  * IPv6Pool repository.
  */
-interface IPv6PoolRepositoryInterface extends RepositoryInterface
-{
-}
+interface IPv6PoolRepositoryInterface extends RepositoryInterface {}

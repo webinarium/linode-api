@@ -16,30 +16,18 @@ use Linode\Entity\Managed\ManagedIssue;
 use Linode\Internal\AbstractRepository;
 use Linode\Repository\Managed\ManagedIssueRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class ManagedIssueRepository extends AbstractRepository implements ManagedIssueRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return '/managed/issues';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new ManagedIssue($this->client, $json);

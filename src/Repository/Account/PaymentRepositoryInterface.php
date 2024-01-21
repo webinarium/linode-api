@@ -12,6 +12,7 @@
 namespace Linode\Repository\Account;
 
 use Linode\Entity\Account\Payment;
+use Linode\Exception\LinodeException;
 use Linode\Repository\RepositoryInterface;
 
 /**
@@ -25,7 +26,7 @@ interface PaymentRepositoryInterface extends RepositoryInterface
      * @param string $usd the amount in US Dollars of the Payment
      * @param string $cvv CVV (Card Verification Value) of the credit card to be used for the Payment
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function makeCreditCardPayment(string $usd, string $cvv): Payment;
 
@@ -41,7 +42,7 @@ interface PaymentRepositoryInterface extends RepositoryInterface
      *
      * @return string The paypal-generated ID for this Payment. Used when authorizing the Payment in PayPal's interface.
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function stagePayPalPayment(string $usd, string $redirect_url, string $cancel_url): string;
 
@@ -51,7 +52,7 @@ interface PaymentRepositoryInterface extends RepositoryInterface
      * @param string $payer_id   the PayerID returned by PayPal during the transaction authorization process
      * @param string $payment_id the PaymentID returned from `stagePayPalPayment()` that has been approved with PayPal
      *
-     * @throws \Linode\Exception\LinodeException
+     * @throws LinodeException
      */
     public function executePayPalPayment(string $payer_id, string $payment_id): void;
 }

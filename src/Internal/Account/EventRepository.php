@@ -16,38 +16,23 @@ use Linode\Entity\Entity;
 use Linode\Internal\AbstractRepository;
 use Linode\Repository\Account\EventRepositoryInterface;
 
-/**
- * {@inheritdoc}
- */
 class EventRepository extends AbstractRepository implements EventRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function markAsSeen(int $id): void
     {
         $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/seen', $this->getBaseUri(), $id));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function markAsRead(int $id): void
     {
         $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/read', $this->getBaseUri(), $id));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getBaseUri(): string
     {
         return '/account/events';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getSupportedFields(): array
     {
         return [
@@ -64,9 +49,6 @@ class EventRepository extends AbstractRepository implements EventRepositoryInter
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function jsonToEntity(array $json): Entity
     {
         return new Event($this->client, $json);
