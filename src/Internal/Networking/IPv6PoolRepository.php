@@ -27,6 +27,7 @@ class IPv6PoolRepository extends AbstractRepository implements IPv6PoolRepositor
     {
         return [
             IPv6Pool::FIELD_RANGE,
+            IPv6Pool::FIELD_PREFIX,
             IPv6Pool::FIELD_REGION,
         ];
     }

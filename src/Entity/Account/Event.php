@@ -56,6 +56,7 @@ class Event extends Entity
     public const ACTION_BACKUPS_CANCEL             = 'backups_cancel';
     public const ACTION_BACKUPS_RESTORE            = 'backups_restore';
     public const ACTION_COMMUNITY_QUESTION_REPLY   = 'community_question_reply';
+    public const ACTION_COMMUNITY_LIKE             = 'community_like';
     public const ACTION_CREDIT_CARD_UPDATED        = 'credit_card_updated';
     public const ACTION_DISK_CREATE                = 'disk_create';
     public const ACTION_DISK_DELETE                = 'disk_delete';

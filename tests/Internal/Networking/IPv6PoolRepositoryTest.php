@@ -47,6 +47,7 @@ final class IPv6PoolRepositoryTest extends TestCase
     {
         $expected = [
             'range',
+            'prefix',
             'region',
         ];
 
