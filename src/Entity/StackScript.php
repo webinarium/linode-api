@@ -17,8 +17,8 @@ namespace Linode\Entity;
  * @property int                      $id                  The unique ID of this StackScript.
  * @property string                   $username            The User who created the StackScript.
  * @property string                   $label               The StackScript's label is for display purposes only.
- * @property string[]                 $images              An array of Image IDs representing the Images that this StackScript
- *                                                         is compatible for deploying with.
+ * @property string[]                 $images              An array of Image IDs. These are the images that can be deployed
+ *                                                         with this Stackscript.
  * @property bool                     $is_public           This determines whether other users can use your StackScript.
  *                                                         Once a StackScript is made public, it cannot be made private.
  * @property string                   $created             The date this StackScript was created.

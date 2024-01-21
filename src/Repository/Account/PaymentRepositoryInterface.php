@@ -37,7 +37,9 @@ interface PaymentRepositoryInterface extends RepositoryInterface
      * the `payer_id` from your PayPal account and call `executePayPalPayment()`
      * to complete the Payment.
      *
-     * @param string $usd          the amount, in US dollars, of the Payment
+     * @param string $usd          The payment amount in USD. Minimum accepted value of $5 USD. Maximum accepted value
+     *                             of $500 USD or credit card payment limit; whichever value is highest. PayPal's
+     *                             maximum transaction limit is $10,000 USD.
      * @param string $redirect_url the URL to have PayPal redirect to when Payment is approved
      * @param string $cancel_url   the URL to have PayPal redirect to when Payment is cancelled
      *

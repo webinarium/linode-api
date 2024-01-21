@@ -55,4 +55,5 @@ class NodeBalancerNode extends Entity
     public const MODE_ACCEPT = 'accept';
     public const MODE_REJECT = 'reject';
     public const MODE_DRAIN  = 'drain';
+    public const MODE_BACKUP = 'backup';
 }
