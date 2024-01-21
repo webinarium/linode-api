@@ -76,6 +76,7 @@ class Event extends Entity
     public const ACTION_IMAGE_DELETE               = 'image_delete';
     public const ACTION_IMAGE_UPDATE               = 'image_update';
     public const ACTION_LASSIE_REBOOT              = 'lassie_reboot';
+    public const ACTION_LISH_BOOT                  = 'lish_boot';
     public const ACTION_LINODE_ADDIP               = 'linode_addip';
     public const ACTION_LINODE_BOOT                = 'linode_boot';
     public const ACTION_LINODE_CLONE               = 'linode_clone';
@@ -85,9 +86,11 @@ class Event extends Entity
     public const ACTION_LINODE_DELETEIP            = 'linode_deleteip';
     public const ACTION_LINODE_MIGRATE             = 'linode_migrate';
     public const ACTION_LINODE_MUTATE              = 'linode_mutate';
+    public const ACTION_LINODE_MUTATE_CREATE       = 'linode_mutate_create';
     public const ACTION_LINODE_REBOOT              = 'linode_reboot';
     public const ACTION_LINODE_REBUILD             = 'linode_rebuild';
     public const ACTION_LINODE_RESIZE              = 'linode_resize';
+    public const ACTION_LINODE_RESIZE_CREATE       = 'linode_resize_create';
     public const ACTION_LINODE_SHUTDOWN            = 'linode_shutdown';
     public const ACTION_LINODE_SNAPSHOT            = 'linode_snapshot';
     public const ACTION_LINODE_CONFIG_CREATE       = 'linode_config_create';

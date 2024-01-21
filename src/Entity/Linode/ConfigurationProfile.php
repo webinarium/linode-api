@@ -25,7 +25,7 @@ use Linode\Entity\Entity;
  * @property string  $virt_mode    Controls the virtualization mode. Defaults to `paravirt` (@see `VIRT_MODE_...` constants).
  * @property Helpers $helpers      Helpers enabled when booting to this Linode Config.
  * @property Devices $devices      Devices configuration.
- * @property string  $root_device  The root device to boot. The corresponding disk must be attached.
+ * @property string  $root_device  The root device to boot.
  */
 class ConfigurationProfile extends Entity
 {

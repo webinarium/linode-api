@@ -921,6 +921,35 @@ final class LinodeRepositoryTest extends TestCase
         self::assertArrayHasKey('snapshot', $data);
     }
 
+    public function testGetCurrentTransfer(): void
+    {
+        $response = <<<'JSON'
+                        {
+                            "billable": 0,
+                            "quota": 2000,
+                            "used": 22956600198
+                        }
+            JSON;
+
+        $client = $this->createMock(Client::class);
+        $client
+            ->method('request')
+            ->willReturnMap([
+                ['GET', 'https://api.linode.com/v4/linode/instances/123/transfer', [], new Response(200, [], $response)],
+            ])
+        ;
+
+        /** @var Client $client */
+        $repository = $this->mockRepository($client);
+
+        $entity = $repository->getCurrentTransfer(123);
+
+        self::assertInstanceOf(Linode\LinodeTransfer::class, $entity);
+        self::assertSame(22956600198, $entity->used);
+        self::assertSame(2000, $entity->quota);
+        self::assertSame(0, $entity->billable);
+    }
+
     public function testGetCurrentStats(): void
     {
         $response = <<<'JSON'

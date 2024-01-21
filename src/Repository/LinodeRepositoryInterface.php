@@ -184,6 +184,13 @@ interface LinodeRepositoryInterface extends RepositoryInterface
     public function getAllBackups(int $id): array;
 
     /**
+     * Returns a Linode’s network transfer pool statistics for the current month.
+     *
+     * @throws LinodeException
+     */
+    public function getCurrentTransfer(int $id): Linode\LinodeTransfer;
+
+    /**
      * View the Linode's current statistics for the past 24 hours.
      *
      * @throws LinodeException

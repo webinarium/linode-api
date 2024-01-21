@@ -76,6 +76,7 @@ class Domain extends Entity
     public const STATUS_HAS_ERRORS = 'has_errors';
 
     // Time values.
+    public const TIME_DEFAULT  = 0;
     public const TIME_5_MINS   = 300;
     public const TIME_1_HOUR   = 3600;
     public const TIME_2_HOURS  = 7200;

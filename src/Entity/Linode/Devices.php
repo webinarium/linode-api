@@ -14,7 +14,7 @@ namespace Linode\Entity\Linode;
 use Linode\Entity\Entity;
 
 /**
- * List of Linode devices.
+ * A dictionary of device disks to use as a device map in a Linode's configuration profile.
  *
  * @property Device $sda
  * @property Device $sdb

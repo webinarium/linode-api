@@ -163,6 +163,15 @@ class LinodeRepository extends AbstractRepository implements LinodeRepositoryInt
         return json_decode($contents, true);
     }
 
+    public function getCurrentTransfer(int $id): Linode\LinodeTransfer
+    {
+        $response = $this->client->api($this->client::REQUEST_GET, sprintf('%s/%s/transfer', $this->getBaseUri(), $id));
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return new Linode\LinodeTransfer($this->client, $json);
+    }
+
     public function getCurrentStats(int $id): Linode\LinodeStats
     {
         $response = $this->client->api($this->client::REQUEST_GET, sprintf('%s/%s/stats', $this->getBaseUri(), $id));
