@@ -63,6 +63,9 @@ final class TaggedObjectRepositoryTest extends TestCase
 
     public function testJsonToEntity(): void
     {
-        self::assertInstanceOf(Linode::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
+        self::assertInstanceOf(Linode::class, $this->callMethod($this->repository, 'jsonToEntity', [[
+            'type' => 'linode',
+            'data' => [],
+        ]]));
     }
 }

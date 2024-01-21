@@ -41,7 +41,8 @@ final class TagRepositoryTest extends TestCase
     {
         $request = [
             'json' => [
-                'label' => 'example tag',
+                'label'   => 'example tag',
+                'linodes' => [123, 456],
             ],
         ];
 
@@ -63,7 +64,8 @@ final class TagRepositoryTest extends TestCase
         $repository = $this->mockRepository($client);
 
         $entity = $repository->create([
-            Tag::FIELD_LABEL => 'example tag',
+            Tag::FIELD_LABEL   => 'example tag',
+            Tag::FIELD_LINODES => [123, 456],
         ]);
 
         self::assertInstanceOf(Tag::class, $entity);
@@ -99,6 +101,8 @@ final class TagRepositoryTest extends TestCase
     {
         $expected = [
             'label',
+            'linodes',
+            'domains',
         ];
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));

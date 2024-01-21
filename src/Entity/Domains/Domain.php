@@ -43,6 +43,8 @@ use Linode\Repository\Domains\DomainRecordRepositoryInterface;
  * @property string[]                        $axfr_ips    The list of IPs that may perform a zone transfer for this Domain.
  *                                                        This is potentially dangerous, and should be set to an empty list
  *                                                        unless you intend to use it.
+ * @property string[]                        $tags        An array of tags applied to this object. Tags are for organizational
+ *                                                        purposes only.
  * @property DomainRecordRepositoryInterface $records     Records of the domain.
  */
 class Domain extends Entity
@@ -61,6 +63,7 @@ class Domain extends Entity
     public const FIELD_EXPIRE_SEC  = 'expire_sec';
     public const FIELD_MASTER_IPS  = 'master_ips';
     public const FIELD_AXFR_IPS    = 'axfr_ips';
+    public const FIELD_TAGS        = 'tags';
 
     // Domain types.
     public const TYPE_MASTER = 'master';

@@ -11,6 +11,7 @@
 
 namespace Linode\Internal\Tags;
 
+use Linode\Entity\Domains\Domain;
 use Linode\Entity\Entity;
 use Linode\Entity\Linode;
 use Linode\Internal\AbstractRepository;
@@ -51,6 +52,9 @@ class TaggedObjectRepository extends AbstractRepository implements TaggedObjectR
 
     protected function jsonToEntity(array $json): Entity
     {
-        return new Linode($this->client, $json);
+        return match ($json['type']) {
+            'domain' => new Domain($this->client, $json['data']),
+            'linode' => new Linode($this->client, $json['data']),
+        };
     }
 }

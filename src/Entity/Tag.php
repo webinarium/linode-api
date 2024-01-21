@@ -24,7 +24,9 @@ use Linode\Repository\Tags\TaggedObjectRepositoryInterface;
 class Tag extends Entity
 {
     // Available fields.
-    public const FIELD_LABEL = 'label';
+    public const FIELD_LABEL   = 'label';
+    public const FIELD_LINODES = 'linodes';
+    public const FIELD_DOMAINS = 'domains';
 
     public function __get(string $name): mixed
     {
