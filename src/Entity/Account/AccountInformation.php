@@ -16,25 +16,29 @@ use Linode\Entity\Entity;
 /**
  * Account information object.
  *
- * @property string      $first_name  The first name of the person associated with this Account.
- * @property string      $last_name   The last name of the person associated with this Account.
- * @property string      $email       The email address of the person associated with this Account.
- * @property float       $balance     This Account's balance, in US dollars.
- * @property string      $company     The company name associated with this Account.
- * @property string      $phone       The phone number associated with this Account.
- * @property null|string $tax_id      The tax identification number associated with this Account,
- *                                    for tax calculations in some countries.
- *                                    If you do not live in a country that collects tax, this should be `null`.
- * @property CreditCard  $credit_card Credit Card information associated with this Account.
- * @property string      $address_1   First line of this Account's billing address.
- * @property string      $address_2   Second line of this Account's billing address.
- * @property string      $city        The city for this Account's billing address.
- * @property string      $state       If billing address is in the United States, this is the State
- *                                    portion of the Account's billing address. If the address is outside
- *                                    the US, this is the Province associated with the Account's billing
- *                                    address.
- * @property string      $zip         The zip code of this Account's billing address.
- * @property string      $country     The two-letter country code of this Account's billing address.
+ * @property string      $first_name         The first name of the person associated with this Account.
+ * @property string      $last_name          The last name of the person associated with this Account.
+ * @property string      $email              The email address of the person associated with this Account.
+ * @property float       $balance            This Account's balance, in US dollars.
+ * @property float       $balance_uninvoiced This Account's current estimated invoice in US dollars. This is not
+ *                                           your final invoice balance. Bandwidth charges are not included in
+ *                                           the estimate.
+ * @property string      $company            The company name associated with this Account.
+ * @property string      $phone              The phone number associated with this Account.
+ * @property null|string $tax_id             The tax identification number associated with this Account,
+ *                                           for tax calculations in some countries.
+ *                                           If you do not live in a country that collects tax, this should be `null`.
+ * @property CreditCard  $credit_card        Credit Card information associated with this Account.
+ * @property string      $address_1          First line of this Account's billing address.
+ * @property string      $address_2          Second line of this Account's billing address.
+ * @property string      $city               The city for this Account's billing address.
+ * @property string      $state              If billing address is in the United States, this is the State
+ *                                           portion of the Account's billing address. If the address is outside
+ *                                           the US, this is the Province associated with the Account's billing
+ *                                           address.
+ * @property string      $zip                The zip code of this Account's billing address.
+ * @property string      $country            The two-letter country code of this Account's billing address.
+ * @property string      $active_since       The datetime of when the account was activated.
  */
 class AccountInformation extends Entity
 {

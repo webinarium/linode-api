@@ -12,6 +12,7 @@
 namespace Linode\Repository\Account;
 
 use Linode\Entity\Account\Payment;
+use Linode\Entity\Account\PayPalPayment;
 use Linode\Exception\LinodeException;
 use Linode\Repository\RepositoryInterface;
 
@@ -40,11 +41,11 @@ interface PaymentRepositoryInterface extends RepositoryInterface
      * @param string $redirect_url the URL to have PayPal redirect to when Payment is approved
      * @param string $cancel_url   the URL to have PayPal redirect to when Payment is cancelled
      *
-     * @return string The paypal-generated ID for this Payment. Used when authorizing the Payment in PayPal's interface.
+     * @return PayPalPayment staged PayPal payment
      *
      * @throws LinodeException
      */
-    public function stagePayPalPayment(string $usd, string $redirect_url, string $cancel_url): string;
+    public function stagePayPalPayment(string $usd, string $redirect_url, string $cancel_url): PayPalPayment;
 
     /**
      * An object representing an execution of Payment to PayPal to capture the funds and credit your Linode Account.

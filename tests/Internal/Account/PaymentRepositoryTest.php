@@ -14,6 +14,7 @@ namespace Linode\Internal\Account;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use Linode\Entity\Account\Payment;
+use Linode\Entity\Account\PayPalPayment;
 use Linode\LinodeClient;
 use Linode\ReflectionTrait;
 use Linode\Repository\Account\PaymentRepositoryInterface;
@@ -83,6 +84,7 @@ final class PaymentRepositoryTest extends TestCase
 
         $response = <<<'JSON'
                         {
+                            "checkout_token": "EC-1A2B3C4D5E6F7G8H9",
                             "payment_id": "PAY-1234567890ABCDEFGHIJKLMN"
                         }
             JSON;
@@ -98,9 +100,11 @@ final class PaymentRepositoryTest extends TestCase
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        $result = $repository->stagePayPalPayment('120.50', 'https://example.org', 'https://example.org');
+        $entity = $repository->stagePayPalPayment('120.50', 'https://example.org', 'https://example.org');
 
-        self::assertSame('PAY-1234567890ABCDEFGHIJKLMN', $result);
+        self::assertInstanceOf(PayPalPayment::class, $entity);
+        self::assertSame('PAY-1234567890ABCDEFGHIJKLMN', $entity->payment_id);
+        self::assertSame('EC-1A2B3C4D5E6F7G8H9', $entity->checkout_token);
     }
 
     public function testExecutePayPalPayment(): void

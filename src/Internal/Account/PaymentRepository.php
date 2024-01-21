@@ -12,6 +12,7 @@
 namespace Linode\Internal\Account;
 
 use Linode\Entity\Account\Payment;
+use Linode\Entity\Account\PayPalPayment;
 use Linode\Entity\Entity;
 use Linode\Internal\AbstractRepository;
 use Linode\Repository\Account\PaymentRepositoryInterface;
@@ -32,7 +33,7 @@ class PaymentRepository extends AbstractRepository implements PaymentRepositoryI
         return new Payment($this->client, $json);
     }
 
-    public function stagePayPalPayment(string $usd, string $redirect_url, string $cancel_url): string
+    public function stagePayPalPayment(string $usd, string $redirect_url, string $cancel_url): PayPalPayment
     {
         $parameters = [
             'usd'          => $usd,
@@ -44,7 +45,7 @@ class PaymentRepository extends AbstractRepository implements PaymentRepositoryI
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
-        return $json['payment_id'];
+        return new PayPalPayment($this->client, $json);
     }
 
     public function executePayPalPayment(string $payer_id, string $payment_id): void
