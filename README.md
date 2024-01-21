@@ -7,7 +7,7 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/webinarium/linode-api/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/webinarium/linode-api/?branch=master)
 
 This package provides a PHP client library for [Linode API](https://www.linode.com/docs/api/).
-The library is up-to-date with API [4.0.8](https://www.linode.com/docs/products/tools/api/release-notes/) released on 2018-11-05.
+The library is up-to-date with API [4.0.9](https://www.linode.com/docs/products/tools/api/release-notes/) released on 2018-11-18.
 
 ## Requirements
 

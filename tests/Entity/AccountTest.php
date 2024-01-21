@@ -181,6 +181,7 @@ final class AccountTest extends TestCase
             'card_number'  => '4111111111111111',
             'expiry_month' => '12',
             'expiry_year'  => '2020',
+            'cvv'          => '123',
         ];
 
         $this->client
@@ -192,7 +193,7 @@ final class AccountTest extends TestCase
 
         $account = new Account($this->client);
 
-        $account->updateCreditCard('4111111111111111', '12', '2020');
+        $account->updateCreditCard('4111111111111111', '12', '2020', '123');
 
         self::assertTrue(true);
     }

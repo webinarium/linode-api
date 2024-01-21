@@ -32,6 +32,8 @@ use Linode\Entity\LinodeEntity;
  *                                  maintenance for one of our systems, `until` would be set to the end
  *                                  of the maintenance window.
  * @property string       $type     The type of Notification this is (@see `TYPE_...` constants).
+ * @property string       $body     A full description of this Notification, in markdown format. Not all
+ *                                  Notifications include bodies.
  * @property LinodeEntity $entity   Detailed information about the Notification.
  */
 class Notification extends Entity
@@ -43,6 +45,7 @@ class Notification extends Entity
     public const FIELD_WHEN     = 'when';
     public const FIELD_UNTIL    = 'until';
     public const FIELD_TYPE     = 'type';
+    public const FIELD_BODY     = 'body';
 
     // Notification types.
     public const TYPE_MIGRATION_SCHEDULED = 'migration_scheduled';
@@ -54,6 +57,7 @@ class Notification extends Entity
     public const TYPE_TICKET_IMPORTANT    = 'ticket_important';
     public const TYPE_TICKET_ABUSE        = 'ticket_abuse';
     public const TYPE_NOTICE              = 'notice';
+    public const TYPE_MAINTENANCE         = 'maintenance';
 
     // Notification severities.
     public const SEVERITY_MINOR    = 'minor';

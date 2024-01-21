@@ -117,18 +117,20 @@ class Account
      * endpoint will overwrite your currently active card information with the
      * new credit card.
      *
-     * @param string $card_number  Your credit card number. No spaces or dashes allowed.
+     * @param string $card_number  your credit card number (no spaces or dashes allowed)
      * @param string $expiry_month a value from 1-12 representing the expiration month of your credit card
      * @param string $expiry_year  a four-digit integer representing the expiration year of your credit card
+     * @param string $cvv          the Card Verification Value on the back of the card
      *
      * @throws LinodeException
      */
-    public function updateCreditCard(string $card_number, string $expiry_month, string $expiry_year): void
+    public function updateCreditCard(string $card_number, string $expiry_month, string $expiry_year, string $cvv): void
     {
         $parameters = [
             'card_number'  => $card_number,
             'expiry_month' => $expiry_month,
             'expiry_year'  => $expiry_year,
+            'cvv'          => $cvv,
         ];
 
         $this->client->api($this->client::REQUEST_POST, '/account/credit-card', $parameters);

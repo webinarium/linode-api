@@ -25,6 +25,8 @@ namespace Linode\Entity;
  *                                     Path is /dev/disk/by-id/scsi-0Linode_Volume_ + Volume label.
  * @property string   $created         When this Volume was created.
  * @property string   $updated         When this Volume was last updated.
+ * @property string[] $tags            An array of Tags applied to this object. Tags are for organizational
+ *                                     purposes only.
  */
 class Volume extends Entity
 {
@@ -35,6 +37,7 @@ class Volume extends Entity
     public const FIELD_SIZE      = 'size';
     public const FIELD_REGION    = 'region';
     public const FIELD_LINODE_ID = 'linode_id';
+    public const FIELD_TAGS      = 'tags';
 
     // Extra field for create/update operations.
     public const FIELD_CONFIG_ID = 'config_id';

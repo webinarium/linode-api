@@ -14,6 +14,7 @@ namespace Linode\Internal\Tags;
 use Linode\Entity\Domains\Domain;
 use Linode\Entity\Entity;
 use Linode\Entity\Linode;
+use Linode\Entity\Volume;
 use Linode\Internal\AbstractRepository;
 use Linode\LinodeClient;
 use Linode\Repository\Tags\TaggedObjectRepositoryInterface;
@@ -55,6 +56,7 @@ class TaggedObjectRepository extends AbstractRepository implements TaggedObjectR
         return match ($json['type']) {
             'domain' => new Domain($this->client, $json['data']),
             'linode' => new Linode($this->client, $json['data']),
+            'volume' => new Volume($this->client, $json['data']),
         };
     }
 }

@@ -103,6 +103,7 @@ final class TagRepositoryTest extends TestCase
             'label',
             'linodes',
             'domains',
+            'volumes',
         ];
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));

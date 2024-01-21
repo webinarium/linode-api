@@ -27,6 +27,7 @@ class Tag extends Entity
     public const FIELD_LABEL   = 'label';
     public const FIELD_LINODES = 'linodes';
     public const FIELD_DOMAINS = 'domains';
+    public const FIELD_VOLUMES = 'volumes';
 
     public function __get(string $name): mixed
     {
