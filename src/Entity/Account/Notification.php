@@ -46,6 +46,7 @@ class Notification extends Entity
 
     // Notification types.
     public const TYPE_MIGRATION_SCHEDULED = 'migration_scheduled';
+    public const TYPE_MIGRATION_IMMINENT  = 'migration_imminent';
     public const TYPE_MIGRATION_PENDING   = 'migration_pending';
     public const TYPE_REBOOT_SCHEDULED    = 'reboot_scheduled';
     public const TYPE_OUTAGE              = 'outage';

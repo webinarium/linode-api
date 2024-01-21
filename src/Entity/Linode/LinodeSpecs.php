@@ -16,7 +16,7 @@ use Linode\Entity\Entity;
 /**
  * Information about the resources available to this Linode.
  *
- * @property int $disk     The amount of storage space, in GB. this Linode has access to. A typical Linode
+ * @property int $disk     The amount of storage space, in MB. this Linode has access to. A typical Linode
  *                         will divide this space between a primary disk with an `image` deployed to it, and
  *                         a swap disk, usually 512 MB. This is the default configuration created when
  *                         deploying a Linode with an `image` through `POST /linode/instances`.

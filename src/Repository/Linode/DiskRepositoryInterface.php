@@ -46,6 +46,15 @@ interface DiskRepositoryInterface extends RepositoryInterface
     public function delete(int $id): void;
 
     /**
+     * Copies a disk, byte-for-byte, into a new Disk belonging to the same Linode.
+     * The Linode must have enough storage space available to accept a new Disk
+     * of the same size as this one or this operation will fail.
+     *
+     * @throws LinodeException
+     */
+    public function clone(int $id): Disk;
+
+    /**
      * Resizes a Disk you have permission to `read_write`.
      *
      * The Linode this Disk is attached to must be shut down for resizing to

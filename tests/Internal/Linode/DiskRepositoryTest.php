@@ -169,6 +169,38 @@ final class DiskRepositoryTest extends TestCase
         self::assertTrue(true);
     }
 
+    public function testClone(): void
+    {
+        $response = <<<'JSON'
+                        {
+                            "id": 25675,
+                            "label": "Debian 9 Disk",
+                            "status": "ready",
+                            "size": 48640,
+                            "filesystem": "ext4",
+                            "created": "2018-01-01T00:01:01",
+                            "updated": "2018-01-01T00:01:01"
+                        }
+            JSON;
+
+        $client = $this->createMock(Client::class);
+        $client
+            ->method('request')
+            ->willReturnMap([
+                ['POST', 'https://api.linode.com/v4/linode/instances/123/disks/25674/clone', [], new Response(200, [], $response)],
+            ])
+        ;
+
+        /** @var Client $client */
+        $repository = $this->mockRepository($client);
+
+        $entity = $repository->clone(25674);
+
+        self::assertInstanceOf(Disk::class, $entity);
+        self::assertSame(25675, $entity->id);
+        self::assertSame('Debian 9 Disk', $entity->label);
+    }
+
     public function testResize(): void
     {
         $request = [

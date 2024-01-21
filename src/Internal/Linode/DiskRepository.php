@@ -54,6 +54,15 @@ class DiskRepository extends AbstractRepository implements DiskRepositoryInterfa
         $this->client->api($this->client::REQUEST_DELETE, sprintf('%s/%s', $this->getBaseUri(), $id));
     }
 
+    public function clone(int $id): Disk
+    {
+        $response = $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/clone', $this->getBaseUri(), $id));
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return new Disk($this->client, $json);
+    }
+
     public function resize(int $id, int $size): void
     {
         $parameters = [
