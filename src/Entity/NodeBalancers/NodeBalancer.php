@@ -32,6 +32,8 @@ use Linode\Repository\NodeBalancers\NodeBalancerConfigRepositoryInterface;
  * @property int                                   $client_conn_throttle Throttle connections per second. Set to 0 (zero) to disable throttling.
  * @property string                                $created              When this NodeBalancer was created.
  * @property string                                $updated              When this NodeBalancer was last updated.
+ * @property string[]                              $tags                 An array of Tags applied to this object. Tags are for organizational
+ *                                                                       purposes only.
  * @property NodeTransfer                          $transfer             Information about the amount of transfer this NodeBalancer has had
  *                                                                       so far this month.
  * @property NodeBalancerConfigRepositoryInterface $configs              Configs of the NodeBalancer.
@@ -46,6 +48,7 @@ class NodeBalancer extends Entity
     public const FIELD_IPV4                 = 'ipv4';
     public const FIELD_IPV6                 = 'ipv6';
     public const FIELD_CLIENT_CONN_THROTTLE = 'client_conn_throttle';
+    public const FIELD_TAGS                 = 'tags';
 
     // Extra field for create/update operations.
     public const FIELD_CONFIGS = 'configs';

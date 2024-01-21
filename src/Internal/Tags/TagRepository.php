@@ -46,6 +46,7 @@ class TagRepository extends AbstractRepository implements TagRepositoryInterface
             Tag::FIELD_LINODES,
             Tag::FIELD_DOMAINS,
             Tag::FIELD_VOLUMES,
+            Tag::FIELD_NODE_BALANCERS,
         ];
     }
 
