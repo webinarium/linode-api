@@ -55,7 +55,20 @@ interface DomainRepositoryInterface extends RepositoryInterface
      *   - 2600:3c00::5e
      *   - 2600:3c00::5f
      *
+     * @param string $domain            the domain to import
+     * @param string $remote_nameserver the remote nameserver that allows zone transfers (AXFR)
+     *
      * @throws LinodeException
      */
     public function import(string $domain, string $remote_nameserver): Domain;
+
+    /**
+     * Clones a Domain and all associated DNS records from a Domain that is
+     * registered in Linode's DNS manager.
+     *
+     * @param string $domain the new domain being created
+     *
+     * @throws LinodeException
+     */
+    public function clone(int $id, string $domain): Domain;
 }

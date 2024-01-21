@@ -203,6 +203,51 @@ final class DomainRepositoryTest extends TestCase
         self::assertSame('master', $entity->type);
     }
 
+    public function testClone(): void
+    {
+        $request = [
+            'json' => [
+                'domain' => 'example.com',
+            ],
+        ];
+
+        $response = <<<'JSON'
+                        {
+                            "id": 1234,
+                            "type": "master",
+                            "domain": "example.org",
+                            "group": null,
+                            "status": "active",
+                            "description": null,
+                            "soa_email": "admin@example.org",
+                            "retry_sec": 300,
+                            "master_ips": [],
+                            "axfr_ips": [],
+                            "expire_sec": 300,
+                            "refresh_sec": 300,
+                            "ttl_sec": 300
+                        }
+            JSON;
+
+        $client = $this->createMock(Client::class);
+        $client
+            ->method('request')
+            ->willReturnMap([
+                ['POST', 'https://api.linode.com/v4/domains/clone', $request, new Response(200, [], $response)],
+            ])
+        ;
+
+        /** @var Client $client */
+        $repository = $this->mockRepository($client);
+
+        $entity = $repository->clone(123, 'example.com');
+
+        self::assertInstanceOf(Domain::class, $entity);
+        self::assertSame(1234, $entity->id);
+        self::assertSame('example.org', $entity->domain);
+        self::assertSame('master', $entity->type);
+    }
+
     public function testGetBaseUri(): void
     {
         $expected = '/domains';

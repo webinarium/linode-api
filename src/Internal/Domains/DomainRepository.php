@@ -59,6 +59,19 @@ class DomainRepository extends AbstractRepository implements DomainRepositoryInt
         return new Domain($this->client, $json);
     }
 
+    public function clone(int $id, string $domain): Domain
+    {
+        $parameters = [
+            'domain' => $domain,
+        ];
+
+        $response = $this->client->api($this->client::REQUEST_POST, sprintf('%s/clone', $this->getBaseUri()), $parameters);
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return new Domain($this->client, $json);
+    }
+
     protected function getBaseUri(): string
     {
         return '/domains';
