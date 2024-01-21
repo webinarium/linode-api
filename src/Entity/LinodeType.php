@@ -41,9 +41,10 @@ class LinodeType extends Entity
     public const FIELD_TRANSFER    = 'transfer';
 
     // Linode type classes.
-    public const CLASS_NANODE   = 'nanode';
-    public const CLASS_STANDARD = 'standard';
-    public const CLASS_HIGHMEM  = 'highmem';
+    public const CLASS_NANODE    = 'nanode';
+    public const CLASS_STANDARD  = 'standard';
+    public const CLASS_DEDICATED = 'dedicated';
+    public const CLASS_HIGHMEM   = 'highmem';
 
     public function __get(string $name): mixed
     {
