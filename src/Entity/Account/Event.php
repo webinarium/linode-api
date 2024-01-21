@@ -52,6 +52,8 @@ class Event extends Entity
     public const FIELD_TIME_REMAINING   = 'time_remaining';
 
     // Event actions.
+    public const ACTION_ACCOUNT_UPDATE             = 'account_update';
+    public const ACTION_ACCOUNT_SETTINGS_UPDATE    = 'account_settings_update';
     public const ACTION_BACKUPS_ENABLE             = 'backups_enable';
     public const ACTION_BACKUPS_CANCEL             = 'backups_cancel';
     public const ACTION_BACKUPS_RESTORE            = 'backups_restore';
@@ -60,19 +62,24 @@ class Event extends Entity
     public const ACTION_CREDIT_CARD_UPDATED        = 'credit_card_updated';
     public const ACTION_DISK_CREATE                = 'disk_create';
     public const ACTION_DISK_DELETE                = 'disk_delete';
+    public const ACTION_DISK_UPDATE                = 'disk_update';
     public const ACTION_DISK_DUPLICATE             = 'disk_duplicate';
     public const ACTION_DISK_IMAGIZE               = 'disk_imagize';
     public const ACTION_DISK_RESIZE                = 'disk_resize';
     public const ACTION_DNS_RECORD_CREATE          = 'dns_record_create';
     public const ACTION_DNS_RECORD_DELETE          = 'dns_record_delete';
+    public const ACTION_DNS_RECORD_UPDATE          = 'dns_record_update';
     public const ACTION_DNS_ZONE_CREATE            = 'dns_zone_create';
     public const ACTION_DNS_ZONE_DELETE            = 'dns_zone_delete';
+    public const ACTION_DNS_ZONE_UPDATE            = 'dns_zone_update';
     public const ACTION_IMAGE_DELETE               = 'image_delete';
+    public const ACTION_IMAGE_UPDATE               = 'image_update';
     public const ACTION_LINODE_ADDIP               = 'linode_addip';
     public const ACTION_LINODE_BOOT                = 'linode_boot';
     public const ACTION_LINODE_CLONE               = 'linode_clone';
     public const ACTION_LINODE_CREATE              = 'linode_create';
     public const ACTION_LINODE_DELETE              = 'linode_delete';
+    public const ACTION_LINODE_UPDATE              = 'linode_update';
     public const ACTION_LINODE_DELETEIP            = 'linode_deleteip';
     public const ACTION_LINODE_MIGRATE             = 'linode_migrate';
     public const ACTION_LINODE_MUTATE              = 'linode_mutate';
@@ -81,20 +88,27 @@ class Event extends Entity
     public const ACTION_LINODE_RESIZE              = 'linode_resize';
     public const ACTION_LINODE_SHUTDOWN            = 'linode_shutdown';
     public const ACTION_LINODE_SNAPSHOT            = 'linode_snapshot';
+    public const ACTION_LINODE_CONFIG_CREATE       = 'linode_config_create';
+    public const ACTION_LINODE_CONFIG_DELETE       = 'linode_config_delete';
+    public const ACTION_LINODE_CONFIG_UPDATE       = 'linode_config_update';
     public const ACTION_LONGVIEWCLIENT_CREATE      = 'longviewclient_create';
     public const ACTION_LONGVIEWCLIENT_DELETE      = 'longviewclient_delete';
+    public const ACTION_LONGVIEWCLIENT_UPDATE      = 'longviewclient_update';
     public const ACTION_MANAGED_DISABLED           = 'managed_disabled';
     public const ACTION_MANAGED_ENABLED            = 'managed_enabled';
     public const ACTION_MANAGED_SERVICE_CREATE     = 'managed_service_create';
     public const ACTION_MANAGED_SERVICE_DELETE     = 'managed_service_delete';
     public const ACTION_NODEBALANCER_CREATE        = 'nodebalancer_create';
     public const ACTION_NODEBALANCER_DELETE        = 'nodebalancer_delete';
+    public const ACTION_NODEBALANCER_UPDATE        = 'nodebalancer_update';
     public const ACTION_NODEBALANCER_CONFIG_CREATE = 'nodebalancer_config_create';
     public const ACTION_NODEBALANCER_CONFIG_DELETE = 'nodebalancer_config_delete';
+    public const ACTION_NODEBALANCER_CONFIG_UPDATE = 'nodebalancer_config_update';
     public const ACTION_PASSWORD_RESET             = 'password_reset';
     public const ACTION_PAYMENT_SUBMITTED          = 'payment_submitted';
     public const ACTION_STACKSCRIPT_CREATE         = 'stackscript_create';
     public const ACTION_STACKSCRIPT_DELETE         = 'stackscript_delete';
+    public const ACTION_STACKSCRIPT_UPDATE         = 'stackscript_update';
     public const ACTION_STACKSCRIPT_PUBLICIZE      = 'stackscript_publicize';
     public const ACTION_STACKSCRIPT_REVISE         = 'stackscript_revise';
     public const ACTION_TFA_DISABLED               = 'tfa_disabled';
@@ -102,10 +116,14 @@ class Event extends Entity
     public const ACTION_TICKET_ATTACHMENT_UPLOAD   = 'ticket_attachment_upload';
     public const ACTION_TICKET_CREATE              = 'ticket_create';
     public const ACTION_TICKET_UPDATE              = 'ticket_update';
+    public const ACTION_USER_SSH_KEY_ADD           = 'user_ssh_key_add';
+    public const ACTION_USER_SSH_KEY_DELETE        = 'user_ssh_key_delete';
+    public const ACTION_USER_SSH_KEY_UPDATE        = 'user_ssh_key_update';
     public const ACTION_VOLUME_ATTACH              = 'volume_attach';
     public const ACTION_VOLUME_CLONE               = 'volume_clone';
     public const ACTION_VOLUME_CREATE              = 'volume_create';
     public const ACTION_VOLUME_DELETE              = 'volume_delete';
+    public const ACTION_VOLUME_UPDATE              = 'volume_update';
     public const ACTION_VOLUME_DETACH              = 'volume_detach';
     public const ACTION_VOLUME_RESIZE              = 'volume_resize';
 

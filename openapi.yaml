@@ -1,6 +1,6 @@
 openapi: 3.0.1
 info:
-  version: 4.0.14
+  version: 4.0.17
   title: Linode API
   x-logo: {
     url: '/api/v4/linode-logo.svg',
@@ -18,14 +18,14 @@ info:
 
 
     This document was generated from our OpenAPI Specification.  See the
-    [OpenAPI website](https://www.openapis.org) for more information.
+    <a target="_top" href="https://www.openapis.org">OpenAPI website</a> for more information.
 
-    [Download the Linode OpenAPI Specification](/api/v4/openapi.yaml)
+    <a target="_top" href="https://developers.linode.com/api/docs/v4/openapi.yaml">Download the Linode OpenAPI Specification</a>.
 
 
     # Changelog
 
-    [View our Changelog](/changelog) to see release
+    <a target="_top" href="https://developers.linode.com/changelog">View our Changelog</a> to see release
     notes on all changes made to our API.
 
     # Access and Authentication
@@ -39,7 +39,7 @@ info:
 
     The easiest way to access the API is with a Personal Access Token (PAT)
     generated from the
-    [Linode Cloud Manager](https://cloud.linode.com/profile/tokens).
+    <a target="_top" href="https://cloud.linode.com/profile/tokens">Linode Cloud Manager</a>.
 
     All scopes for the OAuth security model (defined below) apply to this
     security model as well.
@@ -133,7 +133,7 @@ info:
 
     # Errors
 
-    Success is indicated via [Standard HTTP status codes](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes).
+    Success is indicated via <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes" target="_top">Standard HTTP status codes</a>.
     `2xx` codes indicate success, `4xx` codes indicate a request error, and
     `5xx` errors indicate a server error. A
     request error might be an invalid input, a required parameter being omitted,
@@ -285,7 +285,7 @@ info:
 
     # CLI (Command Line Interface)
 
-    The [Linode CLI](https://github.com/linode/linode-cli) allows you to easily
+    The <a href="https://github.com/linode/linode-cli" target="_top">Linode CLI</a> allows you to easily
     work with the API using intuitive and simple syntax. It requires a
     [Personal Access Token](#section/Personal-Access-Token)
     for authentication, and gives you access to all of the features and functionality
@@ -992,7 +992,7 @@ paths:
       summary: Delete OAuth Client
       description: >
         Deletes an OAuth Client registered with Linode. The Client ID and
-        Client secret will no longer be accepted by https://login.linode.com,
+        Client secret will no longer be accepted by <a target="_top" href="https://login.linode.com">https://login.linode.com</a>,
         and all tokens issued to this client will be invalidated (meaning that
         if your application was using a token, it will no longer work).
       operationId: deleteClient
@@ -1330,7 +1330,7 @@ paths:
               --cancel_url https://example.org \
               --redirect_url https://example.org \
               --usd 120.50
-  /account/payment/paypal/execute:
+  /account/payments/paypal/execute:
     x-linode-cli-command: account
     post:
       x-linode-grant: read_write
@@ -4989,8 +4989,6 @@ paths:
         be completed first before you can initiate a resize. Additionally, the
         following criteria must be met in order to resize a Linode:
 
-          * Any pending free upgrades to the Linode's current Type must be performed
-          before a resize can occur.
           * The Linode must not have a pending migration.
           * Your Account cannot have an outstanding balance.
           * The Linode must not have more disk allocation than the new Type allows.
@@ -5239,7 +5237,7 @@ paths:
 
 
         For more information on StackScripts, please read our guide:
-        [Automate Deployment with StackScripts](https://linode.com/docs/platform/stackscripts/).
+        <a target="_top" href="https://linode.com/docs/platform/stackscripts/">Automate Deployment with StackScripts</a>.
       operationId: getStackScripts
       x-linode-cli-action: list
       security:
@@ -6599,7 +6597,7 @@ paths:
           curl -H "Content-Type: application/json" \
               -H "Authorization: Bearer $TOKEN" \
               -X POST -d '{
-                "service_type": "URL",
+                "service_type": "url",
                 "label": "prod-1",
                 "address": "https://example.org",
                 "timeout": 30,
@@ -6697,7 +6695,7 @@ paths:
           curl -H "Content-Type: application/json" \
               -H "Authorization: Bearer $TOKEN" \
               -X PUT -d '{
-                "service_type": "URL",
+                "service_type": "url",
                 "label": "prod-1",
                 "address": "https://example.org",
                 "timeout": 30,
@@ -8978,7 +8976,7 @@ paths:
               https://api.linode.com/v4/profile/devices/123
       - lang: CLI
         source: >
-          linode-cli profile device-revoke 123          
+          linode-cli profile device-revoke 123
   /profile/sshkeys:
     x-linode-cli-command: sshkeys
     description: >
@@ -9687,7 +9685,7 @@ paths:
                   description: >
                     The new Tag.
                   minLength: 3
-                  maxLength: 30
+                  maxLength: 50
                   example: example tag
                 linodes:
                   type: array
@@ -11002,7 +11000,7 @@ components:
           description: |
             This field is required only if the StackScript being deployed requires input
             data from the User for successful completion. See
-            [Variables and UDFs](https://www.linode.com/docs/platform/stackscripts/#variables-and-udfs)
+            <a target="_top" href="https://www.linode.com/docs/platform/stackscripts/#variables-and-udfs">Variables and UDFs</a>
             for more details. This field is required to be valid JSON.
     Domain:
       type: object
@@ -11279,6 +11277,8 @@ components:
         action:
           type: string
           enum:
+          - account_update
+          - account_settings_update
           - backups_enable
           - backups_cancel
           - backups_restore
@@ -11287,19 +11287,24 @@ components:
           - credit_card_updated
           - disk_create
           - disk_delete
+          - disk_update
           - disk_duplicate
           - disk_imagize
           - disk_resize
           - dns_record_create
           - dns_record_delete
+          - dns_record_update
           - dns_zone_create
           - dns_zone_delete
+          - dns_zone_update
           - image_delete
+          - image_update
           - linode_addip
           - linode_boot
           - linode_clone
           - linode_create
           - linode_delete
+          - linode_update
           - linode_deleteip
           - linode_migrate
           - linode_mutate
@@ -11308,20 +11313,27 @@ components:
           - linode_resize
           - linode_shutdown
           - linode_snapshot
+          - linode_config_create
+          - linode_config_delete
+          - linode_config_update
           - longviewclient_create
           - longviewclient_delete
+          - longviewclient_update
           - managed_disabled
           - managed_enabled
           - managed_service_create
           - managed_service_delete
           - nodebalancer_create
           - nodebalancer_delete
+          - nodebalancer_update
           - nodebalancer_config_create
           - nodebalancer_config_delete
+          - nodebalancer_config_update
           - password_reset
           - payment_submitted
           - stackscript_create
           - stackscript_delete
+          - stackscript_update
           - stackscript_publicize
           - stackscript_revise
           - tfa_disabled
@@ -11329,10 +11341,14 @@ components:
           - ticket_attachment_upload
           - ticket_create
           - ticket_update
+          - user_ssh_key_add
+          - user_ssh_key_delete
+          - user_ssh_key_update
           - volume_attach
           - volume_clone
           - volume_create
           - volume_delete
+          - volume_update
           - volume_detach
           - volume_resize
           readOnly: true
@@ -11359,6 +11375,7 @@ components:
               type: integer
               description: The unique ID for this Event's Entity.
               example: 11111
+              x-linode-filterable: true
             label:
               type: string
               description: >
@@ -11370,6 +11387,7 @@ components:
               description: >
                 The type of entity this Event is related to.
               example: ticket
+              x-linode-filterable: true
             url:
               type: string
               description: >
@@ -13308,11 +13326,11 @@ components:
         service_type:
           type: string
           enum:
-          - URL
-          - TCP
+          - url
+          - tcp
           description: >
             How this Service is monitored.
-          example: URL
+          example: url
           x-linode-cli-display: 3
         label:
           type: string
@@ -13979,7 +13997,7 @@ components:
       description: >
         A third-party application registered to Linode that users may log into
         with their Linode account through our authentication server at
-        https://login.linode.com.  Using an OAuth Client, a third-party
+        <a target="_top" href="https://login.linode.com">https://login.linode.com</a>.  Using an OAuth Client, a third-party
         developer may be given access to some, or all, of a User's account for
         the purposes of their application.
       properties:
@@ -13995,7 +14013,7 @@ components:
           type: string
           format: url
           description: >
-            The location a successful log in from https://login.linode.com should be
+            The location a successful log in from <a target="_top" href="https://login.linode.com">https://login.linode.com</a> should be
             redirected to for this client.  The receiver of this redirect should be
             ready to accept an OAuth exchange code and finish the OAuth exchange.
           example: https://example.org/oauth/callback
@@ -14048,7 +14066,7 @@ components:
           description: >
             If this is a public or private OAuth Client.  Public clients have a slightly
             different authentication workflow than private clients.  See the
-            [OAuth spec](https://oauth.net/2/) for more details.
+            <a target="_top" href="https://oauth.net/2/">OAuth spec</a> for more details.
           example: false
           readOnly: true
           x-linode-cli-display: 4
@@ -14185,7 +14203,7 @@ components:
           description: >
             The scopes this token was created with. These define what parts of
             the Account the token can be used to access. Many command-line tools,
-            such as the [Linode CLI](https://github.com/linode/linode-cli),
+            such as the <a target="_top" href="https://github.com/linode/linode-cli">Linode CLI</a>,
             require tokens with access to `*`. Tokens with more restrictive scopes
             are generally more secure.
           example: '*'
@@ -14507,7 +14525,7 @@ components:
           description: >
             This is a list of fields defined with a special syntax inside this StackScript
             that allow for supplying customized parameters during deployment. See
-            [Variables and UDFs](https://www.linode.com/docs/platform/stackscripts/#variables-and-udfs)
+            <a target="_top" href="https://www.linode.com/docs/platform/stackscripts/#variables-and-udfs">Variables and UDFs</a>
             for more information.
           items:
             $ref: '#/components/schemas/UserDefinedField'
@@ -14901,7 +14919,7 @@ components:
     TrustedDevice:
       type: object
       description: >
-        A trusted device object represents an active Remember Me session with login.linode.com.
+        A trusted device object represents an active Remember Me session with <a target="_top" href="https://login.linode.com">login.linode.com</a>.
       properties:
         id:
           type: integer
@@ -14936,7 +14954,7 @@ components:
           format: date-time
           description: >
             The last time this TrustedDevice was successfully used to authenticate to
-            login.linode.com.
+            <a target="_top" href="https://login.linode.com">login.linode.com</a>.
           example: "2018-01-05T12:57:12"
           readOnly: true
         last_remote_addr:
@@ -14944,7 +14962,7 @@ components:
           description: >
             The last IP Address to successfully authenticate with this TrustedDevice.
           example: 12.34.56.78
-          readOnly: true          
+          readOnly: true
     SSHKey:
       type: object
       description: >
