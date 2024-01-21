@@ -15,9 +15,10 @@ use Linode\Entity\Entity;
 use Linode\Entity\Networking\IPAddress;
 
 /**
- * @property array|IPAddress[] $public
- * @property array|IPAddress[] $private
- * @property array|IPAddress[] $shared
+ * @property array|IPAddress[] $public   A list of public IP Address objects belonging to this Linode.
+ * @property array|IPAddress[] $private  A list of private IP Address objects belonging to this Linode.
+ * @property array|IPAddress[] $shared   A list of shared IP Address objects assigned to this Linode.
+ * @property array|IPAddress[] $reserved A list of reserved IP Address objects belonging to this Linode.
  */
 class IPv4Information extends Entity
 {

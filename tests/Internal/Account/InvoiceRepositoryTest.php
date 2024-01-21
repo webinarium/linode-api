@@ -48,6 +48,8 @@ final class InvoiceRepositoryTest extends TestCase
             'id',
             'date',
             'label',
+            'subtotal',
+            'tax',
             'total',
         ];
 

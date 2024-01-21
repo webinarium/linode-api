@@ -72,8 +72,10 @@ class Event extends Entity
     public const ACTION_DNS_ZONE_CREATE            = 'dns_zone_create';
     public const ACTION_DNS_ZONE_DELETE            = 'dns_zone_delete';
     public const ACTION_DNS_ZONE_UPDATE            = 'dns_zone_update';
+    public const ACTION_HOST_REBOOT                = 'host_reboot';
     public const ACTION_IMAGE_DELETE               = 'image_delete';
     public const ACTION_IMAGE_UPDATE               = 'image_update';
+    public const ACTION_LASSIE_REBOOT              = 'lassie_reboot';
     public const ACTION_LINODE_ADDIP               = 'linode_addip';
     public const ACTION_LINODE_BOOT                = 'linode_boot';
     public const ACTION_LINODE_CLONE               = 'linode_clone';

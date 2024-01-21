@@ -39,6 +39,8 @@ class InvoiceItemRepository extends AbstractRepository implements InvoiceItemRep
             InvoiceItem::FIELD_FROM,
             InvoiceItem::FIELD_TO,
             InvoiceItem::FIELD_AMOUNT,
+            InvoiceItem::FIELD_TAX,
+            InvoiceItem::FIELD_TOTAL,
             InvoiceItem::FIELD_QUANTITY,
             InvoiceItem::FIELD_UNITPRICE,
             InvoiceItem::FIELD_TYPE,
