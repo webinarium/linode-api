@@ -62,10 +62,11 @@ class LinodeRepository extends AbstractRepository implements LinodeRepositoryInt
         return new Linode($this->client, $json);
     }
 
-    public function resize(int $id, string $type): void
+    public function resize(int $id, string $type, bool $allow_auto_disk_resize = true): void
     {
         $parameters = [
-            'type' => $type,
+            'type'                   => $type,
+            'allow_auto_disk_resize' => $allow_auto_disk_resize,
         ];
 
         $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/resize', $this->getBaseUri(), $id), $parameters);
@@ -76,9 +77,15 @@ class LinodeRepository extends AbstractRepository implements LinodeRepositoryInt
         $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/mutate', $this->getBaseUri(), $id));
     }
 
-    public function migrate(int $id): void
+    public function migrate(int $id, string $region = null): void
     {
-        $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/migrate', $this->getBaseUri(), $id));
+        $parameters = [];
+
+        if ($region) {
+            $parameters['region'] = $region;
+        }
+
+        $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/migrate', $this->getBaseUri(), $id), $parameters);
     }
 
     public function boot(int $id, int $config_id = null): void

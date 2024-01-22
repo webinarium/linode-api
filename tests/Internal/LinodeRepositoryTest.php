@@ -431,7 +431,8 @@ final class LinodeRepositoryTest extends TestCase
     {
         $request = [
             'json' => [
-                'type' => 'g6-standard-2',
+                'type'                   => 'g6-standard-2',
+                'allow_auto_disk_resize' => true,
             ],
         ];
 
@@ -471,18 +472,24 @@ final class LinodeRepositoryTest extends TestCase
 
     public function testMigrate(): void
     {
+        $request = [
+            'json' => [
+                'region' => 'us-central',
+            ],
+        ];
+
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
-                ['POST', 'https://api.linode.com/v4/linode/instances/123/migrate', [], new Response(200, [], null)],
+                ['POST', 'https://api.linode.com/v4/linode/instances/123/migrate', $request, new Response(200, [], null)],
             ])
         ;
 
         /** @var Client $client */
         $repository = $this->mockRepository($client);
 
-        $repository->migrate(123);
+        $repository->migrate(123, 'us-central');
 
         self::assertTrue(true);
     }

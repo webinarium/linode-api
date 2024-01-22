@@ -73,9 +73,14 @@ interface LinodeRepositoryInterface extends RepositoryInterface
      * Type. If any actions are currently running or queued, those actions must
      * be completed first before you can initiate a resize.
      *
+     * @param string $type                   the ID representing the Linode Type
+     * @param bool   $allow_auto_disk_resize Automatically resize disks when resizing a Linode.
+     *                                       When resizing down to a smaller plan your Linode's
+     *                                       data must fit within the smaller disk size.
+     *
      * @throws LinodeException
      */
-    public function resize(int $id, string $type): void;
+    public function resize(int $id, string $type, bool $allow_auto_disk_resize = true): void;
 
     /**
      * Linodes created with now-deprecated Types are entitled to a free
@@ -92,14 +97,20 @@ interface LinodeRepositoryInterface extends RepositoryInterface
 
     /**
      * In some circumstances, a Linode may have pending migrations scheduled that
-     * that you can initiate when convenient. In these cases, a Notification
+     * you can initiate when convenient. In these cases, a Notification
      * will be returned from `/account/notifications`. This endpoint initiates
      * the scheduled migration, which will shut the Linode down, migrate it,
      * and then bring it back to its original state.
      *
+     * @param ?string $region The name of the region to which the Linode will be migrated.
+     *                        Must be a valid region slug. A list of regions can be viewed
+     *                        by using the `GET /regions` endpoint.
+     *                        A cross-region migration will cancel a pending migration
+     *                        that has not yet been initiated.
+     *
      * @throws LinodeException
      */
-    public function migrate(int $id): void;
+    public function migrate(int $id, ?string $region = null): void;
 
     /**
      * Boots a Linode you have permission to modify. If no parameters are given, a Config profile
