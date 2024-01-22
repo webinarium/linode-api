@@ -27,4 +27,4 @@ test:
 	@./bin/phpunit
 
 coverage:
-	@XDEBUG_MODE=coverage ./bin/phpunit --coverage-text
+	@XDEBUG_MODE=coverage ./bin/phpunit --coverage-html=coverage
