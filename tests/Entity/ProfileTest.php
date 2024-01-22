@@ -152,7 +152,65 @@ final class ProfileTest extends TestCase
         self::assertSame('871be32f49c1411b14f29f618aaf0c14637fb8d3', $entity->referrals->code);
     }
 
-    public function testDisableFA(): void
+    public function testGetProfilePreferences(): void
+    {
+        $response = <<<'JSON'
+                        {
+                            "key1": "value1",
+                            "key2": "value2"
+                        }
+            JSON;
+
+        $this->client
+            ->method('api')
+            ->willReturnMap([
+                ['GET', '/profile/preferences', [], [], new Response(200, [], $response)],
+            ])
+        ;
+
+        $profile = new Profile($this->client);
+
+        $result = $profile->getProfilePreferences();
+
+        self::assertIsArray($result);
+        self::assertSame(['key1', 'key2'], array_keys($result));
+        self::assertSame(['value1', 'value2'], array_values($result));
+    }
+
+    public function testSetProfilePreferences(): void
+    {
+        $request = [
+            'key1' => 'value1',
+            'key2' => 'value2',
+        ];
+
+        $response = <<<'JSON'
+                        {
+                            "key1": "value1",
+                            "key2": "value2"
+                        }
+            JSON;
+
+        $this->client
+            ->method('api')
+            ->willReturnMap([
+                ['PUT', '/profile/preferences', $request, [], new Response(200, [], $response)],
+            ])
+        ;
+
+        $profile = new Profile($this->client);
+
+        $result = $profile->setProfilePreferences([
+            'key1' => 'value1',
+            'key2' => 'value2',
+        ]);
+
+        self::assertIsArray($result);
+        self::assertSame(['key1', 'key2'], array_keys($result));
+        self::assertSame(['value1', 'value2'], array_values($result));
+    }
+
+    public function testDisable2FA(): void
     {
         $this->client
             ->method('api')
@@ -168,7 +226,7 @@ final class ProfileTest extends TestCase
         self::assertTrue(true);
     }
 
-    public function testEnableFA(): void
+    public function testEnable2FA(): void
     {
         $response = <<<'JSON'
                         {

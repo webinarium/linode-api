@@ -39,7 +39,8 @@ use Linode\Repository\Linode as LinodeRepository;
  *                                                                                      address if needed. You may need to open a support ticket to get
  *                                                                                      additional IPv4 addresses.
  * @property string                                                   $ipv6             This Linode's IPv6 SLAAC addresses. This address is specific to
- *                                                                                      a Linode, and may not be shared.
+ *                                                                                      a Linode, and may not be shared. If the Linode has not been assigned
+ *                                                                                      an IPv6 address, the return value will be `null`.
  * @property string                                                   $hypervisor       The virtualization software powering this Linode
  *                                                                                      (@see `HYPERVISOR_...` constants).
  * @property bool                                                     $watchdog_enabled The watchdog, named Lassie, is a Shutdown Watchdog that monitors

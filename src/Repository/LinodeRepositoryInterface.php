@@ -106,7 +106,7 @@ interface LinodeRepositoryInterface extends RepositoryInterface
      * the scheduled migration, which will shut the Linode down, migrate it,
      * and then bring it back to its original state.
      *
-     * @param ?string $region The name of the region to which the Linode will be migrated.
+     * @param ?string $region The region to which the Linode will be migrated.
      *                        Must be a valid region slug. A list of regions can be viewed
      *                        by using the `GET /regions` endpoint.
      *                        A cross-region migration will cancel a pending migration

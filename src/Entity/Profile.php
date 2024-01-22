@@ -92,6 +92,49 @@ class Profile
     }
 
     /**
+     * View a list of user preferences tied to the OAuth client that generated
+     * the token making the request. The user preferences endpoints allow
+     * consumers of the API to store arbitrary JSON data, such as a user's font
+     * size preference or preferred display name. User preferences are available
+     * for each OAuth client registered to your account, and as such an account can
+     * have multiple user preferences.
+     *
+     * @return array a dictionary of user preferences
+     *
+     * @throws LinodeException
+     */
+    public function getProfilePreferences(): array
+    {
+        $response = $this->client->api($this->client::REQUEST_GET, '/profile/preferences');
+        $contents = $response->getBody()->getContents();
+
+        return json_decode($contents, true);
+    }
+
+    /**
+     * Updates a user's preferences. These preferences are tied to the
+     * OAuth client that generated the token making the request. The user
+     * preferences endpoints allow consumers of the API to store arbitrary
+     * JSON data, such as a user's font size preference or preferred display
+     * name. An account may have multiple preferences. Preferences, and the
+     * pertaining request body, may contain any arbitrary JSON data that
+     * the user would like to store.
+     *
+     * @param array $preferences the user preferences to update or store
+     *
+     * @return array a dictionary of user preferences
+     *
+     * @throws LinodeException
+     */
+    public function setProfilePreferences(array $preferences): array
+    {
+        $response = $this->client->api($this->client::REQUEST_PUT, '/profile/preferences', $preferences);
+        $contents = $response->getBody()->getContents();
+
+        return json_decode($contents, true);
+    }
+
+    /**
      * Disables Two Factor Authentication for your User. Once successful,
      * login attempts from untrusted computers will only require a password
      * before being successful. This is less secure, and is discouraged.
