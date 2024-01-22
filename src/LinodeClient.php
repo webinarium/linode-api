@@ -28,6 +28,8 @@ use Linode\Internal\Networking\IPAddressRepository;
 use Linode\Internal\Networking\IPv6PoolRepository;
 use Linode\Internal\Networking\IPv6RangeRepository;
 use Linode\Internal\NodeBalancers\NodeBalancerRepository;
+use Linode\Internal\ObjectStorage\ObjectStorageClusterRepository;
+use Linode\Internal\ObjectStorage\ObjectStorageKeyRepository;
 use Linode\Internal\RegionRepository;
 use Linode\Internal\StackScriptRepository;
 use Linode\Internal\Support\SupportTicketRepository;
@@ -38,23 +40,25 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * Linode API client.
  *
- * @property Entity\Account                                              $account
- * @property Repository\Domains\DomainRepositoryInterface                $domains
- * @property Repository\ImageRepositoryInterface                         $images
- * @property Repository\Networking\IPAddressRepositoryInterface          $ips
- * @property Repository\Networking\IPv6PoolRepositoryInterface           $ipv6_pools
- * @property Repository\Networking\IPv6RangeRepositoryInterface          $ipv6_ranges
- * @property Repository\KernelRepositoryInterface                        $kernels
- * @property Repository\LinodeRepositoryInterface                        $linodes
- * @property Repository\LinodeTypeRepositoryInterface                    $linode_types
- * @property Repository\Longview\LongviewSubscriptionRepositoryInterface $longview_subscriptions
- * @property Repository\NodeBalancers\NodeBalancerRepositoryInterface    $node_balancers
- * @property Entity\Profile                                              $profile
- * @property Repository\RegionRepositoryInterface                        $regions
- * @property Repository\StackScriptRepositoryInterface                   $stackscripts
- * @property Repository\Tags\TagRepositoryInterface                      $tags
- * @property Repository\Support\SupportTicketRepositoryInterface         $tickets
- * @property Repository\VolumeRepositoryInterface                        $volumes
+ * @property Entity\Account                                                   $account
+ * @property Repository\Domains\DomainRepositoryInterface                     $domains
+ * @property Repository\ImageRepositoryInterface                              $images
+ * @property Repository\Networking\IPAddressRepositoryInterface               $ips
+ * @property Repository\Networking\IPv6PoolRepositoryInterface                $ipv6_pools
+ * @property Repository\Networking\IPv6RangeRepositoryInterface               $ipv6_ranges
+ * @property Repository\KernelRepositoryInterface                             $kernels
+ * @property Repository\LinodeRepositoryInterface                             $linodes
+ * @property Repository\LinodeTypeRepositoryInterface                         $linode_types
+ * @property Repository\Longview\LongviewSubscriptionRepositoryInterface      $longview_subscriptions
+ * @property Repository\NodeBalancers\NodeBalancerRepositoryInterface         $node_balancers
+ * @property Repository\ObjectStorage\ObjectStorageClusterRepositoryInterface $object_storage_clusters
+ * @property Repository\ObjectStorage\ObjectStorageKeyRepositoryInterface     $object_storage_keys
+ * @property Entity\Profile                                                   $profile
+ * @property Repository\RegionRepositoryInterface                             $regions
+ * @property Repository\StackScriptRepositoryInterface                        $stackscripts
+ * @property Repository\Tags\TagRepositoryInterface                           $tags
+ * @property Repository\Support\SupportTicketRepositoryInterface              $tickets
+ * @property Repository\VolumeRepositoryInterface                             $volumes
  */
 class LinodeClient
 {
@@ -88,24 +92,26 @@ class LinodeClient
     public function __get(string $name): null|Account|Profile|Repository\RepositoryInterface
     {
         return match ($name) {
-            'account'                => new Account($this),
-            'domains'                => new DomainRepository($this),
-            'images'                 => new ImageRepository($this),
-            'ips'                    => new IPAddressRepository($this),
-            'ipv6_pools'             => new IPv6PoolRepository($this),
-            'ipv6_ranges'            => new IPv6RangeRepository($this),
-            'kernels'                => new KernelRepository($this),
-            'linodes'                => new LinodeRepository($this),
-            'linode_types'           => new LinodeTypeRepository($this),
-            'longview_subscriptions' => new LongviewSubscriptionRepository($this),
-            'node_balancers'         => new NodeBalancerRepository($this),
-            'profile'                => new Profile($this),
-            'regions'                => new RegionRepository($this),
-            'stackscripts'           => new StackScriptRepository($this),
-            'tags'                   => new TagRepository($this),
-            'tickets'                => new SupportTicketRepository($this),
-            'volumes'                => new VolumeRepository($this),
-            default                  => null,
+            'account'                 => new Account($this),
+            'domains'                 => new DomainRepository($this),
+            'images'                  => new ImageRepository($this),
+            'ips'                     => new IPAddressRepository($this),
+            'ipv6_pools'              => new IPv6PoolRepository($this),
+            'ipv6_ranges'             => new IPv6RangeRepository($this),
+            'kernels'                 => new KernelRepository($this),
+            'linodes'                 => new LinodeRepository($this),
+            'linode_types'            => new LinodeTypeRepository($this),
+            'longview_subscriptions'  => new LongviewSubscriptionRepository($this),
+            'node_balancers'          => new NodeBalancerRepository($this),
+            'object_storage_clusters' => new ObjectStorageClusterRepository($this),
+            'object_storage_keys'     => new ObjectStorageKeyRepository($this),
+            'profile'                 => new Profile($this),
+            'regions'                 => new RegionRepository($this),
+            'stackscripts'            => new StackScriptRepository($this),
+            'tags'                    => new TagRepository($this),
+            'tickets'                 => new SupportTicketRepository($this),
+            'volumes'                 => new VolumeRepository($this),
+            default                   => null,
         };
     }
 

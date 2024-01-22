@@ -9,35 +9,35 @@
 //
 // ---------------------------------------------------------------------
 
-namespace Linode\Internal;
+namespace Linode\Internal\ObjectStorage;
 
-use Linode\Entity\Region;
+use Linode\Entity\ObjectStorage\ObjectStorageCluster;
 use Linode\LinodeClient;
 use Linode\ReflectionTrait;
-use Linode\Repository\RegionRepositoryInterface;
+use Linode\Repository\ObjectStorage\ObjectStorageClusterRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  *
- * @coversDefaultClass \Linode\Internal\RegionRepository
+ * @coversDefaultClass \Linode\Internal\ObjectStorage\ObjectStorageClusterRepository
  */
-final class RegionRepositoryTest extends TestCase
+final class ObjectStorageClusterRepositoryTest extends TestCase
 {
     use ReflectionTrait;
 
-    protected RegionRepositoryInterface $repository;
+    protected ObjectStorageClusterRepositoryInterface $repository;
 
     protected function setUp(): void
     {
         $client = new LinodeClient();
 
-        $this->repository = new RegionRepository($client);
+        $this->repository = new ObjectStorageClusterRepository($client);
     }
 
     public function testGetBaseUri(): void
     {
-        $expected = '/regions';
+        $expected = 'beta/object-storage/clusters';
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getBaseUri'));
     }
@@ -46,8 +46,10 @@ final class RegionRepositoryTest extends TestCase
     {
         $expected = [
             'id',
-            'country',
-            'capabilities',
+            'domain',
+            'status',
+            'region',
+            'static_site_domain',
         ];
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));
@@ -55,6 +57,6 @@ final class RegionRepositoryTest extends TestCase
 
     public function testJsonToEntity(): void
     {
-        self::assertInstanceOf(Region::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
+        self::assertInstanceOf(ObjectStorageCluster::class, $this->callMethod($this->repository, 'jsonToEntity', [[]]));
     }
 }

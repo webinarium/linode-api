@@ -23,6 +23,7 @@ namespace Linode\Entity;
  * @property int         $vcpus       The number of VCPU cores this Linode Type offers.
  * @property int         $network_out The Mbits outbound bandwidth allocation.
  * @property int         $transfer    The monthly outbound transfer amount, in MB.
+ * @property int         $gpus        The number of GPUs this Linode Type offers.
  * @property Price       $price       Cost in US dollars, broken down into hourly and monthly charges.
  * @property array       $addons      A list of optional add-on services for Linodes and their associated costs.
  * @property null|string $successor   The Linode Type that a `mutate` operation will upgrade to for a Linode of this type.
@@ -39,11 +40,13 @@ class LinodeType extends Entity
     public const FIELD_VCPLUS      = 'vcpus';
     public const FIELD_NETWORK_OUT = 'network_out';
     public const FIELD_TRANSFER    = 'transfer';
+    public const FIELD_GPUS        = 'gpus';
 
     // Linode type classes.
     public const CLASS_NANODE    = 'nanode';
     public const CLASS_STANDARD  = 'standard';
     public const CLASS_DEDICATED = 'dedicated';
+    public const CLASS_GPU       = 'gpu';
     public const CLASS_HIGHMEM   = 'highmem';
 
     public function __get(string $name): mixed

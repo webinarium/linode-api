@@ -53,6 +53,7 @@ final class LinodeTypeRepositoryTest extends TestCase
             'vcpus',
             'network_out',
             'transfer',
+            'gpus',
         ];
 
         self::assertSame($expected, $this->callMethod($this->repository, 'getSupportedFields'));

@@ -39,6 +39,7 @@ use Linode\Entity\Entity;
  * @property string      $zip                The zip code of this Account's billing address.
  * @property string      $country            The two-letter country code of this Account's billing address.
  * @property string      $active_since       The datetime of when the account was activated.
+ * @property string[]    $capabilities       A list of capabilities your account supports.
  */
 class AccountInformation extends Entity
 {

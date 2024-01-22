@@ -27,6 +27,7 @@ class RegionRepository extends AbstractRepository implements RegionRepositoryInt
         return [
             Region::FIELD_ID,
             Region::FIELD_COUNTRY,
+            Region::FIELD_CAPABILITIES,
         ];
     }
 

@@ -33,6 +33,7 @@ class LinodeTypeRepository extends AbstractRepository implements LinodeTypeRepos
             LinodeType::FIELD_VCPLUS,
             LinodeType::FIELD_NETWORK_OUT,
             LinodeType::FIELD_TRANSFER,
+            LinodeType::FIELD_GPUS,
         ];
     }
 

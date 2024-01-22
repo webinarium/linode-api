@@ -29,6 +29,8 @@ use Linode\Internal\Networking\IPAddressRepository;
 use Linode\Internal\Networking\IPv6PoolRepository;
 use Linode\Internal\Networking\IPv6RangeRepository;
 use Linode\Internal\NodeBalancers\NodeBalancerRepository;
+use Linode\Internal\ObjectStorage\ObjectStorageClusterRepository;
+use Linode\Internal\ObjectStorage\ObjectStorageKeyRepository;
 use Linode\Internal\RegionRepository;
 use Linode\Internal\StackScriptRepository;
 use Linode\Internal\Support\SupportTicketRepository;
@@ -61,6 +63,8 @@ final class LinodeClientTest extends TestCase
         self::assertInstanceOf(LinodeTypeRepository::class, $object->linode_types);
         self::assertInstanceOf(LongviewSubscriptionRepository::class, $object->longview_subscriptions);
         self::assertInstanceOf(NodeBalancerRepository::class, $object->node_balancers);
+        self::assertInstanceOf(ObjectStorageClusterRepository::class, $object->object_storage_clusters);
+        self::assertInstanceOf(ObjectStorageKeyRepository::class, $object->object_storage_keys);
         self::assertInstanceOf(Profile::class, $object->profile);
         self::assertInstanceOf(RegionRepository::class, $object->regions);
         self::assertInstanceOf(StackScriptRepository::class, $object->stackscripts);
