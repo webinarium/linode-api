@@ -21,7 +21,7 @@ use Linode\Repository\RepositoryInterface;
 interface ManagedServiceRepositoryInterface extends RepositoryInterface
 {
     /**
-     * Creates a Managed Service. Linode Managed will being monitoring this
+     * Creates a Managed Service. Linode Managed will begin monitoring this
      * service and reporting and attempting to resolve any Issues.
      *
      * @throws LinodeException
@@ -55,4 +55,16 @@ interface ManagedServiceRepositoryInterface extends RepositoryInterface
      * @throws LinodeException
      */
     public function enable(int $id): ManagedService;
+
+    /**
+     * Returns the unique SSH public key assigned to your Linode account's
+     * Managed service. If you add this public key to a Linode on your account,
+     * Linode special forces will be able to log in to the Linode with this key
+     * when attempting to resolve issues.
+     *
+     * @return string the unique SSH public key assigned to your Linode account's Managed service
+     *
+     * @throws LinodeException
+     */
+    public function getSshKey(): string;
 }

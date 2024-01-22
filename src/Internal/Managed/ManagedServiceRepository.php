@@ -63,6 +63,15 @@ class ManagedServiceRepository extends AbstractRepository implements ManagedServ
         return new ManagedService($this->client, $json);
     }
 
+    public function getSshKey(): string
+    {
+        $response = $this->client->api($this->client::REQUEST_GET, '/managed/credentials/sshkey');
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return $json['ssh_key'];
+    }
+
     protected function getBaseUri(): string
     {
         return '/managed/services';

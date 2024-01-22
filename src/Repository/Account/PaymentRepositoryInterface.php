@@ -24,7 +24,8 @@ interface PaymentRepositoryInterface extends RepositoryInterface
     /**
      * Makes a Payment to your Account via credit card. This will charge your credit card the requested amount.
      *
-     * @param string $usd the amount in US Dollars of the Payment
+     * @param string $usd The amount in US Dollars of the Payment. The maximum credit card
+     *                    payment that can be made is $50,000 dollars.
      * @param string $cvv CVV (Card Verification Value) of the credit card to be used for the Payment
      *
      * @throws LinodeException

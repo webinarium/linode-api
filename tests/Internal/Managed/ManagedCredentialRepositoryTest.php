@@ -111,6 +111,34 @@ final class ManagedCredentialRepositoryTest extends TestCase
         self::assertSame('prod-password-1', $entity->label);
     }
 
+    public function testSetLoginInformation(): void
+    {
+        $request = [
+            'json' => [
+                'username' => 'johndoe',
+                'password' => 's3cur3P@ssw0rd',
+            ],
+        ];
+
+        $client = $this->createMock(Client::class);
+        $client
+            ->method('request')
+            ->willReturnMap([
+                ['POST', 'https://api.linode.com/v4/managed/credentials/9991/update', $request, new Response(200, [], null)],
+            ])
+        ;
+
+        /** @var Client $client */
+        $repository = $this->mockRepository($client);
+
+        $repository->setLoginInformation(9991, [
+            ManagedCredential::FIELD_USERNAME => 'johndoe',
+            ManagedCredential::FIELD_PASSWORD => 's3cur3P@ssw0rd',
+        ]);
+
+        self::assertTrue(true);
+    }
+
     public function testDelete(): void
     {
         $client = $this->createMock(Client::class);

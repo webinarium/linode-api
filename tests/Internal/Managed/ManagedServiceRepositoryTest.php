@@ -271,6 +271,30 @@ final class ManagedServiceRepositoryTest extends TestCase
         self::assertSame('prod-1', $entity->label);
     }
 
+    public function testGetSshKey(): void
+    {
+        $response = <<<'JSON'
+                        {
+                            "ssh_key": "ssh-rsa AAAAB...oD2ZQ== managedservices@linode"
+                        }
+            JSON;
+
+        $client = $this->createMock(Client::class);
+        $client
+            ->method('request')
+            ->willReturnMap([
+                ['GET', 'https://api.linode.com/v4/managed/credentials/sshkey', [], new Response(200, [], $response)],
+            ])
+        ;
+
+        /** @var Client $client */
+        $repository = $this->mockRepository($client);
+
+        $result = $repository->getSshKey();
+
+        self::assertSame('ssh-rsa AAAAB...oD2ZQ== managedservices@linode', $result);
+    }
+
     public function testGetBaseUri(): void
     {
         $expected = '/managed/services';

@@ -47,14 +47,28 @@ use Linode\Repository\NodeBalancers\NodeBalancerNodeRepositoryInterface;
  * @property bool                                $check_passive   If true, any response from this backend with a `5xx` status code will be
  *                                                                enough for it to be considered unhealthy and taken out of rotation.
  * @property string                              $cipher_suite    What ciphers to use for SSL connections served by this NodeBalancer.
- * @property string                              $ssl_commonname  The common name for the SSL certification this port is serving
- *                                                                if this port is not configured to use SSL.
- * @property string                              $ssl_fingerprint The fingerprint for the SSL certification this port is serving
- *                                                                if this port is not configured to use SSL.
- * @property string                              $ssl_cert        The certificate this port is serving. This is not returned. If set,
- *                                                                this field will come back as "<REDACTED>".
- * @property string                              $ssl_key         The private key corresponding to this port's certificate. This is not
- *                                                                returned. If set, this field will come back as "<REDACTED>".
+ * @property string                              $ssl_commonname  The read-only common name automatically derived from the SSL certificate assigned to this
+ *                                                                NodeBalancerConfig. Please refer to this field to verify that the appropriate
+ *                                                                certificate is assigned to your NodeBalancerConfig.
+ * @property string                              $ssl_fingerprint The read-only fingerprint automatically derived from the SSL certificate assigned to this
+ *                                                                NodeBalancerConfig. Please refer to this field to verify that the appropriate
+ *                                                                certificate is assigned to your NodeBalancerConfig.
+ * @property string                              $ssl_cert        The PEM-formatted public SSL certificate (or the combined PEM-formatted SSL
+ *                                                                certificate and Certificate Authority chain) that should be served on this
+ *                                                                NodeBalancerConfig's port.
+ *                                                                The contents of this field will not be shown in any responses that display
+ *                                                                the NodeBalancerConfig. Instead, `<REDACTED>` will be printed where the field
+ *                                                                appears.
+ *                                                                The read-only `ssl_commonname` and `ssl_fingerprint` fields in a NodeBalancerConfig
+ *                                                                response are automatically derived from your certificate. Please refer to these fields to
+ *                                                                verify that the appropriate certificate was assigned to your NodeBalancerConfig.
+ * @property string                              $ssl_key         The PEM-formatted private key for the SSL certificate set in the `ssl_cert` field.
+ *                                                                The contents of this field will not be shown in any responses that display
+ *                                                                the NodeBalancerConfig. Instead, `<REDACTED>` will be printed where the field
+ *                                                                appears.
+ *                                                                The read-only `ssl_commonname` and `ssl_fingerprint` fields in a NodeBalancerConfig
+ *                                                                response are automatically derived from your certificate. Please refer to these fields to
+ *                                                                verify that the appropriate certificate was assigned to your NodeBalancerConfig.
  * @property int                                 $nodebalancer_id The ID for the NodeBalancer this config belongs to.
  * @property NodesStatus                         $nodes_status    A structure containing information about the health of the backends
  *                                                                for this port. This information is updated periodically as checks

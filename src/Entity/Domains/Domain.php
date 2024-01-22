@@ -21,8 +21,10 @@ use Linode\Repository\Domains\DomainRecordRepositoryInterface;
  * in our system to be treated as authoritative.
  *
  * @property int                             $id          This Domain's unique ID.
- * @property string                          $domain      The domain this Domain represents. These must be unique in our system;
- *                                                        you cannot have two Domains representing the same domain.
+ * @property string                          $domain      The domain this Domain represents. Domain labels cannot be longer than
+ *                                                        63 characters and must conform to RFC1035 (@see https://tools.ietf.org/html/rfc1035).
+ *                                                        Domains must be unique on Linode's platform, including across different Linode
+ *                                                        accounts; there cannot be two Domains representing the same domain.
  * @property string                          $type        If this Domain represents the authoritative source of information for
  *                                                        the domain it describes, or if it is a read-only copy of a master
  *                                                        (also called a slave) (@see `TYPE_...` constants).

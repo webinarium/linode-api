@@ -175,6 +175,32 @@ final class AccountTest extends TestCase
         self::assertSame('11/2022', $entity->credit_card->expiry);
     }
 
+    public function testCancel(): void
+    {
+        $request = [
+            'comments' => 'I am consolidating my accounts.',
+        ];
+
+        $response = <<<'JSON'
+                        {
+                            "survey_link": "https://alinktothesurvey.com"
+                        }
+            JSON;
+
+        $this->client
+            ->method('api')
+            ->willReturnMap([
+                ['POST', '/account/cancel', $request, [], new Response(200, [], $response)],
+            ])
+        ;
+
+        $account = new Account($this->client);
+
+        $link = $account->cancel('I am consolidating my accounts.');
+
+        self::assertSame('https://alinktothesurvey.com', $link);
+    }
+
     public function testUpdateCreditCard(): void
     {
         $request = [

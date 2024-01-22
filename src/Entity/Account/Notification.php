@@ -58,6 +58,7 @@ class Notification extends Entity
     public const TYPE_TICKET_ABUSE        = 'ticket_abuse';
     public const TYPE_NOTICE              = 'notice';
     public const TYPE_MAINTENANCE         = 'maintenance';
+    public const TYPE_PROMOTION           = 'promotion';
 
     // Notification severities.
     public const SEVERITY_MINOR    = 'minor';

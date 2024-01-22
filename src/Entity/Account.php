@@ -111,6 +111,32 @@ class Account
     }
 
     /**
+     * Cancels an active Linode account. This action will cause
+     * Linode to attempt to charge the credit card on file for the remaining
+     * balance. An error will occur if Linode fails to charge the credit card
+     * on file. Restricted users will not be able to cancel an account.
+     *
+     * @param null|string $comments any reason for cancelling the account, and any other comments
+     *                              you might have about your Linode service
+     *
+     * @return string a link to Linode's exit survey
+     *
+     * @throws LinodeException
+     */
+    public function cancel(?string $comments = null): string
+    {
+        $parameters = [
+            'comments' => $comments,
+        ];
+
+        $response = $this->client->api($this->client::REQUEST_POST, '/account/cancel', $parameters);
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return $json['survey_link'];
+    }
+
+    /**
      * Adds/edit credit card information to your Account.
      *
      * Only one credit card can be associated with your Account, so using this

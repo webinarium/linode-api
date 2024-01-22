@@ -53,6 +53,10 @@ interface LinodeRepositoryInterface extends RepositoryInterface
      * If cloning to an existing Linode, any actions currently running or
      * queued must be completed first before you can clone to it.
      *
+     * Up to five clone operations from any given source Linode can be run concurrently.
+     * If more concurrent clones are attempted, an HTTP 400 error will be
+     * returned by this endpoint.
+     *
      * @throws LinodeException
      */
     public function clone(int $id, array $parameters): void;

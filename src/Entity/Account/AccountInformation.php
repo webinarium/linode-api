@@ -40,6 +40,7 @@ use Linode\Entity\Entity;
  * @property string      $country            The two-letter country code of this Account's billing address.
  * @property string      $active_since       The datetime of when the account was activated.
  * @property string[]    $capabilities       A list of capabilities your account supports.
+ * @property Promotion[] $promotions         A list of active promotions on your account.
  */
 class AccountInformation extends Entity
 {
@@ -61,6 +62,7 @@ class AccountInformation extends Entity
     {
         return match ($name) {
             'credit_card' => new CreditCard($this->client, $this->data['credit_card']),
+            'promotions'  => array_map(fn ($data) => new Promotion($this->client, $data), $this->data['active_promotions']),
             default       => parent::__get($name),
         };
     }

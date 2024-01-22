@@ -30,11 +30,23 @@ interface ManagedCredentialRepositoryInterface extends RepositoryInterface
     public function create(array $parameters): ManagedCredential;
 
     /**
-     * Updates information about a Managed Credential.
+     * Updates the label of a Managed Credential. This endpoint
+     * does not update the username and password for a Managed Credential.
+     * To do this, use the Update Managed Credential Username and Password
+     * `POST /managed/credentials/{credentialId}/update` endpoint instead.
+     *
+     * @see self::setLoginInformation
      *
      * @throws LinodeException
      */
     public function update(int $id, array $parameters): ManagedCredential;
+
+    /**
+     * Updates the username and password for a Managed Credential.
+     *
+     * @throws LinodeException
+     */
+    public function setLoginInformation(int $id, array $parameters): void;
 
     /**
      * Deletes a Managed Credential. Linode special forces will no longer

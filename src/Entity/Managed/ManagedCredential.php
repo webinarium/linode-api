@@ -17,14 +17,17 @@ use Linode\Entity\Entity;
  * A securely-stored Credential that allows Linode's special forces
  * to access a Managed server to respond to Issues.
  *
- * @property int    $id    This Credential's unique ID.
- * @property string $label The unique label for this Credential. This is for display purposes only.
+ * @property int    $id             This Credential's unique ID.
+ * @property string $label          The unique label for this Credential. This is for display purposes only.
+ * @property string $last_decrypted The date this Credential was last decrypted by a member of Linode
+ *                                  special forces.
  */
 class ManagedCredential extends Entity
 {
     // Available fields.
-    public const FIELD_ID    = 'id';
-    public const FIELD_LABEL = 'label';
+    public const FIELD_ID             = 'id';
+    public const FIELD_LABEL          = 'label';
+    public const FIELD_LAST_DECRYPTED = 'last_decrypted';
 
     // Extra field for create/update operations.
     public const FIELD_USERNAME = 'username';

@@ -40,6 +40,13 @@ class ManagedCredentialRepository extends AbstractRepository implements ManagedC
         return new ManagedCredential($this->client, $json);
     }
 
+    public function setLoginInformation(int $id, array $parameters): void
+    {
+        $this->checkParametersSupport($parameters);
+
+        $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/update', $this->getBaseUri(), $id), $parameters);
+    }
+
     public function delete(int $id): void
     {
         $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/revoke', $this->getBaseUri(), $id));
