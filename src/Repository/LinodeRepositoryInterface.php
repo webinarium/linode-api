@@ -91,9 +91,13 @@ interface LinodeRepositoryInterface extends RepositoryInterface
      * If any actions are currently running or queued, those actions must be
      * completed first before you can initiate a mutate.
      *
+     * @param bool $allow_auto_disk_resize Automatically resize disks when resizing a Linode.
+     *                                     When resizing down to a smaller plan your Linode's
+     *                                     data must fit within the smaller disk size.
+     *
      * @throws LinodeException
      */
-    public function mutate(int $id): void;
+    public function mutate(int $id, bool $allow_auto_disk_resize = true): void;
 
     /**
      * In some circumstances, a Linode may have pending migrations scheduled that

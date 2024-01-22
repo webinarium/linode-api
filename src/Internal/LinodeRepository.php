@@ -72,9 +72,13 @@ class LinodeRepository extends AbstractRepository implements LinodeRepositoryInt
         $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/resize', $this->getBaseUri(), $id), $parameters);
     }
 
-    public function mutate(int $id): void
+    public function mutate(int $id, bool $allow_auto_disk_resize = true): void
     {
-        $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/mutate', $this->getBaseUri(), $id));
+        $parameters = [
+            'allow_auto_disk_resize' => $allow_auto_disk_resize,
+        ];
+
+        $this->client->api($this->client::REQUEST_POST, sprintf('%s/%s/mutate', $this->getBaseUri(), $id), $parameters);
     }
 
     public function migrate(int $id, string $region = null): void

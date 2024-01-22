@@ -454,11 +454,17 @@ final class LinodeRepositoryTest extends TestCase
 
     public function testMutate(): void
     {
+        $request = [
+            'json' => [
+                'allow_auto_disk_resize' => true,
+            ],
+        ];
+
         $client = $this->createMock(Client::class);
         $client
             ->method('request')
             ->willReturnMap([
-                ['POST', 'https://api.linode.com/v4/linode/instances/123/mutate', [], new Response(200, [], null)],
+                ['POST', 'https://api.linode.com/v4/linode/instances/123/mutate', $request, new Response(200, [], null)],
             ])
         ;
 
