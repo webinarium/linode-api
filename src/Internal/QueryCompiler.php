@@ -5,7 +5,7 @@
 //  Copyright (C) 2018-2024 Artem Rodygin
 //
 //  You should have received a copy of the MIT License along with
-//  this file. If not, see <http://opensource.org/licenses/MIT>.
+//  this file. If not, see <https://opensource.org/licenses/MIT>.
 //
 // ---------------------------------------------------------------------
 
@@ -14,15 +14,15 @@ namespace Linode\Internal;
 use Symfony\Component\ExpressionLanguage\Node\Node;
 
 /**
- * A query compiler.
+ * @internal A query compiler.
  */
-class QueryCompiler
+final class QueryCompiler
 {
     /**
      * Applies specified parameters to the query.
      *
-     * @param string $query      query string
-     * @param array  $parameters query parameters
+     * @param string $query      Query string.
+     * @param array  $parameters Query parameters.
      *
      * @throws \Exception
      */
@@ -52,7 +52,7 @@ class QueryCompiler
     /**
      * Compiles specified AST node of the query into Linode API filter.
      *
-     * @return array filters generated for the node
+     * @return array Filters generated for the node.
      *
      * @throws \Exception
      */

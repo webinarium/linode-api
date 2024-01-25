@@ -5,7 +5,7 @@
 //  Copyright (C) 2018-2024 Artem Rodygin
 //
 //  You should have received a copy of the MIT License along with
-//  this file. If not, see <http://opensource.org/licenses/MIT>.
+//  this file. If not, see <https://opensource.org/licenses/MIT>.
 //
 // ---------------------------------------------------------------------
 
@@ -14,10 +14,10 @@ namespace Linode\Exception;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * An exception raised on every failed request and contains list of errors.
+ * This type of exception is raised on every failed request and contains list of errors.
  *
  * Within each error object, the `field` parameter will be included if the error pertains to
- * a specific field in the JSON you've submitted. This will be omitted if there is no relevant
+ * a specific field in the JSON you’ve submitted. This will be omitted if there is no relevant
  * field. The `reason` is a human-readable explanation of the error, and will always be included.
  *
  * The exception code is an HTTP status code of the request. The exception message is a `reason`
@@ -25,14 +25,14 @@ use Psr\Http\Message\ResponseInterface;
  */
 class LinodeException extends \Exception
 {
-    /** @var Error[] */
-    protected array $errors = [];
+    /**
+     * @var Error[] List of errors associated with the exception.
+     */
+    protected array $errors;
 
     /**
-     * LinodeException constructor.
-     *
-     * @param ResponseInterface $response failed response
-     * @param null|\Throwable   $previous the previous throwable used for the exception chaining
+     * @param ResponseInterface $response Failed response.
+     * @param null|\Throwable   $previous The previous throwable used for the exception chaining.
      */
     public function __construct(ResponseInterface $response, \Throwable $previous = null)
     {
@@ -41,11 +41,9 @@ class LinodeException extends \Exception
 
         $errors = $json['errors'] ?? [['reason' => 'Unknown error']];
 
-        foreach ($errors as $error) {
-            $this->errors[] = new Error($error['reason'], $error['field'] ?? null);
-        }
+        $this->errors = array_map(static fn ($error) => new Error($error['reason'], $error['field'] ?? null), $errors);
 
-        parent::__construct($this->errors[0]->getReason(), $code, $previous);
+        parent::__construct($this->errors[0]->reason, $code, $previous);
     }
 
     /**

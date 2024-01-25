@@ -59,9 +59,9 @@ The message of the exception is always a message of the first error in the error
 You can also get all errors from the exception using its `getErrors` function.
 
 ```php
-use Linode\Entity\Linode;
 use Linode\Exception\LinodeException;
 use Linode\LinodeClient;
+use Linode\LinodeInstances\Linode;
 
 $client = new LinodeClient('03d084436a6c91fbafd5c4b20c82e5056a2e9ce1635920c30dc8d81dc7a6665c');
 
@@ -90,9 +90,9 @@ All entities are read-only, the data accessible through properties.
 There is a dedicated repository for entity of each type. Most of the repositories are available through the `LinodeClient` class:
 
 ```php
-use Linode\Entity\Linode;
 use Linode\LinodeClient;
-use Linode\Repository\LinodeRepositoryInterface;
+use Linode\LinodeInstances\Linode;
+use Linode\LinodeInstances\LinodeRepositoryInterface;
 
 $client = new LinodeClient('03d084436a6c91fbafd5c4b20c82e5056a2e9ce1635920c30dc8d81dc7a6665c');
 
@@ -111,8 +111,8 @@ A repository for such nested entities should be taken from corresponding parent 
 The `LinodeClient` class contains repositories for root entities only.
 
 ```php
-use Linode\Entity\Domains\Domain;
-use Linode\Entity\Domains\DomainRecord;
+use Linode\Domains\Domain;
+use Linode\Domains\DomainRecord;
 use Linode\LinodeClient;
 
 $client = new LinodeClient('03d084436a6c91fbafd5c4b20c82e5056a2e9ce1635920c30dc8d81dc7a6665c');
@@ -137,8 +137,8 @@ Each repository implements `Linode\Repository\RepositoryInterface` and provides 
 The `find` function searches for an entity by its ID:
 
 ```php
-use Linode\Entity\Linode;
 use Linode\LinodeClient;
+use Linode\LinodeInstances\Linode;
 
 $client = new LinodeClient('03d084436a6c91fbafd5c4b20c82e5056a2e9ce1635920c30dc8d81dc7a6665c');
 
@@ -150,8 +150,8 @@ The `findAll` function returns all entities of the type as a `Linode\Repository\
 Such object implements standard `Countable` and `Iterator` interfaces:
 
 ```php
-use Linode\Entity\Linode;
 use Linode\LinodeClient;
+use Linode\LinodeInstances\Linode;
 
 $client = new LinodeClient('03d084436a6c91fbafd5c4b20c82e5056a2e9ce1635920c30dc8d81dc7a6665c');
 
@@ -221,9 +221,9 @@ foreach ($linodes2 as $linode) {
 The Linode API supports sorting of the requested objects, which can be specified in two optional parameters of the `findAll` function:
 
 ```php
-use Linode\Entity\Linode;
 use Linode\LinodeClient;
-use Linode\Repository\RepositoryInterface;
+use Linode\LinodeInstances\Linode;
+use Linode\RepositoryInterface;
 
 $client = new LinodeClient('03d084436a6c91fbafd5c4b20c82e5056a2e9ce1635920c30dc8d81dc7a6665c');
 
@@ -243,8 +243,8 @@ The `findBy` function accepts array of criterias as the first parameter.
 All the criterias are joined via logical _"and"_ operation.
 
 ```php
-use Linode\Entity\Linode;
 use Linode\LinodeClient;
+use Linode\LinodeInstances\Linode;
 
 $client = new LinodeClient('03d084436a6c91fbafd5c4b20c82e5056a2e9ce1635920c30dc8d81dc7a6665c');
 
@@ -260,8 +260,8 @@ The `findBy` function returns a collection, which can be empty if nothing is fou
 When you need to retrieve a single object using filters, you may use the `findOneBy` function, which accepts an array of criterias as the only parameter.
 
 ```php
-use Linode\Entity\Linode;
 use Linode\LinodeClient;
+use Linode\LinodeInstances\Linode;
 
 $client = new LinodeClient('03d084436a6c91fbafd5c4b20c82e5056a2e9ce1635920c30dc8d81dc7a6665c');
 
@@ -365,9 +365,9 @@ As you can see, each parameter starts with a colon, and the whole set of paramet
 And, just like `findAll` and `findBy` functions, the `query` function has two last optional parameters for sorting:
 
 ```php
-use Linode\Entity\LinodeType;
 use Linode\LinodeClient;
-use Linode\Repository\RepositoryInterface;
+use Linode\LinodeTypes\LinodeType;
+use Linode\RepositoryInterface;
 
 $client = new LinodeClient();
 
@@ -394,9 +394,8 @@ If a request requires object ID to be passed via URI (most `PUT` and `DELETE` re
 If a request accepts a vary number of assorted arguments to be passed as a JSON object (most `POST` and `PUT` requests), then its function has a `$parameters` array:
 
 ```php
-use Linode\Entity\Linode;
-use Linode\LinodeClient;
-use Linode\Repository\LinodeRepositoryInterface;
+use Linode\LinodeInstances\Linode;
+use Linode\LinodeInstances\LinodeRepositoryInterface;
 
 /** @var LinodeRepositoryInterface $repository */
 $repository = $client->linodes;

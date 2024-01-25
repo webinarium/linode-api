@@ -12,29 +12,18 @@
 namespace Linode\Entity;
 
 use GuzzleHttp\Psr7\Response;
-use Linode\Entity\Account\AccountInformation;
-use Linode\Entity\Account\AccountSettings;
-use Linode\Entity\Account\CreditCard;
-use Linode\Entity\Account\NetworkUtilization;
-use Linode\Internal\Account\EventRepository;
-use Linode\Internal\Account\InvoiceRepository;
-use Linode\Internal\Account\NotificationRepository;
-use Linode\Internal\Account\OAuthClientRepository;
-use Linode\Internal\Account\PaymentRepository;
-use Linode\Internal\Account\UserRepository;
-use Linode\Internal\Longview\LongviewClientRepository;
-use Linode\Internal\Managed\ManagedContactRepository;
-use Linode\Internal\Managed\ManagedCredentialRepository;
-use Linode\Internal\Managed\ManagedIssueRepository;
-use Linode\Internal\Managed\ManagedLinodeSettingsRepository;
-use Linode\Internal\Managed\ManagedServiceRepository;
+use Linode\Account\Account;
+use Linode\Account\AccountInformation;
+use Linode\Account\AccountSettings;
+use Linode\Account\CreditCard;
+use Linode\Account\NetworkUtilization;
 use Linode\LinodeClient;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  *
- * @coversDefaultClass \Linode\Entity\Account
+ * @coversDefaultClass \Linode\Account\Account
  */
 final class AccountTest extends TestCase
 {
@@ -43,26 +32,6 @@ final class AccountTest extends TestCase
     protected function setUp(): void
     {
         $this->client = $this->createMock(LinodeClient::class);
-    }
-
-    public function testProperties(): void
-    {
-        $entity = new Account($this->client);
-
-        self::assertInstanceOf(EventRepository::class, $entity->events);
-        self::assertInstanceOf(InvoiceRepository::class, $entity->invoices);
-        self::assertInstanceOf(LongviewClientRepository::class, $entity->longviews_clients);
-        self::assertInstanceOf(ManagedContactRepository::class, $entity->managed_contacts);
-        self::assertInstanceOf(ManagedCredentialRepository::class, $entity->managed_credentials);
-        self::assertInstanceOf(ManagedIssueRepository::class, $entity->managed_issues);
-        self::assertInstanceOf(ManagedLinodeSettingsRepository::class, $entity->managed_linode_settings);
-        self::assertInstanceOf(ManagedServiceRepository::class, $entity->managed_services);
-        self::assertInstanceOf(NotificationRepository::class, $entity->notifications);
-        self::assertInstanceOf(OAuthClientRepository::class, $entity->oauth_clients);
-        self::assertInstanceOf(PaymentRepository::class, $entity->payments);
-        self::assertInstanceOf(UserRepository::class, $entity->users);
-
-        self::assertNull($entity->unknown);
     }
 
     public function testGetAccountInformation(): void
@@ -90,9 +59,9 @@ final class AccountTest extends TestCase
             JSON;
 
         $this->client
-            ->method('api')
+            ->method('get')
             ->willReturnMap([
-                ['GET', '/account', [], [], new Response(200, [], $response)],
+                ['/account', [], [], new Response(200, [], $response)],
             ])
         ;
 
@@ -146,9 +115,9 @@ final class AccountTest extends TestCase
             JSON;
 
         $this->client
-            ->method('api')
+            ->method('put')
             ->willReturnMap([
-                ['PUT', '/account', $request, [], new Response(200, [], $response)],
+                ['/account', $request, new Response(200, [], $response)],
             ])
         ;
 
@@ -188,9 +157,9 @@ final class AccountTest extends TestCase
             JSON;
 
         $this->client
-            ->method('api')
+            ->method('post')
             ->willReturnMap([
-                ['POST', '/account/cancel', $request, [], new Response(200, [], $response)],
+                ['/account/cancel', $request, new Response(200, [], $response)],
             ])
         ;
 
@@ -211,9 +180,9 @@ final class AccountTest extends TestCase
         ];
 
         $this->client
-            ->method('api')
+            ->method('post')
             ->willReturnMap([
-                ['POST', '/account/credit-card', $request, [], new Response(200, [], null)],
+                ['/account/credit-card', $request, new Response(200, [], null)],
             ])
         ;
 
@@ -236,9 +205,9 @@ final class AccountTest extends TestCase
             JSON;
 
         $this->client
-            ->method('api')
+            ->method('get')
             ->willReturnMap([
-                ['GET', '/account/settings', [], [], new Response(200, [], $response)],
+                ['/account/settings', [], [], new Response(200, [], $response)],
             ])
         ;
 
@@ -269,9 +238,9 @@ final class AccountTest extends TestCase
             JSON;
 
         $this->client
-            ->method('api')
+            ->method('put')
             ->willReturnMap([
-                ['PUT', '/account/settings', $request, [], new Response(200, [], $response)],
+                ['/account/settings', $request, new Response(200, [], $response)],
             ])
         ;
 
@@ -299,9 +268,9 @@ final class AccountTest extends TestCase
             JSON;
 
         $this->client
-            ->method('api')
+            ->method('get')
             ->willReturnMap([
-                ['GET', '/account/transfer', [], [], new Response(200, [], $response)],
+                ['/account/transfer', [], [], new Response(200, [], $response)],
             ])
         ;
 

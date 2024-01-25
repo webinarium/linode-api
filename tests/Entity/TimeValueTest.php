@@ -11,12 +11,13 @@
 
 namespace Linode\Entity;
 
+use Linode\LinodeInstances\TimeValue;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  *
- * @coversDefaultClass \Linode\Entity\TimeValue
+ * @coversDefaultClass \Linode\LinodeInstances\TimeValue
  */
 final class TimeValueTest extends TestCase
 {

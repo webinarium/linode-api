@@ -5,7 +5,7 @@
 //  Copyright (C) 2018-2024 Artem Rodygin
 //
 //  You should have received a copy of the MIT License along with
-//  this file. If not, see <http://opensource.org/licenses/MIT>.
+//  this file. If not, see <https://opensource.org/licenses/MIT>.
 //
 // ---------------------------------------------------------------------
 
@@ -13,7 +13,7 @@ namespace Linode\Internal;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
-use Linode\Entity\Entity;
+use Linode\Entity;
 use Linode\Exception\LinodeException;
 use Linode\LinodeClient;
 use Linode\ReflectionTrait;
@@ -159,6 +159,9 @@ final class AbstractRepositoryTest extends TestCase
         };
     }
 
+    /**
+     * @covers ::find
+     */
     public function testFind(): void
     {
         $entity = $this->repository->find(2);
@@ -167,6 +170,9 @@ final class AbstractRepositoryTest extends TestCase
         self::assertSame('February', $entity->name);
     }
 
+    /**
+     * @covers ::findAll
+     */
     public function testFindAll(): void
     {
         $collection = $this->repository->findAll();
@@ -194,6 +200,9 @@ final class AbstractRepositoryTest extends TestCase
         }
     }
 
+    /**
+     * @covers ::findAll
+     */
     public function testFindAllSorted(): void
     {
         $collection = $this->repository->findAll('name');
@@ -221,6 +230,9 @@ final class AbstractRepositoryTest extends TestCase
         }
     }
 
+    /**
+     * @covers ::findBy
+     */
     public function testFindBy(): void
     {
         $collection = $this->repository->findBy([
@@ -245,6 +257,9 @@ final class AbstractRepositoryTest extends TestCase
         }
     }
 
+    /**
+     * @covers ::findBy
+     */
     public function testFindBySorted(): void
     {
         $collection = $this->repository->findBy([
@@ -269,6 +284,9 @@ final class AbstractRepositoryTest extends TestCase
         }
     }
 
+    /**
+     * @covers ::findOneBy
+     */
     public function testFindOneBy(): void
     {
         $data = [
@@ -285,6 +303,9 @@ final class AbstractRepositoryTest extends TestCase
         self::assertSame($data, $entity->toArray());
     }
 
+    /**
+     * @covers ::findOneBy
+     */
     public function testFindOneByZero(): void
     {
         $entity = $this->repository->findOneBy([
@@ -294,6 +315,9 @@ final class AbstractRepositoryTest extends TestCase
         self::assertNull($entity);
     }
 
+    /**
+     * @covers ::findOneBy
+     */
     public function testFindOneByException(): void
     {
         $this->expectException(LinodeException::class);
@@ -305,6 +329,9 @@ final class AbstractRepositoryTest extends TestCase
         ]);
     }
 
+    /**
+     * @covers ::query
+     */
     public function testQuery(): void
     {
         $collection = $this->repository->query('days == :number', [
@@ -329,6 +356,9 @@ final class AbstractRepositoryTest extends TestCase
         }
     }
 
+    /**
+     * @covers ::query
+     */
     public function testQuerySorted(): void
     {
         $collection = $this->repository->query('days == :number', [
@@ -353,6 +383,9 @@ final class AbstractRepositoryTest extends TestCase
         }
     }
 
+    /**
+     * @covers ::query
+     */
     public function testQueryException(): void
     {
         $this->expectException(LinodeException::class);
@@ -362,6 +395,9 @@ final class AbstractRepositoryTest extends TestCase
         $this->repository->query('days');
     }
 
+    /**
+     * @covers ::checkParametersSupport
+     */
     public function testCheckParametersSupportSuccess(): void
     {
         $parameters = [
@@ -373,6 +409,9 @@ final class AbstractRepositoryTest extends TestCase
         self::assertTrue(true);
     }
 
+    /**
+     * @covers ::checkParametersSupport
+     */
     public function testCheckParametersSupportException(): void
     {
         $this->expectException(LinodeException::class);

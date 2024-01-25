@@ -42,6 +42,7 @@ return (new PhpCsFixer\Config())
         'declare_strict_types'            => false,
         'increment_style'                 => ['style' => 'post'],
         'native_function_invocation'      => false,
+        'phpdoc_annotation_without_dot'   => false,
         'whitespace_after_comma_in_array' => ['ensure_single_space' => false],
     ])
     ->setFinder($finder)

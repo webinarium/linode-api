@@ -12,21 +12,19 @@
 namespace Linode\Entity;
 
 use GuzzleHttp\Psr7\Response;
-use Linode\Entity\Account\GlobalGrant;
-use Linode\Entity\Account\UserGrant;
-use Linode\Entity\Profile\ProfileInformation;
-use Linode\Entity\Profile\ProfileReferrals;
-use Linode\Entity\Profile\TwoFactorSecret;
-use Linode\Internal\Profile\AuthorizedAppRepository;
-use Linode\Internal\Profile\PersonalAccessTokenRepository;
-use Linode\Internal\Profile\SSHKeyRepository;
+use Linode\Account\GlobalGrant;
+use Linode\Account\UserGrant;
 use Linode\LinodeClient;
+use Linode\Profile\Profile;
+use Linode\Profile\ProfileInformation;
+use Linode\Profile\ProfileReferrals;
+use Linode\Profile\TwoFactorSecret;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  *
- * @coversDefaultClass \Linode\Entity\Profile
+ * @coversDefaultClass \Linode\Profile\Profile
  */
 final class ProfileTest extends TestCase
 {
@@ -35,17 +33,6 @@ final class ProfileTest extends TestCase
     protected function setUp(): void
     {
         $this->client = $this->createMock(LinodeClient::class);
-    }
-
-    public function testProperties(): void
-    {
-        $entity = new Profile($this->client);
-
-        self::assertInstanceOf(AuthorizedAppRepository::class, $entity->apps);
-        self::assertInstanceOf(SSHKeyRepository::class, $entity->ssh_keys);
-        self::assertInstanceOf(PersonalAccessTokenRepository::class, $entity->tokens);
-
-        self::assertNull($entity->unknown);
     }
 
     public function testGetProfileInformation(): void
@@ -74,9 +61,9 @@ final class ProfileTest extends TestCase
             JSON;
 
         $this->client
-            ->method('api')
+            ->method('get')
             ->willReturnMap([
-                ['GET', '/profile', [], [], new Response(200, [], $response)],
+                ['/profile', [], [], new Response(200, [], $response)],
             ])
         ;
 
@@ -127,9 +114,9 @@ final class ProfileTest extends TestCase
             JSON;
 
         $this->client
-            ->method('api')
+            ->method('put')
             ->willReturnMap([
-                ['PUT', '/profile', $request, [], new Response(200, [], $response)],
+                ['/profile', $request, new Response(200, [], $response)],
             ])
         ;
 
@@ -162,9 +149,9 @@ final class ProfileTest extends TestCase
             JSON;
 
         $this->client
-            ->method('api')
+            ->method('get')
             ->willReturnMap([
-                ['GET', '/profile/preferences', [], [], new Response(200, [], $response)],
+                ['/profile/preferences', [], [], new Response(200, [], $response)],
             ])
         ;
 
@@ -192,9 +179,9 @@ final class ProfileTest extends TestCase
             JSON;
 
         $this->client
-            ->method('api')
+            ->method('put')
             ->willReturnMap([
-                ['PUT', '/profile/preferences', $request, [], new Response(200, [], $response)],
+                ['/profile/preferences', $request, new Response(200, [], $response)],
             ])
         ;
 
@@ -213,9 +200,9 @@ final class ProfileTest extends TestCase
     public function testDisable2FA(): void
     {
         $this->client
-            ->method('api')
+            ->method('post')
             ->willReturnMap([
-                ['POST', '/profile/tfa-disable', [], [], new Response(200, [], null)],
+                ['/profile/tfa-disable', [], new Response(200, [], null)],
             ])
         ;
 
@@ -236,9 +223,9 @@ final class ProfileTest extends TestCase
             JSON;
 
         $this->client
-            ->method('api')
+            ->method('post')
             ->willReturnMap([
-                ['POST', '/profile/tfa-enable', [], [], new Response(200, [], $response)],
+                ['/profile/tfa-enable', [], new Response(200, [], $response)],
             ])
         ;
 
@@ -263,9 +250,9 @@ final class ProfileTest extends TestCase
             JSON;
 
         $this->client
-            ->method('api')
+            ->method('post')
             ->willReturnMap([
-                ['POST', '/profile/tfa-enable-confirm', $request, [], new Response(200, [], $response)],
+                ['/profile/tfa-enable-confirm', $request, new Response(200, [], $response)],
             ])
         ;
 
@@ -345,9 +332,9 @@ final class ProfileTest extends TestCase
             JSON;
 
         $this->client
-            ->method('api')
+            ->method('get')
             ->willReturnMap([
-                ['GET', '/profile/grants', [], [], new Response(200, [], $response)],
+                ['/profile/grants', [], [], new Response(200, [], $response)],
             ])
         ;
 
@@ -362,9 +349,9 @@ final class ProfileTest extends TestCase
     public function testGetGrantsUnrestricted(): void
     {
         $this->client
-            ->method('api')
+            ->method('get')
             ->willReturnMap([
-                ['GET', '/profile/grants', [], [], new Response(204, [], null)],
+                ['/profile/grants', [], [], new Response(204, [], null)],
             ])
         ;
 

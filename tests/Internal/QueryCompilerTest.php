@@ -5,7 +5,7 @@
 //  Copyright (C) 2018-2024 Artem Rodygin
 //
 //  You should have received a copy of the MIT License along with
-//  this file. If not, see <http://opensource.org/licenses/MIT>.
+//  this file. If not, see <https://opensource.org/licenses/MIT>.
 //
 // ---------------------------------------------------------------------
 
@@ -28,6 +28,9 @@ final class QueryCompilerTest extends TestCase
         $this->compiler = new QueryCompiler();
     }
 
+    /**
+     * @covers ::apply
+     */
     public function testApply(): void
     {
         $expected = '(class == "standard" or size <= 2500) and (vcpus >= 12 and vcpus <= 20 and is_public == true)';
@@ -45,6 +48,9 @@ final class QueryCompilerTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    /**
+     * @covers ::apply
+     */
     public function testApplyException(): void
     {
         $this->expectException(\Exception::class);
@@ -61,6 +67,9 @@ final class QueryCompilerTest extends TestCase
         ]);
     }
 
+    /**
+     * @covers ::compile
+     */
     public function testCompileEqual(): void
     {
         $expected = [
@@ -75,6 +84,9 @@ final class QueryCompilerTest extends TestCase
         self::assertSame($expected, $this->compiler->compile($ast));
     }
 
+    /**
+     * @covers ::compile
+     */
     public function testCompileNotEqual(): void
     {
         $expected = [
@@ -91,6 +103,9 @@ final class QueryCompilerTest extends TestCase
         self::assertSame($expected, $this->compiler->compile($ast));
     }
 
+    /**
+     * @covers ::compile
+     */
     public function testCompileLessThan(): void
     {
         $expected = [
@@ -107,6 +122,9 @@ final class QueryCompilerTest extends TestCase
         self::assertSame($expected, $this->compiler->compile($ast));
     }
 
+    /**
+     * @covers ::compile
+     */
     public function testCompileLessThanOrEqual(): void
     {
         $expected = [
@@ -123,6 +141,9 @@ final class QueryCompilerTest extends TestCase
         self::assertSame($expected, $this->compiler->compile($ast));
     }
 
+    /**
+     * @covers ::compile
+     */
     public function testCompileGreaterThan(): void
     {
         $expected = [
@@ -139,6 +160,9 @@ final class QueryCompilerTest extends TestCase
         self::assertSame($expected, $this->compiler->compile($ast));
     }
 
+    /**
+     * @covers ::compile
+     */
     public function testCompileGreaterThanOrEqual(): void
     {
         $expected = [
@@ -155,6 +179,9 @@ final class QueryCompilerTest extends TestCase
         self::assertSame($expected, $this->compiler->compile($ast));
     }
 
+    /**
+     * @covers ::compile
+     */
     public function testCompileContains(): void
     {
         $expected = [
@@ -171,6 +198,9 @@ final class QueryCompilerTest extends TestCase
         self::assertSame($expected, $this->compiler->compile($ast));
     }
 
+    /**
+     * @covers ::compile
+     */
     public function testCompileInvalidExpression(): void
     {
         $this->expectException(\Exception::class);
@@ -184,6 +214,9 @@ final class QueryCompilerTest extends TestCase
         $this->compiler->compile($ast);
     }
 
+    /**
+     * @covers ::compile
+     */
     public function testCompileUnknownOperator(): void
     {
         $this->expectException(\Exception::class);
@@ -197,6 +230,9 @@ final class QueryCompilerTest extends TestCase
         $this->compiler->compile($ast);
     }
 
+    /**
+     * @covers ::compile
+     */
     public function testCompileLeftOperand(): void
     {
         $this->expectException(\Exception::class);
@@ -210,6 +246,9 @@ final class QueryCompilerTest extends TestCase
         $this->compiler->compile($ast);
     }
 
+    /**
+     * @covers ::compile
+     */
     public function testCompileRightOperand(): void
     {
         $this->expectException(\Exception::class);
@@ -223,6 +262,9 @@ final class QueryCompilerTest extends TestCase
         $this->compiler->compile($ast);
     }
 
+    /**
+     * @covers ::compile
+     */
     public function testCompileAnd(): void
     {
         $expected = [
@@ -240,6 +282,9 @@ final class QueryCompilerTest extends TestCase
         self::assertSame($expected, $this->compiler->compile($ast));
     }
 
+    /**
+     * @covers ::compile
+     */
     public function testCompileOr(): void
     {
         $expected = [
@@ -257,6 +302,9 @@ final class QueryCompilerTest extends TestCase
         self::assertSame($expected, $this->compiler->compile($ast));
     }
 
+    /**
+     * @covers ::compile
+     */
     public function testCompileComplexQuery(): void
     {
         $expected = [

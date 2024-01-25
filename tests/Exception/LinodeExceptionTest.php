@@ -5,7 +5,7 @@
 //  Copyright (C) 2018-2024 Artem Rodygin
 //
 //  You should have received a copy of the MIT License along with
-//  this file. If not, see <http://opensource.org/licenses/MIT>.
+//  this file. If not, see <https://opensource.org/licenses/MIT>.
 //
 // ---------------------------------------------------------------------
 
@@ -22,6 +22,10 @@ use Psr\Http\Message\StreamInterface;
  */
 final class LinodeExceptionTest extends TestCase
 {
+    /**
+     * @covers ::__construct
+     * @covers ::getErrors
+     */
     public function testWithErrors(): void
     {
         $stream = $this->createMock(StreamInterface::class);
@@ -49,19 +53,23 @@ final class LinodeExceptionTest extends TestCase
 
         [$error1, $error2] = $exception->getErrors();
 
-        self::assertSame('Length must be 1-128 characters', $error1->getReason());
-        self::assertSame('label', $error1->getField());
+        self::assertSame('Length must be 1-128 characters', $error1->reason);
+        self::assertSame('label', $error1->field);
 
-        self::assertSame('Domain is required', $error2->getReason());
-        self::assertSame('redirect_uri', $error2->getField());
+        self::assertSame('Domain is required', $error2->reason);
+        self::assertSame('redirect_uri', $error2->field);
     }
 
+    /**
+     * @covers ::__construct
+     * @covers ::getErrors
+     */
     public function testEmptyErrors(): void
     {
         $stream = $this->createMock(StreamInterface::class);
         $stream
             ->method('getContents')
-            ->willReturn(null)
+            ->willReturn('')
         ;
 
         $response = $this->createMock(ResponseInterface::class);
@@ -83,7 +91,7 @@ final class LinodeExceptionTest extends TestCase
 
         [$error] = $exception->getErrors();
 
-        self::assertSame('Unknown error', $error->getReason());
-        self::assertNull($error->getField());
+        self::assertSame('Unknown error', $error->reason);
+        self::assertNull($error->field);
     }
 }
