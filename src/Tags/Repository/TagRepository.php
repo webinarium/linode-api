@@ -21,10 +21,8 @@ use Linode\Tags\TagRepositoryInterface;
  */
 class TagRepository extends AbstractRepository implements TagRepositoryInterface
 {
-    public function create(array $parameters): Tag
+    public function createTag(array $parameters = []): Tag
     {
-        $this->checkParametersSupport($parameters);
-
         $response = $this->client->post($this->getBaseUri(), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
@@ -32,7 +30,7 @@ class TagRepository extends AbstractRepository implements TagRepositoryInterface
         return new Tag($this->client, $json);
     }
 
-    public function delete(string $label): void
+    public function deleteTag(string $label): void
     {
         $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $label));
     }
@@ -46,10 +44,6 @@ class TagRepository extends AbstractRepository implements TagRepositoryInterface
     {
         return [
             Tag::FIELD_LABEL,
-            Tag::FIELD_LINODES,
-            Tag::FIELD_DOMAINS,
-            Tag::FIELD_VOLUMES,
-            Tag::FIELD_NODE_BALANCERS,
         ];
     }
 

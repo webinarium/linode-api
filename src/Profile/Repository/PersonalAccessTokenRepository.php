@@ -21,10 +21,8 @@ use Linode\Profile\PersonalAccessTokenRepositoryInterface;
  */
 class PersonalAccessTokenRepository extends AbstractRepository implements PersonalAccessTokenRepositoryInterface
 {
-    public function create(array $parameters): PersonalAccessToken
+    public function createPersonalAccessToken(array $parameters = []): PersonalAccessToken
     {
-        $this->checkParametersSupport($parameters);
-
         $response = $this->client->post($this->getBaseUri(), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
@@ -32,20 +30,18 @@ class PersonalAccessTokenRepository extends AbstractRepository implements Person
         return new PersonalAccessToken($this->client, $json);
     }
 
-    public function update(int $id, array $parameters): PersonalAccessToken
+    public function updatePersonalAccessToken(int $tokenId, array $parameters = []): PersonalAccessToken
     {
-        $this->checkParametersSupport($parameters);
-
-        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $id), $parameters);
+        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $tokenId), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
         return new PersonalAccessToken($this->client, $json);
     }
 
-    public function revoke(int $id): void
+    public function deletePersonalAccessToken(int $tokenId): void
     {
-        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $id));
+        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $tokenId));
     }
 
     protected function getBaseUri(): string

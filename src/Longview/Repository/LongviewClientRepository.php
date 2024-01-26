@@ -21,10 +21,8 @@ use Linode\Longview\LongviewClientRepositoryInterface;
  */
 class LongviewClientRepository extends AbstractRepository implements LongviewClientRepositoryInterface
 {
-    public function create(array $parameters): LongviewClient
+    public function createLongviewClient(array $parameters = []): LongviewClient
     {
-        $this->checkParametersSupport($parameters);
-
         $response = $this->client->post($this->getBaseUri(), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
@@ -32,20 +30,18 @@ class LongviewClientRepository extends AbstractRepository implements LongviewCli
         return new LongviewClient($this->client, $json);
     }
 
-    public function update(int $id, array $parameters): LongviewClient
+    public function updateLongviewClient(int $clientId, array $parameters = []): LongviewClient
     {
-        $this->checkParametersSupport($parameters);
-
-        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $id), $parameters);
+        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $clientId), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
         return new LongviewClient($this->client, $json);
     }
 
-    public function delete(int $id): void
+    public function deleteLongviewClient(int $clientId): void
     {
-        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $id));
+        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $clientId));
     }
 
     protected function getBaseUri(): string
@@ -56,7 +52,13 @@ class LongviewClientRepository extends AbstractRepository implements LongviewCli
     protected function getSupportedFields(): array
     {
         return [
+            LongviewClient::FIELD_ID,
             LongviewClient::FIELD_LABEL,
+            LongviewClient::FIELD_API_KEY,
+            LongviewClient::FIELD_INSTALL_CODE,
+            LongviewClient::FIELD_CREATED,
+            LongviewClient::FIELD_UPDATED,
+            LongviewClient::FIELD_APPS,
         ];
     }
 

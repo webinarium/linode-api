@@ -14,9 +14,10 @@ namespace Linode\Profile;
 use Linode\Entity;
 
 /**
- * An application you have authorized access to your Account through OAuth.
+ * A trusted device object represents an active Remember Me session with
+ * login.linode.com.
  *
- * @property int    $id                 The unique ID for this TrustedDevice.
+ * @property int    $id                 The unique ID for this TrustedDevice
  * @property string $created            When this Remember Me session was started. This corresponds to the time of login
  *                                      with the "Remember Me" box checked.
  * @property string $expiry             When this TrustedDevice session expires. Sessions typically last 30 days.

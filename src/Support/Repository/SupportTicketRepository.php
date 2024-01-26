@@ -21,10 +21,8 @@ use Linode\Support\SupportTicketRepositoryInterface;
  */
 class SupportTicketRepository extends AbstractRepository implements SupportTicketRepositoryInterface
 {
-    public function open(array $parameters): SupportTicket
+    public function createTicket(array $parameters = []): SupportTicket
     {
-        $this->checkParametersSupport($parameters);
-
         $response = $this->client->post($this->getBaseUri(), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
@@ -32,9 +30,21 @@ class SupportTicketRepository extends AbstractRepository implements SupportTicke
         return new SupportTicket($this->client, $json);
     }
 
-    public function close(int $id): void
+    public function createTicketAttachment(int $ticketId, string $file): void
     {
-        $this->client->post(sprintf('%s/%s/close', $this->getBaseUri(), $id));
+        $options = [
+            'multipart' => [
+                'name'     => 'file',
+                'contents' => fopen($file, 'r'),
+            ],
+        ];
+
+        $this->client->post(sprintf('%s/%s/attachments', $this->getBaseUri(), $ticketId), [], $options);
+    }
+
+    public function closeTicket(int $ticketId): void
+    {
+        $this->client->post(sprintf('%s/%s/close', $this->getBaseUri(), $ticketId));
     }
 
     protected function getBaseUri(): string
@@ -50,17 +60,14 @@ class SupportTicketRepository extends AbstractRepository implements SupportTicke
             SupportTicket::FIELD_OPENED_BY,
             SupportTicket::FIELD_OPENED,
             SupportTicket::FIELD_DESCRIPTION,
+            SupportTicket::FIELD_ENTITY,
             SupportTicket::FIELD_GRAVATAR_ID,
             SupportTicket::FIELD_STATUS,
             SupportTicket::FIELD_CLOSABLE,
             SupportTicket::FIELD_UPDATED_BY,
             SupportTicket::FIELD_UPDATED,
             SupportTicket::FIELD_CLOSED,
-            SupportTicket::FIELD_DOMAIN_ID,
-            SupportTicket::FIELD_LINODE_ID,
-            SupportTicket::FIELD_LONGVIEWCLIENT_ID,
-            SupportTicket::FIELD_NODEBALANCER_ID,
-            SupportTicket::FIELD_VOLUME_ID,
+            SupportTicket::FIELD_ATTACHMENTS,
         ];
     }
 

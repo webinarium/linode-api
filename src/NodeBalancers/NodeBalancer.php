@@ -15,27 +15,27 @@ use Linode\Entity;
 use Linode\NodeBalancers\Repository\NodeBalancerConfigRepository;
 
 /**
- * Linode's load balancing solution. Can handle multiple ports, SSL termination,
- * and any number of backends. NodeBalancer ports are configured with
- * NodeBalancer Configs, and each config is given one or more NodeBalancer Node that
- * accepts traffic. The traffic should be routed to the NodeBalancer's ip address,
- * the NodeBalancer will handle routing individual requests to backends.
+ * Linode's load balancing solution. Can handle multiple ports, SSL termination, and
+ * any number of backends. NodeBalancer ports are configured with NodeBalancer
+ * Configs, and each config is given one or more NodeBalancer Node that accepts
+ * traffic. The traffic should be routed to the  NodeBalancer's ip address, the
+ * NodeBalancer will handle routing individual requests to backends.
  *
  * @property int                                   $id                   This NodeBalancer's unique ID.
  * @property string                                $label                This NodeBalancer's label. These must be unique on your Account.
- * @property string                                $region               The Region where this NodeBalancer is located. NodeBalancers only
- *                                                                       support backends in the same Region.
- * @property string                                $hostname             This NodeBalancer's hostname, ending with ".nodebalancer.linode.com".
+ * @property string                                $region               The Region where this NodeBalancer is located. NodeBalancers only support backends
+ *                                                                       in the same Region.
+ * @property string                                $hostname             This NodeBalancer's hostname, ending with _.nodebalancer.linode.com_
  * @property string                                $ipv4                 This NodeBalancer's public IPv4 address.
- * @property string                                $ipv6                 This NodeBalancer's public IPv6 address.
+ * @property null|string                           $ipv6                 This NodeBalancer's public IPv6 address.
  * @property int                                   $client_conn_throttle Throttle connections per second. Set to 0 (zero) to disable throttling.
  * @property string                                $created              When this NodeBalancer was created.
  * @property string                                $updated              When this NodeBalancer was last updated.
- * @property string[]                              $tags                 An array of Tags applied to this object. Tags are for organizational
- *                                                                       purposes only.
- * @property NodeTransfer                          $transfer             Information about the amount of transfer this NodeBalancer has had
- *                                                                       so far this month.
- * @property NodeBalancerConfigRepositoryInterface $configs              Configs of the NodeBalancer.
+ * @property string[]                              $tags                 An array of Tags applied to this object. Tags are for organizational purposes
+ *                                                                       only.
+ * @property NodeTransfer                          $transfer             Information about the amount of transfer this NodeBalancer has had so far this
+ *                                                                       month.
+ * @property NodeBalancerConfigRepositoryInterface $configs              NodeBalancer configs.
  */
 class NodeBalancer extends Entity
 {
@@ -47,9 +47,12 @@ class NodeBalancer extends Entity
     public const FIELD_IPV4                 = 'ipv4';
     public const FIELD_IPV6                 = 'ipv6';
     public const FIELD_CLIENT_CONN_THROTTLE = 'client_conn_throttle';
+    public const FIELD_CREATED              = 'created';
+    public const FIELD_UPDATED              = 'updated';
     public const FIELD_TAGS                 = 'tags';
+    public const FIELD_TRANSFER             = 'transfer';
 
-    // Extra field for create/update operations.
+    // Extra fields for POST/PUT requests.
     public const FIELD_CONFIGS = 'configs';
 
     /**
@@ -58,9 +61,9 @@ class NodeBalancer extends Entity
     public function __get(string $name): mixed
     {
         return match ($name) {
-            'transfer' => new NodeTransfer($this->client, $this->data[$name]),
-            'configs'  => new NodeBalancerConfigRepository($this->client, $this->id),
-            default    => parent::__get($name),
+            self::FIELD_TRANSFER => new NodeTransfer($this->client, $this->data[$name]),
+            self::FIELD_CONFIGS  => new NodeBalancerConfigRepository($this->client, $this->id),
+            default              => parent::__get($name),
         };
     }
 }

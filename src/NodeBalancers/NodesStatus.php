@@ -14,7 +14,9 @@ namespace Linode\NodeBalancers;
 use Linode\Entity;
 
 /**
- * A structure containing information about the health of the backends.
+ * A structure containing information about the health of the backends
+ * for this port. This information is updated periodically as checks
+ * are performed against backends.
  *
  * @property int $up   The number of backends considered to be "UP" and healthy, and that
  *                     are serving requests.

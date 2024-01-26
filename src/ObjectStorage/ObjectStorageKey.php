@@ -16,7 +16,7 @@ use Linode\Entity;
 /**
  * A keypair used to communicate with the Object Storage S3 API.
  *
- * @property int    $id         This keypair's unique ID.
+ * @property int    $id         This keypair's unique ID
  * @property string $label      The label given to this key. For display purposes only.
  * @property string $access_key This keypair's access key. This is not secret.
  * @property string $secret_key This keypair's secret key. **Only returned on key creation**.

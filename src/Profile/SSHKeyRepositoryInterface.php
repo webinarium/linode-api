@@ -15,22 +15,46 @@ use Linode\Exception\LinodeException;
 use Linode\RepositoryInterface;
 
 /**
- * SSH key repository.
+ * SSHKey repository.
+ *
+ * @method SSHKey   find(int|string $id)
+ * @method SSHKey[] findAll(string $orderBy = null, string $orderDir = self::SORT_ASC)
+ * @method SSHKey[] findBy(array $criteria, string $orderBy = null, string $orderDir = self::SORT_ASC)
+ * @method SSHKey   findOneBy(array $criteria)
+ * @method SSHKey[] query(string $query, array $parameters = [], string $orderBy = null, string $orderDir = self::SORT_ASC)
  */
 interface SSHKeyRepositoryInterface extends RepositoryInterface
 {
     /**
+     * Adds an SSH Key to your Account profile.
+     *
+     * @param array $parameters Add SSH Key
+     *
      * @throws LinodeException
      */
-    public function add(array $parameters): SSHKey;
+    public function addSSHKey(array $parameters = []): SSHKey;
 
     /**
+     * Updates an SSH Key that you have permission to `read_write`.
+     *
+     * @param int   $sshKeyId   The ID of the SSHKey
+     * @param array $parameters The fields to update.
+     *
      * @throws LinodeException
      */
-    public function update(int $id, array $parameters): SSHKey;
+    public function updateSSHKey(int $sshKeyId, array $parameters = []): SSHKey;
 
     /**
+     * Deletes an SSH Key you have access to.
+     *
+     * **Note:** deleting an SSH Key will *not* remove it from any Linode or Disk that
+     * was deployed with `authorized_keys`. In those cases, the keys must be manually
+     * deleted on the Linode or Disk. This endpoint will only delete the key's
+     * association from your Profile.
+     *
+     * @param int $sshKeyId The ID of the SSHKey
+     *
      * @throws LinodeException
      */
-    public function delete(int $id): void;
+    public function deleteSSHKey(int $sshKeyId): void;
 }

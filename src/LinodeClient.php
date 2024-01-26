@@ -22,7 +22,31 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * Linode API client.
  *
- * @property Regions\RegionRepositoryInterface $regions
+ * @property Account\Account                                       $account
+ * @property Domains\DomainRepositoryInterface                     $domains
+ * @property Images\ImageRepositoryInterface                       $images
+ * @property LinodeInstances\KernelRepositoryInterface             $kernels
+ * @property LinodeInstances\LinodeRepositoryInterface             $linodes
+ * @property LinodeTypes\LinodeTypeRepositoryInterface             $linodeTypes
+ * @property Longview\LongviewClientRepositoryInterface            $longviewClients
+ * @property Longview\LongviewSubscriptionRepositoryInterface      $longviewSubscriptions
+ * @property Managed\ManagedContactRepositoryInterface             $managedContacts
+ * @property Managed\ManagedCredentialRepositoryInterface          $managedCredentials
+ * @property Managed\ManagedIssueRepositoryInterface               $managedIssues
+ * @property Managed\ManagedLinodeSettingsRepositoryInterface      $managedLinodeSettings
+ * @property Managed\ManagedServiceRepositoryInterface             $managedServices
+ * @property Networking\IPAddressRepositoryInterface               $ipAddresses
+ * @property Networking\IPv6PoolRepositoryInterface                $ipv6Pools
+ * @property Networking\IPv6RangeRepositoryInterface               $ipv6Ranges
+ * @property NodeBalancers\NodeBalancerRepositoryInterface         $nodeBalancers
+ * @property ObjectStorage\ObjectStorageClusterRepositoryInterface $objectStorageClusters
+ * @property ObjectStorage\ObjectStorageKeyRepositoryInterface     $objectStorageKeys
+ * @property Profile\Profile                                       $profile
+ * @property Regions\RegionRepositoryInterface                     $regions
+ * @property StackScripts\StackScriptRepositoryInterface           $stackScripts
+ * @property Support\SupportTicketRepositoryInterface              $supportTickets
+ * @property Tags\TagRepositoryInterface                           $tags
+ * @property Volumes\VolumeRepositoryInterface                     $volumes
  */
 class LinodeClient
 {
@@ -62,12 +86,38 @@ class LinodeClient
      * Returns specified repository.
      *
      * @param string $name Repository name.
+     *
+     * @throws LinodeException
      */
-    public function __get(string $name): null|RepositoryInterface
+    public function __get(string $name): null|Account\Account|Profile\Profile|RepositoryInterface
     {
         return match ($name) {
-            'regions' => new Regions\Repository\RegionRepository($this),
-            default   => null,
+            'account'               => new Account\Account($this),
+            'domains'               => new Domains\Repository\DomainRepository($this),
+            'images'                => new Images\Repository\ImageRepository($this),
+            'kernels'               => new LinodeInstances\Repository\KernelRepository($this),
+            'linodes'               => new LinodeInstances\Repository\LinodeRepository($this),
+            'linodeTypes'           => new LinodeTypes\Repository\LinodeTypeRepository($this),
+            'longviewClients'       => new Longview\Repository\LongviewClientRepository($this),
+            'longviewSubscriptions' => new Longview\Repository\LongviewSubscriptionRepository($this),
+            'managedContacts'       => new Managed\Repository\ManagedContactRepository($this),
+            'managedCredentials'    => new Managed\Repository\ManagedCredentialRepository($this),
+            'managedIssues'         => new Managed\Repository\ManagedIssueRepository($this),
+            'managedLinodeSettings' => new Managed\Repository\ManagedLinodeSettingsRepository($this),
+            'managedServices'       => new Managed\Repository\ManagedServiceRepository($this),
+            'ipAddresses'           => new Networking\Repository\IPAddressRepository($this),
+            'ipv6Pools'             => new Networking\Repository\IPv6PoolRepository($this),
+            'ipv6Ranges'            => new Networking\Repository\IPv6RangeRepository($this),
+            'nodeBalancers'         => new NodeBalancers\Repository\NodeBalancerRepository($this),
+            'objectStorageClusters' => new ObjectStorage\Repository\ObjectStorageClusterRepository($this),
+            'objectStorageKeys'     => new ObjectStorage\Repository\ObjectStorageKeyRepository($this),
+            'profile'               => new Profile\Profile($this),
+            'regions'               => new Regions\Repository\RegionRepository($this),
+            'stackScripts'          => new StackScripts\Repository\StackScriptRepository($this),
+            'supportTickets'        => new Support\Repository\SupportTicketRepository($this),
+            'tags'                  => new Tags\Repository\TagRepository($this),
+            'volumes'               => new Volumes\Repository\VolumeRepository($this),
+            default                 => null,
         };
     }
 
@@ -98,17 +148,16 @@ class LinodeClient
     /**
      * Performs a POST request to specified API endpoint.
      *
-     * @param string $uri  Relative URI to the API endpoint.
-     * @param array  $body Request body.
+     * @param string $uri     Relative URI to the API endpoint.
+     * @param array  $body    Request body.
+     * @param array  $options Custom request options.
      *
      * @throws LinodeException
      */
-    public function post(string $uri, array $body = []): ResponseInterface
+    public function post(string $uri, array $body = [], array $options = []): ResponseInterface
     {
-        $options = [];
-
-        if (0 !== count($body)) {
-            $options['json'] = $body;
+        if (0 !== count($body) && 0 === count($options)) {
+            $options['json'] = array_filter($body, static fn ($value) => null !== $value);
         }
 
         return $this->api(self::REQUEST_POST, $uri, $options);
@@ -117,17 +166,16 @@ class LinodeClient
     /**
      * Performs a PUT request to specified API endpoint.
      *
-     * @param string $uri  Relative URI to the API endpoint.
-     * @param array  $body Request body.
+     * @param string $uri     Relative URI to the API endpoint.
+     * @param array  $body    Request body.
+     * @param array  $options Custom request options.
      *
      * @throws LinodeException
      */
-    public function put(string $uri, array $body = []): ResponseInterface
+    public function put(string $uri, array $body = [], array $options = []): ResponseInterface
     {
-        $options = [];
-
-        if (0 !== count($body)) {
-            $options['json'] = $body;
+        if (0 !== count($body) && 0 === count($options)) {
+            $options['json'] = array_filter($body, static fn ($value) => null !== $value);
         }
 
         return $this->api(self::REQUEST_PUT, $uri, $options);

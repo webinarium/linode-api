@@ -32,6 +32,7 @@ class LongviewSubscriptionRepository extends AbstractRepository implements Longv
             LongviewSubscription::FIELD_ID,
             LongviewSubscription::FIELD_LABEL,
             LongviewSubscription::FIELD_CLIENTS_INCLUDED,
+            LongviewSubscription::FIELD_PRICE,
         ];
     }
 

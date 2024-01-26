@@ -14,10 +14,17 @@ namespace Linode\Account;
 use Linode\Entity;
 
 /**
- * An object representing your network utilization for the current month, in Gigabytes.
+ * An object representing your network utilization for the current month, in
+ * Gigabytes.
  *
  * @property int $quota    The amount of network usage allowed this billing cycle.
  * @property int $used     The amount of network usage you have used this billing cycle.
  * @property int $billable The amount of your transfer pool that is billable this billing cycle.
  */
-class NetworkUtilization extends Entity {}
+class Transfer extends Entity
+{
+    // Available fields.
+    public const FIELD_QUOTA    = 'quota';
+    public const FIELD_USED     = 'used';
+    public const FIELD_BILLABLE = 'billable';
+}

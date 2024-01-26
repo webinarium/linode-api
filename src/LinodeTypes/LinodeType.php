@@ -12,14 +12,25 @@
 namespace Linode\LinodeTypes;
 
 use Linode\Entity;
+use Linode\Linode\Price;
 
 /**
- * Linode type, including pricing and specifications.
- * These are used when creating or resizing Linodes.
+ * Returns collection of Linode types, including pricing and specifications for each
+ * type. These are used when creating or resizing Linodes.
  *
  * @property string      $id          The ID representing the Linode Type.
  * @property string      $label       The Linode Type's label is for display purposes only.
- * @property string      $class       The class of the Linode Type (@see `CLASS_...` constants).
+ * @property string      $class       The class of the Linode Type. We currently offer five classes of Linodes:
+ *                                    * nanode - Nanode instances are good for low-duty workloads,
+ *                                    where performance isn't critical.
+ *                                    * standard - Standard instances are good for medium-duty workloads and
+ *                                    are a good mix of performance, resources, and price.
+ *                                    * dedicated - Dedicated CPU instances are good for full-duty workloads
+ *                                    where consistent performance is important.
+ *                                    * gpu - Linodes with dedicated NVIDIA Quadro (R) RTX 6000 GPUs accelerate highly
+ *                                    specialized applications such as machine learning, AI, and video transcoding.
+ *                                    * highmem - High Memory instances favor RAM over other resources, and can be
+ *                                    good for memory hungry use cases like caching and in-memory databases.
  * @property int         $disk        The Disk size, in MB, of the Linode Type.
  * @property int         $memory      Amount of RAM included in this Linode Type.
  * @property int         $vcpus       The number of VCPU cores this Linode Type offers.
@@ -27,9 +38,9 @@ use Linode\Entity;
  * @property int         $transfer    The monthly outbound transfer amount, in MB.
  * @property int         $gpus        The number of GPUs this Linode Type offers.
  * @property Price       $price       Cost in US dollars, broken down into hourly and monthly charges.
- * @property array       $addons      A list of optional add-on services for Linodes and their associated costs.
- * @property null|string $successor   The Linode Type that a `mutate` operation will upgrade to for a Linode of this type.
- *                                    If "null", a Linode of this type may not mutate.
+ * @property object      $addons      A list of optional add-on services for Linodes and their associated costs.
+ * @property null|string $successor   The Linode Type that a mutate will upgrade to for a Linode of this type. If
+ *                                    "null", a Linode of this type may not mutate.
  */
 class LinodeType extends Entity
 {
@@ -39,10 +50,13 @@ class LinodeType extends Entity
     public const FIELD_CLASS       = 'class';
     public const FIELD_DISK        = 'disk';
     public const FIELD_MEMORY      = 'memory';
-    public const FIELD_VCPLUS      = 'vcpus';
+    public const FIELD_VCPUS       = 'vcpus';
     public const FIELD_NETWORK_OUT = 'network_out';
     public const FIELD_TRANSFER    = 'transfer';
     public const FIELD_GPUS        = 'gpus';
+    public const FIELD_PRICE       = 'price';
+    public const FIELD_ADDONS      = 'addons';
+    public const FIELD_SUCCESSOR   = 'successor';
 
     // `FIELD_CLASS` values.
     public const CLASS_NANODE    = 'nanode';
@@ -57,8 +71,8 @@ class LinodeType extends Entity
     public function __get(string $name): mixed
     {
         return match ($name) {
-            'price' => new Price($this->client, $this->data[$name] ?? []),
-            default => parent::__get($name),
+            self::FIELD_PRICE => new Price($this->client, $this->data[$name]),
+            default           => parent::__get($name),
         };
     }
 }

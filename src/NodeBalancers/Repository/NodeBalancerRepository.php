@@ -22,10 +22,8 @@ use Linode\NodeBalancers\NodeBalancerStats;
  */
 class NodeBalancerRepository extends AbstractRepository implements NodeBalancerRepositoryInterface
 {
-    public function create(array $parameters): NodeBalancer
+    public function createNodeBalancer(array $parameters = []): NodeBalancer
     {
-        $this->checkParametersSupport($parameters);
-
         $response = $this->client->post($this->getBaseUri(), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
@@ -33,25 +31,23 @@ class NodeBalancerRepository extends AbstractRepository implements NodeBalancerR
         return new NodeBalancer($this->client, $json);
     }
 
-    public function update(int $id, array $parameters): NodeBalancer
+    public function updateNodeBalancer(int $nodeBalancerId, array $parameters = []): NodeBalancer
     {
-        $this->checkParametersSupport($parameters);
-
-        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $id), $parameters);
+        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $nodeBalancerId), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
         return new NodeBalancer($this->client, $json);
     }
 
-    public function delete(int $id): void
+    public function deleteNodeBalancer(int $nodeBalancerId): void
     {
-        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $id));
+        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $nodeBalancerId));
     }
 
-    public function getStats(int $id): NodeBalancerStats
+    public function getNodeBalancerStats(int $nodeBalancerId): NodeBalancerStats
     {
-        $response = $this->client->get(sprintf('%s/%s/stats', $this->getBaseUri(), $id));
+        $response = $this->client->get(sprintf('%s/%s/stats', $this->getBaseUri(), $nodeBalancerId));
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
@@ -73,7 +69,10 @@ class NodeBalancerRepository extends AbstractRepository implements NodeBalancerR
             NodeBalancer::FIELD_IPV4,
             NodeBalancer::FIELD_IPV6,
             NodeBalancer::FIELD_CLIENT_CONN_THROTTLE,
-            NodeBalancer::FIELD_CONFIGS,
+            NodeBalancer::FIELD_CREATED,
+            NodeBalancer::FIELD_UPDATED,
+            NodeBalancer::FIELD_TAGS,
+            NodeBalancer::FIELD_TRANSFER,
         ];
     }
 

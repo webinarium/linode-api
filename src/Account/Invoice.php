@@ -23,7 +23,7 @@ use Linode\Entity;
  * @property float                          $subtotal The amount of the Invoice before taxes in US Dollars.
  * @property float                          $tax      The amount of tax levied on the Invoice in US Dollars.
  * @property float                          $total    The amount of the Invoice after taxes in US Dollars.
- * @property InvoiceItemRepositoryInterface $items    Items of the invoice.
+ * @property InvoiceItemRepositoryInterface $items    Invoice items.
  */
 class Invoice extends Entity
 {
@@ -32,7 +32,7 @@ class Invoice extends Entity
     public const FIELD_DATE     = 'date';
     public const FIELD_LABEL    = 'label';
     public const FIELD_SUBTOTAL = 'subtotal';
-    public const FIELD_TAXL     = 'tax';
+    public const FIELD_TAX      = 'tax';
     public const FIELD_TOTAL    = 'total';
 
     /**

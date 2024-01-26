@@ -14,7 +14,7 @@ namespace Linode\Account;
 use Linode\Entity;
 
 /**
- * Payment object.
+ * Payment object response.
  *
  * @property int    $id   The unique ID of the Payment.
  * @property string $date When the Payment was made.

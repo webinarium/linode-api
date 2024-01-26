@@ -23,17 +23,15 @@ use Linode\LinodeClient;
 class DomainRecordRepository extends AbstractRepository implements DomainRecordRepositoryInterface
 {
     /**
-     * @param int $domainId The ID of the Domain we are accessing Records for
+     * @param int $domainId The ID of the Domain we are accessing Records for.
      */
     public function __construct(LinodeClient $client, protected int $domainId)
     {
         parent::__construct($client);
     }
 
-    public function create(array $parameters): DomainRecord
+    public function createDomainRecord(array $parameters = []): DomainRecord
     {
-        $this->checkParametersSupport($parameters);
-
         $response = $this->client->post($this->getBaseUri(), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
@@ -41,20 +39,18 @@ class DomainRecordRepository extends AbstractRepository implements DomainRecordR
         return new DomainRecord($this->client, $json);
     }
 
-    public function update(int $id, array $parameters): DomainRecord
+    public function updateDomainRecord(int $recordId, array $parameters = []): DomainRecord
     {
-        $this->checkParametersSupport($parameters);
-
-        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $id), $parameters);
+        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $recordId), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
         return new DomainRecord($this->client, $json);
     }
 
-    public function delete(int $id): void
+    public function deleteDomainRecord(int $recordId): void
     {
-        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $id));
+        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $recordId));
     }
 
     protected function getBaseUri(): string

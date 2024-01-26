@@ -24,17 +24,15 @@ use Linode\NodeBalancers\NodeBalancerConfigRepositoryInterface;
 class NodeBalancerConfigRepository extends AbstractRepository implements NodeBalancerConfigRepositoryInterface
 {
     /**
-     * @param int $nodeBalancerId The ID of the NodeBalancer we are accessing Configs for
+     * @param int $nodeBalancerId The ID of the NodeBalancer to access.
      */
     public function __construct(LinodeClient $client, protected int $nodeBalancerId)
     {
         parent::__construct($client);
     }
 
-    public function create(array $parameters): NodeBalancerConfig
+    public function createNodeBalancerConfig(array $parameters = []): NodeBalancerConfig
     {
-        $this->checkParametersSupport($parameters);
-
         $response = $this->client->post($this->getBaseUri(), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
@@ -42,25 +40,23 @@ class NodeBalancerConfigRepository extends AbstractRepository implements NodeBal
         return new NodeBalancerConfig($this->client, $json);
     }
 
-    public function update(int $id, array $parameters): NodeBalancerConfig
+    public function updateNodeBalancerConfig(int $configId, array $parameters = []): NodeBalancerConfig
     {
-        $this->checkParametersSupport($parameters);
-
-        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $id), $parameters);
+        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $configId), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
         return new NodeBalancerConfig($this->client, $json);
     }
 
-    public function delete(int $id): void
+    public function deleteNodeBalancerConfig(int $configId): void
     {
-        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $id));
+        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $configId));
     }
 
-    public function rebuild(int $id, array $parameters): NodeBalancer
+    public function rebuildNodeBalancerConfig(int $configId, array $parameters = []): NodeBalancer
     {
-        $response = $this->client->post(sprintf('%s/%s/rebuild', $this->getBaseUri(), $id), $parameters);
+        $response = $this->client->post(sprintf('%s/%s/rebuild', $this->getBaseUri(), $configId), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
@@ -92,7 +88,8 @@ class NodeBalancerConfigRepository extends AbstractRepository implements NodeBal
             NodeBalancerConfig::FIELD_SSL_FINGERPRINT,
             NodeBalancerConfig::FIELD_SSL_CERT,
             NodeBalancerConfig::FIELD_SSL_KEY,
-            NodeBalancerConfig::FIELD_NODES,
+            NodeBalancerConfig::FIELD_NODES_STATUS,
+            NodeBalancerConfig::FIELD_NODEBALANCER_ID,
         ];
     }
 

@@ -15,14 +15,22 @@ use Linode\Exception\LinodeException;
 use Linode\RepositoryInterface;
 
 /**
- * Support ticket reply repository.
+ * SupportTicketReply repository.
+ *
+ * @method SupportTicketReply   find(int|string $id)
+ * @method SupportTicketReply[] findAll(string $orderBy = null, string $orderDir = self::SORT_ASC)
+ * @method SupportTicketReply[] findBy(array $criteria, string $orderBy = null, string $orderDir = self::SORT_ASC)
+ * @method SupportTicketReply   findOneBy(array $criteria)
+ * @method SupportTicketReply[] query(string $query, array $parameters = [], string $orderBy = null, string $orderDir = self::SORT_ASC)
  */
 interface SupportTicketReplyRepositoryInterface extends RepositoryInterface
 {
     /**
      * Adds a reply to an existing Support Ticket.
      *
+     * @param array $parameters Add a reply.
+     *
      * @throws LinodeException
      */
-    public function create(array $parameters): SupportTicketReply;
+    public function createTicketReply(array $parameters = []): SupportTicketReply;
 }

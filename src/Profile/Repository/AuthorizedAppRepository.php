@@ -21,9 +21,9 @@ use Linode\Profile\AuthorizedAppRepositoryInterface;
  */
 class AuthorizedAppRepository extends AbstractRepository implements AuthorizedAppRepositoryInterface
 {
-    public function revoke(int $id): void
+    public function deleteProfileApp(int $appId): void
     {
-        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $id));
+        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $appId));
     }
 
     protected function getBaseUri(): string

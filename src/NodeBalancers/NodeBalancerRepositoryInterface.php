@@ -16,42 +16,57 @@ use Linode\RepositoryInterface;
 
 /**
  * NodeBalancer repository.
+ *
+ * @method NodeBalancer   find(int|string $id)
+ * @method NodeBalancer[] findAll(string $orderBy = null, string $orderDir = self::SORT_ASC)
+ * @method NodeBalancer[] findBy(array $criteria, string $orderBy = null, string $orderDir = self::SORT_ASC)
+ * @method NodeBalancer   findOneBy(array $criteria)
+ * @method NodeBalancer[] query(string $query, array $parameters = [], string $orderBy = null, string $orderDir = self::SORT_ASC)
  */
 interface NodeBalancerRepositoryInterface extends RepositoryInterface
 {
     /**
-     * Creates a NodeBalancer in the requested Region. This NodeBalancer
-     * will not start serving requests until it is configured.
+     * Creates a NodeBalancer in the requested Region. This NodeBalancer will not start
+     * serving requests until it is configured.
+     *
+     * @param array $parameters Information about the NodeBalancer to create.
      *
      * @throws LinodeException
      */
-    public function create(array $parameters): NodeBalancer;
+    public function createNodeBalancer(array $parameters = []): NodeBalancer;
 
     /**
      * Updates information about a NodeBalancer you can access.
      *
+     * @param int   $nodeBalancerId The ID of the NodeBalancer to access.
+     * @param array $parameters     The information to update.
+     *
      * @throws LinodeException
      */
-    public function update(int $id, array $parameters): NodeBalancer;
+    public function updateNodeBalancer(int $nodeBalancerId, array $parameters = []): NodeBalancer;
 
     /**
      * Deletes a NodeBalancer.
      *
-     * WARNING! This is a destructive action and cannot be undone.
+     * **This is a destructive action and cannot be undone.**
      *
      * Deleting a NodeBalancer will also delete all associated Configs and Nodes,
-     * although the backend servers represented by the Nodes will not be
-     * changed or removed. Deleting a NodeBalancer will cause you to lose access
-     * to the IP Addresses assigned to this NodeBalancer.
+     * although the backend servers represented by the Nodes will not be changed or
+     * removed. Deleting a NodeBalancer will cause you to lose access to the IP Addresses
+     * assigned to this NodeBalancer.
+     *
+     * @param int $nodeBalancerId The ID of the NodeBalancer to access.
      *
      * @throws LinodeException
      */
-    public function delete(int $id): void;
+    public function deleteNodeBalancer(int $nodeBalancerId): void;
 
     /**
      * Returns detailed statistics about the requested NodeBalancer.
      *
+     * @param int $nodeBalancerId The ID of the NodeBalancer to access.
+     *
      * @throws LinodeException
      */
-    public function getStats(int $id): NodeBalancerStats;
+    public function getNodeBalancerStats(int $nodeBalancerId): NodeBalancerStats;
 }

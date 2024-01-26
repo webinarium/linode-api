@@ -21,14 +21,14 @@ use Linode\Internal\AbstractRepository;
  */
 class EventRepository extends AbstractRepository implements EventRepositoryInterface
 {
-    public function markAsSeen(int $id): void
+    public function eventRead(int $eventId): void
     {
-        $this->client->post(sprintf('%s/%s/seen', $this->getBaseUri(), $id));
+        $this->client->post(sprintf('%s/%s/read', $this->getBaseUri(), $eventId));
     }
 
-    public function markAsRead(int $id): void
+    public function eventSeen(int $eventId): void
     {
-        $this->client->post(sprintf('%s/%s/read', $this->getBaseUri(), $id));
+        $this->client->post(sprintf('%s/%s/seen', $this->getBaseUri(), $eventId));
     }
 
     protected function getBaseUri(): string
@@ -42,6 +42,7 @@ class EventRepository extends AbstractRepository implements EventRepositoryInter
             Event::FIELD_ID,
             Event::FIELD_USERNAME,
             Event::FIELD_ACTION,
+            Event::FIELD_ENTITY,
             Event::FIELD_CREATED,
             Event::FIELD_STATUS,
             Event::FIELD_SEEN,

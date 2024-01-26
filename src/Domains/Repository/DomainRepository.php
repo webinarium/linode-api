@@ -21,10 +21,8 @@ use Linode\Internal\AbstractRepository;
  */
 class DomainRepository extends AbstractRepository implements DomainRepositoryInterface
 {
-    public function create(array $parameters): Domain
+    public function createDomain(array $parameters = []): Domain
     {
-        $this->checkParametersSupport($parameters);
-
         $response = $this->client->post($this->getBaseUri(), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
@@ -32,23 +30,21 @@ class DomainRepository extends AbstractRepository implements DomainRepositoryInt
         return new Domain($this->client, $json);
     }
 
-    public function update(int $id, array $parameters): Domain
+    public function updateDomain(int $domainId, array $parameters = []): Domain
     {
-        $this->checkParametersSupport($parameters);
-
-        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $id), $parameters);
+        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $domainId), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
         return new Domain($this->client, $json);
     }
 
-    public function delete(int $id): void
+    public function deleteDomain(int $domainId): void
     {
-        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $id));
+        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $domainId));
     }
 
-    public function import(string $domain, string $remote_nameserver): Domain
+    public function importDomain(string $domain, string $remote_nameserver): Domain
     {
         $parameters = [
             'domain'            => $domain,
@@ -62,13 +58,13 @@ class DomainRepository extends AbstractRepository implements DomainRepositoryInt
         return new Domain($this->client, $json);
     }
 
-    public function clone(int $id, string $domain): Domain
+    public function cloneDomain(int $domainId, string $domain): Domain
     {
         $parameters = [
             'domain' => $domain,
         ];
 
-        $response = $this->client->post(sprintf('%s/clone', $this->getBaseUri()), $parameters);
+        $response = $this->client->post(sprintf('%s/%s/clone', $this->getBaseUri(), $domainId), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
@@ -96,6 +92,7 @@ class DomainRepository extends AbstractRepository implements DomainRepositoryInt
             Domain::FIELD_EXPIRE_SEC,
             Domain::FIELD_MASTER_IPS,
             Domain::FIELD_AXFR_IPS,
+            Domain::FIELD_TAGS,
         ];
     }
 

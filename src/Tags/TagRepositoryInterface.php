@@ -16,24 +16,32 @@ use Linode\RepositoryInterface;
 
 /**
  * Tag repository.
+ *
+ * @method Tag   find(int|string $id)
+ * @method Tag[] findAll(string $orderBy = null, string $orderDir = self::SORT_ASC)
+ * @method Tag[] findBy(array $criteria, string $orderBy = null, string $orderDir = self::SORT_ASC)
+ * @method Tag   findOneBy(array $criteria)
+ * @method Tag[] query(string $query, array $parameters = [], string $orderBy = null, string $orderDir = self::SORT_ASC)
  */
 interface TagRepositoryInterface extends RepositoryInterface
 {
     /**
      * Creates a new Tag and optionally tags requested objects with it immediately.
      *
-     * You must be an unrestricted User in order to add or modify Tags.
+     * **Important**: You must be an unrestricted User in order to add or modify Tags.
+     *
+     * @param array $parameters The tag to create, and optionally the objects to tag.
      *
      * @throws LinodeException
      */
-    public function create(array $parameters): Tag;
+    public function createTag(array $parameters = []): Tag;
 
     /**
      * Remove a Tag from all objects and delete it.
      *
-     * You must be an unrestricted User in order to add or modify Tags.
+     * **Important**: You must be an unrestricted User in order to add or modify Tags.
      *
      * @throws LinodeException
      */
-    public function delete(string $label): void;
+    public function deleteTag(string $label): void;
 }

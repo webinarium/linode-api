@@ -14,16 +14,12 @@ namespace Linode\Managed;
 use Linode\Entity;
 
 /**
- * A Linode SSH settings.
+ * The SSH settings for this Linode.
  *
- * @property bool   $access If true, Linode special forces may access this Linode over
- *                          ssh to respond to Issues.
- * @property string $user   The user Linode's special forces should use when accessing this
- *                          Linode to respond to an issue.
- * @property string $ip     The IP Linode special forces should use to access this Linode
- *                          when responding to an Issue.
- * @property int    $port   The port Linode special forces should use to access this Linode
- *                          over ssh to respond to an Issue.
+ * @property bool   $access If true, Linode special forces may access this Linode over ssh to respond to Issues.
+ * @property string $user   The user Linode special forces should use when accessing this Linode to respond to an issue.
+ * @property string $ip     The IP Linode special forces should use to access this Linode when responding to an Issue.
+ * @property int    $port   The port Linode special forces should use to access this Linode over ssh to respond to an Issue.
  */
 class SSHSettings extends Entity
 {

@@ -15,55 +15,61 @@ use Linode\Exception\LinodeException;
 use Linode\RepositoryInterface;
 
 /**
- * Managed service repository.
+ * ManagedService repository.
+ *
+ * @method ManagedService   find(int|string $id)
+ * @method ManagedService[] findAll(string $orderBy = null, string $orderDir = self::SORT_ASC)
+ * @method ManagedService[] findBy(array $criteria, string $orderBy = null, string $orderDir = self::SORT_ASC)
+ * @method ManagedService   findOneBy(array $criteria)
+ * @method ManagedService[] query(string $query, array $parameters = [], string $orderBy = null, string $orderDir = self::SORT_ASC)
  */
 interface ManagedServiceRepositoryInterface extends RepositoryInterface
 {
     /**
-     * Creates a Managed Service. Linode Managed will begin monitoring this
-     * service and reporting and attempting to resolve any Issues.
+     * Creates a Managed Service. Linode Managed will begin monitoring this service and
+     * reporting and attempting to resolve any Issues.
+     *
+     * @param array $parameters Information about the service to monitor.
      *
      * @throws LinodeException
      */
-    public function create(array $parameters): ManagedService;
+    public function createManagedService(array $parameters = []): ManagedService;
 
     /**
      * Updates information about a Managed Service.
      *
-     * @throws LinodeException
-     */
-    public function update(int $id, array $parameters): ManagedService;
-
-    /**
-     * Deletes a Managed Service. This service will no longer be monitored by Linode Managed.
+     * @param int   $serviceId  The ID of the Managed Service to access.
+     * @param array $parameters The fields to update.
      *
      * @throws LinodeException
      */
-    public function delete(int $id): void;
+    public function updateManagedService(int $serviceId, array $parameters = []): ManagedService;
+
+    /**
+     * Deletes a Managed Service. This service will no longer be monitored by Linode
+     * Managed.
+     *
+     * @param int $serviceId The ID of the Managed Service to access.
+     *
+     * @throws LinodeException
+     */
+    public function deleteManagedService(int $serviceId): void;
 
     /**
      * Temporarily disables monitoring of a Managed Service.
      *
+     * @param int $serviceId The ID of the Managed Service to disable.
+     *
      * @throws LinodeException
      */
-    public function disable(int $id): ManagedService;
+    public function disableManagedService(int $serviceId): ManagedService;
 
     /**
      * Enables monitoring of a Managed Service.
      *
-     * @throws LinodeException
-     */
-    public function enable(int $id): ManagedService;
-
-    /**
-     * Returns the unique SSH public key assigned to your Linode account's
-     * Managed service. If you add this public key to a Linode on your account,
-     * Linode special forces will be able to log in to the Linode with this key
-     * when attempting to resolve issues.
-     *
-     * @return string the unique SSH public key assigned to your Linode account's Managed service
+     * @param int $serviceId The ID of the Managed Service to enable.
      *
      * @throws LinodeException
      */
-    public function getSshKey(): string;
+    public function enableManagedService(int $serviceId): ManagedService;
 }

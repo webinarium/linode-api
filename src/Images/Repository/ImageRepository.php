@@ -21,10 +21,8 @@ use Linode\Internal\AbstractRepository;
  */
 class ImageRepository extends AbstractRepository implements ImageRepositoryInterface
 {
-    public function create(array $parameters): Image
+    public function createImage(array $parameters = []): Image
     {
-        $this->checkParametersSupport($parameters);
-
         $response = $this->client->post($this->getBaseUri(), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
@@ -32,20 +30,18 @@ class ImageRepository extends AbstractRepository implements ImageRepositoryInter
         return new Image($this->client, $json);
     }
 
-    public function update(string $id, array $parameters): Image
+    public function updateImage(string $imageId, array $parameters = []): Image
     {
-        $this->checkParametersSupport($parameters);
-
-        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $id), $parameters);
+        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $imageId), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
         return new Image($this->client, $json);
     }
 
-    public function delete(string $id): void
+    public function deleteImage(string $imageId): void
     {
-        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $id));
+        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $imageId));
     }
 
     protected function getBaseUri(): string
@@ -62,9 +58,11 @@ class ImageRepository extends AbstractRepository implements ImageRepositoryInter
             Image::FIELD_DESCRIPTION,
             Image::FIELD_IS_PUBLIC,
             Image::FIELD_SIZE,
-            Image::FIELD_TYPE,
+            Image::FIELD_CREATED,
+            Image::FIELD_CREATED_BY,
             Image::FIELD_DEPRECATED,
-            Image::FIELD_DISK_ID,
+            Image::FIELD_TYPE,
+            Image::FIELD_EXPIRY,
         ];
     }
 

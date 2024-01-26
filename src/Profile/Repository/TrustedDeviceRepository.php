@@ -21,9 +21,9 @@ use Linode\Profile\TrustedDeviceRepositoryInterface;
  */
 class TrustedDeviceRepository extends AbstractRepository implements TrustedDeviceRepositoryInterface
 {
-    public function revoke(int $id): void
+    public function revokeTrustedDevice(int $deviceId): void
     {
-        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $id));
+        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $deviceId));
     }
 
     protected function getBaseUri(): string

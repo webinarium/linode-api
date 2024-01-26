@@ -14,11 +14,12 @@ namespace Linode\LinodeInstances;
 use Linode\Entity;
 
 /**
- * Device can be either a Disk or Volume identified by `disk_id` or `volume_id`.
- * Only one type per slot allowed.
+ * Device can be either a Disk or Volume identified by `disk_id` or `volume_id`. Only
+ * one type per slot allowed. Can be null.
+ * Devices mapped from _sde_ through _sdh_ are unavailable in `fullvirt` virt_mode.
  *
- * @property null|int $disk_id   The Disk ID, or `null` if a Volume is assigned to this slot.
- * @property null|int $volume_id The Volume ID, or `null` if a Disk is assigned to this slot.
+ * @property int $disk_id   The Disk ID, or `null` if a Volume is assigned to this slot.
+ * @property int $volume_id The Volume ID, or `null` if a Disk is assigned to this slot.
  */
 class Device extends Entity
 {

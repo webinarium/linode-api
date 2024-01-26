@@ -14,13 +14,13 @@ namespace Linode\LinodeInstances;
 use Linode\Entity;
 
 /**
- * Helpers enabled when booting to a Linode Config.
+ * Helpers enabled when booting to this Linode Config.
  *
  * @property bool $updatedb_disabled  Disables updatedb cron job to avoid disk thrashing.
  * @property bool $distro             Helps maintain correct inittab/upstart console device.
  * @property bool $modules_dep        Creates a modules dependency file for the Kernel you run.
  * @property bool $network            Automatically configures static networking.
- * @property bool $devtmpfs_automount Populates the /dev directory early during boot without udev.  Defaults to false.
+ * @property bool $devtmpfs_automount Populates the /dev directory early during boot without udev. Defaults to false.
  */
 class Helpers extends Entity
 {

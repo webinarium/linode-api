@@ -14,6 +14,12 @@ namespace Linode\ObjectStorage;
 use Linode\RepositoryInterface;
 
 /**
- * Object Storage Cluster repository.
+ * ObjectStorageCluster repository.
+ *
+ * @method ObjectStorageCluster   find(int|string $id)
+ * @method ObjectStorageCluster[] findAll(string $orderBy = null, string $orderDir = self::SORT_ASC)
+ * @method ObjectStorageCluster[] findBy(array $criteria, string $orderBy = null, string $orderDir = self::SORT_ASC)
+ * @method ObjectStorageCluster   findOneBy(array $criteria)
+ * @method ObjectStorageCluster[] query(string $query, array $parameters = [], string $orderBy = null, string $orderDir = self::SORT_ASC)
  */
 interface ObjectStorageClusterRepositoryInterface extends RepositoryInterface {}

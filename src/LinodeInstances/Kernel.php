@@ -34,4 +34,8 @@ class Kernel extends Entity
     public const FIELD_KVM          = 'kvm';
     public const FIELD_XEN          = 'xen';
     public const FIELD_PVOPS        = 'pvops';
+
+    // `FIELD_ARCHITECTURE` values.
+    public const ARCHITECTURE_X86_64 = 'x86_64';
+    public const ARCHITECTURE_I386   = 'i386';
 }

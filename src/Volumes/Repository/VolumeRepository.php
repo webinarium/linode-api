@@ -21,10 +21,8 @@ use Linode\Volumes\VolumeRepositoryInterface;
  */
 class VolumeRepository extends AbstractRepository implements VolumeRepositoryInterface
 {
-    public function create(array $parameters): Volume
+    public function createVolume(array $parameters = []): Volume
     {
-        $this->checkParametersSupport($parameters);
-
         $response = $this->client->post($this->getBaseUri(), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
@@ -32,50 +30,42 @@ class VolumeRepository extends AbstractRepository implements VolumeRepositoryInt
         return new Volume($this->client, $json);
     }
 
-    public function update(int $id, array $parameters): Volume
+    public function updateVolume(int $volumeId, array $parameters = []): Volume
     {
-        $this->checkParametersSupport($parameters);
-
-        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $id), $parameters);
+        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $volumeId), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
         return new Volume($this->client, $json);
     }
 
-    public function delete(int $id): void
+    public function deleteVolume(int $volumeId): void
     {
-        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $id));
+        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $volumeId));
     }
 
-    public function clone(int $id, array $parameters): void
+    public function attachVolume(int $volumeId, array $parameters = []): Volume
     {
-        $this->checkParametersSupport($parameters);
-
-        $this->client->post(sprintf('%s/%s/clone', $this->getBaseUri(), $id), $parameters);
-    }
-
-    public function resize(int $id, array $parameters): void
-    {
-        $this->checkParametersSupport($parameters);
-
-        $this->client->post(sprintf('%s/%s/resize', $this->getBaseUri(), $id), $parameters);
-    }
-
-    public function attach(int $id, array $parameters): Volume
-    {
-        $this->checkParametersSupport($parameters);
-
-        $response = $this->client->post(sprintf('%s/%s/attach', $this->getBaseUri(), $id), $parameters);
+        $response = $this->client->post(sprintf('%s/%s/attach', $this->getBaseUri(), $volumeId), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
         return new Volume($this->client, $json);
     }
 
-    public function detach(int $id): void
+    public function cloneVolume(int $volumeId, array $parameters = []): void
     {
-        $this->client->post(sprintf('%s/%s/detach', $this->getBaseUri(), $id));
+        $this->client->post(sprintf('%s/%s/clone', $this->getBaseUri(), $volumeId), $parameters);
+    }
+
+    public function detachVolume(int $volumeId): void
+    {
+        $this->client->post(sprintf('%s/%s/detach', $this->getBaseUri(), $volumeId));
+    }
+
+    public function resizeVolume(int $volumeId, array $parameters = []): void
+    {
+        $this->client->post(sprintf('%s/%s/resize', $this->getBaseUri(), $volumeId), $parameters);
     }
 
     protected function getBaseUri(): string
@@ -92,7 +82,10 @@ class VolumeRepository extends AbstractRepository implements VolumeRepositoryInt
             Volume::FIELD_SIZE,
             Volume::FIELD_REGION,
             Volume::FIELD_LINODE_ID,
-            Volume::FIELD_CONFIG_ID,
+            Volume::FIELD_FILESYSTEM_PATH,
+            Volume::FIELD_CREATED,
+            Volume::FIELD_UPDATED,
+            Volume::FIELD_TAGS,
         ];
     }
 

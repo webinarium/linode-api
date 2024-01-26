@@ -23,7 +23,9 @@ composer require webinarium/linode-api
 
 ## Usage
 
-### Authentication
+<details>
+<summary>Basic Usage</summary>
+<br>
 
 Access to all API endpoints goes through an instance of `LinodeClient` class, which you have to create first:
 
@@ -48,8 +50,11 @@ $linodes = $client->linodes->findAll();
 
 Access token can be a manually generated _Personal Access Token_ or a retrieved one from OAuth workflow.
 You can use [oauth2-linode](https://github.com/webinarium/oauth2-linode) library to authenticate in Linode using OAuth.
+</details>
 
-### Errors
+<details>
+<summary>Errors</summary>
+<br>
 
 Any API request to Linode can fail.
 In this case Linode API returns list of errors, each consists of `reason` (a human-readable error message, always included) and `field` (a specific field in the submitted JSON, `null` when not applicable).
@@ -76,18 +81,21 @@ catch (LinodeException $exception) {
     $message = $exception->getMessage();
 
     foreach ($exception->getErrors() as $error) {
-        $field  = $error->getField();
-        $reason = $error->getReason();
+        echo $error->field;
+        echo $error->reason;
     }
 }
 ```
+</details>
 
-### Entities and Repositories
+<details>
+<summary>Entities and Repositories</summary>
+<br>
 
-The library provides an _entity_ class for any object returned by Linode API - _linodes_, _images_, _nodebalancers_, whatever.
-All entities are read-only, the data accessible through properties.
+The library provides an _entity_ class for every object returned by Linode API - _linodes_, _images_, _nodebalancers_, whatever.
+All entities are read-only, the data are accessible through properties.
 
-There is a dedicated repository for entity of each type. Most of the repositories are available through the `LinodeClient` class:
+Also, there is a dedicated repository for entity of each type. Most of the repositories are available through the `LinodeClient` class:
 
 ```php
 use Linode\LinodeClient;
@@ -130,9 +138,14 @@ foreach ($records as $record) {
 }
 ```
 
-### Repositories and Collections
+To make it easier to find corresponding entity and repository, the library sources are structured the same way as the original API documentation.
+</details>
 
-Each repository implements `Linode\Repository\RepositoryInterface` and provides two following functions.
+<details>
+<summary>Repositories and Collections</summary>
+<br>
+
+Each repository implements `Linode\RepositoryInterface` and provides two following functions.
 
 The `find` function searches for an entity by its ID:
 
@@ -146,7 +159,7 @@ $client = new LinodeClient('03d084436a6c91fbafd5c4b20c82e5056a2e9ce1635920c30dc8
 $linode = $client->linodes->find(123);
 ```
 
-The `findAll` function returns all entities of the type as a `Linode\Repository\EntityCollection` object.
+The `findAll` function returns all entities of the type as a `Linode\EntityCollection` object.
 Such object implements standard `Countable` and `Iterator` interfaces:
 
 ```php
@@ -164,13 +177,16 @@ foreach ($linodes as $linode) {
     // ...
 }
 ```
+</details>
 
-### Pagination
+<details>
+<summary>Pagination</summary>
+<br>
 
 When you are retrieving a list of objects from Linode API, the API returns the list paginated.
 To make your life easier, the library manages the pagination for you internally, so you can work with a list of entities as with a simple array.
 
-For example, let's assume you have 70 linodes in your account and need to enumerate their labels:
+For example, let's assume you have 270 linodes in your account and need to enumerate their labels:
 
 ```php
 use Linode\LinodeClient;
@@ -184,12 +200,12 @@ foreach ($linodes as $linode) {
 }
 ```
 
-When you call `findAll` function in this example, only first 25 entities are loaded (25 is a default page size in the API).
-Once you reach 26th entity in your enumeration, the library makes another call for next 25 linodes, and so on.
-As result, the library will make three API requests for your 70 linodes, but it's completely transparent for you.
+When you call `findAll` function in this example, only first 100 entities are loaded (100 is a default page size in the API).
+Once you reach 101st entity in your enumeration, the library makes another call for next 100 linodes, and so on.
+As result, the library will make three API requests for your 270 linodes, but it's completely transparent for you.
 Of course, extra requests are performed only when needed, so if you break your enumeration in the middle, remaining entities won't be requested at all.
 
-Also please note, that retrieved entities are cached per collection, so it's safe to enumerate the same collection multiple times:
+Also, the retrieved entities are cached per collection, so it's safe to enumerate the same collection multiple times:
 
 ```php
 use Linode\LinodeClient;
@@ -215,8 +231,11 @@ foreach ($linodes2 as $linode) {
     echo $linode->type;
 }
 ```
+</details>
 
-### Sorting
+<details>
+<summary>Sorting</summary>
+<br>
 
 The Linode API supports sorting of the requested objects, which can be specified in two optional parameters of the `findAll` function:
 
@@ -230,17 +249,20 @@ $client = new LinodeClient('03d084436a6c91fbafd5c4b20c82e5056a2e9ce1635920c30dc8
 $linodes = $client->linodes->findAll(Linode::FIELD_LABEL, RepositoryInterface::SORT_DESC);
 ```
 
-The first parameter is a name of the field to sort entities by.
+The first parameter is the name of the field to sort entities by.
 Every entity class contains useful constants so you don't have to hardcode field names.
 
-The second parameter is a sorting direction and equals to `RepositoryInterface::SORT_ASC` if omitted.
+The second parameter is a sorting direction and equals to `Linode\RepositoryInterface::SORT_ASC` if omitted.
+</details>
 
-### Filtering (simple queries)
+<details>
+<summary>Filtering (simple queries)</summary>
+<br>
 
-The Linode API supports filtering of the requested objects, which is addressed by the same `Linode\Repository\RepositoryInterface` interface via `findBy`, `findOneBy`, and `query` functions.
+The Linode API supports filtering of the requested objects, which is addressed by the same `Linode\RepositoryInterface` interface via `findBy`, `findOneBy`, and `query` functions.
 
 The `findBy` function accepts array of criterias as the first parameter.
-All the criterias are joined via logical _"and"_ operation.
+All the criterias are joined via logical `AND` operation.
 
 ```php
 use Linode\LinodeClient;
@@ -272,13 +294,16 @@ $linode = $client->linodes->findOneBy([
 
 If nothing is found, the function returns `null`.
 If more than one entity is found, the function raises a `LinodeException`.
+</details>
 
-### Filtering (complex queries)
+<details>
+<summary>Filtering (complex queries)</summary>
+<br>
 
 The last of functions mentioned above - `query` - lets you make complex requests using query language of the Linode API.
 
 The API query language assumes you convert your conditions to JSON, which actually makes them hard to read, debug, and maintain.
-For example, current API documentation assumes the following JSON object to get all Linode Types which are either _standard_ or _highmem_ class, and have between 12 and 20 vcpus:
+For example, current API documentation suggests the following JSON object to get all Linode Types which are either _standard_ or _highmem_ class, or have between 12 and 20 vcpus:
 
 ```json
 {
@@ -311,8 +336,6 @@ For example, current API documentation assumes the following JSON object to get 
 }
 ```
 
-And even this pretty simple example contains a mistake - it actually returns all Linode Types which are either _standard_ or _highmem_ class, **or** (not **and**!) have between 12 and 20 vcpus.
-
 The `query` function lets you write your conditions using more human-readable expressions which are passed as a string to the first parameter.
 The above example can be implemented as following:
 
@@ -321,11 +344,11 @@ use Linode\LinodeClient;
 
 $client = new LinodeClient();
 
-$types = $client->linode_types->query('(class == "standard" or class == "highmem") and (vcpus >= 12 and vcpus <= 20)');
+$types = $client->linodeTypes->query('(class == "standard" or class == "highmem") or (vcpus >= 12 and vcpus <= 20)');
 
 foreach ($types as $type) {
-    $class = $type->class;
-    $vcpus = $type->vcpus;
+    echo $type->class;
+    echo $type->vcpus;
 }
 ```
 
@@ -357,10 +380,10 @@ $parameters = [
     'max'    => 20,
 ];
 
-$types = $client->linode_types->query('(class == :class1 or class == :class2) and (vcpus >= :min and vcpus <= :max)', $parameters);
+$types = $client->linodeTypes->query('(class == :class1 or class == :class2) or (vcpus >= :min and vcpus <= :max)', $parameters);
 ```
 
-As you can see, each parameter starts with a colon, and the whole set of parameters is provided once as an array.
+Each parameter starts with a colon, and the whole set of parameters is provided once as an array.
 
 And, just like `findAll` and `findBy` functions, the `query` function has two last optional parameters for sorting:
 
@@ -378,39 +401,13 @@ $parameters = [
     'max'    => 20,
 ];
 
-$types = $client->linode_types->query(
-    '(class == :class1 or class == :class2) and (vcpus >= :min and vcpus <= :max)',
+$types = $client->linodeTypes->query(
+    '(class == :class1 or class == :class2) or (vcpus >= :min and vcpus <= :max)',
     $parameters,
     LinodeType::FIELD_MEMORY,
     RepositoryInterface::SORT_DESC);
 ```
-
-### POST/PUT/DELETE requests
-
-Each request which is not covered by `find` and `findAll` functions has an appropriate function in the corresponding repository.
-
-If a request requires object ID to be passed via URI (most `PUT` and `DELETE` requests), then its function has an `$id` parameter.
-
-If a request accepts a vary number of assorted arguments to be passed as a JSON object (most `POST` and `PUT` requests), then its function has a `$parameters` array:
-
-```php
-use Linode\LinodeInstances\Linode;
-use Linode\LinodeInstances\LinodeRepositoryInterface;
-
-/** @var LinodeRepositoryInterface $repository */
-$repository = $client->linodes;
-
-$linode = $repository->create([
-    Linode::FIELD_TYPE   => 'g6-standard-2',
-    Linode::FIELD_REGION => 'us-east',
-]);
-
-$repository->update($linode->id, [
-    Linode::FIELD_LABEL => 'new-server',
-]);
-
-$repository->delete($linode->id);
-```
+</details>
 
 ## Development
 

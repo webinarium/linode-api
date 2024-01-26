@@ -21,10 +21,8 @@ use Linode\Profile\SSHKeyRepositoryInterface;
  */
 class SSHKeyRepository extends AbstractRepository implements SSHKeyRepositoryInterface
 {
-    public function add(array $parameters): SSHKey
+    public function addSSHKey(array $parameters = []): SSHKey
     {
-        $this->checkParametersSupport($parameters);
-
         $response = $this->client->post($this->getBaseUri(), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
@@ -32,20 +30,18 @@ class SSHKeyRepository extends AbstractRepository implements SSHKeyRepositoryInt
         return new SSHKey($this->client, $json);
     }
 
-    public function update(int $id, array $parameters): SSHKey
+    public function updateSSHKey(int $sshKeyId, array $parameters = []): SSHKey
     {
-        $this->checkParametersSupport($parameters);
-
-        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $id), $parameters);
+        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $sshKeyId), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
         return new SSHKey($this->client, $json);
     }
 
-    public function delete(int $id): void
+    public function deleteSSHKey(int $sshKeyId): void
     {
-        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $id));
+        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $sshKeyId));
     }
 
     protected function getBaseUri(): string

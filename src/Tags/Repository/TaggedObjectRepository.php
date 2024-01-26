@@ -14,9 +14,11 @@ namespace Linode\Tags\Repository;
 use Linode\Domains\Domain;
 use Linode\Entity;
 use Linode\Internal\AbstractRepository;
+use Linode\Linode\LinodeEntity;
 use Linode\LinodeClient;
 use Linode\LinodeInstances\Linode;
 use Linode\NodeBalancers\NodeBalancer;
+use Linode\Tags\Tag;
 use Linode\Tags\TaggedObjectRepositoryInterface;
 use Linode\Volumes\Volume;
 
@@ -26,42 +28,32 @@ use Linode\Volumes\Volume;
 class TaggedObjectRepository extends AbstractRepository implements TaggedObjectRepositoryInterface
 {
     /**
-     * @param string $tag The ID of the Tag we are accessing Objects for
+     * @param string $label The Label of the Tag we are accessing Objects for.
      */
-    public function __construct(LinodeClient $client, protected string $tag)
+    public function __construct(LinodeClient $client, protected string $label)
     {
         parent::__construct($client);
     }
 
     protected function getBaseUri(): string
     {
-        return sprintf('/tags/%s', $this->tag);
+        return sprintf('/tags/%s', $this->label);
     }
 
     protected function getSupportedFields(): array
     {
         return [
-            Linode::FIELD_ID,
-            Linode::FIELD_LABEL,
-            Linode::FIELD_REGION,
-            Linode::FIELD_IMAGE,
-            Linode::FIELD_TYPE,
-            Linode::FIELD_STATUS,
-            Linode::FIELD_HYPERVISOR,
-            Linode::FIELD_WATCHDOG_ENABLED,
-            Linode::FIELD_CREATED,
-            Linode::FIELD_UPDATED,
-            Linode::FIELD_GROUP,
+            Tag::FIELD_TYPE,
         ];
     }
 
     protected function jsonToEntity(array $json): Entity
     {
-        return match ($json['type']) {
-            'domain'       => new Domain($this->client, $json['data']),
-            'linode'       => new Linode($this->client, $json['data']),
-            'nodebalancer' => new NodeBalancer($this->client, $json['data']),
-            'volume'       => new Volume($this->client, $json['data']),
+        return match ($json[Tag::FIELD_TYPE]) {
+            LinodeEntity::TYPE_DOMAIN       => new Domain($this->client, $json['data']),
+            LinodeEntity::TYPE_LINODE       => new Linode($this->client, $json['data']),
+            LinodeEntity::TYPE_NODEBALANCER => new NodeBalancer($this->client, $json['data']),
+            LinodeEntity::TYPE_VOLUME       => new Volume($this->client, $json['data']),
         };
     }
 }

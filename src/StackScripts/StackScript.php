@@ -14,27 +14,28 @@ namespace Linode\StackScripts;
 use Linode\Entity;
 
 /**
- * A StackScript enables you to quickly deploy a fully-configured application in an automated manner.
+ * A StackScript enables you to quickly deploy a fully-configured application in an
+ * automated manner.
  *
- * @property int                      $id                  The unique ID of this StackScript.
- * @property string                   $username            The User who created the StackScript.
- * @property string                   $label               The StackScript's label is for display purposes only.
- * @property string[]                 $images              An array of Image IDs. These are the images that can be deployed
- *                                                         with this Stackscript.
- * @property bool                     $is_public           This determines whether other users can use your StackScript.
- *                                                         Once a StackScript is made public, it cannot be made private.
- * @property string                   $created             The date this StackScript was created.
- * @property string                   $updated             The date this StackScript was last updated.
- * @property string                   $user_gravatar_id    The Gravatar ID for the User who created the StackScript.
- * @property string                   $description         A description for the StackScript.
- * @property int                      $deployments_total   The total number of times this StackScript has been deployed.
- * @property int                      $deployments_active  Count of currently active, deployed Linodes created from
- *                                                         this StackScript.
- * @property string                   $rev_note            This field allows you to add notes for the set of revisions made to
- *                                                         this StackScript.
- * @property string                   $script              The script to execute when provisioning a new Linode with this StackScript.
- * @property array|UserDefinedField[] $user_defined_fields This is a list of fields defined with a special syntax inside this StackScript
- *                                                         that allow for supplying customized parameters during deployment.
+ * @property int                $id                  The unique ID of this StackScript.
+ * @property string             $username            The User who created the StackScript.
+ * @property string             $label               The StackScript's label is for display purposes only.
+ * @property string[]           $images              An array of Image IDs. These are the images that can be deployed with this
+ *                                                   Stackscript.
+ * @property bool               $is_public           This determines whether other users can use your StackScript. **Once a StackScript
+ *                                                   is made public, it cannot be made private.**
+ * @property string             $created             The date this StackScript was created.
+ * @property string             $updated             The date this StackScript was last updated.
+ * @property string             $user_gravatar_id    The Gravatar ID for the User who created the StackScript.
+ * @property string             $description         A description for the StackScript.
+ * @property int                $deployments_total   The total number of times this StackScript has been deployed.
+ * @property int                $deployments_active  Count of currently active, deployed Linodes created from this StackScript.
+ * @property string             $rev_note            This field allows you to add notes for the set of revisions made to this
+ *                                                   StackScript.
+ * @property string             $script              The script to execute when provisioning a new Linode with this StackScript.
+ * @property UserDefinedField[] $user_defined_fields This is a list of fields defined with a special syntax inside this StackScript
+ *                                                   that allow for supplying customized parameters during deployment. See Variables
+ *                                                   and UDFs for more information.
  */
 class StackScript extends Entity
 {
@@ -60,7 +61,7 @@ class StackScript extends Entity
     public function __get(string $name): mixed
     {
         return match ($name) {
-            self::FIELD_USER_DEFINED_FIELDS => array_map(fn ($data) => new UserDefinedField($this->client, $data), $this->data[self::FIELD_USER_DEFINED_FIELDS]),
+            self::FIELD_USER_DEFINED_FIELDS => array_map(fn ($data) => new UserDefinedField($this->client, $data), $this->data[$name]),
             default                         => parent::__get($name),
         };
     }

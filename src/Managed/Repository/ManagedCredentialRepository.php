@@ -21,10 +21,8 @@ use Linode\Managed\ManagedCredentialRepositoryInterface;
  */
 class ManagedCredentialRepository extends AbstractRepository implements ManagedCredentialRepositoryInterface
 {
-    public function create(array $parameters): ManagedCredential
+    public function createManagedCredential(array $parameters = []): ManagedCredential
     {
-        $this->checkParametersSupport($parameters);
-
         $response = $this->client->post($this->getBaseUri(), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
@@ -32,27 +30,37 @@ class ManagedCredentialRepository extends AbstractRepository implements ManagedC
         return new ManagedCredential($this->client, $json);
     }
 
-    public function update(int $id, array $parameters): ManagedCredential
+    public function updateManagedCredential(int $credentialId, array $parameters = []): ManagedCredential
     {
-        $this->checkParametersSupport($parameters);
-
-        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $id), $parameters);
+        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $credentialId), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
         return new ManagedCredential($this->client, $json);
     }
 
-    public function setLoginInformation(int $id, array $parameters): void
+    public function updateManagedCredentialUsernamePassword(int $credentialId, ?string $username, string $password): void
     {
-        $this->checkParametersSupport($parameters);
+        $parameters = [
+            'username' => $username,
+            'password' => $password,
+        ];
 
-        $this->client->post(sprintf('%s/%s/update', $this->getBaseUri(), $id), $parameters);
+        $this->client->post(sprintf('%s/%s/update', $this->getBaseUri(), $credentialId), $parameters);
     }
 
-    public function delete(int $id): void
+    public function deleteManagedCredential(int $credentialId): void
     {
-        $this->client->post(sprintf('%s/%s/revoke', $this->getBaseUri(), $id));
+        $this->client->post(sprintf('%s/%s/revoke', $this->getBaseUri(), $credentialId));
+    }
+
+    public function viewManagedSSHKey(): string
+    {
+        $response = $this->client->get(sprintf('%s/sshkey', $this->getBaseUri()));
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return $json['ssh_key'];
     }
 
     protected function getBaseUri(): string
@@ -65,8 +73,7 @@ class ManagedCredentialRepository extends AbstractRepository implements ManagedC
         return [
             ManagedCredential::FIELD_ID,
             ManagedCredential::FIELD_LABEL,
-            ManagedCredential::FIELD_USERNAME,
-            ManagedCredential::FIELD_PASSWORD,
+            ManagedCredential::FIELD_LAST_DECRYPTED,
         ];
     }
 

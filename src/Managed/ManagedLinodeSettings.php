@@ -14,13 +14,12 @@ namespace Linode\Managed;
 use Linode\Entity;
 
 /**
- * Settings for a specific Linode related to Managed Services. There is
- * one ManagedLinodeSettings object for each Linode on your Account.
+ * Settings for a specific Linode related to Managed Services. There is one
+ * ManagedLinodeSettings object for each Linode on your Account.
  *
  * @property int         $id    The ID of the Linode these Settings are for.
  * @property string      $label The label of the Linode these Settings are for.
- * @property string      $group The group of the Linode these Settings are for. This is for display
- *                              purposes only.
+ * @property string      $group The group of the Linode these Settings are for. This is for display purposes only.
  * @property SSHSettings $ssh   The SSH settings for this Linode.
  */
 class ManagedLinodeSettings extends Entity
@@ -37,7 +36,7 @@ class ManagedLinodeSettings extends Entity
     public function __get(string $name): mixed
     {
         return match ($name) {
-            self::FIELD_SSH => new SSHSettings($this->client, $this->data[self::FIELD_SSH]),
+            self::FIELD_SSH => new SSHSettings($this->client, $this->data[$name]),
             default         => parent::__get($name),
         };
     }

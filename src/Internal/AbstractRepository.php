@@ -92,26 +92,6 @@ abstract class AbstractRepository implements RepositoryInterface
     }
 
     /**
-     * Verifies that all specified parameters are supported by the repository.
-     * An exception is raised when unsupported parameter was found.
-     *
-     * @throws LinodeException
-     */
-    protected function checkParametersSupport(array $parameters): void
-    {
-        $supported = $this->getSupportedFields();
-        $provided  = array_keys($parameters);
-
-        $unknown = array_diff($provided, $supported);
-
-        if (0 !== count($unknown)) {
-            $errors = ['errors' => [['reason' => sprintf('Unknown field(s): %s', implode(', ', $unknown))]]];
-
-            throw new LinodeException(new Response(LinodeClient::ERROR_BAD_REQUEST, [], json_encode($errors)));
-        }
-    }
-
-    /**
      * Returns base URI to the repository-specific API.
      */
     abstract protected function getBaseUri(): string;

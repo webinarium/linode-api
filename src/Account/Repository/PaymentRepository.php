@@ -22,7 +22,7 @@ use Linode\Internal\AbstractRepository;
  */
 class PaymentRepository extends AbstractRepository implements PaymentRepositoryInterface
 {
-    public function makeCreditCardPayment(string $usd, string $cvv): Payment
+    public function createPayment(string $usd, string $cvv): Payment
     {
         $parameters = [
             'usd' => $usd,
@@ -36,7 +36,7 @@ class PaymentRepository extends AbstractRepository implements PaymentRepositoryI
         return new Payment($this->client, $json);
     }
 
-    public function stagePayPalPayment(string $usd, string $redirect_url, string $cancel_url): PayPalPayment
+    public function createPayPalPayment(string $usd, string $redirect_url, string $cancel_url): PayPalPayment
     {
         $parameters = [
             'usd'          => $usd,

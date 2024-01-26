@@ -15,5 +15,11 @@ use Linode\RepositoryInterface;
 
 /**
  * Invoice repository.
+ *
+ * @method Invoice   find(int|string $id)
+ * @method Invoice[] findAll(string $orderBy = null, string $orderDir = self::SORT_ASC)
+ * @method Invoice[] findBy(array $criteria, string $orderBy = null, string $orderDir = self::SORT_ASC)
+ * @method Invoice   findOneBy(array $criteria)
+ * @method Invoice[] query(string $query, array $parameters = [], string $orderBy = null, string $orderDir = self::SORT_ASC)
  */
 interface InvoiceRepositoryInterface extends RepositoryInterface {}

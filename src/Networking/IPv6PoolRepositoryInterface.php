@@ -15,5 +15,11 @@ use Linode\RepositoryInterface;
 
 /**
  * IPv6Pool repository.
+ *
+ * @method IPv6Pool   find(int|string $id)
+ * @method IPv6Pool[] findAll(string $orderBy = null, string $orderDir = self::SORT_ASC)
+ * @method IPv6Pool[] findBy(array $criteria, string $orderBy = null, string $orderDir = self::SORT_ASC)
+ * @method IPv6Pool   findOneBy(array $criteria)
+ * @method IPv6Pool[] query(string $query, array $parameters = [], string $orderBy = null, string $orderDir = self::SORT_ASC)
  */
 interface IPv6PoolRepositoryInterface extends RepositoryInterface {}

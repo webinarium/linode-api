@@ -18,9 +18,9 @@ use Linode\Entity;
  * your Linode services, and the promotion expires after a specified date.
  * As well, a monthly cap on the promotional offer is set.
  *
- * Simply put, a promotion offers a certain amount of credit every month,
- * until either the expiration date is passed, or until the total promotional
- * credit is used, whichever comes first.
+ * Simply put, a promotion offers a certain amount of credit every
+ * month, until either the expiration date is passed, or until the total
+ * promotional credit is used, whichever comes first.
  *
  * @property string $expire_dt                   When this promotion's credits expire.
  * @property string $credit_remaining            The total amount of credit left for this promotion.

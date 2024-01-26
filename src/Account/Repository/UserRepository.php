@@ -11,8 +11,8 @@
 
 namespace Linode\Account\Repository;
 
+use Linode\Account\GrantsResponse;
 use Linode\Account\User;
-use Linode\Account\UserGrant;
 use Linode\Account\UserRepositoryInterface;
 use Linode\Entity;
 use Linode\Internal\AbstractRepository;
@@ -23,10 +23,8 @@ use Linode\LinodeClient;
  */
 class UserRepository extends AbstractRepository implements UserRepositoryInterface
 {
-    public function create(array $parameters): User
+    public function createUser(array $parameters = []): User
     {
-        $this->checkParametersSupport($parameters);
-
         $response = $this->client->post($this->getBaseUri(), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
@@ -34,10 +32,8 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
         return new User($this->client, $json);
     }
 
-    public function update(string $username, array $parameters): User
+    public function updateUser(string $username, array $parameters = []): User
     {
-        $this->checkParametersSupport($parameters);
-
         $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $username), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
@@ -45,12 +41,12 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
         return new User($this->client, $json);
     }
 
-    public function delete(string $username): void
+    public function deleteUser(string $username): void
     {
         $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $username));
     }
 
-    public function getUserGrants(string $username): ?UserGrant
+    public function getUserGrants(string $username): ?GrantsResponse
     {
         $response = $this->client->get(sprintf('%s/%s/grants', $this->getBaseUri(), $username));
 
@@ -61,16 +57,16 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
-        return new UserGrant($this->client, $json);
+        return new GrantsResponse($this->client, $json);
     }
 
-    public function setUserGrants(string $username, array $parameters): UserGrant
+    public function updateUserGrants(string $username, array $parameters = []): GrantsResponse
     {
         $response = $this->client->put(sprintf('%s/%s/grants', $this->getBaseUri(), $username), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
-        return new UserGrant($this->client, $json);
+        return new GrantsResponse($this->client, $json);
     }
 
     protected function getBaseUri(): string

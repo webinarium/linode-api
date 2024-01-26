@@ -21,10 +21,8 @@ use Linode\ObjectStorage\ObjectStorageKeyRepositoryInterface;
  */
 class ObjectStorageKeyRepository extends AbstractRepository implements ObjectStorageKeyRepositoryInterface
 {
-    public function create(array $parameters): ObjectStorageKey
+    public function createObjectStorageKeys(array $parameters = []): ObjectStorageKey
     {
-        $this->checkParametersSupport($parameters);
-
         $response = $this->client->post($this->getBaseUri(), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
@@ -32,20 +30,18 @@ class ObjectStorageKeyRepository extends AbstractRepository implements ObjectSto
         return new ObjectStorageKey($this->client, $json);
     }
 
-    public function update(int $id, array $parameters): ObjectStorageKey
+    public function updateObjectStorageKey(int $keyId, array $parameters = []): ObjectStorageKey
     {
-        $this->checkParametersSupport($parameters);
-
-        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $id), $parameters);
+        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $keyId), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
         return new ObjectStorageKey($this->client, $json);
     }
 
-    public function revoke(int $id): void
+    public function deleteObjectStorageKey(int $keyId): void
     {
-        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $id));
+        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $keyId));
     }
 
     protected function getBaseUri(): string
@@ -58,6 +54,8 @@ class ObjectStorageKeyRepository extends AbstractRepository implements ObjectSto
         return [
             ObjectStorageKey::FIELD_ID,
             ObjectStorageKey::FIELD_LABEL,
+            ObjectStorageKey::FIELD_ACCESS_KEY,
+            ObjectStorageKey::FIELD_SECRET_KEY,
         ];
     }
 

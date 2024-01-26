@@ -14,7 +14,7 @@ namespace Linode\Account;
 use Linode\Entity;
 
 /**
- * Staged PayPal payment object.
+ * PayPal Payment staged.
  *
  * @property string $payment_id     The paypal-generated ID for this Payment. Used when
  *                                  authorizing the Payment in PayPal's interface.

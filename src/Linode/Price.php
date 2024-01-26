@@ -9,11 +9,14 @@
 //
 // ---------------------------------------------------------------------
 
-namespace Linode\LinodeInstances;
+namespace Linode\Linode;
 
-use Linode\RepositoryInterface;
+use Linode\Entity;
 
 /**
- * Linode volume repository.
+ * Cost in US dollars, broken down into hourly and monthly charges.
+ *
+ * @property float $hourly  Cost (in US dollars) per hour.
+ * @property float $monthly Cost (in US dollars) per month.
  */
-interface LinodeVolumeRepositoryInterface extends RepositoryInterface {}
+class Price extends Entity {}

@@ -21,10 +21,8 @@ use Linode\Managed\ManagedContactRepositoryInterface;
  */
 class ManagedContactRepository extends AbstractRepository implements ManagedContactRepositoryInterface
 {
-    public function create(array $parameters): ManagedContact
+    public function createManagedContact(array $parameters = []): ManagedContact
     {
-        $this->checkParametersSupport($parameters);
-
         $response = $this->client->post($this->getBaseUri(), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
@@ -32,20 +30,18 @@ class ManagedContactRepository extends AbstractRepository implements ManagedCont
         return new ManagedContact($this->client, $json);
     }
 
-    public function update(int $id, array $parameters): ManagedContact
+    public function updateManagedContact(int $contactId, array $parameters = []): ManagedContact
     {
-        $this->checkParametersSupport($parameters);
-
-        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $id), $parameters);
+        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $contactId), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
         return new ManagedContact($this->client, $json);
     }
 
-    public function delete(int $id): void
+    public function deleteManagedContact(int $contactId): void
     {
-        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $id));
+        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $contactId));
     }
 
     protected function getBaseUri(): string
@@ -61,6 +57,7 @@ class ManagedContactRepository extends AbstractRepository implements ManagedCont
             ManagedContact::FIELD_EMAIL,
             ManagedContact::FIELD_PHONE,
             ManagedContact::FIELD_GROUP,
+            ManagedContact::FIELD_UPDATED,
         ];
     }
 

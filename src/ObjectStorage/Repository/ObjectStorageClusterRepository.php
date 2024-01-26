@@ -33,7 +33,7 @@ class ObjectStorageClusterRepository extends AbstractRepository implements Objec
             ObjectStorageCluster::FIELD_DOMAIN,
             ObjectStorageCluster::FIELD_STATUS,
             ObjectStorageCluster::FIELD_REGION,
-            ObjectStorageCluster::FIELD_SITE_DOMAIN,
+            ObjectStorageCluster::FIELD_STATIC_SITE_DOMAIN,
         ];
     }
 

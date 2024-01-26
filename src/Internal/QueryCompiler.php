@@ -26,7 +26,7 @@ final class QueryCompiler
      *
      * @throws \Exception
      */
-    public function apply(string $query, array $parameters): string
+    public function apply(string $query, array $parameters = []): string
     {
         $patterns     = [];
         $replacements = [];

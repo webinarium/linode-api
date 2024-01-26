@@ -16,8 +16,30 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Linode\Domains\DomainRepositoryInterface;
 use Linode\Exception\LinodeException;
+use Linode\Images\ImageRepositoryInterface;
+use Linode\LinodeInstances\KernelRepositoryInterface;
+use Linode\LinodeInstances\LinodeRepositoryInterface;
+use Linode\LinodeTypes\LinodeTypeRepositoryInterface;
+use Linode\Longview\LongviewClientRepositoryInterface;
+use Linode\Longview\LongviewSubscriptionRepositoryInterface;
+use Linode\Managed\ManagedContactRepositoryInterface;
+use Linode\Managed\ManagedCredentialRepositoryInterface;
+use Linode\Managed\ManagedIssueRepositoryInterface;
+use Linode\Managed\ManagedLinodeSettingsRepositoryInterface;
+use Linode\Managed\ManagedServiceRepositoryInterface;
+use Linode\Networking\IPAddressRepositoryInterface;
+use Linode\Networking\IPv6PoolRepositoryInterface;
+use Linode\Networking\IPv6RangeRepositoryInterface;
+use Linode\NodeBalancers\NodeBalancerRepositoryInterface;
+use Linode\ObjectStorage\ObjectStorageClusterRepositoryInterface;
+use Linode\ObjectStorage\ObjectStorageKeyRepositoryInterface;
 use Linode\Regions\RegionRepositoryInterface;
+use Linode\StackScripts\StackScriptRepositoryInterface;
+use Linode\Support\SupportTicketRepositoryInterface;
+use Linode\Tags\TagRepositoryInterface;
+use Linode\Volumes\VolumeRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 
@@ -38,7 +60,29 @@ final class LinodeClientTest extends TestCase
     {
         $object = new LinodeClient();
 
+        self::assertInstanceOf(DomainRepositoryInterface::class, $object->domains);
+        self::assertInstanceOf(ImageRepositoryInterface::class, $object->images);
+        self::assertInstanceOf(KernelRepositoryInterface::class, $object->kernels);
+        self::assertInstanceOf(LinodeRepositoryInterface::class, $object->linodes);
+        self::assertInstanceOf(LinodeTypeRepositoryInterface::class, $object->linodeTypes);
+        self::assertInstanceOf(LongviewClientRepositoryInterface::class, $object->longviewClients);
+        self::assertInstanceOf(LongviewSubscriptionRepositoryInterface::class, $object->longviewSubscriptions);
+        self::assertInstanceOf(ManagedContactRepositoryInterface::class, $object->managedContacts);
+        self::assertInstanceOf(ManagedCredentialRepositoryInterface::class, $object->managedCredentials);
+        self::assertInstanceOf(ManagedIssueRepositoryInterface::class, $object->managedIssues);
+        self::assertInstanceOf(ManagedLinodeSettingsRepositoryInterface::class, $object->managedLinodeSettings);
+        self::assertInstanceOf(ManagedServiceRepositoryInterface::class, $object->managedServices);
+        self::assertInstanceOf(IPAddressRepositoryInterface::class, $object->ipAddresses);
+        self::assertInstanceOf(IPv6PoolRepositoryInterface::class, $object->ipv6Pools);
+        self::assertInstanceOf(IPv6RangeRepositoryInterface::class, $object->ipv6Ranges);
+        self::assertInstanceOf(NodeBalancerRepositoryInterface::class, $object->nodeBalancers);
+        self::assertInstanceOf(ObjectStorageClusterRepositoryInterface::class, $object->objectStorageClusters);
+        self::assertInstanceOf(ObjectStorageKeyRepositoryInterface::class, $object->objectStorageKeys);
         self::assertInstanceOf(RegionRepositoryInterface::class, $object->regions);
+        self::assertInstanceOf(StackScriptRepositoryInterface::class, $object->stackScripts);
+        self::assertInstanceOf(SupportTicketRepositoryInterface::class, $object->supportTickets);
+        self::assertInstanceOf(TagRepositoryInterface::class, $object->tags);
+        self::assertInstanceOf(VolumeRepositoryInterface::class, $object->volumes);
 
         self::assertNull($object->unknown);
     }

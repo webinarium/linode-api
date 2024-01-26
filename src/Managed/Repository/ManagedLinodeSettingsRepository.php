@@ -21,11 +21,9 @@ use Linode\Managed\ManagedLinodeSettingsRepositoryInterface;
  */
 class ManagedLinodeSettingsRepository extends AbstractRepository implements ManagedLinodeSettingsRepositoryInterface
 {
-    public function update(int $id, array $parameters): ManagedLinodeSettings
+    public function updateManagedLinodeSetting(int $linodeId, array $parameters = []): ManagedLinodeSettings
     {
-        $this->checkParametersSupport($parameters);
-
-        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $id), $parameters);
+        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $linodeId), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 

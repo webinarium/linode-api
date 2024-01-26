@@ -35,6 +35,8 @@ class NotificationRepository extends AbstractRepository implements NotificationR
             Notification::FIELD_WHEN,
             Notification::FIELD_UNTIL,
             Notification::FIELD_TYPE,
+            Notification::FIELD_BODY,
+            Notification::FIELD_ENTITY,
         ];
     }
 

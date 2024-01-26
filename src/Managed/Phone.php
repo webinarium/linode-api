@@ -16,8 +16,8 @@ use Linode\Entity;
 /**
  * Information about how to reach a Contact by phone.
  *
- * @property null|string $primary   A contact's primary phone number.
- * @property null|string $secondary A contact's secondary phone number.
+ * @property null|string $primary   This Contact's primary phone number.
+ * @property null|string $secondary This Contact's secondary phone number.
  */
 class Phone extends Entity
 {

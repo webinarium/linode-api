@@ -21,14 +21,8 @@ use Linode\Networking\IPAddressRepositoryInterface;
  */
 class IPAddressRepository extends AbstractRepository implements IPAddressRepositoryInterface
 {
-    public function allocate(int $linode_id, bool $public, string $type = IPAddress::TYPE_IP4): IPAddress
+    public function allocateIP(array $parameters = []): IPAddress
     {
-        $parameters = [
-            'linode_id' => $linode_id,
-            'public'    => $public,
-            'type'      => $type,
-        ];
-
         $response = $this->client->post($this->getBaseUri(), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
@@ -36,34 +30,22 @@ class IPAddressRepository extends AbstractRepository implements IPAddressReposit
         return new IPAddress($this->client, $json);
     }
 
-    public function update(string $id, array $parameters): IPAddress
+    public function updateIP(string $address, array $parameters = []): IPAddress
     {
-        $this->checkParametersSupport($parameters);
-
-        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $id), $parameters);
+        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $address), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
         return new IPAddress($this->client, $json);
     }
 
-    public function assign(string $region, array $assignments): void
+    public function assignIPs(array $parameters = []): void
     {
-        $parameters = [
-            'region'      => $region,
-            'assignments' => $assignments,
-        ];
-
         $this->client->post('/networking/ipv4/assign', $parameters);
     }
 
-    public function share(int $linode_id, array $ips): void
+    public function shareIPs(array $parameters = []): void
     {
-        $parameters = [
-            'linode_id' => $linode_id,
-            'ips'       => $ips,
-        ];
-
         $this->client->post('/networking/ipv4/share', $parameters);
     }
 
@@ -76,14 +58,14 @@ class IPAddressRepository extends AbstractRepository implements IPAddressReposit
     {
         return [
             IPAddress::FIELD_ADDRESS,
-            IPAddress::FIELD_GATEWAY,
-            IPAddress::FIELD_SUBNET_MASK,
-            IPAddress::FIELD_PREFIX,
             IPAddress::FIELD_TYPE,
             IPAddress::FIELD_PUBLIC,
             IPAddress::FIELD_RDNS,
             IPAddress::FIELD_REGION,
             IPAddress::FIELD_LINODE_ID,
+            IPAddress::FIELD_GATEWAY,
+            IPAddress::FIELD_SUBNET_MASK,
+            IPAddress::FIELD_PREFIX,
         ];
     }
 

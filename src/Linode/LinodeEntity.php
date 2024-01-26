@@ -9,23 +9,22 @@
 //
 // ---------------------------------------------------------------------
 
-namespace Linode\LinodeInstances;
+namespace Linode\Linode;
 
 use Linode\Entity;
 
 /**
  * Detailed information about the entity, including ID, type, label, and URL used to access it.
  *
- * @property int    $id    The unique ID for this Entity.
- * @property string $type  The type of entity this is related to (@see `TYPE_...` constants).
- * @property string $label The current label of this object.
- * @property string $url   The URL where you can access the object this entity is for. If
- *                         a relative URL, it is relative to the domain you retrieved the
- *                         object from.
+ * @property int|string $id    The unique ID for this entity.
+ * @property string     $type  The type of entity.
+ * @property string     $label The current label of this entity.
+ * @property string     $url   The URL where you can access the entity. If a relative URL, it is relative
+ *                             to the domain you retrieved the entity from.
  */
 class LinodeEntity extends Entity
 {
-    // Entity types.
+    // `FIELD_TYPE` values.
     public const TYPE_ACCOUNT         = 'account';
     public const TYPE_BACKUPS         = 'backups';
     public const TYPE_COMMUNITY       = 'community';
@@ -36,10 +35,10 @@ class LinodeEntity extends Entity
     public const TYPE_LINODE          = 'linode';
     public const TYPE_LONGVIEW        = 'longview';
     public const TYPE_MANAGED_SERVICE = 'managed_service';
-    public const TYPE_NODE_BALANCER   = 'nodebalancer';
+    public const TYPE_NODEBALANCER    = 'nodebalancer';
     public const TYPE_OAUTH_CLIENT    = 'oauth_client';
     public const TYPE_PROFILE         = 'profile';
-    public const TYPE_STACK_SCRIPT    = 'stackscript';
+    public const TYPE_STACKSCRIPT     = 'stackscript';
     public const TYPE_TAG             = 'tag';
     public const TYPE_TICKET          = 'ticket';
     public const TYPE_TOKEN           = 'token';

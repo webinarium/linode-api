@@ -16,14 +16,18 @@ use Linode\Entity;
 /**
  * Disk associated with a Linode.
  *
- * @property int    $id         This Disk's ID which must be provided for all
- *                              operations impacting this Disk.
+ * @property int    $id         This Disk's ID which must be provided for all operations impacting this Disk.
  * @property string $label      The Disk's label is for display purposes only.
  * @property string $status     A brief description of this Disk's current state. This field may change without
- *                              direct action from you, as a result of operations performed to the Disk
- *                              or the Linode containing the Disk (@see `STATUS_...` constants).
+ *                              direct action from you, as a result of operations performed to the Disk or the
+ *                              Linode containing the Disk.
  * @property int    $size       The size of the Disk in MB.
- * @property string $filesystem The Disk filesystem (@see `FILESYSTEM_...` constants).
+ * @property string $filesystem The Disk filesystem can be one of:
+ *                              * raw - No filesystem, just a raw binary stream.
+ *                              * swap - Linux swap area.
+ *                              * ext3 - The ext3 journaling filesystem for Linux.
+ *                              * ext4 - The ext4 journaling filesystem for Linux.
+ *                              * initrd - initrd (uncompressed initrd, ext2, max 32 MB).
  * @property string $created    When this Linode was created.
  * @property string $updated    When this Linode was last updated.
  */
@@ -38,12 +42,12 @@ class Disk extends Entity
     public const FIELD_CREATED    = 'created';
     public const FIELD_UPDATED    = 'updated';
 
-    // Extra field for create/update operations.
+    // Extra fields for POST/PUT requests.
     public const FIELD_READ_ONLY        = 'read_only';
     public const FIELD_IMAGE            = 'image';
-    public const FIELD_ROOT_PASS        = 'root_pass';
     public const FIELD_AUTHORIZED_KEYS  = 'authorized_keys';
     public const FIELD_AUTHORIZED_USERS = 'authorized_users';
+    public const FIELD_ROOT_PASS        = 'root_pass';
     public const FIELD_STACKSCRIPT_ID   = 'stackscript_id';
     public const FIELD_STACKSCRIPT_DATA = 'stackscript_data';
 

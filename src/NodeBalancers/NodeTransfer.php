@@ -14,10 +14,10 @@ namespace Linode\NodeBalancers;
 use Linode\Entity;
 
 /**
- * Information about the amount of transfer a NodeBalancer has had.
+ * Information about the amount of transfer this NodeBalancer has had so far this month.
  *
- * @property float $in    The total inbound transfer, in MB.
- * @property float $out   The total outbound transfer, in MB.
- * @property float $total The total transfer, in MB.
+ * @property null|float $in    The total outbound transfer, in MB, used for this NodeBalancer this month.
+ * @property null|float $out   The total inbound transfer, in MB, used for this NodeBalancer this month.
+ * @property null|float $total The total transfer, in MB, used by this NodeBalancer this month.
  */
 class NodeTransfer extends Entity {}

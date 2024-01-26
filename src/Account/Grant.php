@@ -14,12 +14,13 @@ namespace Linode\Account;
 use Linode\Entity;
 
 /**
- * Represents the level of access a restricted User has to a specific resource on the Account.
+ * Represents the level of access a restricted User has to a specific resource on the
+ * Account.
  *
  * @property int         $id          The ID of the entity this grant applies to.
  * @property string      $label       The current label of the entity this grant applies to, for display purposes.
- * @property null|string $permissions The level of access this User has to this entity.
- *                                    If null, this User has no access (@see permissions constants below).
+ * @property null|string $permissions The level of access this User has to this entity. If null, this User has no
+ *                                    access.
  */
 class Grant extends Entity
 {
@@ -29,7 +30,7 @@ class Grant extends Entity
     public const FIELD_PERMISSIONS = 'permissions';
 
     // `FIELD_PERMISSIONS` values.
-    public const NO_ACCESS         = null;
-    public const ACCESS_READ_ONLY  = 'read_only';
-    public const ACCESS_READ_WRITE = 'read_write';
+    public const PERMISSIONS_NO_ACCESS  = null;
+    public const PERMISSIONS_READ_ONLY  = 'read_only';
+    public const PERMISSIONS_READ_WRITE = 'read_write';
 }

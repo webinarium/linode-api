@@ -23,17 +23,15 @@ use Linode\LinodeInstances\DiskRepositoryInterface;
 class DiskRepository extends AbstractRepository implements DiskRepositoryInterface
 {
     /**
-     * @param int $linodeId The ID of the Linode whose Disk to look up
+     * @param int $linodeId ID of the Linode to look up.
      */
     public function __construct(LinodeClient $client, protected int $linodeId)
     {
         parent::__construct($client);
     }
 
-    public function create(array $parameters): Disk
+    public function addLinodeDisk(array $parameters = []): Disk
     {
-        $this->checkParametersSupport($parameters);
-
         $response = $this->client->post($this->getBaseUri(), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
@@ -41,47 +39,45 @@ class DiskRepository extends AbstractRepository implements DiskRepositoryInterfa
         return new Disk($this->client, $json);
     }
 
-    public function update(int $id, array $parameters): Disk
+    public function updateDisk(int $diskId, array $parameters = []): Disk
     {
-        $this->checkParametersSupport($parameters);
-
-        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $id), $parameters);
+        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $diskId), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
         return new Disk($this->client, $json);
     }
 
-    public function delete(int $id): void
+    public function deleteDisk(int $diskId): void
     {
-        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $id));
+        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $diskId));
     }
 
-    public function clone(int $id): Disk
+    public function cloneLinodeDisk(int $diskId): Disk
     {
-        $response = $this->client->post(sprintf('%s/%s/clone', $this->getBaseUri(), $id));
+        $response = $this->client->post(sprintf('%s/%s/clone', $this->getBaseUri(), $diskId));
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
         return new Disk($this->client, $json);
     }
 
-    public function resize(int $id, int $size): void
-    {
-        $parameters = [
-            'size' => $size,
-        ];
-
-        $this->client->post(sprintf('%s/%s/resize', $this->getBaseUri(), $id), $parameters);
-    }
-
-    public function resetPassword(int $id, string $password): void
+    public function resetDiskPassword(int $diskId, string $password): void
     {
         $parameters = [
             'password' => $password,
         ];
 
-        $this->client->post(sprintf('%s/%s/password', $this->getBaseUri(), $id), $parameters);
+        $this->client->post(sprintf('%s/%s/password', $this->getBaseUri(), $diskId), $parameters);
+    }
+
+    public function resizeDisk(int $diskId, int $size): void
+    {
+        $parameters = [
+            'size' => $size,
+        ];
+
+        $this->client->post(sprintf('%s/%s/resize', $this->getBaseUri(), $diskId), $parameters);
     }
 
     protected function getBaseUri(): string
@@ -99,13 +95,6 @@ class DiskRepository extends AbstractRepository implements DiskRepositoryInterfa
             Disk::FIELD_FILESYSTEM,
             Disk::FIELD_CREATED,
             Disk::FIELD_UPDATED,
-            Disk::FIELD_READ_ONLY,
-            Disk::FIELD_IMAGE,
-            Disk::FIELD_ROOT_PASS,
-            Disk::FIELD_AUTHORIZED_KEYS,
-            Disk::FIELD_AUTHORIZED_USERS,
-            Disk::FIELD_STACKSCRIPT_ID,
-            Disk::FIELD_STACKSCRIPT_DATA,
         ];
     }
 

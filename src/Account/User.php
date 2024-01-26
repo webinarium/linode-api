@@ -15,19 +15,20 @@ use Linode\Entity;
 
 /**
  * A User on your Account. Unrestricted users can log in and access information about
- * your Account, while restricted users may only access entities or perform
- * actions they've been granted access to.
+ * your Account, while restricted users may only access entities or perform actions
+ * they've been granted access to.
  *
- * @property string   $username   This User's username. This is used for logging in, and may also be
- *                                displayed alongside actions the User performs (for example, in Events
- *                                or public StackScripts).
- * @property string   $email      The email address for this User, for account management
- *                                communications, and may be used for other communications as configured.
- * @property bool     $restricted If true, this User must be granted access to perform actions or access
- *                                entities on this Account.
- * @property string[] $ssh_keys   A list of SSH Key labels added by this User. These are the keys
- *                                that will be deployed if this User is included in the `authorized_users`
- *                                field of a create Linode, rebuild Linode, or create Disk request.
+ * @property string   $username   This User's username. This is used for logging in, and may also be displayed
+ *                                alongside actions the User performs (for example, in Events or public
+ *                                StackScripts).
+ * @property string   $email      The email address for this User, for account management communications, and may be
+ *                                used for other communications as configured.
+ * @property bool     $restricted If true, this User must be granted access to perform actions or access entities on
+ *                                this Account. See /account/users/{username}/grants for details on how to configure
+ *                                grants for a restricted User.
+ * @property string[] $ssh_keys   A list of SSH Key labels added by this User. These are the keys that will be
+ *                                deployed if this User is included in the `authorized_users` field of a create
+ *                                Linode, rebuild Linode, or create Disk request.
  */
 class User extends Entity
 {

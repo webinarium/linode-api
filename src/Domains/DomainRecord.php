@@ -17,26 +17,25 @@ use Linode\Entity;
  * A single record on a Domain.
  *
  * @property int         $id       This Record's unique ID.
- * @property string      $type     The type of Record this is in the DNS system. For example, A
- *                                 records associate a domain name with an IPv4 address, and AAAA
- *                                 records associate a domain name with an IPv6 address.
- * @property string      $name     The name of this Record. This field's actual usage depends on the
- *                                 type of record this represents. For A and AAAA records, this is
- *                                 the subdomain being associated with an IP address.
- * @property string      $target   The target for this Record. This field's actual usage depends on
- *                                 the type of record this represents. For A and AAAA records, this
- *                                 is the address the named Domain should resolve to.
- * @property int         $ttl_sec  "Time to Live" - the amount of time in seconds that this Domain's
- *                                 records may be cached by resolvers or other domain servers
- *                                 (@see `Domain::TIME_...` constants).
+ * @property string      $type     The type of Record this is in the DNS system. For example, A records associate a
+ *                                 domain name with an IPv4 address, and AAAA records associate a domain name with an
+ *                                 IPv6 address.
+ * @property string      $name     The name of this Record. This field's actual usage depends on the type of record
+ *                                 this represents. For A and AAAA records, this is the subdomain being associated
+ *                                 with an IP address.
+ * @property string      $target   The target for this Record. This field's actual usage depends on the type of
+ *                                 record this represents. For A and AAAA records, this is the address the named
+ *                                 Domain should resolve to.
+ * @property int         $ttl_sec  "Time to Live" - the amount of time in seconds that this Domain's records may be
+ *                                 cached by resolvers or other domain servers. Valid values are 300, 3600, 7200,
+ *                                 14400, 28800, 57600, 86400, 172800, 345600, 604800, 1209600, and 2419200 - any
+ *                                 other value will be rounded to the nearest valid value.
  * @property int         $priority The priority of the target host. Lower values are preferred.
  * @property int         $weight   The relative weight of this Record. Higher values are preferred.
  * @property null|string $service  The service this Record identified. Only valid for SRV records.
- * @property null|string $protocol The protocol this Record's service communicates with. Only valid
- *                                 for SRV records.
+ * @property null|string $protocol The protocol this Record's service communicates with. Only valid for SRV records.
  * @property int         $port     The port this Record points to.
- * @property null|string $tag      The tag portion of a CAA record. It is invalid to set this on
- *                                 other record types.
+ * @property null|string $tag      The tag portion of a CAA record. It is invalid to set this on other record types.
  */
 class DomainRecord extends Entity
 {

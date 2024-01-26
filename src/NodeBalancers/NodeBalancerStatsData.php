@@ -12,14 +12,13 @@
 namespace Linode\NodeBalancers;
 
 use Linode\Entity;
-use Linode\LinodeInstances\TimeValue;
 
 /**
- * Stats data for a NodeBalancer.
+ * Stats for this NodeBalancer.
  *
- * @property array|TimeValue[] $connections An array of key/value pairs representing unix timestamp and
- *                                          reading for connections to this NodeBalancer.
- * @property NodeTraffic       $traffic     Traffic statistics for this NodeBalancer.
+ * @property float[]             $connections An array of key/value pairs representing unix timestamp and
+ *                                            reading for connections to this NodeBalancer.
+ * @property NodeBalancerTraffic $traffic     Traffic statistics for this NodeBalancer.
  */
 class NodeBalancerStatsData extends Entity
 {
@@ -29,9 +28,8 @@ class NodeBalancerStatsData extends Entity
     public function __get(string $name): mixed
     {
         return match ($name) {
-            'connections' => array_map(static fn ($data) => new TimeValue((int) $data[0], (float) $data[1]), $this->data[$name]),
-            'traffic'     => new NodeTraffic($this->client, $this->data[$name]),
-            default       => parent::__get($name),
+            'traffic' => new NodeBalancerTraffic($this->client, $this->data[$name]),
+            default   => parent::__get($name),
         };
     }
 }

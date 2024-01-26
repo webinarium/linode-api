@@ -14,10 +14,10 @@ namespace Linode\LinodeInstances;
 use Linode\Entity;
 
 /**
- * A disk that is a part of a Backup.
+ * A disk that is part of the Backup.
  *
- * @property int    $size       The Disk size in bytes.
- * @property string $filesystem The Disk filesystem (@see `Disk::FILESYSTEM_...` constants).
- * @property string $label      The Disk label.
+ * @property string $label      The Disk's label is for display purposes only.
+ * @property int    $size       The size of the Disk in MB.
+ * @property string $filesystem The Disk filesystem.
  */
 class BackupDisk extends Entity {}

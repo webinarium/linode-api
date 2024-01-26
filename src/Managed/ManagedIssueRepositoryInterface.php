@@ -14,6 +14,12 @@ namespace Linode\Managed;
 use Linode\RepositoryInterface;
 
 /**
- * Managed issue repository.
+ * ManagedIssue repository.
+ *
+ * @method ManagedIssue   find(int|string $id)
+ * @method ManagedIssue[] findAll(string $orderBy = null, string $orderDir = self::SORT_ASC)
+ * @method ManagedIssue[] findBy(array $criteria, string $orderBy = null, string $orderDir = self::SORT_ASC)
+ * @method ManagedIssue   findOneBy(array $criteria)
+ * @method ManagedIssue[] query(string $query, array $parameters = [], string $orderBy = null, string $orderDir = self::SORT_ASC)
  */
 interface ManagedIssueRepositoryInterface extends RepositoryInterface {}

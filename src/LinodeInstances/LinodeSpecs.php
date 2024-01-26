@@ -26,7 +26,7 @@ use Linode\Entity;
  *                         choose to boot with all of its available RAM, but this can be configured in a
  *                         Config profile, see the `/linode/instances/{linodeId}/configs` endpoints and
  *                         the LinodeConfig object for more information.
- * @property int $vcpus    The number of vcpus this Linode has access to.  Typically a Linode will choose to
+ * @property int $vcpus    The number of vcpus this Linode has access to. Typically a Linode will choose to
  *                         boot with all of its available vcpus, but this can be configured in a Config Profile,
  *                         see the `/linode/instances/{linodeId}/configs` endpoints and the LinodeConfig object
  *                         for more information.

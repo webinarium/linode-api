@@ -15,12 +15,23 @@ use Linode\Exception\LinodeException;
 use Linode\RepositoryInterface;
 
 /**
- * Trusted device repository.
+ * TrustedDevice repository.
+ *
+ * @method TrustedDevice   find(int|string $id)
+ * @method TrustedDevice[] findAll(string $orderBy = null, string $orderDir = self::SORT_ASC)
+ * @method TrustedDevice[] findBy(array $criteria, string $orderBy = null, string $orderDir = self::SORT_ASC)
+ * @method TrustedDevice   findOneBy(array $criteria)
+ * @method TrustedDevice[] query(string $query, array $parameters = [], string $orderBy = null, string $orderDir = self::SORT_ASC)
  */
 interface TrustedDeviceRepositoryInterface extends RepositoryInterface
 {
     /**
+     * Revoke an active TrustedDevice for your User. Once a TrustedDevice is revoked,
+     * this device will have to log in again before accessing your Linode account.
+     *
+     * @param int $deviceId The ID of the TrustedDevice
+     *
      * @throws LinodeException
      */
-    public function revoke(int $id): void;
+    public function revokeTrustedDevice(int $deviceId): void;
 }

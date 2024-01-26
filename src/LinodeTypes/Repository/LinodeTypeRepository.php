@@ -34,10 +34,13 @@ class LinodeTypeRepository extends AbstractRepository implements LinodeTypeRepos
             LinodeType::FIELD_CLASS,
             LinodeType::FIELD_DISK,
             LinodeType::FIELD_MEMORY,
-            LinodeType::FIELD_VCPLUS,
+            LinodeType::FIELD_VCPUS,
             LinodeType::FIELD_NETWORK_OUT,
             LinodeType::FIELD_TRANSFER,
             LinodeType::FIELD_GPUS,
+            LinodeType::FIELD_PRICE,
+            LinodeType::FIELD_ADDONS,
+            LinodeType::FIELD_SUCCESSOR,
         ];
     }
 

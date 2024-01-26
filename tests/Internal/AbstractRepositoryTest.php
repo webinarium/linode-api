@@ -394,38 +394,4 @@ final class AbstractRepositoryTest extends TestCase
 
         $this->repository->query('days');
     }
-
-    /**
-     * @covers ::checkParametersSupport
-     */
-    public function testCheckParametersSupportSuccess(): void
-    {
-        $parameters = [
-            'season' => 'Summer',
-            'days'   => 31,
-        ];
-
-        $this->callMethod($this->repository, 'checkParametersSupport', [$parameters]);
-        self::assertTrue(true);
-    }
-
-    /**
-     * @covers ::checkParametersSupport
-     */
-    public function testCheckParametersSupportException(): void
-    {
-        $this->expectException(LinodeException::class);
-        $this->expectExceptionCode(400);
-        $this->expectExceptionMessage('Unknown field(s): year, city');
-
-        $parameters = [
-            'season' => 'Summer',
-            'year'   => 2004,
-            'days'   => 31,
-            'city'   => 'Auckland',
-        ];
-
-        $this->callMethod($this->repository, 'checkParametersSupport', [$parameters]);
-        self::assertTrue(true);
-    }
 }

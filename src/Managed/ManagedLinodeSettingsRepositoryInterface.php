@@ -15,14 +15,23 @@ use Linode\Exception\LinodeException;
 use Linode\RepositoryInterface;
 
 /**
- * Managed Linode settings repository.
+ * ManagedLinodeSettings repository.
+ *
+ * @method ManagedLinodeSettings   find(int|string $id)
+ * @method ManagedLinodeSettings[] findAll(string $orderBy = null, string $orderDir = self::SORT_ASC)
+ * @method ManagedLinodeSettings[] findBy(array $criteria, string $orderBy = null, string $orderDir = self::SORT_ASC)
+ * @method ManagedLinodeSettings   findOneBy(array $criteria)
+ * @method ManagedLinodeSettings[] query(string $query, array $parameters = [], string $orderBy = null, string $orderDir = self::SORT_ASC)
  */
 interface ManagedLinodeSettingsRepositoryInterface extends RepositoryInterface
 {
     /**
      * Updates a single Linode's Managed settings.
      *
+     * @param int   $linodeId   The Linode ID whose settings we are accessing.
+     * @param array $parameters The settings to update.
+     *
      * @throws LinodeException
      */
-    public function update(int $id, array $parameters): ManagedLinodeSettings;
+    public function updateManagedLinodeSetting(int $linodeId, array $parameters = []): ManagedLinodeSettings;
 }

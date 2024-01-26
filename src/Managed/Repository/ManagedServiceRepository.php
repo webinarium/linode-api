@@ -21,10 +21,8 @@ use Linode\Managed\ManagedServiceRepositoryInterface;
  */
 class ManagedServiceRepository extends AbstractRepository implements ManagedServiceRepositoryInterface
 {
-    public function create(array $parameters): ManagedService
+    public function createManagedService(array $parameters = []): ManagedService
     {
-        $this->checkParametersSupport($parameters);
-
         $response = $this->client->post($this->getBaseUri(), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
@@ -32,47 +30,36 @@ class ManagedServiceRepository extends AbstractRepository implements ManagedServ
         return new ManagedService($this->client, $json);
     }
 
-    public function update(int $id, array $parameters): ManagedService
+    public function updateManagedService(int $serviceId, array $parameters = []): ManagedService
     {
-        $this->checkParametersSupport($parameters);
-
-        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $id), $parameters);
+        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $serviceId), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
         return new ManagedService($this->client, $json);
     }
 
-    public function delete(int $id): void
+    public function deleteManagedService(int $serviceId): void
     {
-        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $id));
+        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $serviceId));
     }
 
-    public function disable(int $id): ManagedService
+    public function disableManagedService(int $serviceId): ManagedService
     {
-        $response = $this->client->post(sprintf('%s/%s/disable', $this->getBaseUri(), $id));
+        $response = $this->client->post(sprintf('%s/%s/disable', $this->getBaseUri(), $serviceId));
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
         return new ManagedService($this->client, $json);
     }
 
-    public function enable(int $id): ManagedService
+    public function enableManagedService(int $serviceId): ManagedService
     {
-        $response = $this->client->post(sprintf('%s/%s/enable', $this->getBaseUri(), $id));
+        $response = $this->client->post(sprintf('%s/%s/enable', $this->getBaseUri(), $serviceId));
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
         return new ManagedService($this->client, $json);
-    }
-
-    public function getSshKey(): string
-    {
-        $response = $this->client->get('/managed/credentials/sshkey');
-        $contents = $response->getBody()->getContents();
-        $json     = json_decode($contents, true);
-
-        return $json['ssh_key'];
     }
 
     protected function getBaseUri(): string
@@ -94,6 +81,8 @@ class ManagedServiceRepository extends AbstractRepository implements ManagedServ
             ManagedService::FIELD_NOTES,
             ManagedService::FIELD_REGION,
             ManagedService::FIELD_CREDENTIALS,
+            ManagedService::FIELD_CREATED,
+            ManagedService::FIELD_UPDATED,
         ];
     }
 

@@ -21,10 +21,8 @@ use Linode\StackScripts\StackScriptRepositoryInterface;
  */
 class StackScriptRepository extends AbstractRepository implements StackScriptRepositoryInterface
 {
-    public function create(array $parameters): StackScript
+    public function addStackScript(array $parameters = []): StackScript
     {
-        $this->checkParametersSupport($parameters);
-
         $response = $this->client->post($this->getBaseUri(), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
@@ -32,20 +30,18 @@ class StackScriptRepository extends AbstractRepository implements StackScriptRep
         return new StackScript($this->client, $json);
     }
 
-    public function update(int $id, array $parameters): StackScript
+    public function updateStackScript(int $stackscriptId, array $parameters = []): StackScript
     {
-        $this->checkParametersSupport($parameters);
-
-        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $id), $parameters);
+        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $stackscriptId), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
         return new StackScript($this->client, $json);
     }
 
-    public function delete(int $id): void
+    public function deleteStackScript(int $stackscriptId): void
     {
-        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $id));
+        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $stackscriptId));
     }
 
     protected function getBaseUri(): string

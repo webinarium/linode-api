@@ -14,8 +14,10 @@ namespace Linode\LinodeInstances;
 use Linode\Entity;
 
 /**
- * @property IPv4Information $ipv4
- * @property IPv6Information $ipv6
+ * Requested Linode's networking configuration.
+ *
+ * @property IPv4Information $ipv4 Information about this Linode's IPv4 addresses.
+ * @property IPv6Information $ipv6 Information about this Linode's IPv6 addresses.
  */
 class NetworkInformation extends Entity
 {
@@ -25,8 +27,8 @@ class NetworkInformation extends Entity
     public function __get(string $name): mixed
     {
         return match ($name) {
-            'ipv4'  => new IPv4Information($this->client, $this->data['ipv4']),
-            'ipv6'  => new IPv6Information($this->client, $this->data['ipv6']),
+            'ipv4'  => new IPv4Information($this->client, $this->data[$name]),
+            'ipv6'  => new IPv6Information($this->client, $this->data[$name]),
             default => parent::__get($name),
         };
     }

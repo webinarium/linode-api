@@ -23,18 +23,16 @@ use Linode\NodeBalancers\NodeBalancerNodeRepositoryInterface;
 class NodeBalancerNodeRepository extends AbstractRepository implements NodeBalancerNodeRepositoryInterface
 {
     /**
-     * @param int $nodeBalancerId       The ID of the NodeBalancer we are accessing nodes for
-     * @param int $nodeBalancerConfigId The ID of the NodeBalancer config we are accessing nodes for
+     * @param int $nodeBalancerId The ID of the NodeBalancer to access.
+     * @param int $configId       The ID of the NodeBalancer config to access.
      */
-    public function __construct(LinodeClient $client, protected int $nodeBalancerId, protected int $nodeBalancerConfigId)
+    public function __construct(LinodeClient $client, protected int $nodeBalancerId, protected int $configId)
     {
         parent::__construct($client);
     }
 
-    public function create(array $parameters): NodeBalancerNode
+    public function createNodeBalancerNode(array $parameters = []): NodeBalancerNode
     {
-        $this->checkParametersSupport($parameters);
-
         $response = $this->client->post($this->getBaseUri(), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
@@ -42,25 +40,23 @@ class NodeBalancerNodeRepository extends AbstractRepository implements NodeBalan
         return new NodeBalancerNode($this->client, $json);
     }
 
-    public function update(int $id, array $parameters): NodeBalancerNode
+    public function updateNodeBalancerNode(int $nodeId, array $parameters = []): NodeBalancerNode
     {
-        $this->checkParametersSupport($parameters);
-
-        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $id), $parameters);
+        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $nodeId), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
         return new NodeBalancerNode($this->client, $json);
     }
 
-    public function delete(int $id): void
+    public function deleteNodeBalancerConfigNode(int $nodeId): void
     {
-        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $id));
+        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $nodeId));
     }
 
     protected function getBaseUri(): string
     {
-        return sprintf('/nodebalancers/%s/configs/%s/nodes', $this->nodeBalancerId, $this->nodeBalancerConfigId);
+        return sprintf('/nodebalancers/%s/configs/%s/nodes', $this->nodeBalancerId, $this->configId);
     }
 
     protected function getSupportedFields(): array
@@ -72,6 +68,8 @@ class NodeBalancerNodeRepository extends AbstractRepository implements NodeBalan
             NodeBalancerNode::FIELD_STATUS,
             NodeBalancerNode::FIELD_WEIGHT,
             NodeBalancerNode::FIELD_MODE,
+            NodeBalancerNode::FIELD_NODEBALANCER_ID,
+            NodeBalancerNode::FIELD_CONFIG_ID,
         ];
     }
 

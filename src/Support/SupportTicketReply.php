@@ -19,9 +19,9 @@ use Linode\Entity;
  * @property int    $id          The unique ID of this Support Ticket reply.
  * @property string $created_by  The User who submitted this reply.
  * @property string $created     The date and time this Ticket reply was created.
- * @property string $description The body of this Support Ticket reply.
  * @property string $gravatar_id The Gravatar ID of the User who created this reply.
  * @property bool   $from_linode If set to true, this reply came from a Linode employee.
+ * @property string $description The body of this Support Ticket reply.
  */
 class SupportTicketReply extends Entity
 {
@@ -29,7 +29,7 @@ class SupportTicketReply extends Entity
     public const FIELD_ID          = 'id';
     public const FIELD_CREATED_BY  = 'created_by';
     public const FIELD_CREATED     = 'created';
-    public const FIELD_DESCRIPTION = 'description';
     public const FIELD_GRAVATAR_ID = 'gravatar_id';
     public const FIELD_FROM_LINODE = 'from_linode';
+    public const FIELD_DESCRIPTION = 'description';
 }

@@ -23,17 +23,15 @@ use Linode\Support\SupportTicketReplyRepositoryInterface;
 class SupportTicketReplyRepository extends AbstractRepository implements SupportTicketReplyRepositoryInterface
 {
     /**
-     * @param int $ticketId The ID of the Support Ticket we are accessing Replies for
+     * @param int $ticketId The ID of the Support Ticket.
      */
     public function __construct(LinodeClient $client, protected int $ticketId)
     {
         parent::__construct($client);
     }
 
-    public function create(array $parameters): SupportTicketReply
+    public function createTicketReply(array $parameters = []): SupportTicketReply
     {
-        $this->checkParametersSupport($parameters);
-
         $response = $this->client->post($this->getBaseUri(), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
@@ -52,9 +50,9 @@ class SupportTicketReplyRepository extends AbstractRepository implements Support
             SupportTicketReply::FIELD_ID,
             SupportTicketReply::FIELD_CREATED_BY,
             SupportTicketReply::FIELD_CREATED,
-            SupportTicketReply::FIELD_DESCRIPTION,
             SupportTicketReply::FIELD_GRAVATAR_ID,
             SupportTicketReply::FIELD_FROM_LINODE,
+            SupportTicketReply::FIELD_DESCRIPTION,
         ];
     }
 

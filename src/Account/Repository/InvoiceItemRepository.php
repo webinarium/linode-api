@@ -23,7 +23,7 @@ use Linode\LinodeClient;
 class InvoiceItemRepository extends AbstractRepository implements InvoiceItemRepositoryInterface
 {
     /**
-     * @param int $invoiceId The ID of the Invoice we are accessing InvoiceItems for
+     * @param int $invoiceId The ID of the Invoice.
      */
     public function __construct(LinodeClient $client, protected int $invoiceId)
     {

@@ -17,10 +17,9 @@ use Linode\Entity;
  * An object representing an IPv6 range.
  *
  * @property string $range  The IPv6 range.
- * @property string $region A range of IPv6 addresses routed to a single Linode in the given
- *                          Region. Your Linode is responsible for routing individual addresses
- *                          in the range, or handling traffic for all of the addresses in the
- *                          range.
+ * @property string $region A range of IPv6 addresses routed to a single Linode in the given Region. Your
+ *                          Linode is responsible for routing individual addresses in the range, or handling
+ *                          traffic for all of the addresses in the range.
  */
 class IPv6Range extends Entity
 {

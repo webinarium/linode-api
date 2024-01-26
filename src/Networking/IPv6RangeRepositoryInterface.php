@@ -15,5 +15,11 @@ use Linode\RepositoryInterface;
 
 /**
  * IPv6Range repository.
+ *
+ * @method IPv6Range   find(int|string $id)
+ * @method IPv6Range[] findAll(string $orderBy = null, string $orderDir = self::SORT_ASC)
+ * @method IPv6Range[] findBy(array $criteria, string $orderBy = null, string $orderDir = self::SORT_ASC)
+ * @method IPv6Range   findOneBy(array $criteria)
+ * @method IPv6Range[] query(string $query, array $parameters = [], string $orderBy = null, string $orderDir = self::SORT_ASC)
  */
 interface IPv6RangeRepositoryInterface extends RepositoryInterface {}

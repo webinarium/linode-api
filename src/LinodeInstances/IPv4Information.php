@@ -13,12 +13,15 @@ namespace Linode\LinodeInstances;
 
 use Linode\Entity;
 use Linode\Networking\IPAddress;
+use Linode\Networking\IPAddressPrivate;
 
 /**
- * @property array|IPAddress[] $public   A list of public IP Address objects belonging to this Linode.
- * @property array|IPAddress[] $private  A list of private IP Address objects belonging to this Linode.
- * @property array|IPAddress[] $shared   A list of shared IP Address objects assigned to this Linode.
- * @property array|IPAddress[] $reserved A list of reserved IP Address objects belonging to this Linode.
+ * Information about this Linode's IPv4 addresses.
+ *
+ * @property IPAddress[]        $public   A list of public IP Address objects belonging to this Linode.
+ * @property IPAddressPrivate[] $private  A list of private IP Address objects belonging to this Linode.
+ * @property IPAddress[]        $shared   A list of shared IP Address objects assigned to this Linode.
+ * @property IPAddress[]        $reserved A list of reserved IP Address objects belonging to this Linode.
  */
 class IPv4Information extends Entity
 {
@@ -27,10 +30,9 @@ class IPv4Information extends Entity
      */
     public function __get(string $name): ?array
     {
-        if (array_key_exists($name, $this->data)) {
-            return array_map(fn ($data) => new IPAddress($this->client, $data), $this->data[$name]);
-        }
-
-        return null;
+        return match ($name) {
+            'private' => array_map(fn ($data) => new IPAddressPrivate($this->client, $data), $this->data[$name]),
+            default   => array_map(fn ($data) => new IPAddress($this->client, $data), $this->data[$name]),
+        };
     }
 }

@@ -14,6 +14,12 @@ namespace Linode\Account;
 use Linode\RepositoryInterface;
 
 /**
- * Invoice item repository.
+ * InvoiceItem repository.
+ *
+ * @method InvoiceItem   find(int|string $id)
+ * @method InvoiceItem[] findAll(string $orderBy = null, string $orderDir = self::SORT_ASC)
+ * @method InvoiceItem[] findBy(array $criteria, string $orderBy = null, string $orderDir = self::SORT_ASC)
+ * @method InvoiceItem   findOneBy(array $criteria)
+ * @method InvoiceItem[] query(string $query, array $parameters = [], string $orderBy = null, string $orderDir = self::SORT_ASC)
  */
 interface InvoiceItemRepositoryInterface extends RepositoryInterface {}

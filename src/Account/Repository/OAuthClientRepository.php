@@ -21,10 +21,8 @@ use Linode\Internal\AbstractRepository;
  */
 class OAuthClientRepository extends AbstractRepository implements OAuthClientRepositoryInterface
 {
-    public function create(array $parameters): OAuthClient
+    public function createClient(array $parameters = []): OAuthClient
     {
-        $this->checkParametersSupport($parameters);
-
         $response = $this->client->post($this->getBaseUri(), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
@@ -32,29 +30,43 @@ class OAuthClientRepository extends AbstractRepository implements OAuthClientRep
         return new OAuthClient($this->client, $json);
     }
 
-    public function update(string $id, array $parameters): OAuthClient
+    public function updateClient(string $clientId, array $parameters = []): OAuthClient
     {
-        $this->checkParametersSupport($parameters);
-
-        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $id), $parameters);
+        $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $clientId), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
         return new OAuthClient($this->client, $json);
     }
 
-    public function delete(string $id): void
+    public function deleteClient(string $clientId): void
     {
-        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $id));
+        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $clientId));
     }
 
-    public function resetSecret(string $id): OAuthClient
+    public function resetClientSecret(string $clientId): OAuthClient
     {
-        $response = $this->client->post(sprintf('%s/%s/reset-secret', $this->getBaseUri(), $id));
+        $response = $this->client->post(sprintf('%s/%s/reset-secret', $this->getBaseUri(), $clientId));
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
         return new OAuthClient($this->client, $json);
+    }
+
+    public function getClientThumbnail(string $clientId): string
+    {
+        $response = $this->client->get(sprintf('%s/%s/thumbnail', $this->getBaseUri(), $clientId));
+
+        return $response->getBody()->getContents();
+    }
+
+    public function setClientThumbnail(string $clientId, string $file): void
+    {
+        $options = [
+            'body' => fopen($file, 'r'),
+        ];
+
+        $this->client->put(sprintf('%s/%s/thumbnail', $this->getBaseUri(), $clientId), [], $options);
     }
 
     protected function getBaseUri(): string

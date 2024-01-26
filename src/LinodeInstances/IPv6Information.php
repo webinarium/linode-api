@@ -12,13 +12,16 @@
 namespace Linode\LinodeInstances;
 
 use Linode\Entity;
-use Linode\Networking\IPAddress;
+use Linode\Networking\IPAddressV6LinkLocal;
+use Linode\Networking\IPAddressV6Slaac;
 use Linode\Networking\IPv6Pool;
 
 /**
- * @property IPAddress $link_local
- * @property IPAddress $slaac
- * @property IPv6Pool  $global
+ * Information about this Linode's IPv6 addresses.
+ *
+ * @property IPAddressV6LinkLocal $link_local
+ * @property IPAddressV6Slaac     $slaac
+ * @property IPv6Pool             $global
  */
 class IPv6Information extends Entity
 {
@@ -28,9 +31,9 @@ class IPv6Information extends Entity
     public function __get(string $name): mixed
     {
         return match ($name) {
-            'link_local' => new IPAddress($this->client, $this->data['link_local']),
-            'slaac'      => new IPAddress($this->client, $this->data['slaac']),
-            'global'     => new IPv6Pool($this->client, $this->data['global']),
+            'link_local' => new IPAddressV6LinkLocal($this->client, $this->data[$name]),
+            'slaac'      => new IPAddressV6Slaac($this->client, $this->data[$name]),
+            'global'     => new IPv6Pool($this->client, $this->data[$name]),
             default      => parent::__get($name),
         };
     }

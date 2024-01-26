@@ -12,30 +12,30 @@
 namespace Linode\Account;
 
 use Linode\Entity;
-use Linode\LinodeInstances\LinodeEntity;
+use Linode\Linode\LinodeEntity;
 
 /**
- * An Event is an action taken against an entity related to your Account.
- * For example, booting a Linode would create an Event.
+ * A collection of Event objects. An Event is an action taken against an entity
+ * related to your Account. For example, booting a Linode would create an Event.
+ * The Events returned depends on your grants.
  *
  * @property int          $id               The unique ID of this Event.
  * @property string       $username         The username of the User who caused the Event.
- * @property string       $action           The action that caused this Event. New actions may be added in the
- *                                          future (@see `ACTION_...` constants).
- * @property LinodeEntity $entity           Detailed information about the Event's entity, including ID, type,
- *                                          label, and URL used to access it.
+ * @property string       $action           The action that caused this Event. New actions may be added in the future.
+ * @property LinodeEntity $entity           Detailed information about the Event's entity, including ID, type, label, and URL
+ *                                          used to access it.
  * @property string       $created          When this Event was created.
- * @property string       $status           The current status of this Event (@see `STATUS_...` constants).
+ * @property string       $status           The current status of this Event.
  * @property bool         $seen             If this Event has been seen.
  * @property bool         $read             If this Event has been read.
- * @property string       $rate             The rate of completion of the Event. Only some Events will return
- *                                          rate; for example, migration and resize Events.
- * @property null|int     $percent_complete A percentage estimating the amount of time remaining for an Event.
+ * @property string       $rate             The rate of completion of the Event. Only some Events will return rate; for
+ *                                          example, migration and resize Events.
+ * @property int          $percent_complete A percentage estimating the amount of time remaining for an Event.
  *                                          Returns `null` for notification events.
- * @property null|string  $time_remaining   The estimated time remaining until the completion of this Event.
- *                                          This value is only returned for some in-progress migration events.
- *                                          For all other in-progress events, the `percent_complete` attribute
- *                                          will indicate about how much more work is to be done.
+ * @property null|string  $time_remaining   The estimated time remaining until the completion of this Event. This value is
+ *                                          only returned for some in-progress migration events. For all other in-progress
+ *                                          events, the `percent_complete` attribute will indicate about how much more work is
+ *                                          to be done.
  */
 class Event extends Entity
 {
@@ -43,6 +43,7 @@ class Event extends Entity
     public const FIELD_ID               = 'id';
     public const FIELD_USERNAME         = 'username';
     public const FIELD_ACTION           = 'action';
+    public const FIELD_ENTITY           = 'entity';
     public const FIELD_CREATED          = 'created';
     public const FIELD_STATUS           = 'status';
     public const FIELD_SEEN             = 'seen';
@@ -167,8 +168,8 @@ class Event extends Entity
     public function __get(string $name): mixed
     {
         return match ($name) {
-            'entity' => new LinodeEntity($this->client, $this->data['entity']),
-            default  => parent::__get($name),
+            self::FIELD_ENTITY => new LinodeEntity($this->client, $this->data[$name]),
+            default            => parent::__get($name),
         };
     }
 }

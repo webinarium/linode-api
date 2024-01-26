@@ -28,7 +28,12 @@ class ManagedIssueRepository extends AbstractRepository implements ManagedIssueR
 
     protected function getSupportedFields(): array
     {
-        return [];
+        return [
+            ManagedIssue::FIELD_ID,
+            ManagedIssue::FIELD_CREATED,
+            ManagedIssue::FIELD_SERVICES,
+            ManagedIssue::FIELD_ENTITY,
+        ];
     }
 
     protected function jsonToEntity(array $json): Entity
