@@ -81,6 +81,7 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
             User::FIELD_EMAIL,
             User::FIELD_RESTRICTED,
             User::FIELD_SSH_KEYS,
+            User::FIELD_TFA_ENABLED,
         ];
     }
 

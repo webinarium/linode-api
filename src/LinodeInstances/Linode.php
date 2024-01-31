@@ -30,8 +30,8 @@ use Linode\LinodeInstances\Repository\LinodeConfigRepository;
  * @property string                          $group            A deprecated property denoting a group label for this Linode.
  * @property string[]                        $tags             An array of tags applied to this object. Tags are for organizational purposes
  *                                                             only.
- * @property string                          $region           This is the location where the Linode was deployed. This cannot be changed without
- *                                                             opening a support ticket.
+ * @property string                          $region           This is the location where the Linode was deployed. A Linode's region can only be
+ *                                                             changed by initiating a cross data center migration.
  * @property string                          $type             This is the Linode Type that this Linode was deployed with.
  *                                                             To change a Linode's Type, use POST /linode/instances/{linodeId}/resize.
  * @property null|string                     $image            An Image ID to deploy the Disk from. Official Linode Images start with `linode/ `,

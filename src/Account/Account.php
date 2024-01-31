@@ -20,6 +20,7 @@ use Linode\Account\Repository\UserRepository;
 use Linode\Entity;
 use Linode\Exception\LinodeException;
 use Linode\LinodeClient;
+use Linode\Managed\StatsDataAvailable;
 
 /**
  * Account object.
@@ -236,5 +237,45 @@ class Account extends Entity
         $json     = json_decode($contents, true);
 
         return new AccountSettings($this->client, $json);
+    }
+
+    /**
+     * Enables Linode Managed for the entire account and sends a welcome email to the
+     * account's associated email address. Linode Managed can monitor any service or
+     * software stack reachable over TCP or HTTP. See our Linode Managed guide to learn
+     * more.
+     *
+     * @throws LinodeException
+     */
+    public function enableAccountManged(): void
+    {
+        $this->client->post('/account/settings/managed-enable');
+    }
+
+    /**
+     * Returns a list of Managed Stats on your Account in the form of x and y data
+     * points.
+     * You can use these data points to plot your own graph visualizations. These stats
+     * reflect the last 24 hours of combined usage across all managed Linodes on your
+     * account
+     * giving you a high-level snapshot of data for the following:
+     *
+     * * cpu
+     * * disk
+     * * swap
+     * * network in
+     * * network out
+     *
+     * @return StatsDataAvailable A list of Managed Stats from the last 24 hours.
+     *
+     * @throws LinodeException
+     */
+    public function getManagedStats(): StatsDataAvailable
+    {
+        $response = $this->client->get('/managed/stats');
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return new StatsDataAvailable($this->client, $json);
     }
 }

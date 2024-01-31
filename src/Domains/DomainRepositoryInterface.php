@@ -60,10 +60,11 @@ interface DomainRepositoryInterface extends RepositoryInterface
     /**
      * Imports a domain zone from a remote nameserver.
      * Your nameserver must allow zone transfers (AXFR) from the following IPs:
+     *
      *   - 96.126.114.97
      *   - 96.126.114.98
      *   - 2600:3c00::5e
-     *   - 2600:3c00::5f.
+     *   - 2600:3c00::5f
      *
      * @param string $domain            The domain to import.
      * @param string $remote_nameserver The remote nameserver that allows zone transfers (AXFR).

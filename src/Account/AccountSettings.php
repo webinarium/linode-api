@@ -28,6 +28,8 @@ use Linode\Entity;
  * @property bool   $backups_enabled       Account-wide backups default. If `true`, all Linodes created will automatically be
  *                                         enrolled in the Backups service. If `false`, Linodes will not be enrolled by
  *                                         default, but may still be enrolled on creation or later.
+ * @property string $object_storage        A string describing the status of this account's Object Storage service
+ *                                         enrollment.
  */
 class AccountSettings extends Entity
 {
@@ -36,4 +38,10 @@ class AccountSettings extends Entity
     public const FIELD_LONGVIEW_SUBSCRIPTION = 'longview_subscription';
     public const FIELD_MANAGED               = 'managed';
     public const FIELD_BACKUPS_ENABLED       = 'backups_enabled';
+    public const FIELD_OBJECT_STORAGE        = 'object_storage';
+
+    // `FIELD_OBJECT_STORAGE` values.
+    public const OBJECT_STORAGE_DISABLED  = 'disabled';
+    public const OBJECT_STORAGE_SUSPENDED = 'suspended';
+    public const OBJECT_STORAGE_ACTIVE    = 'active';
 }

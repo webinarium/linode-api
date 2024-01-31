@@ -19,7 +19,7 @@ use Linode\Entity;
  * @property string $id                 The unique ID for this cluster.
  * @property string $domain             The base URL for this cluster, used for connecting with third-party clients.
  * @property string $status             This cluster's status.
- * @property string $region             The region this cluster is located in.
+ * @property string $region             The region where this cluster is located.
  * @property string $static_site_domain The base URL for this cluster used when hosting static sites.
  */
 class ObjectStorageCluster extends Entity

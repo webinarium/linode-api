@@ -24,10 +24,15 @@ use Linode\Linode\LinodeEntity;
  * @property string       $action           The action that caused this Event. New actions may be added in the future.
  * @property LinodeEntity $entity           Detailed information about the Event's entity, including ID, type, label, and URL
  *                                          used to access it.
+ * @property LinodeEntity $secondary_entity Detailed information about the Event's secondary entity, which provides additional
+ *                                          information
+ *                                          for events such as, but not limited to, `linode_boot`, `linode_reboot`,
+ *                                          `linode_create`, and `linode_clone` Event actions.
  * @property string       $created          When this Event was created.
  * @property string       $status           The current status of this Event.
  * @property bool         $seen             If this Event has been seen.
  * @property bool         $read             If this Event has been read.
+ * @property float        $duration         The total duration in seconds that it takes for the Event to complete.
  * @property string       $rate             The rate of completion of the Event. Only some Events will return rate; for
  *                                          example, migration and resize Events.
  * @property int          $percent_complete A percentage estimating the amount of time remaining for an Event.
@@ -44,10 +49,12 @@ class Event extends Entity
     public const FIELD_USERNAME         = 'username';
     public const FIELD_ACTION           = 'action';
     public const FIELD_ENTITY           = 'entity';
+    public const FIELD_SECONDARY_ENTITY = 'secondary_entity';
     public const FIELD_CREATED          = 'created';
     public const FIELD_STATUS           = 'status';
     public const FIELD_SEEN             = 'seen';
     public const FIELD_READ             = 'read';
+    public const FIELD_DURATION         = 'duration';
     public const FIELD_RATE             = 'rate';
     public const FIELD_PERCENT_COMPLETE = 'percent_complete';
     public const FIELD_TIME_REMAINING   = 'time_remaining';
