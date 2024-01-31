@@ -30,6 +30,8 @@ use Linode\Entity;
  *                                    Images are created automatically from a deleted Linode.
  * @property string      $expiry      Only Images created automatically (from a deleted Linode; type=automatic) will
  *                                    expire.
+ * @property string      $eol         The date of the image's planned end of life. Some images, like custom private
+ *                                    images, will not have an end of life date. In that case this field will be `None`.
  */
 class Image extends Entity
 {
@@ -45,6 +47,7 @@ class Image extends Entity
     public const FIELD_DEPRECATED  = 'deprecated';
     public const FIELD_TYPE        = 'type';
     public const FIELD_EXPIRY      = 'expiry';
+    public const FIELD_EOL         = 'eol';
 
     // Extra fields for POST/PUT requests.
     public const FIELD_DISK_ID = 'disk_id';

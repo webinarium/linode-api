@@ -22,6 +22,8 @@ use Linode\Images\ImageRepositoryInterface;
 use Linode\LinodeInstances\KernelRepositoryInterface;
 use Linode\LinodeInstances\LinodeRepositoryInterface;
 use Linode\LinodeTypes\LinodeTypeRepositoryInterface;
+use Linode\LKE\LKEClusterRepositoryInterface;
+use Linode\LKE\LKEVersionRepositoryInterface;
 use Linode\Longview\LongviewClientRepositoryInterface;
 use Linode\Longview\LongviewSubscriptionRepositoryInterface;
 use Linode\Managed\ManagedContactRepositoryInterface;
@@ -65,6 +67,8 @@ final class LinodeClientTest extends TestCase
         self::assertInstanceOf(KernelRepositoryInterface::class, $object->kernels);
         self::assertInstanceOf(LinodeRepositoryInterface::class, $object->linodes);
         self::assertInstanceOf(LinodeTypeRepositoryInterface::class, $object->linodeTypes);
+        self::assertInstanceOf(LKEClusterRepositoryInterface::class, $object->lkeClusters);
+        self::assertInstanceOf(LKEVersionRepositoryInterface::class, $object->lkeVersions);
         self::assertInstanceOf(LongviewClientRepositoryInterface::class, $object->longviewClients);
         self::assertInstanceOf(LongviewSubscriptionRepositoryInterface::class, $object->longviewSubscriptions);
         self::assertInstanceOf(ManagedContactRepositoryInterface::class, $object->managedContacts);

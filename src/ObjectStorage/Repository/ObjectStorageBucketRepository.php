@@ -70,12 +70,12 @@ class ObjectStorageBucketRepository extends AbstractRepository implements Object
 
     public function cancelObjectStorage(): void
     {
-        $this->client->post('beta/object-storage/cancel');
+        $this->client->post('/object-storage/cancel');
     }
 
     protected function getBaseUri(): string
     {
-        return 'beta/object-storage/buckets';
+        return '/object-storage/buckets';
     }
 
     protected function getSupportedFields(): array

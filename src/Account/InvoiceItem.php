@@ -25,7 +25,7 @@ use Linode\Entity;
  * @property float  $total     The price of this Item after taxes in US Dollars.
  * @property int    $quantity  The quantity of this Item for the specified Invoice.
  * @property float  $unitprice The monthly service fee in US Dollars for this Item.
- * @property string $type      The type of service, ether `prepay` or `misc`.
+ * @property string $type      The type of service, ether `hourly` or `misc`.
  */
 class InvoiceItem extends Entity
 {
@@ -42,6 +42,5 @@ class InvoiceItem extends Entity
 
     // `FIELD_TYPE` values.
     public const TYPE_HOURLY = 'hourly';
-    public const TYPE_PREPAY = 'prepay';
     public const TYPE_MISC   = 'misc';
 }

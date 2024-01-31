@@ -30,7 +30,6 @@ class Grant extends Entity
     public const FIELD_PERMISSIONS = 'permissions';
 
     // `FIELD_PERMISSIONS` values.
-    public const PERMISSIONS_NO_ACCESS  = null;
     public const PERMISSIONS_READ_ONLY  = 'read_only';
     public const PERMISSIONS_READ_WRITE = 'read_write';
 }

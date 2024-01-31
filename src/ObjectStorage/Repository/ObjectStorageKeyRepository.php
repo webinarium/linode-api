@@ -46,7 +46,7 @@ class ObjectStorageKeyRepository extends AbstractRepository implements ObjectSto
 
     protected function getBaseUri(): string
     {
-        return 'beta/object-storage/keys';
+        return '/object-storage/keys';
     }
 
     protected function getSupportedFields(): array

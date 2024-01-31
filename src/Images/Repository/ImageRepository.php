@@ -63,6 +63,7 @@ class ImageRepository extends AbstractRepository implements ImageRepositoryInter
             Image::FIELD_DEPRECATED,
             Image::FIELD_TYPE,
             Image::FIELD_EXPIRY,
+            Image::FIELD_EOL,
         ];
     }
 

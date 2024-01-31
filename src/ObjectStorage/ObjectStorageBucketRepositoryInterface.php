@@ -33,12 +33,6 @@ interface ObjectStorageBucketRepositoryInterface extends RepositoryInterface
      * This endpoint is available for convenience. It is recommended that instead you
      * use the more fully-featured S3 API directly.
      *
-     *
-     * **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
-     * `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
-     * updates in the future. This notice will be removed when this endpoint is out of
-     * beta.
-     *
      * @param array $parameters Information about the bucket you want to create.
      *
      * @throws LinodeException
@@ -50,12 +44,6 @@ interface ObjectStorageBucketRepositoryInterface extends RepositoryInterface
      *
      * This endpoint is available for convenience. It is recommended that instead you
      * use the more fully-featured S3 API directly.
-     *
-     *
-     * **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
-     * `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
-     * updates in the future. This notice will be removed when this endpoint is out of
-     * beta.
      *
      * @param string $clusterId The ID of the cluster this bucket exists in.
      * @param string $bucket    The bucket name.
@@ -74,11 +62,6 @@ interface ObjectStorageBucketRepositoryInterface extends RepositoryInterface
      * This endpoint is available for convenience. It is recommended that instead you use
      * the more fully- featured S3 API directly.
      *
-     * **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
-     * `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
-     * updates in the future. This notice will be removed when this endpoint is out of
-     * beta.
-     *
      * @param string $clusterId The ID of the cluster this bucket exists in.
      * @param string $bucket    The bucket name.
      *
@@ -94,12 +77,6 @@ interface ObjectStorageBucketRepositoryInterface extends RepositoryInterface
      *
      * This endpoint is available for convenience. It is recommended that instead you
      * use the more more fully-featured S3 API directly.
-     *
-     *
-     * **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
-     * `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
-     * updates in the future. This notice will be removed when this endpoint is out of
-     * beta.
      *
      * @param string $clusterId  The ID of the cluster this bucket exists in.
      * @param string $bucket     The bucket name.
@@ -118,12 +95,6 @@ interface ObjectStorageBucketRepositoryInterface extends RepositoryInterface
      * This endpoint is available for convenience. It is recommended that instead you
      * use the more fully-featured S3 API directly.
      *
-     *
-     * **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
-     * `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
-     * updates in the future. This notice will be removed when this endpoint is out of
-     * beta.
-     *
      * @param string $clusterId The ID of the cluster this bucket exists in.
      * @param string $bucket    The bucket name.
      *
@@ -141,12 +112,6 @@ interface ObjectStorageBucketRepositoryInterface extends RepositoryInterface
      * This endpoint is available for convenience. It is recommended that instead you
      * use the more fully-featured S3 API
      * directly.
-     *
-     *
-     * **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
-     * `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
-     * updates in the future. This notice will be removed when this endpoint is out of
-     * beta.
      *
      * @param string $clusterId  The ID of the cluster this bucket exists in.
      * @param string $bucket     The bucket name.
@@ -167,11 +132,6 @@ interface ObjectStorageBucketRepositoryInterface extends RepositoryInterface
      * guide.
      * - To delete large amounts of objects, consult our guide on
      * Lifecycle Policies.
-     *
-     * **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
-     * `/v4beta` instead of `/v4`, and be aware that this endpoint may receiving breaking
-     * updates in the future. This notice will be removed when this endpoint is out of
-     * beta.
      *
      * @throws LinodeException
      */

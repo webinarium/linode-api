@@ -30,7 +30,8 @@ use Linode\NodeBalancers\Repository\NodeBalancerNodeRepository;
  *                                                                used for HTTPS, you do not need SSL configured to have a NodeBalancer listening on
  *                                                                port 443.
  * @property string                              $protocol        The protocol this port is configured to serve.
- *                                                                * If this is set to `https` you must include an `ssl_cert` and an `ssl_key`.
+ *                                                                * If using `http` or `tcp` protocol, `ssl_cert` and `ssl_key` are not supported.
+ *                                                                * If using `https` protocol, `ssl_cert` and `ssl_key` are required.
  * @property string                              $algorithm       What algorithm this NodeBalancer should use for routing traffic to backends.
  * @property string                              $stickiness      Controls how session stickiness is handled on this port.
  *                                                                * If set to `none` connections will always be assigned a backend based on the

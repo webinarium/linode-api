@@ -9,19 +9,18 @@
 //
 // ---------------------------------------------------------------------
 
-namespace Linode\Networking;
+namespace Linode\LKE;
 
 use Linode\Entity;
 
 /**
- * An object representing an IPv6 range.
+ * LKE versions.
  *
- * @property string $range  The IPv6 range of addresses in this pool.
- * @property string $region The region for this range of IPv6 addresses.
+ * @property string $id A Kubernetes version number available for deployment to a Kubernetes cluster in
+ *                      the format of <major>.<minor>, and the latest supported patch version.
  */
-class IPv6Range extends Entity
+class LKEVersion extends Entity
 {
     // Available fields.
-    public const FIELD_RANGE  = 'range';
-    public const FIELD_REGION = 'region';
+    public const FIELD_ID = 'id';
 }

@@ -19,6 +19,7 @@ use Linode\Entity;
  * @property string   $id           The unique ID of this Region.
  * @property string   $country      The country where this Region resides.
  * @property string[] $capabilities A list of capabilities of this region.
+ * @property string   $status       This region's current operational status.
  */
 class Region extends Entity
 {
@@ -26,4 +27,9 @@ class Region extends Entity
     public const FIELD_ID           = 'id';
     public const FIELD_COUNTRY      = 'country';
     public const FIELD_CAPABILITIES = 'capabilities';
+    public const FIELD_STATUS       = 'status';
+
+    // `FIELD_STATUS` values.
+    public const STATUS_OK     = 'ok';
+    public const STATUS_OUTAGE = 'outage';
 }

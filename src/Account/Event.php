@@ -108,6 +108,7 @@ class Event extends Entity
     public const ACTION_LINODE_CONFIG_CREATE             = 'linode_config_create';
     public const ACTION_LINODE_CONFIG_DELETE             = 'linode_config_delete';
     public const ACTION_LINODE_CONFIG_UPDATE             = 'linode_config_update';
+    public const ACTION_LKE_NODE_CREATE                  = 'lke_node_create';
     public const ACTION_LONGVIEWCLIENT_CREATE            = 'longviewclient_create';
     public const ACTION_LONGVIEWCLIENT_DELETE            = 'longviewclient_delete';
     public const ACTION_LONGVIEWCLIENT_UPDATE            = 'longviewclient_update';

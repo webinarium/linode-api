@@ -28,11 +28,6 @@ interface ObjectStorageKeyRepositoryInterface extends RepositoryInterface
     /**
      * Provisions a new Object Storage Key on your account.
      *
-     * **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
-     * `/v4beta` instead of `/v4`, and be aware that this endpoint may receiving breaking
-     * updates in the future. This notice will be removed when this endpoint is out of
-     * beta.
-     *
      * @param array $parameters The label of the key to create. This is used to identify the created key.
      *
      * @return ObjectStorageKey The new keypair. **This is the only time** the secret key is returned.
@@ -44,11 +39,6 @@ interface ObjectStorageKeyRepositoryInterface extends RepositoryInterface
     /**
      * Updates an Object Storage Key on your account.
      *
-     * **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
-     * `/v4beta` instead of `/v4`, and be aware that this endpoint may receiving breaking
-     * updates in the future. This notice will be removed when this endpoint is out of
-     * beta.
-     *
      * @param int   $keyId      The key to look up.
      * @param array $parameters The fields to update.
      *
@@ -59,11 +49,6 @@ interface ObjectStorageKeyRepositoryInterface extends RepositoryInterface
     /**
      * Revokes an Object Storage Key. This keypair will no longer be usable by
      * third-party clients.
-     *
-     * **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
-     * `/v4beta` instead of `/v4`, and be aware that this endpoint may receiving breaking
-     * updates in the future. This notice will be removed when this endpoint is out of
-     * beta.
      *
      * @param int $keyId The key to look up.
      *

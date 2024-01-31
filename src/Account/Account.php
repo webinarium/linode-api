@@ -54,6 +54,7 @@ use Linode\Managed\StatsDataAvailable;
  *                                                               Simply put, a promotion offers a certain amount of credit every
  *                                                               month, until either the expiration date is passed, or until the total
  *                                                               promotional credit is used, whichever comes first.
+ * @property string                          $euuid              An external unique identifier for this account.
  * @property EventRepositoryInterface        $events             List of Event objects representing actions taken on your Account. The Events
  *                                                               returned depends on your grants.
  * @property InvoiceRepositoryInterface      $invoices           List of Invoices against your Account.
@@ -92,6 +93,7 @@ class Account extends Entity
     public const FIELD_ACTIVE_SINCE       = 'active_since';
     public const FIELD_CAPABILITIES       = 'capabilities';
     public const FIELD_ACTIVE_PROMOTIONS  = 'active_promotions';
+    public const FIELD_EUUID              = 'euuid';
 
     /**
      * Returns the contact and billing information related to your Account.

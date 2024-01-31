@@ -28,6 +28,8 @@ use Psr\Http\Message\ResponseInterface;
  * @property LinodeInstances\KernelRepositoryInterface             $kernels
  * @property LinodeInstances\LinodeRepositoryInterface             $linodes
  * @property LinodeTypes\LinodeTypeRepositoryInterface             $linodeTypes
+ * @property LKE\LKEClusterRepositoryInterface                     $lkeClusters
+ * @property LKE\LKEVersionRepositoryInterface                     $lkeVersions
  * @property Longview\LongviewClientRepositoryInterface            $longviewClients
  * @property Longview\LongviewSubscriptionRepositoryInterface      $longviewSubscriptions
  * @property Managed\ManagedContactRepositoryInterface             $managedContacts
@@ -98,6 +100,8 @@ class LinodeClient
             'kernels'               => new LinodeInstances\Repository\KernelRepository($this),
             'linodes'               => new LinodeInstances\Repository\LinodeRepository($this),
             'linodeTypes'           => new LinodeTypes\Repository\LinodeTypeRepository($this),
+            'lkeClusters'           => new LKE\Repository\LKEClusterRepository($this),
+            'lkeVersions'           => new LKE\Repository\LKEVersionRepository($this),
             'longviewClients'       => new Longview\Repository\LongviewClientRepository($this),
             'longviewSubscriptions' => new Longview\Repository\LongviewSubscriptionRepository($this),
             'managedContacts'       => new Managed\Repository\ManagedContactRepository($this),

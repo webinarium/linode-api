@@ -78,10 +78,8 @@ class Domain extends Entity
     public const TYPE_SLAVE  = 'slave';
 
     // `FIELD_STATUS` values.
-    public const STATUS_DISABLED   = 'disabled';
-    public const STATUS_ACTIVE     = 'active';
-    public const STATUS_EDIT_MODE  = 'edit_mode';
-    public const STATUS_HAS_ERRORS = 'has_errors';
+    public const STATUS_DISABLED = 'disabled';
+    public const STATUS_ACTIVE   = 'active';
 
     // Time values.
     public const TIME_DEFAULT  = 0;

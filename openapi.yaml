@@ -1,6 +1,7 @@
 openapi: 3.0.1
 info:
-  version: 4.8.0
+  version: 4.14.1
+
   title: Linode API
   description: |
     # Introduction
@@ -37,7 +38,7 @@ info:
     generated from the
     <a target="_top" href="https://cloud.linode.com/profile/tokens">Linode Cloud Manager</a>.
 
-    All scopes for the OAuth security model (defined below) apply to this
+    All scopes for the OAuth security model ([defined below](#o-auth)) apply to this
     security model as well.
 
     ### Authentication
@@ -47,19 +48,49 @@ info:
     | **HTTP Authorization Scheme** | bearer |
 
     ## OAuth
+    If you only need to access the Linode API for personal use,
+    we recommend that you create a [personal access token](#personal-access-token).
+    If you're designing an application that can authenticate with an arbitrary Linode user, then
+    you should use the OAuth 2.0 workflows presented in this section.
 
-    The OAuth workflow is a three-step process to authenticate a User before an
-    application can start making API calls on the User's behalf. If all you need
-    is a Personal Access Token, feel free to skip ahead to the next section.
+    For a more detailed example of an OAuth 2.0 implementation, see our guide on [How to Create an OAuth App with the Linode Python API Library](https://www.linode.com/docs/platform/api/how-to-create-an-oauth-app-with-the-linode-python-api-library/#oauth-2-authentication-exchange).
 
-    First, the User visits the application's website and is directed to log with
-    Linode. The User is then redirected to Linode's authentication server and
-    presented the scope levels the application is requesting. Once the User
-    accepts the request for access, we redirect them back to the application's
-    specified redirect URI with an access code.
+    Before you implement OAuth in your application, you first need to create an OAuth client. You can do this [with the Linode API](https://developers.linode.com/api/v4/account-oauth-clients/#post) or [via the Cloud Manager](https://cloud.linode.com/profile/clients):
 
-    Once the User has logged in to Linode and you have received an exchange code,
-    you will need to exchange that access code for an Authorization token. You
+      - When creating the client, you'll supply a `label` and a `redirect_uri` (referred to as the Callback URL in the Cloud Manager).
+      - The response from this endpoint will give you a `client_id` and a `secret`.
+      - Clients can be public or private, and are private by default. You can choose to make the client public when it is created.
+        - A private client is used with applications which can securely store the client secret (that is, the secret returned to you when you first created the client). For example, an application running on a secured server that only the developer has access to would use a private OAuth client. This is also called a confidential client in some OAuth documentation.
+        - A public client is used with applications where the client secret is not guaranteed to be secure. For example, a native app running on a user's computer may not be able to keep the client secret safe, as a user could potentially inspect the source of the application. So, native apps or apps that run in a user's browser should use a public client.
+        - Public and private clients follow different workflows, as described below.
+
+    ### OAuth Workflow
+
+    The OAuth workflow is a series of exchanges between your third-party app and Linode. The workflow is used
+    to authenticate a user before an application can start making API calls on the user's behalf.
+
+    Notes:
+
+    - With respect to the diagram in [section 1.2 of RFC 6749](https://tools.ietf.org/html/rfc6749#section-1.2), login.linode.com (referred to in this section as the *login server*)
+    is the Resource Owner and the Authorization Server; api.linode.com (referred to here as the *api server*) is the Resource Server.
+    - The OAuth spec refers to the private and public workflows listed below as the [authorization code flow](https://tools.ietf.org/html/rfc6749#section-1.3.1) and [implicit flow](https://tools.ietf.org/html/rfc6749#section-1.3.2).
+
+    | PRIVATE WORKFLOW | PUBLIC WORKFLOW |
+    |------------------|------------------|
+    | 1.  The user visits the application's website and is directed to login with Linode. | 1.  The user visits the application's website and is directed to login with Linode. |
+    | 2.  Your application then redirects the user to Linode's [login server](https://login.linode.com) with the client application's `client_id` and requested OAuth `scope`, which should appear in the URL of the login page. | 2.  Your application then redirects the user to Linode's [login server](https://login.linode.com) with the client application's `client_id` and requested OAuth `scope`, which should appear in the URL of the login page. |
+    | 3.  The user logs into the login server with their username and password. | 3.  The user logs into the login server with their username and password. |
+    | 4.  The login server redirects the user to the specificed redirect URL with a temporary authorization `code` (exchange code) in the URL. | 4.  The login server redirects the user back to your application with an OAuth `access_token` embedded in the redirect URL's hash. This is temporary and expires in two hours. No `refresh_token` is issued. Therefore, once the `access_token` expires, a new one will need to be issued by having the user log in again. |
+    | 5.  The application issues a POST request (*see below*) to the login server with the exchange code, `client_id`, and the client application's `client_secret`. | |
+    | 6.  The login server responds to the client application with a new OAuth `access_token` and `refresh_token`. The `access_token` is set to expire in two hours. | |
+    | 7.  The `refresh_token` can be used by contacting the login server with the `client_id`, `client_secret`, and `refresh_token` to get a new OAuth `access_token` and `refresh_token`. The new `access_token` is good for another two hours, and the new `refresh_token`, can be used to extend the session again by this same method. | |
+
+    ### OAuth Private Workflow - Additional Details
+
+    The following information expands on steps 5 through 7 of the private workflow:
+
+    Once the user has logged into Linode and you have received an exchange code,
+    you will need to trade that exchange code for an `access_token` and `refresh_token`. You
     do this by making an HTTP POST request to the following address:
 
     ```
@@ -71,11 +102,11 @@ info:
 
     | PARAMETER | DESCRIPTION |
     |-----------|-------------|
-    | client_id | Your app's client ID |
-    | client_secret | Your app's client secret |
-    | code | The code you just received from the redirect |
+    | client_id | Your app's client ID. |
+    | client_secret | Your app's client secret. |
+    | code | The code you just received from the redirect. |
 
-    You'll get a reponse like this:
+    You'll get a response like this:
 
     ```json
     {
@@ -86,18 +117,20 @@ info:
     }
     ```
 
-    Included in the reponse is `access_token`. With this token, you can proceed to make
+    Included in the reponse is an `access_token`. With this token, you can proceed to make
     authenticated HTTP requests to the API by adding this header to each request:
 
     ```
     Authorization: Bearer 03d084436a6c91fbafd5c4b20c82e5056a2e9ce1635920c30dc8d81dc7a6665c
     ```
 
-    ### Authentication
+    ### OAuth Reference
 
-    | Security Scheme Type: | Oauth2 |
+    | Security Scheme Type | OAuth 2.0 |
     |-----------------------|--------|
-    | **AuthorizationCode Oauth Flow** |  **Authorization URL:** https://login.linode.com/oauth/authorize<br />**Token URL:** https://login.linode.com/oauth/token<br />**Scopes:**<br /><ul><li>`account:read_only` - Allows access to GET information about your Account.</li><li>`account:read_write` - Allows access to all endpoints related to your Account.</li><li>`domains:read_only` - Allows access to GET Domains on your Account.</li><li>`domains:read_write` - Allows access to all Domain endpoints.</li><li>`events:read_only` - Allows access to GET your Events.</li><li>`events:read_write` - Allows access to all endpoints related to your Events.</li><li>`images:read_only` - Allows access to GET your Images.</li><li>`images:read_write` - Allows access to all endpoints related to your Images.</li><li>`ips:read_only` - Allows access to GET your ips.</li><li>`ips:read_write` - Allows access to all endpoints related to your ips.</li><li>`linodes:read_only` - Allows access to GET Linodes on your Account.</li><li>`linodes:read_write` - Allow access to all endpoints related to your Linodes.</li><li>`longview:read_only` - Allows access to GET your Longview Clients.</li><li>`longview:read_write` - Allows access to all endpoints related to your Longview Clients.</li><li>`nodebalancers:read_only` - Allows access to GET NodeBalancers on your Account.</li><li>`nodebalancers:read_write` - Allows access to all NodeBalancer endpoints.</li><li>`stackscripts:read_only` - Allows access to GET your StackScripts.</li><li>`stackscripts:read_write` - Allows access to all endpoints related to your StackScripts.</li><li>`volumes:read_only` - Allows access to GET your Volumes.</li><li>`volumes:read_write` - Allows access to all endpoints related to your Volumes.</li></ul><br />|
+    | **Authorization URL** | https://login.linode.com/oauth/authorize |
+    | **Token URL** | https://login.linode.com/oauth/token |
+    | **Scopes** | <ul><li>`account:read_only` - Allows access to GET information about your Account.</li><li>`account:read_write` - Allows access to all endpoints related to your Account.</li><li>`domains:read_only` - Allows access to GET Domains on your Account.</li><li>`domains:read_write` - Allows access to all Domain endpoints.</li><li>`events:read_only` - Allows access to GET your Events.</li><li>`events:read_write` - Allows access to all endpoints related to your Events.</li><li>`images:read_only` - Allows access to GET your Images.</li><li>`images:read_write` - Allows access to all endpoints related to your Images.</li><li>`ips:read_only` - Allows access to GET your ips.</li><li>`ips:read_write` - Allows access to all endpoints related to your ips.</li><li>`linodes:read_only` - Allows access to GET Linodes on your Account.</li><li>`linodes:read_write` - Allow access to all endpoints related to your Linodes.</li><li>`lke:read_only` - Allows access to GET LKE Clusters on your Account.</li><li>`lke:read_write` - Allows access to all endpoints related to LKE Clusters on your Account.</li><li>`longview:read_only` - Allows access to GET your Longview Clients.</li><li>`longview:read_write` - Allows access to all endpoints related to your Longview Clients.</li><li>`nodebalancers:read_only` - Allows access to GET NodeBalancers on your Account.</li><li>`nodebalancers:read_write` - Allows access to all NodeBalancer endpoints.</li><li>`stackscripts:read_only` - Allows access to GET your StackScripts.</li><li>`stackscripts:read_write` - Allows access to all endpoints related to your StackScripts.</li><li>`volumes:read_only` - Allows access to GET your Volumes.</li><li>`volumes:read_write` - Allows access to all endpoints related to your Volumes.</li></ul><br />|
 
     # Requests
 
@@ -299,9 +332,6 @@ info:
     Endpoints that do not have CLI examples are currently unavailable through the CLI, but
     can be accessed via other methods such as Shell commands and other third-party applications.
 
-    # APIv3
-
-    View the [Linode APIv3 Documentation](https://linode.com/apiv3).
   contact:
     name: Linode
     url: /
@@ -3326,6 +3356,12 @@ paths:
           description: A collection of the specified Linode's available backups.
           content:
             application/json:
+              x-linode-cli-rows:
+              - automatic
+              - snapshot.current
+              - snapshot.in_progress
+              x-linode-cli-use-schema:
+                $ref: '#/components/schemas/Backup'
               schema:
                 type: object
                 properties:
@@ -5962,6 +5998,752 @@ paths:
       - lang: CLI
         source: >
           linode-cli linodes type-view g6-standard-2
+  /lke/clusters:
+    x-linode-cli-command: lke
+    get:
+      operationId: getLKEClusters
+      x-linode-cli-action: clusters-list
+      x-linode-grant: read_only
+      security:
+      - personalAccessToken: []
+      - oauth:
+        - lke:read_only
+      tags:
+      - Linode Kubernetes Engine (LKE)
+      servers:
+      - url: https://api.linode.com/v4beta
+      summary: List Kubernetes Clusters
+      description: >
+        Lists current Kubernetes clusters available on your account.
+
+
+        **Beta**: This endpoint is in private beta. Please make sure to prepend all requests with
+        `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
+        updates in the future. This notice will be removed when this endpoint is out of
+        beta. Sign up for the beta [here](https://welcome.linode.com/lkebeta/).
+      responses:
+        '200':
+          description: Returns an array of all Kubernetes clusters on your Account.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LKECluster'
+                  page:
+                    $ref: '#/components/schemas/PaginationEnvelope/properties/page'
+                  pages:
+                    $ref: '#/components/schemas/PaginationEnvelope/properties/pages'
+                  results:
+                    $ref: '#/components/schemas/PaginationEnvelope/properties/results'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      x-code-samples:
+      - lang: Shell
+        source: >
+          curl -H "Authorization: Bearer $TOKEN" \
+                https://api.linode.com/v4beta/lke/clusters
+      - lang: CLI
+        source: >
+          linode-cli lke clusters-list
+    post:
+      operationId: createLKECluster
+      x-linode-cli-action: cluster-create
+      x-linode-charge: true
+      x-linode-grant: add_clusters
+      security:
+      - personalAccessToken: []
+      - oauth:
+        - lke:read_write
+      tags:
+      - Linode Kubernetes Engine (LKE)
+      servers:
+      - url: https://api.linode.com/v4beta
+      summary: Create Kubernetes Cluster
+      description: >
+        Creates a Kubernetes cluster. The Kubernetes cluster will be created
+        asynchronously. You can use the events system to determine when the
+        Kubernetes cluster is ready to use.
+
+
+        **Beta**: This endpoint is in private beta. Please make sure to prepend all requests with
+        `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
+        updates in the future. This notice will be removed when this endpoint is out of
+        beta. Sign up for the beta [here](https://welcome.linode.com/lkebeta/).
+      requestBody:
+        description: Configuration for the Kubernetes cluster
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - label
+              - region
+              - version
+              - node_pools
+              allOf:
+              - $ref: '#/components/schemas/LKEClusterRequestBody'
+              - properties:
+                  node_pools:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LKENodePoolRequestBody'
+      responses:
+        '200':
+          description: Kubernetes cluster creation has started.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LKECluster'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      x-code-samples:
+      - lang: Shell
+        source: >
+          curl -H "Content-Type: application/json" \
+                -H "Authorization: Bearer $TOKEN" \
+                -X POST -d '{
+                  "label": "cluster12345",
+                  "region": "us-central",
+                  "version": "1.16",
+                  "tags": ["ecomm", "blogs"],
+                  "node_pools": [
+                    { "type": "g6-standard-4", "count": 6},
+                    { "type": "g6-standard-8", "count": 3}
+                  ]
+                }' \
+                https://api.linode.com/v4beta/lke/clusters
+      - lang: CLI
+        source: >
+          linode-cli lke cluster-create \
+            --label cluster12345 \
+            --region us-central \
+            --version 1.16 \
+            --node_pools.type g6-standard-4 --node_pools.count 6 \
+            --node_pools.type g6-standard-8 --node_pools.count 3
+  /lke/clusters/{clusterId}:
+    parameters:
+    - name: clusterId
+      in: path
+      description: ID of the Kubernetes cluster to look up.
+      required: true
+      schema:
+        type: integer
+    x-linode-cli-command: lke
+    get:
+      operationId: getLKECluster
+      x-linode-cli-action: cluster-view
+      security:
+      - personalAccessToken: []
+      - oauth:
+        - lke:read_only
+      tags:
+      - Linode Kubernetes Engine (LKE)
+      servers:
+      - url: https://api.linode.com/v4beta
+      summary: View Kubernetes Cluster
+      description: >
+        Get a specific Cluster by ID.
+
+
+        **Beta**: This endpoint is in private beta. Please make sure to prepend all requests with
+        `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
+        updates in the future. This notice will be removed when this endpoint is out of
+        beta. Sign up for the beta [here](https://welcome.linode.com/lkebeta/).
+      responses:
+        '200':
+          description: Returns a single Kubernetes cluster.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LKECluster'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      x-code-samples:
+      - lang: Shell
+        source: >
+          curl -H "Authorization: Bearer $TOKEN" \
+                https://api.linode.com/v4beta/lke/clusters/12345
+      - lang: CLI
+        source:
+          linode-cli lke cluster-view 12345
+    put:
+      operationId: putLKECluster
+      x-linode-cli-action: cluster-update
+      security:
+      - personalAccessToken: []
+      - oauth:
+        - lke:read_write
+      tags:
+      - Linode Kubernetes Engine (LKE)
+      servers:
+      - url: https://api.linode.com/v4beta
+      summary: Update Kubernetes Cluster
+      description: >
+        Updates a Kubernetes cluster.
+
+
+        **Beta**: This endpoint is in private beta. Please make sure to prepend all requests with
+        `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
+        updates in the future. This notice will be removed when this endpoint is out of
+        beta. Sign up for the beta [here](https://welcome.linode.com/lkebeta/).
+      requestBody:
+        description: The fields to update the Kubernetes cluster.
+        content:
+          application/json:
+            schema:
+              properties:
+                label:
+                  $ref: '#/components/schemas/LKEClusterRequestBody/properties/label'
+      responses:
+        '200':
+          description: Returns a single Kubernetes cluster.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LKECluster'
+      x-code-samples:
+      - lang: Shell
+        source: >
+          curl -H "Content-Type: application/json" \
+                -H "Authorization: Bearer $TOKEN" \
+                -X PUT -d '{
+                  "label": "lkecluster54321"
+                }' \
+                https://api.linode.com/v4beta/lke/clusters/12345
+      - lang: CLI
+        source: >
+          linode-cli lke cluster-update 12345 \
+            --label lkecluster54321
+    delete:
+      operationId: deleteLKECluster
+      x-linode-cli-action: cluster-delete
+      security:
+      - personalAccessToken: []
+      - oauth:
+        - lke:read_write
+      tags:
+      - Linode Kubernetes Engine (LKE)
+      servers:
+      - url: https://api.linode.com/v4beta
+      summary: Delete Kubernetes Cluster
+      description: |
+        Deletes a Cluster you have permission to `read_write`.
+
+        **Deleting a Cluster is a destructive action and cannot be undone.**
+
+        Deleting a Cluster:
+          - Deletes all Linodes in all pools within this Kubernetes cluster
+          - Deletes all supporting Kubernetes services for this Kubernetes
+            cluster (API server, etcd, etc)
+          - Deletes all NodeBalancers created by this Kubernetes cluster
+          - Does not delete any of the volumes created by this Kubernetes
+            cluster
+
+
+        **Beta**: This endpoint is in private beta. Please make sure to prepend all requests with
+        `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
+        updates in the future. This notice will be removed when this endpoint is out of
+        beta. Sign up for the beta [here](https://welcome.linode.com/lkebeta/).
+      responses:
+        '200':
+          description: Delete successful
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      x-code-samples:
+      - lang: Shell
+        source: >
+          curl -H "Authorization: Bearer $TOKEN" \
+                -X DELETE \
+                https://api.linode.com/v4beta/lke/clusters/12345
+      - lang: CLI
+        source: >
+          linode-cli lke cluster-delete 12345
+  /lke/clusters/{clusterId}/pools:
+    parameters:
+    - name: clusterId
+      in: path
+      description: ID of the Kubernetes cluster to look up.
+      required: true
+      schema:
+        type: integer
+    x-linode-cli-command: lke
+    get:
+      operationId: getLKEClusterPools
+      x-linode-cli-action: pools-list
+      security:
+      - personalAccessToken: []
+      - oauth:
+        - lke:read_only
+      tags:
+      - Linode Kubernetes Engine (LKE)
+      servers:
+      - url: https://api.linode.com/v4beta
+      summary: List Node Pools
+      description: >
+        Returns all active Node Pools on a Kubernetes cluster.
+
+
+        **Beta**: This endpoint is in private beta. Please make sure to prepend all requests with
+        `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
+        updates in the future. This notice will be removed when this endpoint is out of
+        beta. Sign up for the beta [here](https://welcome.linode.com/lkebeta/).
+      responses:
+        '200':
+          description: Returns an array of all Pools in this Kubernetes cluster.
+          content:
+            application/json:
+              x-linode-cli-nested-list: nodes
+              x-linode-cli-use-schema:
+                type: object
+                properties:
+                  id:
+                    x-linode-cli-display: 1
+                  type:
+                    x-linode-cli-display: 2
+                  nodes.id:
+                    x-linode-cli-display: 3
+                  nodes.instance_id:
+                    x-linode-cli-display: 4
+                  nodes.status:
+                    x-linode-cli-display: 5
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LKENodePool'
+                  page:
+                    $ref: '#/components/schemas/PaginationEnvelope/properties/page'
+                  pages:
+                    $ref: '#/components/schemas/PaginationEnvelope/properties/pages'
+                  results:
+                    $ref: '#/components/schemas/PaginationEnvelope/properties/results'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      x-code-samples:
+      - lang: Shell
+        source: >
+          curl -H "Authorization: Bearer $TOKEN" \
+                https://api.linode.com/v4beta/lke/clusters/12345/pools
+      - lang: CLI
+        source: >
+          linode-cli lke pools-list 12345
+    post:
+      operationId: postLKEClusterPools
+      x-linode-cli-action: pool-create
+      security:
+      - personalAccessToken: []
+      - oauth:
+        - lke:read_write
+      tags:
+      - Linode Kubernetes Engine (LKE)
+      servers:
+      - url: https://api.linode.com/v4beta
+      summary: Create Node Pool
+      description: >
+        Creates a new Node Pool for the designated Kubernetes cluster.
+
+
+        **Beta**: This endpoint is in private beta. Please make sure to prepend all requests with
+        `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
+        updates in the future. This notice will be removed when this endpoint is out of
+        beta. Sign up for the beta [here](https://welcome.linode.com/lkebeta/).
+      requestBody:
+        description: Configuration for the Node Pool
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - type
+              - count
+              allOf:
+              - $ref: '#/components/schemas/LKENodePoolRequestBody'
+      responses:
+        '200':
+          description: Node Pool has been created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LKENodePool'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      x-code-samples:
+      - lang: Shell
+        source: >
+          curl -H "Content-Type: application/json" \
+                -H "Authorization: Bearer $TOKEN" \
+                -X POST -d '{
+                  "type": "g6-standard-4",
+                  "count": 6
+                }' \
+                https://api.linode.com/v4beta/lke/clusters/12345/pools
+      - lang: CLI
+        source: >
+          linode-cli lke pool-create 12345 \
+            --type g6-standard-4 \
+            --count 6 \
+  /lke/clusters/{clusterId}/pools/{poolId}:
+    parameters:
+    - name: clusterId
+      in: path
+      description: ID of the Kubernetes cluster to look up.
+      required: true
+      schema:
+        type: integer
+    - name: poolId
+      in: path
+      description: ID of the Pool to look up
+      required: true
+      schema:
+        type: integer
+    x-linode-cli-command: lke
+    get:
+      operationId: getLKENodePool
+      x-linode-cli-action: pool-view
+      security:
+      - personalAccessToken: []
+      - oauth:
+        - lke:read_only
+      tags:
+      - Linode Kubernetes Engine (LKE)
+      servers:
+      - url: https://api.linode.com/v4beta
+      summary: View Node Pool
+      description: >
+        Get a specific Node Pool by ID.
+
+
+        **Beta**: This endpoint is in private beta. Please make sure to prepend all requests with
+        `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
+        updates in the future. This notice will be removed when this endpoint is out of
+        beta. Sign up for the beta [here](https://welcome.linode.com/lkebeta/).
+      responses:
+        '200':
+          description: Returns the requested Node Pool.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LKENodePool'
+      x-code-samples:
+      - lang: Shell
+        source: >
+          curl -H "Authorization: Bearer $TOKEN" \
+                https://api.linode.com/v4beta/lke/clusters/12345/pools/456
+      - lang: CLI
+        source: >
+          linode-cli lke pool-view 12345 456
+    put:
+      operationId: putLKENodePool
+      x-linode-cli-action: pool-update
+      security:
+      - personalAccessToken: []
+      - oauth:
+        - lke:read_write
+      tags:
+      - Linode Kubernetes Engine (LKE)
+      servers:
+      - url: https://api.linode.com/v4beta
+      summary: Update Node Pool
+      description: >
+        Updates a Node Pool. When a Node Pool's count are
+        changed, the nodes in that pool will be replaced in a rolling
+        fashion.
+
+
+        **Beta**: This endpoint is in private beta. Please make sure to prepend all requests with
+        `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
+        updates in the future. This notice will be removed when this endpoint is out of
+        beta. Sign up for the beta [here](https://welcome.linode.com/lkebeta/).
+      requestBody:
+        description: The fields to update
+        content:
+          application/json:
+            schema:
+              properties:
+                count:
+                  $ref: '#/components/schemas/LKENodePoolRequestBody/properties/count'
+      responses:
+        '200':
+          description: Node Pool was successfully modified.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LKENodePool'
+      x-code-samples:
+      - lang: Shell
+        source: >
+          curl -H "Content-Type: application/json" \
+                -H "Authorization: Bearer $TOKEN" \
+                -X PUT -d '{
+                  "count": 6
+                }' \
+                https://api.linode.com/v4beta/lke/clusters/12345/pools/456
+      - lang: CLI
+        source: >
+          linode-cli lke pool-update 12345 456 \
+            --count 6 \
+    delete:
+      operationId: deleteLKENodePool
+      x-linode-cli-action: pool-delete
+      security:
+      - personalAccessToken: []
+      - oauth:
+        - lke:read_write
+      tags:
+      - Linode Kubernetes Engine (LKE)
+      servers:
+      - url: https://api.linode.com/v4beta
+      summary: Delete Node Pool
+      description: |
+        Delete a specific Node Pool from a Kubernetes cluster.
+
+        **Deleting a Node Pool is a destructive action and cannot be undone.**
+
+        Deleting a Node Pool will delete all Linodes within that Pool.
+
+
+        **Beta**: This endpoint is in private beta. Please make sure to prepend all requests with
+        `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
+        updates in the future. This notice will be removed when this endpoint is out of
+        beta. Sign up for the beta [here](https://welcome.linode.com/lkebeta/).
+      responses:
+        '200':
+          description: Delete successful
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      x-code-samples:
+      - lang: Shell
+        source: >
+          curl -H "Authorization: Bearer $TOKEN" \
+                -X DELETE \
+                https://api.linode.com/v4beta/lke/clusters/12345/pools/456
+      - lang: CLI
+        source: >
+          linode-cli lke pool-delete 12345 456
+  /lke/clusters/{clusterId}/api-endpoint:
+    parameters:
+    - name: clusterId
+      in: path
+      description: ID of the Kubernetes cluster to look up.
+      required: true
+      schema:
+        type: integer
+    x-linode-cli-command: lke
+    get:
+      operationId: getLKEClusterAPIEndpoint
+      x-linode-cli-action: api-endpoint-view
+      security:
+      - personalAccessToken: []
+      - oauth:
+        - lke:read_only
+      tags:
+      - Linode Kubernetes Engine (LKE)
+      servers:
+      - url: https://api.linode.com/v4beta
+      summary: View Kubernetes API Endpoint
+      description: >
+        Get the Kubernetes API server endpoint for this cluster.
+
+
+        **Beta**: This endpoint is in private beta. Please make sure to prepend all requests with
+        `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
+        updates in the future. This notice will be removed when this endpoint is out of
+        beta. Sign up for the beta [here](https://welcome.linode.com/lkebeta/).
+      responses:
+        '200':
+          description: Returns the Kubernetes API server endpoint for this cluster.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  endpoints:
+                    type: string
+                    readOnly: true
+                    description: >
+                      The Kubernetes API server endpoint for this cluster.
+                    example: "https://192.0.2.1:6443"
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      x-code-samples:
+      - lang: Shell
+        source: >
+          curl -H "Authorization: Bearer $TOKEN" \
+                https://api.linode.com/v4beta/lke/clusters/12345/api-endpoint
+      - lang: CLI
+        source: >
+          linode-cli lke api-endpoint-view 12345
+  /lke/clusters/{clusterId}/kubeconfig:
+    parameters:
+    - name: clusterId
+      in: path
+      description: ID of the Kubernetes cluster to look up.
+      required: true
+      schema:
+        type: integer
+    x-linode-cli-command: lke
+    get:
+      operationId: getLKEClusterKubeconfig
+      x-linode-cli-action: kubeconfig-view
+      security:
+      - personalAccessToken: []
+      - oauth:
+        - lke:read_write
+      tags:
+      - Linode Kubernetes Engine (LKE)
+      servers:
+      - url: https://api.linode.com/v4beta
+      summary: View Kubeconfig
+      description: >
+        Get the Kubeconfig file for a Cluster.
+
+
+        **Beta**: This endpoint is in private beta. Please make sure to prepend all requests with
+        `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
+        updates in the future. This notice will be removed when this endpoint is out of
+        beta. Sign up for the beta [here](https://welcome.linode.com/lkebeta/).
+      responses:
+        '200':
+          description: Returns the Base64-encoded Kubeconfig file for this Kubernetes cluster.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  kubeconfig:
+                    type: string
+                    readOnly: true
+                    description: >
+                      The Base64-encoded Kubeconfig file for this Cluster.
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      x-code-samples:
+      - lang: Shell
+        source: >
+          curl -H "Authorization: Bearer $TOKEN" \
+                https://api.linode.com/v4beta/lke/clusters/12345/kubeconfig
+      - lang: CLI
+        source: >
+          linode-cli lke kubeconfig-view 12345
+  /lke/versions:
+    x-linode-cli-command: lke
+    get:
+      operationId: getLKEVersions
+      x-linode-cli-action: versions-list
+      x-linode-grant: read_only
+      security:
+      - personalAccessToken: []
+      - oauth:
+        - lke:read_only
+      tags:
+      - Linode Kubernetes Engine (LKE)
+      servers:
+      - url: https://api.linode.com/v4beta
+      summary: List Kubernetes Versions
+      description: >
+        List the Kubernetes versions available for deployment
+        to a Kubernetes cluster.
+
+
+        **Beta**: This endpoint is in private beta. Please make sure to prepend all requests with
+        `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
+        updates in the future. This notice will be removed when this endpoint is out of
+        beta. Sign up for the beta [here](https://welcome.linode.com/lkebeta/).
+      responses:
+        '200':
+          description: >
+            Returns a list of Kubernetes versions available for deployment
+            to a Kubernetes cluster.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LKEVersion'
+                  page:
+                    $ref: '#/components/schemas/PaginationEnvelope/properties/page'
+                  pages:
+                    $ref: '#/components/schemas/PaginationEnvelope/properties/pages'
+                  results:
+                    $ref: '#/components/schemas/PaginationEnvelope/properties/results'
+        default:
+            $ref: '#/components/responses/ErrorResponse'
+      x-code-samples:
+      - lang: Shell
+        source: >
+          curl -H "Authorization: Bearer $TOKEN" \
+                https://api.linode.com/v4beta/lke/versions
+      - lang: CLI
+        source: >
+          linode-cli lke versions-list
+  /lke/versions/{version}:
+    parameters:
+    - name: version
+      in: path
+      required: true
+      description: The LKE version to view.
+      schema:
+        type: string
+    x-linode-cli-command: lke
+    get:
+      operationId: getLKEVersion
+      x-linode-cli-action: version-view
+      x-linode-grant: read_only
+      security:
+      - personalAccessToken: []
+      - oauth:
+        - lke:read_only
+      tags:
+      - Linode Kubernetes Engine (LKE)
+      servers:
+      - url: https://api.linode.com/v4beta
+      summary: View Kubernetes Version
+      description: >
+        View a Kubernetes version available for deployment
+        to a Kubernetes cluster.
+
+
+        **Beta**: This endpoint is in private beta. Please make sure to prepend all requests with
+        `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
+        updates in the future. This notice will be removed when this endpoint is out of
+        beta. Sign up for the beta [here](https://welcome.linode.com/lkebeta/).
+      responses:
+        '200':
+          description: >
+            Returns a Kubernetes version object that is available for deployment
+            to a Kubernetes cluster.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LKEVersion'
+        default:
+            $ref: '#/components/responses/ErrorResponse'
+      x-code-samples:
+      - lang: Shell
+        source: >
+          curl -H "Authorization: Bearer $TOKEN" \
+                https://api.linode.com/v4beta/lke/versions/1.16
+      - lang: CLI
+        source: >
+          linode-cli lke version-view 1.16
   /longview/clients:
     x-linode-cli-command: longview
     get:
@@ -7820,7 +8602,9 @@ paths:
       - Networking
       summary: List IPv6 Pools
       description: >
-        Displays the IPv6 pools on your Account.
+        Displays the IPv6 pools on your Account. A pool of IPv6 addresses are routed to all of your
+        Linodes in a single [Region](https://developers.linode.com/api/v4/regions). Any Linode on your Account may bring up any address in this
+        pool at any time, with no external configuration required.
       operationId: getIPv6Pools
       x-linode-cli-action: v6-pools
       security:
@@ -7865,7 +8649,9 @@ paths:
       - Networking
       summary: List IPv6 Ranges
       description: >
-        Displays the IPv6 ranges on your Account.
+        Displays the IPv6 ranges on your Account. A range of IPv6 addresses is routed to a single
+        Linode in a given [Region](https://developers.linode.com/api/v4/regions). Your Linode is responsible for routing individual addresses in
+        the range, or handling traffic for all the addresses in the range.
       operationId: getIPv6Ranges
       x-linode-cli-action: v6-ranges
       security:
@@ -8837,7 +9623,7 @@ paths:
       operationId: getObjectStorageBuckets
       x-linode-cli-skip: true
       servers:
-      - url: https://api.linode.com/v4beta
+      - url: https://api.linode.com/v4
       summary: List Object Storage Buckets
       description: |
         Returns a paginated list of all Object Storage Buckets that you own.
@@ -8845,12 +9631,6 @@ paths:
 
         This endpoint is available for convenience. It is recommended that instead you
         use the more [fully-featured S3 API](https://docs.ceph.com/docs/mimic/radosgw/s3/serviceops/) directly.
-
-
-        **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
-        `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
-        updates in the future. This notice will be removed when this endpoint is out of
-        beta.
       tags:
       - Object Storage
       security:
@@ -8881,12 +9661,12 @@ paths:
       - lang: Shell
         source: >
           curl -H "Authorization: Bearer $TOKEN" \
-            https://api.linode.com/v4beta/object-storage/buckets/
+            https://api.linode.com/v4/object-storage/buckets/
     post:
       operationId: createObjectStorageBucket
       x-linode-cli-skip: true
       servers:
-      - url: https://api.linode.com/v4beta
+      - url: https://api.linode.com/v4
       summary: Create Object Storage Bucket
       description: |
         Creates an Object Storage Bucket in the cluster specified. If the
@@ -8896,12 +9676,6 @@ paths:
 
         This endpoint is available for convenience. It is recommended that instead you
         use the more [fully-featured S3 API](https://docs.ceph.com/docs/mimic/radosgw/s3/bucketops/#put-bucket) directly.
-
-
-        **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
-        `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
-        updates in the future. This notice will be removed when this endpoint is out of
-        beta.
       tags:
       - Object Storage
       security:
@@ -8923,7 +9697,10 @@ paths:
                   type: string
                   description: >
                     The name for this bucket. Must be unique in the cluster you
-                    are creating the bucket in, or an error will be returned.
+                    are creating the bucket in, or an error will be returned. Labels will be
+                    reserved only for the cluster that active buckets are created and stored in.
+                    If you want to reserve this bucket's label in another cluster,
+                    you must create a new bucket with the same label in the new cluster.
                   pattern: ^[a-z0-09][a-z0-9-]*[a-z0-9]?$
                   example: example-bucket
                 cluster:
@@ -8972,7 +9749,7 @@ paths:
                 "cors_enabled": true,
                 "acl": "private"
               }' \
-            https://api.linode.com/v4beta/object-storage/buckets/
+            https://api.linode.com/v4/object-storage/buckets/
   /object-storage/buckets/{clusterId}/{bucket}:
     parameters:
     - name: clusterId
@@ -8991,7 +9768,7 @@ paths:
       operationId: getObjectStorageBucket
       x-linode-cli-skip: true
       servers:
-      - url: https://api.linode.com/v4beta
+      - url: https://api.linode.com/v4
       summary: View Object Storage Bucket
       description: |
         Returns a single Object Storage Bucket.
@@ -8999,12 +9776,6 @@ paths:
 
         This endpoint is available for convenience. It is recommended that instead you
         use the more [fully-featured S3 API](https://docs.ceph.com/docs/mimic/radosgw/s3/bucketops/#get-bucket) directly.
-
-
-        **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
-        `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
-        updates in the future. This notice will be removed when this endpoint is out of
-        beta.
       tags:
       - Object Storage
       security:
@@ -9024,12 +9795,12 @@ paths:
       - lang: Shell
         source: >
           curl -H "Authorization: Bearer $TOKEN" \
-            https://api.linode.com/v4beta/object-storage/buckets/us-east-1/example-bucket
+            https://api.linode.com/v4/object-storage/buckets/us-east-1/example-bucket
     delete:
       operationId: deleteObjectStorageBucket
       x-linode-cli-skip: true
       servers:
-      - url: https://api.linode.com/v4beta
+      - url: https://api.linode.com/v4
       summary: Remove Object Storage Bucket
       description: >
         Removes a single bucket. While buckets containing objects _may_ be
@@ -9041,12 +9812,6 @@ paths:
 
         This endpoint is available for convenience. It is recommended that instead you
         use the more [fully- featured S3 API](https://docs.ceph.com/docs/mimic/radosgw/s3/bucketops/#delete-bucket) directly.
-
-
-        **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
-        `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
-        updates in the future. This notice will be removed when this endpoint is out of
-        beta.
       tags:
       - Object Storage
       security:
@@ -9067,7 +9832,7 @@ paths:
         source: >
           curl -H "Authorization: Bearer $TOKEN" \
             -X DELETE \
-            https://api.linode.com/v4beta/object-storage/buckets/us-east-1/example-bucket
+            https://api.linode.com/v4/object-storage/buckets/us-east-1/example-bucket
   /object-storage/buckets/{clusterId}/{bucket}/access:
     parameters:
     - name: clusterId
@@ -9086,7 +9851,7 @@ paths:
       operationId: modifyObjectStorageBucketAccess
       x-linode-cli-skip: true
       servers:
-      - url: https://api.linode.com/v4beta
+      - url: https://api.linode.com/v4
       summary: Modify Object Storage Bucket Access
       description: |
         Allows changing basic Cross-origin Resource Sharing (CORS) and Access Control Level (ACL) settings.
@@ -9096,12 +9861,6 @@ paths:
 
         This endpoint is available for convenience. It is recommended that instead you
         use the more more [fully-featured S3 API](https://docs.ceph.com/docs/mimic/radosgw/s3/bucketops/#put-bucket-acl) directly.
-
-
-        **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
-        `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
-        updates in the future. This notice will be removed when this endpoint is out of
-        beta.
       tags:
       - Object Storage
       security:
@@ -9149,7 +9908,7 @@ paths:
                 "cors_enabled": true,
                 "acl": "private"
               }' \
-            https://api.linode.com/v4beta/object-storage/buckets/us-east-1/example-bucket/access
+            https://api.linode.com/v4/object-storage/buckets/us-east-1/example-bucket/access
   /object-storage/buckets/{clusterId}/{bucket}/object-list:
     parameters:
     - name: clusterId
@@ -9168,7 +9927,7 @@ paths:
       operationId: getObjectStorageBucketContent
       x-linode-cli-skip: true
       servers:
-      - url: https://api.linode.com/v4beta
+      - url: https://api.linode.com/v4
       summary: List Object Storage Bucket Contents
       description: |
         Returns the contents of a bucket. The contents are paginated using a `marker`,
@@ -9179,12 +9938,6 @@ paths:
 
         This endpoint is available for convenience. It is recommended that instead you
         use the more [fully-featured S3 API](https://docs.ceph.com/docs/luminous/radosgw/s3/bucketops/#get-bucket) directly.
-
-
-        **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
-        `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
-        updates in the future. This notice will be removed when this endpoint is out of
-        beta.
       tags:
       - Object Storage
       security:
@@ -9241,7 +9994,7 @@ paths:
       - lang: Shell
         source: >
           curl -H "Authorization: Bearer $TOKEN" \
-            https://api.linode.com/v4beta/object-storage/buckets/us-east-1/example-bucket/object-list
+            https://api.linode.com/v4/object-storage/buckets/us-east-1/example-bucket/object-list
   /object-storage/buckets/{clusterId}/{bucket}/object-url:
     parameters:
     - name: clusterId
@@ -9260,7 +10013,7 @@ paths:
       operationId: createObjectStorageObjectURL
       x-linode-cli-skip: true
       servers:
-      - url: https://api.linode.com/v4beta
+      - url: https://api.linode.com/v4
       summary: Create Object Storage Object URL
       description: |
         Creates a pre-signed URL to access a single Object in a bucket. This
@@ -9271,12 +10024,6 @@ paths:
         This endpoint is available for convenience. It is recommended that instead you
         use the more [fully-featured S3 API](https://docs.ceph.com/docs/mimic/radosgw/s3/)
         directly.
-
-
-        **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
-        `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
-        updates in the future. This notice will be removed when this endpoint is out of
-        beta.
       tags:
       - Object Storage
       security:
@@ -9345,25 +10092,19 @@ paths:
                 "method": "GET",
                 "name": "example"
               }' \
-            https://api.linode.com/v4beta/object-storage/buckets/us-east-1/example-bucket/object-url
+            https://api.linode.com/v4/object-storage/buckets/us-east-1/example-bucket/object-url
   /object-storage/clusters:
     x-linode-cli-command: object-storage
     get:
       operationId: getObjectStorageClusters
       x-linode-cli-action: clusters-list
       servers:
-      - url: https://api.linode.com/v4beta
+      - url: https://api.linode.com/v4
       summary: List Clusters
       description: |
         Returns a paginated list of Object Storage Clusters that are available for
         use.  Users can connect to the clusters with third party clients to create buckets
         and upload objects.
-
-
-        **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
-        `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
-        updates in the future.  This notice will be removed when this endpoint is out of
-        beta.
       tags:
       - Object Storage
       responses:
@@ -9390,7 +10131,7 @@ paths:
       - lang: Shell
         source: >
           curl -H "Authorization: Bearer $TOKEN" \
-            https://api.linode.com/v4beta/object-storage/clusters
+            https://api.linode.com/v4/object-storage/clusters
       - lang: CLI
         source: >
           linode-cli object-storage clusters-list
@@ -9407,16 +10148,10 @@ paths:
       operationId: getObjectStorageCluster
       x-linode-cli-action: clusters-view
       servers:
-      - url: https://api.linode.com/v4beta
+      - url: https://api.linode.com/v4
       summary: View Cluster
       description: |
         Returns a single Object Storage Cluster.
-
-
-        **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
-        `/v4beta` instead of `/v4`, and be aware that this endpoint may receiving breaking
-        updates in the future.  This notice will be removed when this endpoint is out of
-        beta.
       tags:
       - Object Storage
       responses:
@@ -9432,7 +10167,7 @@ paths:
       - lang: Shell
         source: >
           curl -H "Authorization: Bearer $TOKEN" \
-            https://api.linode.com/v4beta/object-storage/clusters/us-east-1
+            https://api.linode.com/v4/object-storage/clusters/us-east-1
       - lang: CLI
         source: >
           linode-cli object-storage clusters-view us-east-1
@@ -9442,19 +10177,13 @@ paths:
       operationId: getObjectStorageKeys
       x-linode-cli-action: keys-list
       servers:
-      - url: https://api.linode.com/v4beta
+      - url: https://api.linode.com/v4
       tags:
       - Object Storage
       summary: List Object Storage Keys
       description: |
         Returns a paginated list of Object Storage Keys for authenticating to
         the Object Storage S3 API.
-
-
-        **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
-        `/v4beta` instead of `/v4`, and be aware that this endpoint may receiving breaking
-        updates in the future.  This notice will be removed when this endpoint is out of
-        beta.
       security:
       - personalAccessToken: []
       - oauth:
@@ -9483,7 +10212,7 @@ paths:
       - lang: Shell
         source: >
           curl -H "Authorization: Bearer $TOKEN" \
-            https://api.linode.com/v4beta/object-storage/keys
+            https://api.linode.com/v4/object-storage/keys
       - lang: CLI
         source: >
           linode-cli object-storage keys-list
@@ -9491,16 +10220,10 @@ paths:
       operationId: createObjectStorageKeys
       x-linode-cli-action: keys-create
       servers:
-      - url: https://api.linode.com/v4beta
+      - url: https://api.linode.com/v4
       summary: Create an Object Storage Key
       description: |
         Provisions a new Object Storage Key on your account.
-
-
-        **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
-        `/v4beta` instead of `/v4`, and be aware that this endpoint may receiving breaking
-        updates in the future.  This notice will be removed when this endpoint is out of
-        beta.
       tags:
       - Object Storage
       security:
@@ -9541,7 +10264,7 @@ paths:
             -X POST -d '{
                 "label": "my-object-storage-key"
             }' \
-            https://api.linode.com/v4beta/object-storage/keys
+            https://api.linode.com/v4/object-storage/keys
       - lang: CLI
         source: >
           linode-cli object-storage keys-create \
@@ -9559,16 +10282,10 @@ paths:
       operationId: getObjectStorageKey
       x-linode-cli-action: keys-view
       servers:
-      - url: https://api.linode.com/v4beta
+      - url: https://api.linode.com/v4
       summary: View Object Storage Key
       description: |
         Returns a single Object Storage Key provisioned for your account.
-
-
-        **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
-        `/v4beta` instead of `/v4`, and be aware that this endpoint may receiving breaking
-        updates in the future. This notice will be removed when this endpoint is out of
-        beta.
       security:
       - personalAccessToken: []
       - oauth:
@@ -9588,7 +10305,7 @@ paths:
       - lang: Shell
         source: >
           curl -H "Authorization: Bearer $TOKEN" \
-            https://api.linode.com/v4beta/object-storage/keys/12345
+            https://api.linode.com/v4/object-storage/keys/12345
       - lang: CLI
         source: >
           linode-cli object-storage keys-view \
@@ -9597,16 +10314,10 @@ paths:
       operationId: updateObjectStorageKey
       x-linode-cli-action: keys-update
       servers:
-      - url: https://api.linode.com/v4beta
+      - url: https://api.linode.com/v4
       summary: Update an Object Storage Key
       description: |
         Updates an Object Storage Key on your account.
-
-
-        **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
-        `/v4beta` instead of `/v4`, and be aware that this endpoint may receiving breaking
-        updates in the future. This notice will be removed when this endpoint is out of
-        beta.
       security:
       - personalAccessToken: []
       - oauth:
@@ -9636,7 +10347,7 @@ paths:
             -x PUT -d '{
               "label": "my-object-storage-key"
             }' \
-            https://api.linode.com/v4beta/object-storage/keys/12345
+            https://api.linode.com/v4/object-storage/keys/12345
       - lang: CLI
         source: >
           linode-cli object-storage keys-update \
@@ -9646,16 +10357,10 @@ paths:
       operationId: deleteObjectStorageKey
       x-linode-cli-action: keys-delete
       servers:
-      - url: https://api.linode.com/v4beta
+      - url: https://api.linode.com/v4
       summary: Revoke Object Storage Key
       description: |
         Revokes an Object Storage Key.  This keypair will no longer be usable by third-party clients.
-
-
-        **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
-        `/v4beta` instead of `/v4`, and be aware that this endpoint may receiving breaking
-        updates in the future. This notice will be removed when this endpoint is out of
-        beta.
       security:
       - personalAccessToken: []
       - oauth:
@@ -9676,7 +10381,7 @@ paths:
         source: >
           curl -H "Authorization: Bearer $TOKEN" \
             -x DELETE \
-            https://api.linode.com/v4beta/object-storage/keys/12345
+            https://api.linode.com/v4/object-storage/keys/12345
       - lang: CLI
         source: >
           linode-cli object-storage keys-delete \
@@ -9687,7 +10392,7 @@ paths:
       operationId: cancelObjectStorage
       x-linode-cli-action: cancel
       servers:
-      - url: https://api.linode.com/v4beta
+      - url: https://api.linode.com/v4
       summary: Cancel Object Storage
       description: |
         Cancel Object Storage on an Account. All buckets on the Account must be empty
@@ -9698,11 +10403,6 @@ paths:
         guide.
         - To delete large amounts of objects, consult our guide on
         [Lifecycle Policies](https://www.linode.com/docs/platform/object-storage/lifecycle-policies/).
-
-        **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
-        `/v4beta` instead of `/v4`, and be aware that this endpoint may receiving breaking
-        updates in the future.  This notice will be removed when this endpoint is out of
-        beta.
       security:
       - personalAccessToken: []
       - oauth:
@@ -9723,7 +10423,7 @@ paths:
           source: >
             curl -H "Authorization: Bearer $TOKEN" \
               -X POST \
-              https://api.linode.com/v4beta/object-storage/cancel
+              https://api.linode.com/v4/object-storage/cancel
         - lang: CLI
           source: >
             linode-cli object-storage cancel
@@ -11074,7 +11774,7 @@ paths:
         source: >
           curl -H "Authorization: Bearer $TOKEN" \
               -X POST \
-              https://api.linode.com/v4/tickets/11223344/close
+              https://api.linode.com/v4/support/tickets/11223344/close
       - lang: CLI
         source: >
           linode-cli tickets close 11223344
@@ -11971,6 +12671,8 @@ components:
             'ips:read_write': Allows access to all endpoints related to your ips.
             'linodes:read_only': Allows access to GET Linodes on your Account.
             'linodes:read_write': Allow access to all endpoints related to your Linodes.
+            'lke:read_only': Allows access to GET LKE Clusters on your Account.
+            'lke:read_write': Allows access to all endpoints related to LKE Clusters on your Account.
             'longview:read_only': Allows access to GET your Longview Clients.
             'longview:read_write': Allows access to all endpoints related to your Longview Clients.
             'nodebalancers:read_only': Allows access to GET NodeBalancers on your Account.
@@ -12122,7 +12824,6 @@ components:
                 description: >
                   The amount of credit left for this month for this promotion.
                 example:  "10.00"
-
         active_since:
           type: string
           format: date-time
@@ -12238,6 +12939,13 @@ components:
             If you do not live in a country that collects tax, this should be `null`.
           maxLength: 100
           example: ATU99999999
+        euuid:
+          type: string
+          description: >
+            An external unique identifier for this account.
+          format: uuid
+          readOnly: true
+          example: E1AF5EEC-526F-487D-B317EBEB34C87D71
         zip:
           type: string
           description: The zip code of this Account's billing address.
@@ -12716,7 +13424,7 @@ components:
           x-linode-cli-display: 3
         domain:
           type: string
-          pattern: ([a-zA-Z0-9-_]{1,63}\.)+([a-zA-Z]{2,3}\.)?([a-zA-Z]{2,16}|xn--[a-zA-Z0-9]+)
+          pattern: ([a-zA-Z0-9-_]{1,63}\.)+([a-zA-Z]{2,3}\.)?([a-zA-Z]{2,16}|xn--[a-zA-Z0-9]+\.?)
           description: >
             The domain this Domain represents. Domain labels cannot be longer than
             63 characters and must conform to [RFC1035](https://tools.ietf.org/html/rfc1035).
@@ -12740,8 +13448,6 @@ components:
           enum:
           - disabled
           - active
-          - edit_mode
-          - has_errors
           description: >
             Used to control whether this Domain is currently being rendered.
           example: active
@@ -13017,6 +13723,7 @@ components:
           - linode_config_create
           - linode_config_delete
           - linode_config_update
+          - lke_node_create
           - longviewclient_create
           - longviewclient_delete
           - longviewclient_update
@@ -13267,7 +13974,6 @@ components:
           type: string
           nullable: true
           enum:
-          - null
           - read_only
           - read_write
           description: >
@@ -13310,7 +14016,6 @@ components:
               type: string
               nullable: true
               enum:
-              - null
               - read_only
               - read_write
               description: >
@@ -13470,6 +14175,14 @@ components:
             Only Images created automatically (from a deleted Linode; type=automatic) will expire.
           example: '2018-08-01T00:01:01'
           readOnly: true
+        eol:
+          type: string
+          format: date-time
+          description: >
+            The date of the image's planned end of life. Some images, like custom private images,
+            will not have an end of life date. In that case this field will be `None`.
+          example: '2200-10-23T00:00:00'
+          readOnly: true
         vendor:
           x-linode-filterable: true
           type: string
@@ -13560,6 +14273,14 @@ components:
             Only Images created automatically (from a deleted Linode; type=automatic) will expire.
           example: null
           readOnly: true
+        eol:
+          type: string
+          format: date-time
+          description: >
+            The date of the image's planned end of life. Some images, like custom private images,
+            will not have an end of life date. In that case this field will be `None`.
+          example: '2200-10-23T00:00:00'
+          readOnly: true
         vendor:
           x-linode-filterable: true
           type: string
@@ -13595,44 +14316,44 @@ components:
           example: Invoice
           x-linode-cli-display: 3
         subtotal:
-          type: integer
+          type: number
           readOnly: true
           description: The amount of the Invoice before taxes in US Dollars.
-          example: 120
+          example: 120.25
           x-linode-cli-display: 4
         tax:
-          type: integer
+          type: number
           readOnly: true
           description: The amount of tax levied on the Invoice in US Dollars.
-          example: 12
+          example: 12.25
           x-linode-cli-display: 5
         total:
-          type: integer
+          type: number
           readOnly: true
           description: The amount of the Invoice after taxes in US Dollars.
-          example: 132
+          example: 132.50
           x-linode-cli-display: 6
     InvoiceItem:
       type: object
       description: An InvoiceItem object.
       properties:
         amount:
-          type: integer
+          type: number
           readOnly: true
           description: The price, in US dollars, of the Invoice Item. Equal to the unit price multiplied by quantity.
-          example: 20
+          example: 20.20
           x-linode-cli-display: 4
         tax:
-          type: integer
+          type: number
           readOnly: true
           description: The amount of tax levied on this Item in US Dollars.
-          example: 2
+          example: 1.25
           x-linode-cli-display: 5
         total:
-          type: integer
+          type: number
           readOnly: true
           description: The price of this Item after taxes in US Dollars.
-          example: 22
+          example: 21.45
           x-linode-cli-display: 6
         from:
           type: string
@@ -13651,7 +14372,7 @@ components:
           type: integer
           readOnly: true
           description: The quantity of this Item for the specified Invoice.
-          example: 2
+          example: 4
         to:
           type: string
           readOnly: true
@@ -13662,16 +14383,16 @@ components:
         type:
           type: string
           readOnly: true
-          description: The type of service, ether `prepay` or `misc`.
+          description: The type of service, ether `hourly` or `misc`.
           enum:
           - hourly
-          - prepay
           - misc
+          example: hourly
         unitprice:
-          type: integer
+          type: number
           readOnly: true
           description: The monthly service fee in US Dollars for this Item.
-          example: 10
+          example: 5.05
     IPAddress:
       type: object
       description: >
@@ -13962,27 +14683,31 @@ components:
         range:
           type: string
           description: >
-            The IPv6 pool
+            The IPv6 range of addresses in this pool.
           example: '2600:3c01::02:5000::'
           readOnly: true
           x-linode-cli-display: 1
         prefix:
           type: integer
           description: >
-            The prefix length of the address, denoting which addresses can be
-            assigned from this pool.
+            The prefix length of the address, denoting how many addresses can be
+            assigned from this pool calculated as 2 <sup>128-prefix</sup>.
           example: 124
           x-linode-cli-display: 2
         region:
           type: string
           description: >
-            A pool of IPv6 addresses that are routed to all of
-            your Linodes in a single Region. Any Linode you own may bring up any
-            address in this pool at any time, with no external configuration
-            required.
+            The region for this pool of IPv6 addresses.
           example: us-east
           readOnly: true
           x-linode-cli-display: 3
+          x-linode-filterable: true
+        route_target:
+          type: string
+          description: >
+            The last address in this block of IPv6 addresses.
+          example: '2600:3c01::02:5000::ca72'
+          nullable: true
     IPv6Range:
       type: object
       description: >
@@ -13991,17 +14716,14 @@ components:
         range:
           type: string
           description: >
-            The IPv6 range.
+            The IPv6 range of addresses in this pool.
           example: '2600:3c01::02:5000::'
           readOnly: true
           x-linode-cli-display: 1
         region:
           type: string
           description: >
-            A range of IPv6 addresses routed to a single Linode in the given
-            Region. Your Linode is responsible for routing individual addresses
-            in the range, or handling traffic for all of the addresses in the
-            range.
+            The region for this range of IPv6 addresses.
           example: us-east
           readOnly: true
           x-linode-cli-display: 2
@@ -14350,6 +15072,12 @@ components:
                   - W18
                   - W20
                   - W22
+            last_successful:
+              type: string
+              format: date-time
+              description: The last successful backup date. 'null' if there was no previous backup.
+              readOnly: true
+              example: '2018-01-01T00:01:01'
         watchdog_enabled:
           type: boolean
           description: >
@@ -14797,6 +15525,175 @@ components:
             The number of GPUs this Linode Type offers.
           example: 0
           x-linode-cli-display: 11
+    LKEClusterRequestBody:
+      type: object
+      description: A Kubernetes cluster.
+      properties:
+        label:
+          type: string
+          description: >
+            This Kubernetes cluster's unique label for display purposes only.
+            If no label is provided, one will be assigned automatically.
+
+            Labels have the following constraints:
+              * Must start with an alpha character
+              * Must only consist of alphanumeric characters and dashes (`-`)
+              * Must not contain two dashes in a row
+          minLength: 3
+          maxLength: 32
+          # Kubernetes does NOT allow underscores in resource names and we are
+          # passing this name to Kubernetes. Thus the following pattern:
+          pattern: '[a-zA-Z0-9-]{3, 32}'
+          example: lkecluster12345
+        region:
+          type: string
+          description: This Kubernetes cluster's location.
+          example: us-central
+        version:
+          type: string
+          description: >
+            The desired Kubernetes version for this Kubernetes cluster in the format of &lt;major&gt;.&lt;minor&gt;,
+            and the latest supported patch version will be deployed.
+          example: "1.16"
+        tags:
+          type: array
+          description: >
+            An array of tags applied to the Kubernetes cluster. Tags are for organizational purposes only.
+          items:
+            type: string
+          example:
+          - ecomm
+          - blogs
+      required:
+      - label
+      - region
+      - version
+    LKECluster:
+      type: object
+      # Note that LKECluster inherits all properties of
+      # LKEClusterRequestBody and then overrides some of the sub-properties
+      allOf:
+      - $ref: '#/components/schemas/LKEClusterRequestBody'
+      properties:
+        id:
+          type: integer
+          description: This Kubernetes cluster's unique ID.
+          readOnly: true
+          x-linode-cli-display: 1
+          example: 1234
+        created:
+          type: string
+          format: date-time
+          description: When this Kubernetes cluster was created.
+          example: "2019-09-12T21:25:30Z"
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          description: When this Kubernetes cluster was updated.
+          example: "2019-09-13T21:24:16Z"
+          readOnly: true
+        # Note that these properties override some of the sub-properties from
+        # LKEClusterRequestBody but otherwise inherit all of the original
+        # sub-properties.
+        label:
+          x-linode-filterable: true
+          x-linode-cli-display: 2
+          example: lkecluster12345
+        region:
+          readOnly: true
+          x-linode-filterable: true
+          x-linode-cli-display: 3
+          example: us-central
+        version:
+          x-linode-filterable: true
+          example: "1.16"
+        tags:
+          x-linode-filterable: true
+          example:
+          - ecomm
+          - blogs
+    LKENodePoolRequestBody:
+      type: object
+      description: >
+        Specifies a collection of Linodes which will be members of a Kubernetes
+        cluster.
+      properties:
+        type:
+          type: string
+          description: A Linode Type for all of the nodes in the Node Pool.
+          example: "g6-standard-4"
+        count:
+          type: integer
+          description: The number of nodes in the Node Pool.
+          minimum: 1
+          maximum: 100
+          example: 6
+    LKENodePool:
+      # Note that LKENodePool inherits all properties of
+      # LKENodePoolRequestBody and then overrides some of the sub-properties
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/LKENodePoolRequestBody'
+      description: >
+        The set of Node Pools which are members of the Kubernetes cluster.
+        Node Pools consist of a Linode type, the number of Linodes to
+        deploy of that type, and additional status information.
+      properties:
+        id:
+          type: integer
+          description: >
+            This Node Pool's unique ID.
+          x-linode-filterable: true
+          example: 456
+        nodes:
+          type: array
+          description: >
+            Status information for the Nodes which are members of this Node
+            Pool. If a Linode has not been provisioned for a given Node slot,
+            the instance_id will be returned as null.
+          items:
+            $ref: '#/components/schemas/LKENodeStatus'
+    LKENodeStatus:
+      type: object
+      description: >
+        Status information for a Node which is a member of a Kubernetes
+        cluster.
+      readOnly: true
+      properties:
+        id:
+          type: number
+          description: >
+            The Node's ID.
+          x-linode-filterable: true
+          example: 123456
+        instance_id:
+          type: string
+          description: >
+            The Linode's ID. When no Linode is currently provisioned for this
+            Node, this will be null.
+          example: 123458
+        status:
+          type: string
+          description: >
+            The Node's status as it pertains to being a Kubernetes node.
+          enum:
+          - ready
+          - not_ready
+          example: ready
+    LKEVersion:
+      type: object
+      description: >
+        LKE versions
+      readOnly: true
+      properties:
+        id:
+          type: string
+          description: >
+            A Kubernetes version number available for deployment
+            to a Kubernetes cluster in the format of &lt;major&gt;.&lt;minor&gt;,
+            and the latest supported patch version.
+          example: "1.16"
     LongviewClient:
       type: object
       description: >
@@ -15429,7 +16326,9 @@ components:
           description: >
             The protocol this port is configured to serve.
 
-            * If this is set to `https` you must include an `ssl_cert` and an `ssl_key`.
+            * If using `http` or `tcp` protocol, `ssl_cert` and `ssl_key` are not supported.
+
+            * If using `https` protocol, `ssl_cert` and `ssl_key` are required.
           example: http
           x-linode-cli-display: 3
         algorithm:
@@ -16417,6 +17316,16 @@ components:
           - Object Storage
           readOnly: true
           x-linode-cli-display: 3
+        status:
+          type: string
+          description: >
+            This region's current operational status.
+          example: ok
+          enum:
+          - ok
+          - outage
+          readOnly: true
+          x-linode-cli-display: 4
     RescueDevices:
       type: object
       properties:
