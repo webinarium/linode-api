@@ -46,7 +46,7 @@ class FirewallRepository extends AbstractRepository implements FirewallRepositor
 
     protected function getBaseUri(): string
     {
-        return '/networking/firewalls';
+        return 'beta/networking/firewalls';
     }
 
     protected function getSupportedFields(): array

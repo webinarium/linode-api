@@ -290,6 +290,17 @@ interface LinodeRepositoryInterface extends RepositoryInterface
     public function getLinodeTransferByYearMonth(int $linodeId, int $year, int $month): Transfer;
 
     /**
+     * View Firewall information for Firewalls associated with this Linode.
+     *
+     * @param int $linodeId ID of the Linode to look up.
+     *
+     * @return Firewall[] Firewalls associated with this Linode.
+     *
+     * @throws LinodeException
+     */
+    public function getLinodeFirewalls(int $linodeId): array;
+
+    /**
      * View Block Storage Volumes attached to this Linode.
      *
      * @param int $linodeId ID of the Linode to look up.

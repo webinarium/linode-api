@@ -36,8 +36,9 @@ use Linode\Profile\Repository\TrustedDeviceRepository;
  *                                                                        get details on what entities/actions you can access/perform, see /profile/grants.
  * @property bool                                   $two_factor_auth      If true, logins from untrusted computers will require Two Factor Authentication.
  *                                                                        See /profile/tfa-enable to enable Two Factor Authentication.
- * @property string                                 $timezone             The timezone you prefer to see times in. This is not used by the API, and is for
- *                                                                        the benefit of clients only. All times the API returns are in UTC.
+ * @property string                                 $timezone             The timezone you prefer to see times in. This is not used by the API directly. It
+ *                                                                        is provided for the benefit of clients such as the Linode Cloud Manager and other
+ *                                                                        clients built on the API. All times returned by the API are in UTC.
  * @property bool                                   $email_notifications  If true, you will receive email notifications about account activity. If false,
  *                                                                        you may still receive business-critical communications through email.
  * @property bool                                   $ip_whitelist_enabled If true, logins for your User will only be allowed from whitelisted IPs. This

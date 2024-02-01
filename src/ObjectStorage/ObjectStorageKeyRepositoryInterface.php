@@ -28,6 +28,15 @@ interface ObjectStorageKeyRepositoryInterface extends RepositoryInterface
     /**
      * Provisions a new Object Storage Key on your account.
      *
+     * * To create a Limited Access Key with specific permissions, send a `bucket_access`
+     * array.
+     *
+     * * To create a Limited Access Key without access to any buckets, send an empty
+     * `bucket_access` array.
+     *
+     * * To create an Access Key with unlimited access to all clusters and all buckets,
+     * omit the `bucket_access` array.
+     *
      * @param array $parameters The label of the key to create. This is used to identify the created key.
      *
      * @return ObjectStorageKey The new keypair. **This is the only time** the secret key is returned.

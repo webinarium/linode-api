@@ -16,20 +16,20 @@ use Linode\Networking\Repository\FirewallDevicesRepository;
 
 /**
  * A resource that controls incoming and outgoing network traffic to a Linode
- * service. A Firewall can be assigned to multiple Linode services, and up to three
+ * service. A Firewall can be assigned to multiple Linode services, and up to five
  * active Firewalls can be assigned to a single Linode service. Create a Firewall
  * Device to assign a Firewall to a Linode service. Currently, Firewalls can only be
  * assigned to Linode instances.
  *
  * @property int                                $id      The Firewall's unique ID.
- * @property string                             $label   The Firewall's label, for display purposes only. If no label is provided for a
- *                                                       Firewall, a default will be assigned.
+ * @property string                             $label   The Firewall's label, for display purposes only.
  *                                                       Firewall labels have the following constraints:
  *                                                       * Must begin and end with an alphanumeric character.
  *                                                       * May only consist of alphanumeric characters, dashes (`-`), underscores (`_`)
  *                                                       or periods (`.`).
  *                                                       * Cannot have two dashes (`--`), underscores (`__`) or periods (`..`) in a row.
  *                                                       * Must be between 3 and 32 characters.
+ *                                                       * Must be unique.
  * @property string                             $status  The status of this Firewall.
  *                                                       * When a Firewall is first created its status is `enabled`.
  *                                                       * Use the Update Firewall endpoint to set a Firewall's status to `enbaled` or

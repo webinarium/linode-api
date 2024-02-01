@@ -28,8 +28,8 @@ use Linode\Entity;
  *                              * ext3 - The ext3 journaling filesystem for Linux.
  *                              * ext4 - The ext4 journaling filesystem for Linux.
  *                              * initrd - initrd (uncompressed initrd, ext2, max 32 MB).
- * @property string $created    When this Linode was created.
- * @property string $updated    When this Linode was last updated.
+ * @property string $created    When this Disk was created.
+ * @property string $updated    When this Disk was last updated.
  */
 class Disk extends Entity
 {

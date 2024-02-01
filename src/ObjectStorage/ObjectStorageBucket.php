@@ -23,6 +23,7 @@ use Linode\Entity;
  * @property string $hostname The hostname where this bucket can be accessed. This hostname can be accessed
  *                            through a browser if the bucket is made public.
  * @property int    $size     The size of the bucket in bytes.
+ * @property int    $objects  The number of objects stored in this bucket.
  */
 class ObjectStorageBucket extends Entity
 {
@@ -32,6 +33,7 @@ class ObjectStorageBucket extends Entity
     public const FIELD_LABEL    = 'label';
     public const FIELD_HOSTNAME = 'hostname';
     public const FIELD_SIZE     = 'size';
+    public const FIELD_OBJECTS  = 'objects';
 
     // Extra fields for POST/PUT requests.
     public const FIELD_CORS_ENABLED = 'cors_enabled';

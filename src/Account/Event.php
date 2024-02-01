@@ -41,6 +41,9 @@ use Linode\Linode\LinodeEntity;
  *                                          only returned for some in-progress migration events. For all other in-progress
  *                                          events, the `percent_complete` attribute will indicate about how much more work is
  *                                          to be done.
+ * @property null|string  $message          Provides additional information about the event. Additional information may
+ *                                          include, but is not limited to, a more detailed representation of events which can
+ *                                          help diagnose non-obvious failures.
  */
 class Event extends Entity
 {
@@ -58,6 +61,7 @@ class Event extends Entity
     public const FIELD_RATE             = 'rate';
     public const FIELD_PERCENT_COMPLETE = 'percent_complete';
     public const FIELD_TIME_REMAINING   = 'time_remaining';
+    public const FIELD_MESSAGE          = 'message';
 
     // `FIELD_ACTION` values.
     public const ACTION_ACCOUNT_UPDATE                   = 'account_update';
@@ -81,6 +85,11 @@ class Event extends Entity
     public const ACTION_DNS_ZONE_DELETE                  = 'dns_zone_delete';
     public const ACTION_DNS_ZONE_IMPORT                  = 'dns_zone_import';
     public const ACTION_DNS_ZONE_UPDATE                  = 'dns_zone_update';
+    public const ACTION_ENTITY_TRANSFER_ACCEPT           = 'entity_transfer_accept';
+    public const ACTION_ENTITY_TRANSFER_CANCEL           = 'entity_transfer_cancel';
+    public const ACTION_ENTITY_TRANSFER_CREATE           = 'entity_transfer_create';
+    public const ACTION_ENTITY_TRANSFER_FAIL             = 'entity_transfer_fail';
+    public const ACTION_ENTITY_TRANSFER_STALE            = 'entity_transfer_stale';
     public const ACTION_FIREWALL_CREATE                  = 'firewall_create';
     public const ACTION_FIREWALL_DELETE                  = 'firewall_delete';
     public const ACTION_FIREWALL_DISABLE                 = 'firewall_disable';

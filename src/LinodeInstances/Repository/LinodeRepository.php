@@ -141,6 +141,15 @@ class LinodeRepository extends AbstractRepository implements LinodeRepositoryInt
         return new Transfer($this->client, $json);
     }
 
+    public function getLinodeFirewalls(int $linodeId): array
+    {
+        $response = $this->client->get(sprintf('%s/%s/firewalls', $this->getBaseUri(), $linodeId));
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return array_map(fn ($data) => new Firewall($this->client, $data), $json['data']);
+    }
+
     public function getLinodeVolumes(int $linodeId): array
     {
         $response = $this->client->get(sprintf('%s/%s/volumes', $this->getBaseUri(), $linodeId));

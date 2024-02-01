@@ -23,6 +23,8 @@ use Linode\Entity;
  * @property string      $service_type       How this Service is monitored.
  * @property string      $label              The label for this Service. This is for display purposes only.
  * @property string      $address            The URL at which this Service is monitored.
+ *                                           URL parameters such as `?no-cache=1` are preserved.
+ *                                           URL fragments/anchors such as `#monitor` are **not** preserved.
  * @property string      $consultation_group The group of ManagedContacts who should be notified or consulted with when an
  *                                           Issue is detected.
  * @property int         $timeout            How long to wait, in seconds, for a response before considering the Service to be

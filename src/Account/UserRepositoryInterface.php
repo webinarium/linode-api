@@ -26,9 +26,11 @@ use Linode\RepositoryInterface;
 interface UserRepositoryInterface extends RepositoryInterface
 {
     /**
-     * Creates a User on your Account. Once created, the User will be able to log in and
-     * access portions of your Account. Access is determined by whether or not they are
-     * restricted, and what grants they have been given.
+     * Creates a User on your Account. Once created, a confirmation message containing
+     * password creation and login instructions is sent to the User's email address.
+     *
+     * The User's account access is determined by whether or not they are restricted, and
+     * what grants they have been given.
      *
      * @param array $parameters Information about the User to create.
      *

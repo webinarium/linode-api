@@ -47,7 +47,7 @@ interface ObjectStorageBucketRepositoryInterface extends RepositoryInterface
      * delete the bucket.
      *
      * This endpoint is available for convenience. It is recommended that instead you use
-     * the more fully- featured S3 API directly.
+     * the more fully-featured S3 API directly.
      *
      * @param string $bucket The bucket name.
      *
@@ -59,10 +59,9 @@ interface ObjectStorageBucketRepositoryInterface extends RepositoryInterface
      * Allows changing basic Cross-origin Resource Sharing (CORS) and Access Control
      * Level (ACL) settings.
      * Only allows enabling/disabling CORS for all origins, and/or setting canned ACLs.
-     * For more fine-grained control of both systems, please use the S3 API directly.
      *
-     * This endpoint is available for convenience. It is recommended that instead you
-     * use the more more fully-featured S3 API directly.
+     * For more fine-grained control of both systems, please use the more fully-featured
+     * S3 API directly.
      *
      * @param string $bucket     The bucket name.
      * @param array  $parameters The changes to make to the bucket's access controls.
@@ -70,6 +69,58 @@ interface ObjectStorageBucketRepositoryInterface extends RepositoryInterface
      * @throws LinodeException
      */
     public function modifyObjectStorageBucketAccess(string $bucket, array $parameters = []): void;
+
+    /**
+     * Allows changing basic Cross-origin Resource Sharing (CORS) and Access Control
+     * Level (ACL) settings.
+     * Only allows enabling/disabling CORS for all origins, and/or setting canned ACLs.
+     *
+     * For more fine-grained control of both systems, please use the more fully-featured
+     * S3 API directly.
+     *
+     * @param string $bucket     The bucket name.
+     * @param array  $parameters The changes to make to the bucket's access controls.
+     *
+     * @throws LinodeException
+     */
+    public function updateObjectStorageBucketAccess(string $bucket, array $parameters = []): void;
+
+    /**
+     * View an Object’s configured Access Control List (ACL) in this Object Storage
+     * bucket.
+     * ACLs define who can access your buckets and objects and specify the level of
+     * access
+     * granted to those users.
+     *
+     * This endpoint is available for convenience. It is recommended that instead you
+     * use the more fully-featured S3 API directly.
+     *
+     * @param string $bucket The bucket name.
+     *
+     * @return ObjectACL The Object's canned ACL and policy.
+     *
+     * @throws LinodeException
+     */
+    public function viewObjectStorageBucketACL(string $bucket): ObjectACL;
+
+    /**
+     * Update an Object's configured Access Control List (ACL) in this Object Storage
+     * bucket.
+     * ACLs define who can access your buckets and objects and specify the level of
+     * access
+     * granted to those users.
+     *
+     * This endpoint is available for convenience. It is recommended that instead you
+     * use the more fully-featured S3 API directly.
+     *
+     * @param string $bucket     The bucket name.
+     * @param array  $parameters The changes to make to this Object's access controls.
+     *
+     * @return ObjectACL The Object's canned ACL and policy.
+     *
+     * @throws LinodeException
+     */
+    public function updateObjectStorageBucketACL(string $bucket, array $parameters = []): ObjectACL;
 
     /**
      * Returns the contents of a bucket. The contents are paginated using a `marker`,
@@ -105,6 +156,63 @@ interface ObjectStorageBucketRepositoryInterface extends RepositoryInterface
      * @throws LinodeException
      */
     public function createObjectStorageObjectURL(string $bucket, array $parameters = []): string;
+
+    /**
+     * Returns a boolean value indicating if this bucket has a corresponding TLS/SSL
+     * certificate that was
+     * uploaded by an Account user.
+     *
+     * @param string $bucket The bucket name.
+     *
+     * @return bool A boolean indicating if this Bucket has a corresponding TLS/SSL certificate that
+     *              was uploaded by an Account user.
+     *
+     * @throws LinodeException
+     */
+    public function getObjectStorageSSL(string $bucket): bool;
+
+    /**
+     * Upload a TLS/SSL certificate and private key to be served when you visit your
+     * Object Storage bucket via HTTPS.
+     * Your TLS/SSL certificate and private key are stored encrypted at rest.
+     *
+     * To replace an expired certificate, delete your current certificate
+     * and upload a new one.
+     *
+     * @param string $bucket     The bucket name.
+     * @param array  $parameters Upload this TLS/SSL certificate with its corresponding secret key.
+     *
+     * @return bool A boolean indicating if this Bucket has a corresponding TLS/SSL certificate that
+     *              was uploaded by an Account user.
+     *
+     * @throws LinodeException
+     */
+    public function createObjectStorageSSL(string $bucket, array $parameters = []): bool;
+
+    /**
+     * Deletes this Object Storage bucket's user uploaded TLS/SSL certificate and private
+     * key.
+     *
+     * @param string $bucket The bucket name.
+     *
+     * @throws LinodeException
+     */
+    public function deleteObjectStorageSSL(string $bucket): void;
+
+    /**
+     * The amount of outbound data transfer used by your account's Object Storage
+     * buckets.
+     * Object Storage adds 1 terabyte of outbound data transfer to your data transfer
+     * pool.
+     * See the Object Storage Pricing and Limitations
+     * guide for details on Object Storage transfer quotas.
+     *
+     * @return int The amount of outbound data transfer used by your account's Object Storage
+     *             buckets, in GB, for the current month’s billing cycle.
+     *
+     * @throws LinodeException
+     */
+    public function getObjectStorageTransfer(): int;
 
     /**
      * Cancel Object Storage on an Account. All buckets on the Account must be empty

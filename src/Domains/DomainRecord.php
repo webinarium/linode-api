@@ -19,23 +19,52 @@ use Linode\Entity;
  * @property int         $id       This Record's unique ID.
  * @property string      $type     The type of Record this is in the DNS system. For example, A records associate a
  *                                 domain name with an IPv4 address, and AAAA records associate a domain name with an
- *                                 IPv6 address.
- * @property string      $name     The name of this Record. This field's actual usage depends on the type of record
- *                                 this represents. For A and AAAA records, this is the subdomain being associated
- *                                 with an IP address.
- * @property string      $target   The target for this Record. This field's actual usage depends on the type of
- *                                 record this represents. For A and AAAA records, this is the address the named
- *                                 Domain should resolve to.
+ *                                 IPv6 address. For more information, see our guide on DNS Records.
+ * @property string      $name     The name of this Record. For requests, this property's actual usage and whether it
+ *                                 is required depends on the type of record this represents:
+ *                                 `A` and `AAAA`: The hostname or FQDN of the Record.
+ *                                 `NS`: The subdomain, if any, to use with the Domain of the Record.
+ *                                 `MX`: The subdomain.
+ *                                 `CNAME`: The hostname. Must be unique. Required.
+ *                                 `TXT`: The hostname.
+ *                                 `SRV`: Unused. Use the `service` property to set the service name for this record.
+ *                                 `CAA`: The subdomain. Omit or enter an empty string ("") to apply to the entire
+ *                                 Domain.
+ *                                 `PTR`: See our guide on how to Configure Your Linode for Reverse DNS (rDNS).
+ * @property string      $target   The target for this Record. For requests, this property's actual usage and whether
+ *                                 it is required depends on the type of record this represents:
+ *                                 `A` and `AAAA`: The IP address. Use `remote_addr]` to submit the IPv4 address of
+ *                                 the request. Required.
+ *                                 `NS`: The name server. Must be a valid domain. Required.
+ *                                 `MX`: The mail server. Must be a valid domain. Required.
+ *                                 `CNAME`: The alias. Must be a valid domain. Required.
+ *                                 `TXT`: The value. Required.
+ *                                 `SRV`: The target domain or subdomain. If a subdomain is entered, it is
+ *                                 automatically used with the Domain. To configure for a different domain, enter a
+ *                                 valid FQDN. For example, the value `www` with a Domain for `example.com` results
+ *                                 in a target set to `www.example.com`, whereas the value `sample.com` results in a
+ *                                 target set to `sample.com`. Required.
+ *                                 `CAA`: The value. For `issue` or `issuewild` tags, the domain of your certificate
+ *                                 issuer. For the `iodef` tag, a contact or submission URL (http or mailto).
+ *                                 `PTR`: See our guide on how to [Configure Your Linode for Reverse DNS (rDNS).
+ *                                 With the exception of A, AAAA, and CAA records, this field accepts a trailing
+ *                                 period.
  * @property int         $ttl_sec  "Time to Live" - the amount of time in seconds that this Domain's records may be
  *                                 cached by resolvers or other domain servers. Valid values are 300, 3600, 7200,
  *                                 14400, 28800, 57600, 86400, 172800, 345600, 604800, 1209600, and 2419200 - any
  *                                 other value will be rounded to the nearest valid value.
- * @property int         $priority The priority of the target host. Lower values are preferred.
- * @property int         $weight   The relative weight of this Record. Higher values are preferred.
- * @property null|string $service  The service this Record identified. Only valid for SRV records.
- * @property null|string $protocol The protocol this Record's service communicates with. Only valid for SRV records.
- * @property int         $port     The port this Record points to.
- * @property null|string $tag      The tag portion of a CAA record. It is invalid to set this on other record types.
+ * @property int         $priority The priority of the target host for this Record. Lower values are preferred. Only
+ *                                 valid and required for SRV record requests.
+ * @property int         $weight   The relative weight of this Record. Higher values are preferred. Only valid and
+ *                                 required for SRV record requests.
+ * @property null|string $service  The name of the service. An underscore (_) is prepended and a period (.) is
+ *                                 appended automatically to the submitted value for this property. Only valid and
+ *                                 required for SRV record requests.
+ * @property null|string $protocol The protocol this Record's service communicates with. An underscore (_) is
+ *                                 prepended automatically to the submitted value for this property. Only valid for
+ *                                 SRV record requests.
+ * @property int         $port     The port this Record points to. Only valid and required for SRV record requests.
+ * @property null|string $tag      The tag portion of a CAA record. Only valid and required for CAA record requests.
  * @property string      $created  When this Domain Record was created.
  * @property string      $updated  When this Domain Record was last updated.
  */
@@ -66,4 +95,9 @@ class DomainRecord extends Entity
     public const TYPE_SRV   = 'SRV';
     public const TYPE_PTR   = 'PTR';
     public const TYPE_CAA   = 'CAA';
+
+    // `FIELD_TAG` values.
+    public const TAG_ISSUE     = 'issue';
+    public const TAG_ISSUEWILD = 'issuewild';
+    public const TAG_IODEF     = 'iodef';
 }

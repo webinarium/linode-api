@@ -14,6 +14,7 @@ namespace Linode\ObjectStorage\Repository;
 use Linode\Entity;
 use Linode\Internal\AbstractRepository;
 use Linode\LinodeClient;
+use Linode\ObjectStorage\ObjectACL;
 use Linode\ObjectStorage\ObjectStorageBucket;
 use Linode\ObjectStorage\ObjectStorageBucketRepositoryInterface;
 use Linode\ObjectStorage\ObjectStorageObject;
@@ -50,6 +51,29 @@ class ObjectStorageBucketRepository extends AbstractRepository implements Object
         $this->client->post(sprintf('%s/%s/access', $this->getBaseUri(), $bucket), $parameters);
     }
 
+    public function updateObjectStorageBucketAccess(string $bucket, array $parameters = []): void
+    {
+        $this->client->put(sprintf('%s/%s/access', $this->getBaseUri(), $bucket), $parameters);
+    }
+
+    public function viewObjectStorageBucketACL(string $bucket): ObjectACL
+    {
+        $response = $this->client->get(sprintf('%s/%s/object-acl', $this->getBaseUri(), $bucket));
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return new ObjectACL($this->client, $json);
+    }
+
+    public function updateObjectStorageBucketACL(string $bucket, array $parameters = []): ObjectACL
+    {
+        $response = $this->client->put(sprintf('%s/%s/object-acl', $this->getBaseUri(), $bucket), $parameters);
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return new ObjectACL($this->client, $json);
+    }
+
     public function getObjectStorageBucketContent(string $bucket): array
     {
         $response = $this->client->get(sprintf('%s/%s/object-list', $this->getBaseUri(), $bucket));
@@ -66,6 +90,38 @@ class ObjectStorageBucketRepository extends AbstractRepository implements Object
         $json     = json_decode($contents, true);
 
         return $json['url'];
+    }
+
+    public function getObjectStorageSSL(string $bucket): bool
+    {
+        $response = $this->client->get(sprintf('%s/%s/ssl', $this->getBaseUri(), $bucket));
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return $json['ssl'];
+    }
+
+    public function createObjectStorageSSL(string $bucket, array $parameters = []): bool
+    {
+        $response = $this->client->post(sprintf('%s/%s/ssl', $this->getBaseUri(), $bucket), $parameters);
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return $json['ssl'];
+    }
+
+    public function deleteObjectStorageSSL(string $bucket): void
+    {
+        $this->client->delete(sprintf('%s/%s/ssl', $this->getBaseUri(), $bucket));
+    }
+
+    public function getObjectStorageTransfer(): int
+    {
+        $response = $this->client->get('/object-storage/transfer');
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return $json['used'];
     }
 
     public function cancelObjectStorage(): void
@@ -86,6 +142,7 @@ class ObjectStorageBucketRepository extends AbstractRepository implements Object
             ObjectStorageBucket::FIELD_LABEL,
             ObjectStorageBucket::FIELD_HOSTNAME,
             ObjectStorageBucket::FIELD_SIZE,
+            ObjectStorageBucket::FIELD_OBJECTS,
         ];
     }
 

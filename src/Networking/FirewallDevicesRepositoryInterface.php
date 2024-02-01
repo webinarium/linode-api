@@ -30,10 +30,10 @@ interface FirewallDevicesRepositoryInterface extends RepositoryInterface
      * to
      * as the Device's `entity`). Currently, only Devices with an entity of type `linode`
      * are accepted.
-     * A Firewall can be assigned to multiple Linode services, and up to three active
+     * A Firewall can be assigned to multiple Linode services, and up to five active
      * Firewalls can
      * be assigned to a single Linode service. Additional disabled Firewalls can be
-     * assigned to a service, but they cannot be enabled if three other active Firewalls
+     * assigned to a service, but they cannot be enabled if five other active Firewalls
      * are already assigned to the same service.
      *
      * Creating a Firewall Device will apply the Rules from a Firewall to a Linode
@@ -46,7 +46,15 @@ interface FirewallDevicesRepositoryInterface extends RepositoryInterface
      * migration will fail.
      * Use the List Regions endpoint to view a list of a data center's capabilities.
      *
-     * **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
+     * This endpoint is in **beta**.
+     *
+     *
+     * * Gain access to Linode Cloud Firewall by signing up for our Greenlight Beta
+     * program.
+     * * During the beta, Cloud Firewall is not available in every data center region.
+     * For the current list of availability, see the Cloud Firewall Product
+     * Documentation.
+     * * Please make sure to prepend all requests with
      * `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
      * updates in the future. This notice will be removed when this endpoint is out of
      * beta.
@@ -66,7 +74,15 @@ interface FirewallDevicesRepositoryInterface extends RepositoryInterface
      * A `firewall_device_remove` Event is generated when the Firewall Device is removed
      * successfully.
      *
-     * **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
+     * This endpoint is in **beta**.
+     *
+     *
+     * * Gain access to Linode Cloud Firewall by signing up for our Greenlight Beta
+     * program.
+     * * During the beta, Cloud Firewall is not available in every data center region.
+     * For the current list of availability, see the Cloud Firewall Product
+     * Documentation.
+     * * Please make sure to prepend all requests with
      * `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
      * updates in the future. This notice will be removed when this endpoint is out of
      * beta.
@@ -80,7 +96,15 @@ interface FirewallDevicesRepositoryInterface extends RepositoryInterface
     /**
      * Returns the inbound and outbound Rules for a Firewall.
      *
-     * **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
+     * This endpoint is in **beta**.
+     *
+     *
+     * * Gain access to Linode Cloud Firewall by signing up for our Greenlight Beta
+     * program.
+     * * During the beta, Cloud Firewall is not available in every data center region.
+     * For the current list of availability, see the Cloud Firewall Product
+     * Documentation.
+     * * Please make sure to prepend all requests with
      * `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
      * updates in the future. This notice will be removed when this endpoint is out of
      * beta.
@@ -95,7 +119,15 @@ interface FirewallDevicesRepositoryInterface extends RepositoryInterface
      * Updates the inbound and outbound Rules for a Firewall. Using this endpoint will
      * replace all of a Firewall's ruleset with the Rules specified in your request.
      *
-     * **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
+     * This endpoint is in **beta**.
+     *
+     *
+     * * Gain access to Linode Cloud Firewall by signing up for our Greenlight Beta
+     * program.
+     * * During the beta, Cloud Firewall is not available in every data center region.
+     * For the current list of availability, see the Cloud Firewall Product
+     * Documentation.
+     * * Please make sure to prepend all requests with
      * `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
      * updates in the future. This notice will be removed when this endpoint is out of
      * beta.

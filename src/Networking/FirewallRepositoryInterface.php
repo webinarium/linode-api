@@ -31,13 +31,21 @@ interface FirewallRepositoryInterface extends RepositoryInterface
      * Firewall to a Linode service. Currently, Firewalls can only be assigned to Linode
      * instances.
      *
-     * A Firewall can be assigned to multiple Linode services, and up to three active
+     * A Firewall can be assigned to multiple Linode services, and up to five active
      * Firewalls
      * can be assigned to a single Linode service.
      *
      * A `firewall_create` Event is generated when this endpoint returns successfully.
      *
-     * **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
+     * This endpoint is in **beta**.
+     *
+     *
+     * * Gain access to Linode Cloud Firewall by signing up for our Greenlight Beta
+     * program.
+     * * During the beta, Cloud Firewall is not available in every data center region.
+     * For the current list of availability, see the Cloud Firewall Product
+     * Documentation.
+     * * Please make sure to prepend all requests with
      * `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
      * updates in the future. This notice will be removed when this endpoint is out of
      * beta.
@@ -73,7 +81,15 @@ interface FirewallRepositoryInterface extends RepositoryInterface
      * `firewall_enable` or
      * `firewall_disable` Event will be generated.
      *
-     * **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
+     * This endpoint is in **beta**.
+     *
+     *
+     * * Gain access to Linode Cloud Firewall by signing up for our Greenlight Beta
+     * program.
+     * * During the beta, Cloud Firewall is not available in every data center region.
+     * For the current list of availability, see the Cloud Firewall Product
+     * Documentation.
+     * * Please make sure to prepend all requests with
      * `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
      * updates in the future. This notice will be removed when this endpoint is out of
      * beta.
@@ -91,7 +107,15 @@ interface FirewallRepositoryInterface extends RepositoryInterface
      *
      * A `firewall_delete` Event is generated when this endpoint returns successfully.
      *
-     * **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
+     * This endpoint is in **beta**.
+     *
+     *
+     * * Gain access to Linode Cloud Firewall by signing up for our Greenlight Beta
+     * program.
+     * * During the beta, Cloud Firewall is not available in every data center region.
+     * For the current list of availability, see the Cloud Firewall Product
+     * Documentation.
+     * * Please make sure to prepend all requests with
      * `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
      * updates in the future. This notice will be removed when this endpoint is out of
      * beta.

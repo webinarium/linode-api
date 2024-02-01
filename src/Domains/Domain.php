@@ -34,20 +34,28 @@ use Linode\Entity;
  * @property int                             $ttl_sec     "Time to Live" - the amount of time in seconds that this Domain's records may be
  *                                                        cached by resolvers or other domain servers.
  *                                                        * Valid values are 0, 300, 3600, 7200, 14400, 28800, 57600, 86400, 172800, 345600,
- *                                                        604800, 1209600, and 2419200 - any other value will be rounded to the nearest
- *                                                        valid value.
- *                                                        * ttl_sec will default to 0 if no value is provided.
- *                                                        * A value of 0 is equivalent to a value of 86400.
- * @property int                             $refresh_sec The amount of time in seconds before this Domain should be refreshed. Valid values
- *                                                        are 300, 3600, 7200, 14400, 28800, 57600, 86400, 172800, 345600, 604800, 1209600,
- *                                                        and 2419200 - any other value will be rounded to the nearest valid value.
- * @property int                             $retry_sec   The interval, in seconds, at which a failed refresh should be retried. Valid
- *                                                        values are 300, 3600, 7200, 14400, 28800, 57600, 86400, 172800, 345600, 604800,
- *                                                        1209600, and 2419200 - any other value will be rounded to the nearest valid value.
+ *                                                        604800, 1209600, and 2419200.
+ *                                                        * Any other value is rounded up to the nearest valid value.
+ *                                                        * A value of 0 is equivalent to the default value of 86400.
+ * @property int                             $refresh_sec The amount of time in seconds before this Domain should be refreshed.
+ *                                                        * Valid values are
+ *                                                        0, 300, 3600, 7200, 14400, 28800, 57600, 86400, 172800, 345600, 604800, 1209600,
+ *                                                        and 2419200.
+ *                                                        * Any other value is rounded up to the nearest valid value.
+ *                                                        * A value of 0 is equivalent to the default value of 14400.
+ * @property int                             $retry_sec   The interval, in seconds, at which a failed refresh should be retried.
+ *                                                        * Valid values are
+ *                                                        0, 300, 3600, 7200, 14400, 28800, 57600, 86400, 172800, 345600, 604800, 1209600,
+ *                                                        and 2419200.
+ *                                                        * Any other value is rounded up to the nearest valid value.
+ *                                                        * A value of 0 is equivalent to the default value of 14400.
  * @property int                             $expire_sec  The amount of time in seconds that may pass before this Domain is no longer
- *                                                        authoritative. Valid values are 300, 3600, 7200, 14400, 28800, 57600, 86400,
- *                                                        172800, 345600, 604800, 1209600, and 2419200 - any other value will be rounded to
- *                                                        the nearest valid value.
+ *                                                        authoritative.
+ *                                                        * Valid values are
+ *                                                        0, 300, 3600, 7200, 14400, 28800, 57600, 86400, 172800, 345600, 604800, 1209600,
+ *                                                        and 2419200.
+ *                                                        * Any other value is rounded up to the nearest valid value.
+ *                                                        * A value of 0 is equivalent to the default value of 1209600.
  * @property string[]                        $master_ips  The IP addresses representing the master DNS for this Domain. At least one value
  *                                                        is required for `type` slave Domains.
  * @property string[]                        $axfr_ips    The list of IPs that may perform a zone transfer for this Domain. This is

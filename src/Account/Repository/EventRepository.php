@@ -52,6 +52,7 @@ class EventRepository extends AbstractRepository implements EventRepositoryInter
             Event::FIELD_RATE,
             Event::FIELD_PERCENT_COMPLETE,
             Event::FIELD_TIME_REMAINING,
+            Event::FIELD_MESSAGE,
         ];
     }
 

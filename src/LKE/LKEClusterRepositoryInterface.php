@@ -68,4 +68,50 @@ interface LKEClusterRepositoryInterface extends RepositoryInterface
      * @throws LinodeException
      */
     public function deleteLKECluster(int $clusterId): void;
+
+    /**
+     * Recycles all nodes in all pools of a designated Kubernetes Cluster. All Linodes
+     * within the Cluster will be deleted
+     * and replaced with new Linodes on a rolling basis, which may take several minutes.
+     * Replacement Nodes are
+     * installed with the latest available patch version for the Cluster's current
+     * Kubernetes minor release.
+     *
+     * **Any local storage on deleted Linodes (such as "hostPath" and "emptyDir" volumes,
+     * or "local" PersistentVolumes) will be erased.**
+     *
+     * @param int $clusterId ID of the Kubernetes cluster which contains nodes to be recycled.
+     *
+     * @throws LinodeException
+     */
+    public function postLKEClusterRecycle(int $clusterId): void;
+
+    /**
+     * Returns the values for a specified node object.
+     *
+     * @param int    $clusterId ID of the Kubernetes cluster containing the Node.
+     * @param string $nodeId    ID of the Node to look up.
+     *
+     * @return LKENodeStatus The selected node in the cluster.
+     *
+     * @throws LinodeException
+     */
+    public function getLKEClusterNode(int $clusterId, string $nodeId): LKENodeStatus;
+
+    /**
+     * Recycles an individual Node in the designated Kubernetes Cluster. The Node will be
+     * deleted
+     * and replaced with a new Linode, which may take a few minutes. Replacement Nodes
+     * are
+     * installed with the latest available patch for the Cluster's Kubernetes Version.
+     *
+     * **Any local storage on deleted Linodes (such as "hostPath" and "emptyDir" volumes,
+     * or "local" PersistentVolumes) will be erased.**
+     *
+     * @param int    $clusterId ID of the Kubernetes cluster containing the Node.
+     * @param string $nodeId    ID of the Node to be recycled.
+     *
+     * @throws LinodeException
+     */
+    public function postLKEClusterNodeRecycle(int $clusterId, string $nodeId): void;
 }
