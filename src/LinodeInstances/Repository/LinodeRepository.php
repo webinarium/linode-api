@@ -17,6 +17,7 @@ use Linode\Internal\AbstractRepository;
 use Linode\LinodeInstances\Linode;
 use Linode\LinodeInstances\LinodeRepositoryInterface;
 use Linode\LinodeInstances\LinodeStats;
+use Linode\Networking\Firewall;
 use Linode\Volumes\Volume;
 
 /**
@@ -169,18 +170,18 @@ class LinodeRepository extends AbstractRepository implements LinodeRepositoryInt
         return [
             Linode::FIELD_ID,
             Linode::FIELD_LABEL,
-            Linode::FIELD_GROUP,
-            Linode::FIELD_TAGS,
             Linode::FIELD_REGION,
             Linode::FIELD_TYPE,
             Linode::FIELD_IMAGE,
             Linode::FIELD_STATUS,
-            Linode::FIELD_HYPERVISOR,
-            Linode::FIELD_CREATED,
-            Linode::FIELD_UPDATED,
-            Linode::FIELD_WATCHDOG_ENABLED,
             Linode::FIELD_IPV4,
             Linode::FIELD_IPV6,
+            Linode::FIELD_GROUP,
+            Linode::FIELD_TAGS,
+            Linode::FIELD_HYPERVISOR,
+            Linode::FIELD_WATCHDOG_ENABLED,
+            Linode::FIELD_CREATED,
+            Linode::FIELD_UPDATED,
             Linode::FIELD_SPECS,
             Linode::FIELD_ALERTS,
             Linode::FIELD_BACKUPS,

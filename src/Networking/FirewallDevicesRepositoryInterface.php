@@ -30,11 +30,10 @@ interface FirewallDevicesRepositoryInterface extends RepositoryInterface
      * to
      * as the Device's `entity`). Currently, only Devices with an entity of type `linode`
      * are accepted.
-     * A Firewall can be assigned to multiple Linode services, and up to five active
-     * Firewalls can
-     * be assigned to a single Linode service. Additional disabled Firewalls can be
-     * assigned to a service, but they cannot be enabled if five other active Firewalls
-     * are already assigned to the same service.
+     * A Firewall can be assigned a single Linode service at a time. Additional disabled
+     * Firewalls can be
+     * assigned to a service, but they cannot be enabled if another active Firewall
+     * is already assigned to the same service.
      *
      * Creating a Firewall Device will apply the Rules from a Firewall to a Linode
      * service.

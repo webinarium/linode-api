@@ -68,6 +68,7 @@ class LinodeConfigRepository extends AbstractRepository implements LinodeConfigR
             LinodeConfig::FIELD_MEMORY_LIMIT,
             LinodeConfig::FIELD_RUN_LEVEL,
             LinodeConfig::FIELD_VIRT_MODE,
+            LinodeConfig::FIELD_INTERFACES,
             LinodeConfig::FIELD_HELPERS,
             LinodeConfig::FIELD_DEVICES,
             LinodeConfig::FIELD_ROOT_DEVICE,

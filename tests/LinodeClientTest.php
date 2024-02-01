@@ -35,6 +35,7 @@ use Linode\Networking\FirewallRepositoryInterface;
 use Linode\Networking\IPAddressRepositoryInterface;
 use Linode\Networking\IPv6PoolRepositoryInterface;
 use Linode\Networking\IPv6RangeRepositoryInterface;
+use Linode\Networking\VlansRepositoryInterface;
 use Linode\NodeBalancers\NodeBalancerRepositoryInterface;
 use Linode\ObjectStorage\ObjectStorageClusterRepositoryInterface;
 use Linode\ObjectStorage\ObjectStorageKeyRepositoryInterface;
@@ -88,6 +89,7 @@ final class LinodeClientTest extends TestCase
         self::assertInstanceOf(StackScriptRepositoryInterface::class, $object->stackScripts);
         self::assertInstanceOf(SupportTicketRepositoryInterface::class, $object->supportTickets);
         self::assertInstanceOf(TagRepositoryInterface::class, $object->tags);
+        self::assertInstanceOf(VlansRepositoryInterface::class, $object->vlans);
         self::assertInstanceOf(VolumeRepositoryInterface::class, $object->volumes);
 
         self::assertNull($object->unknown);

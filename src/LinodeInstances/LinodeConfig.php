@@ -16,25 +16,26 @@ use Linode\Entity;
 /**
  * Configuration profile associated with a Linode.
  *
- * @property int         $id           The ID of this Config.
- * @property string      $label        The Config's label is for display purposes only.
- * @property string      $kernel       A Kernel ID to boot a Linode with. Defaults to "linode/latest-64bit".
- * @property null|string $comments     Optional field for arbitrary User comments on this Config.
- * @property int         $memory_limit Defaults to the total RAM of the Linode.
- * @property string      $run_level    Defines the state of your Linode after booting. Defaults to `default`.
- * @property string      $virt_mode    Controls the virtualization mode. Defaults to `paravirt`.
- *                                     * `paravirt` is suitable for most cases. Linodes running in paravirt mode
- *                                     share some qualities with the host, ultimately making it run faster since
- *                                     there is less transition between it and the host.
- *                                     * `full_virt` affords more customization, but is slower because 100% of the VM
- *                                     is virtualized.
- * @property Helpers     $helpers      Helpers enabled when booting to this Linode Config.
- * @property Devices     $devices      Devices configuration
- * @property string      $root_device  The root device to boot.
- *                                     * If no value or an invalid value is provided, root device will default to
- *                                     `/dev/sda`.
- *                                     * If the device specified at the root device location is not mounted, the Linode
- *                                     will not boot until a device is mounted.
+ * @property int                     $id           The ID of this Config.
+ * @property string                  $label        The Config's label is for display purposes only.
+ * @property string                  $kernel       A Kernel ID to boot a Linode with. Defaults to "linode/latest-64bit".
+ * @property null|string             $comments     Optional field for arbitrary User comments on this Config.
+ * @property int                     $memory_limit Defaults to the total RAM of the Linode.
+ * @property string                  $run_level    Defines the state of your Linode after booting. Defaults to `default`.
+ * @property string                  $virt_mode    Controls the virtualization mode. Defaults to `paravirt`.
+ *                                                 * `paravirt` is suitable for most cases. Linodes running in paravirt mode
+ *                                                 share some qualities with the host, ultimately making it run faster since
+ *                                                 there is less transition between it and the host.
+ *                                                 * `full_virt` affords more customization, but is slower because 100% of the VM
+ *                                                 is virtualized.
+ * @property LinodeConfigInterface[] $interfaces   An array of Network Interfaces to add to this Linode's Configuration Profile.
+ * @property Helpers                 $helpers      Helpers enabled when booting to this Linode Config.
+ * @property Devices                 $devices      Devices configuration
+ * @property string                  $root_device  The root device to boot.
+ *                                                 * If no value or an invalid value is provided, root device will default to
+ *                                                 `/dev/sda`.
+ *                                                 * If the device specified at the root device location is not mounted, the Linode
+ *                                                 will not boot until a device is mounted.
  */
 class LinodeConfig extends Entity
 {
@@ -46,6 +47,7 @@ class LinodeConfig extends Entity
     public const FIELD_MEMORY_LIMIT = 'memory_limit';
     public const FIELD_RUN_LEVEL    = 'run_level';
     public const FIELD_VIRT_MODE    = 'virt_mode';
+    public const FIELD_INTERFACES   = 'interfaces';
     public const FIELD_HELPERS      = 'helpers';
     public const FIELD_DEVICES      = 'devices';
     public const FIELD_ROOT_DEVICE  = 'root_device';
@@ -65,9 +67,10 @@ class LinodeConfig extends Entity
     public function __get(string $name): mixed
     {
         return match ($name) {
-            self::FIELD_HELPERS => new Helpers($this->client, $this->data[$name]),
-            self::FIELD_DEVICES => new Devices($this->client, $this->data[$name]),
-            default             => parent::__get($name),
+            self::FIELD_INTERFACES => array_map(fn ($data) => new LinodeConfigInterface($this->client, $data), $this->data[$name]),
+            self::FIELD_HELPERS    => new Helpers($this->client, $this->data[$name]),
+            self::FIELD_DEVICES    => new Devices($this->client, $this->data[$name]),
+            default                => parent::__get($name),
         };
     }
 }

@@ -19,10 +19,12 @@ use Linode\Entity;
  *
  * @property int          $id           This Client's unique ID.
  * @property string       $label        This Client's unique label. This is for display purposes only.
- * @property string       $api_key      The API key for this Client, used when configuring the Longview Client application
- *                                      on your Linode.
- * @property string       $install_code The install code for this Client, used when configuring the Longview Client
- *                                      application on your Linode.
+ * @property string       $api_key      The API key for this Client, used when configuring the Longview
+ *                                      Client application on your Linode.
+ *                                      Returns as `[REDACTED]` if you do not have read-write access to this client.
+ * @property string       $install_code The install code for this Client, used when configuring the Longview
+ *                                      Client application on your Linode.
+ *                                      Returns as `[REDACTED]` if you do not have read-write access to this client.
  * @property string       $created      When this Longview Client was created.
  * @property string       $updated      When this Longview Client was last updated.
  * @property LongviewApps $apps         The apps this Client is monitoring on your Linode. This is configured when you

@@ -11,12 +11,12 @@
 
 namespace Linode\Account;
 
-use Linode\Account\Repository\EntityTransferRepository;
 use Linode\Account\Repository\EventRepository;
 use Linode\Account\Repository\InvoiceRepository;
 use Linode\Account\Repository\NotificationRepository;
 use Linode\Account\Repository\OAuthClientRepository;
 use Linode\Account\Repository\PaymentRepository;
+use Linode\Account\Repository\ServiceTransferRepository;
 use Linode\Account\Repository\UserRepository;
 use Linode\Entity;
 use Linode\Exception\LinodeException;
@@ -27,52 +27,54 @@ use Linode\Managed\StatsDataAvailable;
 /**
  * Account object.
  *
- * @property string                            $first_name         The first name of the person associated with this Account.
- * @property string                            $last_name          The last name of the person associated with this Account.
- * @property string                            $email              The email address of the person associated with this Account.
- * @property float                             $balance            This Account's balance, in US dollars.
- * @property float                             $balance_uninvoiced This Account's current estimated invoice in US dollars. This is not your final
- *                                                                 invoice balance. Transfer charges are not included in the estimate.
- * @property string                            $company            The company name associated with this Account.
- * @property string                            $address_1          First line of this Account's billing address.
- * @property string                            $address_2          Second line of this Account's billing address.
- * @property string                            $city               The city for this Account's billing address.
- * @property string                            $state              If billing address is in the United States, this is the State portion of the
- *                                                                 Account's billing address. If the address is outside the US, this is the Province
- *                                                                 associated with the Account's billing address.
- * @property string                            $zip                The zip code of this Account's billing address.
- * @property string                            $country            The two-letter country code of this Account's billing address.
- * @property string                            $phone              The phone number associated with this Account.
- * @property string                            $tax_id             The tax identification number associated with this Account, for tax calculations
- *                                                                 in some countries. If you do not live in a country that collects tax, this should
- *                                                                 be `null`.
- * @property CreditCard                        $credit_card        Credit Card information associated with this Account.
- * @property string                            $active_since       The datetime of when the account was activated.
- * @property string[]                          $capabilities       A list of capabilities your account supports.
- * @property Promotion[]                       $active_promotions  A list of active promotions on your account. Promotions generally
- *                                                                 offer a set amount of credit that can be used toward your Linode
- *                                                                 services, and the promotion expires after a specified date. As well,
- *                                                                 a monthly cap on the promotional offer is set.
- *                                                                 Simply put, a promotion offers a certain amount of credit every
- *                                                                 month, until either the expiration date is passed, or until the total
- *                                                                 promotional credit is used, whichever comes first.
- * @property string                            $euuid              An external unique identifier for this account.
- * @property EntityTransferRepositoryInterface $entityTransfers    List of Entity Transfer objects containing the details of all transfers that have
- *                                                                 been created and accepted by this account.
- * @property EventRepositoryInterface          $events             List of Event objects representing actions taken on your Account. The Events
- *                                                                 returned depends on your grants.
- * @property InvoiceRepositoryInterface        $invoices           List of Invoices against your Account.
- * @property NotificationRepositoryInterface   $notifications      List of Notification objects representing important, often time-sensitive items
- *                                                                 related to your Account.
- * @property OAuthClientRepositoryInterface    $oauth_clients      List of OAuth Clients registered to your Account. OAuth Clients allow users to log
- *                                                                 into applications you write or host using their Linode Account, and may allow them
- *                                                                 to grant some level of access to their Linodes or other entities to your
- *                                                                 application.
- * @property PaymentRepositoryInterface        $payments           List of Payments made on this Account.
- * @property UserRepositoryInterface           $users              List of Users on your Account. Users may access all or part of your Account based
- *                                                                 on their restricted status and grants. An unrestricted User may access everything
- *                                                                 on the account, whereas restricted User may only access entities or perform
- *                                                                 actions they've been given specific grants to.
+ * @property string                             $first_name         The first name of the person associated with this Account.
+ * @property string                             $last_name          The last name of the person associated with this Account.
+ * @property string                             $email              The email address of the person associated with this Account.
+ * @property float                              $balance            This Account's balance, in US dollars.
+ * @property float                              $balance_uninvoiced This Account's current estimated invoice in US dollars. This is not your final
+ *                                                                  invoice balance. Transfer charges are not included in the estimate.
+ * @property string                             $company            The company name associated with this Account.
+ * @property string                             $address_1          First line of this Account's billing address.
+ * @property string                             $address_2          Second line of this Account's billing address.
+ * @property string                             $city               The city for this Account's billing address.
+ * @property string                             $state              If billing address is in the United States, this is the State portion of the
+ *                                                                  Account's billing address. If the address is outside the US, this is the Province
+ *                                                                  associated with the Account's billing address.
+ * @property string                             $zip                The zip code of this Account's billing address. The following restrictions apply:
+ *                                                                  - May only consist of letters, numbers, spaces, and hyphens.
+ *                                                                  - Must not contain more than 9 letter or number characters.
+ * @property string                             $country            The two-letter country code of this Account's billing address.
+ * @property string                             $phone              The phone number associated with this Account.
+ * @property string                             $tax_id             The tax identification number associated with this Account, for tax calculations
+ *                                                                  in some countries. If you do not live in a country that collects tax, this should
+ *                                                                  be `null`.
+ * @property CreditCard                         $credit_card        Credit Card information associated with this Account.
+ * @property string                             $active_since       The datetime of when the account was activated.
+ * @property string[]                           $capabilities       A list of capabilities your account supports.
+ * @property Promotion[]                        $active_promotions  A list of active promotions on your account. Promotions generally
+ *                                                                  offer a set amount of credit that can be used toward your Linode
+ *                                                                  services, and the promotion expires after a specified date. As well,
+ *                                                                  a monthly cap on the promotional offer is set.
+ *                                                                  Simply put, a promotion offers a certain amount of credit every
+ *                                                                  month, until either the expiration date is passed, or until the total
+ *                                                                  promotional credit is used, whichever comes first.
+ * @property string                             $euuid              An external unique identifier for this account.
+ * @property EventRepositoryInterface           $events             List of Event objects representing actions taken on your Account. The Events
+ *                                                                  returned depends on your grants.
+ * @property InvoiceRepositoryInterface         $invoices           List of Invoices against your Account.
+ * @property NotificationRepositoryInterface    $notifications      List of Notification objects representing important, often time-sensitive items
+ *                                                                  related to your Account.
+ * @property OAuthClientRepositoryInterface     $oauth_clients      List of OAuth Clients registered to your Account. OAuth Clients allow users to log
+ *                                                                  into applications you write or host using their Linode Account, and may allow them
+ *                                                                  to grant some level of access to their Linodes or other entities to your
+ *                                                                  application.
+ * @property PaymentRepositoryInterface         $payments           List of Payments made on this Account.
+ * @property ServiceTransferRepositoryInterface $serviceTransfers   List of Service Transfer objects containing the details of all transfers that have
+ *                                                                  been created and accepted by this account.
+ * @property UserRepositoryInterface            $users              List of Users on your Account. Users may access all or part of your Account based
+ *                                                                  on their restricted status and grants. An unrestricted User may access everything
+ *                                                                  on the account, whereas restricted User may only access entities or perform
+ *                                                                  actions they've been given specific grants to.
  *
  * @codeCoverageIgnore This class was autogenerated.
  */
@@ -123,12 +125,12 @@ class Account extends Entity
         return match ($name) {
             self::FIELD_CREDIT_CARD       => new CreditCard($this->client, $this->data[$name]),
             self::FIELD_ACTIVE_PROMOTIONS => array_map(fn ($data) => new Promotion($this->client, $data), $this->data[$name]),
-            'entityTransfers'             => new EntityTransferRepository($this->client),
             'events'                      => new EventRepository($this->client),
             'invoices'                    => new InvoiceRepository($this->client),
             'notifications'               => new NotificationRepository($this->client),
             'oauth_clients'               => new OAuthClientRepository($this->client),
             'payments'                    => new PaymentRepository($this->client),
+            'serviceTransfers'            => new ServiceTransferRepository($this->client),
             'users'                       => new UserRepository($this->client),
             default                       => parent::__get($name),
         };
@@ -178,8 +180,14 @@ class Account extends Entity
 
     /**
      * Adds/edit credit card information to your Account.
-     * Only one credit card can be associated with your Account, so using this endpoint
-     * will overwrite your currently active card information with the new credit card.
+     *
+     * Only one credit card can be associated with your Account, so using this
+     * endpoint will overwrite your currently active card information with the
+     * new credit card.
+     *
+     * To use this endpoint, you must have a valid `zip` entered for your Account.
+     * Use the Account Update (PUT /account)
+     * endpoint to enter a new zip code.
      *
      * @param string $card_number  Your credit card number. No spaces or dashes allowed.
      * @param string $expiry_month A value from 1-12 representing the expiration month of your credit card.

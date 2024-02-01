@@ -16,10 +16,9 @@ use Linode\Networking\Repository\FirewallDevicesRepository;
 
 /**
  * A resource that controls incoming and outgoing network traffic to a Linode
- * service. A Firewall can be assigned to multiple Linode services, and up to five
- * active Firewalls can be assigned to a single Linode service. Create a Firewall
- * Device to assign a Firewall to a Linode service. Currently, Firewalls can only be
- * assigned to Linode instances.
+ * service. Only one Firewall can be attached to a Linode at any given time. Create a
+ * Firewall Device to assign a Firewall to a Linode service. Currently, Firewalls can
+ * only be assigned to Linode instances.
  *
  * @property int                                $id      The Firewall's unique ID.
  * @property string                             $label   The Firewall's label, for display purposes only.
@@ -32,18 +31,12 @@ use Linode\Networking\Repository\FirewallDevicesRepository;
  *                                                       * Must be unique.
  * @property string                             $status  The status of this Firewall.
  *                                                       * When a Firewall is first created its status is `enabled`.
- *                                                       * Use the Update Firewall endpoint to set a Firewall's status to `enbaled` or
+ *                                                       * Use the Update Firewall endpoint to set a Firewall's status to `enabled` or
  *                                                       `disabled`.
  *                                                       * Use the Delete Firewall endpoint to delete a Firewall.
  * @property string                             $created When this Firewall was created.
  * @property string                             $updated When this Firewall was last updated.
  * @property FirewallRules                      $rules   The inbound and outbound access rules to apply to the Firewall.
- *                                                       * A minimum of one open inbound rule is required. Any inbound
- *                                                       traffic that is not permitted by your rules will be blocked.
- *                                                       * Outbound rules are optional. When no outbound rules are specified,
- *                                                       all outbound traffic is allowed. If one or more outbound rules are
- *                                                       specified, all outbound traffic that is not permitted by your rules
- *                                                       will be blocked.
  *                                                       A Firewall may have up to 25 rules across its inbound and outbound rulesets.
  * @property string[]                           $tags    An array of tags applied to this object. Tags are for organizational purposes
  *                                                       only.

@@ -31,14 +31,11 @@ interface FirewallRepositoryInterface extends RepositoryInterface
      * Firewall to a Linode service. Currently, Firewalls can only be assigned to Linode
      * instances.
      *
-     * A Firewall can be assigned to multiple Linode services, and up to five active
-     * Firewalls
-     * can be assigned to a single Linode service.
+     * A Firewall can be assigned to a single Linode service at a time.
      *
      * A `firewall_create` Event is generated when this endpoint returns successfully.
      *
      * This endpoint is in **beta**.
-     *
      *
      * * Gain access to Linode Cloud Firewall by signing up for our Greenlight Beta
      * program.

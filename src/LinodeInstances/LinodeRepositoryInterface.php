@@ -13,6 +13,7 @@ namespace Linode\LinodeInstances;
 
 use Linode\Account\Transfer;
 use Linode\Exception\LinodeException;
+use Linode\Networking\Firewall;
 use Linode\RepositoryInterface;
 use Linode\Volumes\Volume;
 
