@@ -55,7 +55,8 @@ class ObjectStorageKeyRepository extends AbstractRepository implements ObjectSto
             ObjectStorageKey::FIELD_ID,
             ObjectStorageKey::FIELD_LABEL,
             ObjectStorageKey::FIELD_ACCESS_KEY,
-            ObjectStorageKey::FIELD_SECRET_KEY,
+            ObjectStorageKey::FIELD_LIMITED,
+            ObjectStorageKey::FIELD_BUCKET_ACCESS,
         ];
     }
 

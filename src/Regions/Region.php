@@ -20,6 +20,7 @@ use Linode\Entity;
  * @property string   $country      The country where this Region resides.
  * @property string[] $capabilities A list of capabilities of this region.
  * @property string   $status       This region's current operational status.
+ * @property Resolver $resolvers    Region's DNS resolvers.
  */
 class Region extends Entity
 {
@@ -28,6 +29,7 @@ class Region extends Entity
     public const FIELD_COUNTRY      = 'country';
     public const FIELD_CAPABILITIES = 'capabilities';
     public const FIELD_STATUS       = 'status';
+    public const FIELD_RESOLVERS    = 'resolvers';
 
     // `FIELD_STATUS` values.
     public const STATUS_OK     = 'ok';

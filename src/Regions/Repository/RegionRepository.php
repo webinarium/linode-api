@@ -33,6 +33,7 @@ class RegionRepository extends AbstractRepository implements RegionRepositoryInt
             Region::FIELD_COUNTRY,
             Region::FIELD_CAPABILITIES,
             Region::FIELD_STATUS,
+            Region::FIELD_RESOLVERS,
         ];
     }
 

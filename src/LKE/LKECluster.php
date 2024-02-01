@@ -17,28 +17,28 @@ use Linode\LKE\Repository\LKENodePoolRepository;
 /**
  * A Kubernetes cluster.
  *
- * @property int                            $id        This Kubernetes cluster's unique ID.
- * @property string                         $label     This Kubernetes cluster's unique label for display purposes only. If no label is
- *                                                     provided, one will be assigned automatically.
- * @property string                         $region    This Kubernetes cluster's location.
- * @property string                         $created   When this Kubernetes cluster was created.
- * @property string                         $updated   When this Kubernetes cluster was updated.
- * @property string                         $version   The desired Kubernetes version for this Kubernetes cluster in the format of
- *                                                     <major>.<minor>, and the latest supported patch version will be deployed.
- * @property string[]                       $tags      An array of tags applied to the Kubernetes cluster. Tags are for organizational
- *                                                     purposes only.
- * @property LKENodePoolRepositoryInterface $nodePools Node pools.
+ * @property int                            $id          This Kubernetes cluster's unique ID.
+ * @property string                         $label       This Kubernetes cluster's unique label for display purposes only. If no label is
+ *                                                       provided, one will be assigned automatically.
+ * @property string                         $region      This Kubernetes cluster's location.
+ * @property string                         $created     When this Kubernetes cluster was created.
+ * @property string                         $updated     When this Kubernetes cluster was updated.
+ * @property string                         $k8s_version The desired Kubernetes version for this Kubernetes cluster in the format of
+ *                                                       <major>.<minor>, and the latest supported patch version will be deployed.
+ * @property string[]                       $tags        An array of tags applied to the Kubernetes cluster. Tags are for organizational
+ *                                                       purposes only.
+ * @property LKENodePoolRepositoryInterface $nodePools   Node pools.
  */
 class LKECluster extends Entity
 {
     // Available fields.
-    public const FIELD_ID      = 'id';
-    public const FIELD_LABEL   = 'label';
-    public const FIELD_REGION  = 'region';
-    public const FIELD_CREATED = 'created';
-    public const FIELD_UPDATED = 'updated';
-    public const FIELD_VERSION = 'version';
-    public const FIELD_TAGS    = 'tags';
+    public const FIELD_ID          = 'id';
+    public const FIELD_LABEL       = 'label';
+    public const FIELD_REGION      = 'region';
+    public const FIELD_CREATED     = 'created';
+    public const FIELD_UPDATED     = 'updated';
+    public const FIELD_K8S_VERSION = 'k8s_version';
+    public const FIELD_TAGS        = 'tags';
 
     // Extra fields for POST/PUT requests.
     public const FIELD_NODE_POOLS = 'node_pools';

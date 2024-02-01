@@ -20,6 +20,7 @@ use Linode\Account\Repository\UserRepository;
 use Linode\Entity;
 use Linode\Exception\LinodeException;
 use Linode\LinodeClient;
+use Linode\Longview\LongviewSubscription;
 use Linode\Managed\StatsDataAvailable;
 
 /**
@@ -196,6 +197,65 @@ class Account extends Entity
     }
 
     /**
+     * Returns a collection of successful logins for all users on the account during the
+     * last 90 days. This command can only be accessed by the unrestricted users of an
+     * account.
+     *
+     * @return Login[] A collection of successful logins for all users on the account during the last 90
+     *                 days.
+     *
+     * @throws LinodeException
+     */
+    public function getAccountLogins(): array
+    {
+        $response = $this->client->get('/account/logins');
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return array_map(fn ($data) => new Login($this->client, $data), $json['data']);
+    }
+
+    /**
+     * Returns a Login object that displays information about a successful login. The
+     * logins that can be viewed can be for any user on the account, and are not limited
+     * to only the logins of the user that is accessing this API endpoint. This command
+     * can only be accessed by the unrestricted users of the account.
+     *
+     * @param int $loginId The ID of the login object to access.
+     *
+     * @throws LinodeException
+     */
+    public function getAccountLogin(int $loginId): Login
+    {
+        $response = $this->client->get("/account/logins/{$loginId}");
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return new Login($this->client, $json);
+    }
+
+    /**
+     * Returns a collection of Maintenance objects for any entity a user has permissions
+     * to view.
+     *
+     * Currently, Linodes are the only entities available for viewing.
+     *
+     * **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
+     * `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
+     * updates in the future. This notice will be removed when this endpoint is out of
+     * beta.
+     *
+     * @throws LinodeException
+     */
+    public function getMaintenance(): array
+    {
+        $response = $this->client->get('/account/maintenance');
+        $contents = $response->getBody()->getContents();
+
+        return json_decode($contents, true);
+    }
+
+    /**
      * Returns a Transfer object showing your network utilization, in GB, for the current
      * month.
      *
@@ -228,6 +288,8 @@ class Account extends Entity
     /**
      * Updates your Account settings.
      *
+     * To update your Longview subscription plan, send a request to Update Longview Plan.
+     *
      * @param array $parameters Update Account settings information.
      *
      * @throws LinodeException
@@ -252,6 +314,56 @@ class Account extends Entity
     public function enableAccountManged(): void
     {
         $this->client->post('/account/settings/managed-enable');
+    }
+
+    /**
+     * Get the details of your current Longview plan. This returns a
+     * `LongviewSubscription` object for your current Longview Pro plan, or an empty set
+     * `{}` if your current plan is Longview Free.
+     *
+     * You must have at least one of the following `global` User Grants in order to
+     * access this endpoint:
+     *
+     *   - `"account_access": read_write`
+     *   - `"account_access": read_only`
+     *   - `"longview_subscription": true`
+     *   - `"add_longview": true`
+     *
+     * To update your subscription plan, send a request to Update Longview Plan.
+     *
+     * @throws LinodeException
+     */
+    public function getLongviewPlan(): LongviewSubscription
+    {
+        $response = $this->client->get('/longview/plan');
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return new LongviewSubscription($this->client, $json);
+    }
+
+    /**
+     * Update your Longview plan to that of the given subcription ID. This returns a
+     * `LongviewSubscription` object for the updated Longview Pro plan, or an empty set
+     * `{}` if the updated plan is Longview Free.
+     *
+     * You must have `"longview_subscription": true` configured as a `global` User Grant
+     * in order to access this endpoint.
+     *
+     * You can send a request to the List Longview Subscriptions endpoint to receive the
+     * details, including `id`'s, of each plan.
+     *
+     * @param array $parameters Update your Longview subscription plan.
+     *
+     * @throws LinodeException
+     */
+    public function updateLongviewPlan(array $parameters = []): LongviewSubscription
+    {
+        $response = $this->client->put('/longview/plan', $parameters);
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return new LongviewSubscription($this->client, $json);
     }
 
     /**

@@ -18,8 +18,8 @@ use Linode\Entity;
  *
  * @property bool   $network_helper        Enables network helper across all users by default for new Linodes and Linode
  *                                         Configs.
- * @property string $longview_subscription The Longview Pro tier you are currently subscribed to. The value must a Longview
- *                                         Subscription ID or `null`.
+ * @property string $longview_subscription The Longview Pro tier you are currently subscribed to. The value must be a
+ *                                         Longview Subscription ID or `null` for Longview Free.
  * @property bool   $managed               Our 24/7 incident response service. This robust, multi-homed monitoring system
  *                                         distributes monitoring checks to ensure that your servers remain online and
  *                                         available at all times. Linode Managed can monitor any service or software stack

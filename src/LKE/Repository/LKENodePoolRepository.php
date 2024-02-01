@@ -53,18 +53,23 @@ class LKENodePoolRepository extends AbstractRepository implements LKENodePoolRep
         $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $poolId));
     }
 
-    public function getLKEClusterAPIEndpoint(): string
+    public function postLKEClusterPoolRecycle(int $poolId): void
     {
-        $response = $this->client->get(sprintf('beta/lke/clusters/%s/api-endpoint', $this->getBaseUri()));
+        $this->client->post(sprintf('%s/%s/recycle', $this->getBaseUri(), $poolId));
+    }
+
+    public function getLKEClusterAPIEndpoints(): array
+    {
+        $response = $this->client->get(sprintf('/lke/clusters/%s/api-endpoints', $this->getBaseUri()));
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
-        return $json['endpoints'];
+        return array_map(static fn ($data) => $data['endpoint'], $json['data']);
     }
 
     public function getLKEClusterKubeconfig(): string
     {
-        $response = $this->client->get(sprintf('beta/lke/clusters/%s/kubeconfig', $this->getBaseUri()));
+        $response = $this->client->get(sprintf('/lke/clusters/%s/kubeconfig', $this->getBaseUri()));
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
@@ -73,7 +78,7 @@ class LKENodePoolRepository extends AbstractRepository implements LKENodePoolRep
 
     protected function getBaseUri(): string
     {
-        return sprintf('beta/lke/clusters/%s/pools', $this->clusterId);
+        return sprintf('/lke/clusters/%s/pools', $this->clusterId);
     }
 
     protected function getSupportedFields(): array

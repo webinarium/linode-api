@@ -28,11 +28,6 @@ interface LKENodePoolRepositoryInterface extends RepositoryInterface
     /**
      * Creates a new Node Pool for the designated Kubernetes cluster.
      *
-     * **Beta**: This endpoint is in private beta. Please make sure to prepend all
-     * requests with `/v4beta` instead of `/v4`, and be aware that this endpoint may
-     * receive breaking updates in the future. This notice will be removed when this
-     * endpoint is out of beta. Sign up for the beta here.
-     *
      * @param array $parameters Configuration for the Node Pool
      *
      * @throws LinodeException
@@ -40,13 +35,12 @@ interface LKENodePoolRepositoryInterface extends RepositoryInterface
     public function postLKEClusterPools(array $parameters = []): LKENodePool;
 
     /**
-     * Updates a Node Pool. When a Node Pool's count are changed, the nodes in that pool
-     * will be replaced in a rolling fashion.
+     * Updates a Node Pool's count.
      *
-     * **Beta**: This endpoint is in private beta. Please make sure to prepend all
-     * requests with `/v4beta` instead of `/v4`, and be aware that this endpoint may
-     * receive breaking updates in the future. This notice will be removed when this
-     * endpoint is out of beta. Sign up for the beta here.
+     * Linodes will be created or deleted to match changes to the Node Pool's count.
+     *
+     * **Any local storage on deleted Linodes (such as "hostPath" and "emptyDir" volumes,
+     * or "local" PersistentVolumes) will be erased.**
      *
      * @param int   $poolId     ID of the Pool to look up
      * @param array $parameters The fields to update
@@ -62,13 +56,6 @@ interface LKENodePoolRepositoryInterface extends RepositoryInterface
      *
      * Deleting a Node Pool will delete all Linodes within that Pool.
      *
-     *
-     * **Beta**: This endpoint is in private beta. Please make sure to prepend all
-     * requests with
-     * `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
-     * updates in the future. This notice will be removed when this endpoint is out of
-     * beta. Sign up for the beta here.
-     *
      * @param int $poolId ID of the Pool to look up
      *
      * @throws LinodeException
@@ -76,26 +63,36 @@ interface LKENodePoolRepositoryInterface extends RepositoryInterface
     public function deleteLKENodePool(int $poolId): void;
 
     /**
-     * Get the Kubernetes API server endpoint for this cluster.
+     * Recycles a Node Pool for the designated Kubernetes Cluster. All Linodes within the
+     * Node Pool will be deleted
+     * and replaced with new Linodes on a rolling basis, which may take several minutes.
+     * Replacement Nodes are
+     * installed with the latest available patch for the Cluster's Kubernetes Version.
      *
-     * **Beta**: This endpoint is in private beta. Please make sure to prepend all
-     * requests with `/v4beta` instead of `/v4`, and be aware that this endpoint may
-     * receive breaking updates in the future. This notice will be removed when this
-     * endpoint is out of beta. Sign up for the beta here.
+     * **Any local storage on deleted Linodes (such as "hostPath" and "emptyDir" volumes,
+     * or "local" PersistentVolumes) will be erased.**
      *
-     * @return string The Kubernetes API server endpoint for this cluster.
+     * @param int $poolId ID of the Node Pool to be recycled.
      *
      * @throws LinodeException
      */
-    public function getLKEClusterAPIEndpoint(): string;
+    public function postLKEClusterPoolRecycle(int $poolId): void;
 
     /**
-     * Get the Kubeconfig file for a Cluster.
+     * List the Kubernetes API server endpoints for this cluster. Please note that it
+     * often takes 2-5 minutes before the endpoint is ready after first creating a new
+     * cluster.
      *
-     * **Beta**: This endpoint is in private beta. Please make sure to prepend all
-     * requests with `/v4beta` instead of `/v4`, and be aware that this endpoint may
-     * receive breaking updates in the future. This notice will be removed when this
-     * endpoint is out of beta. Sign up for the beta here.
+     * @return string[] The Kubernetes API server endpoints for this cluster.
+     *
+     * @throws LinodeException
+     */
+    public function getLKEClusterAPIEndpoints(): array;
+
+    /**
+     * Get the Kubeconfig file for a Cluster. Please note that it often takes 2-5 minutes
+     * before
+     * the Kubeconfig file is ready after first creating a new cluster.
      *
      * @return string The Base64-encoded Kubeconfig file for this Cluster.
      *

@@ -53,9 +53,13 @@ class VolumeRepository extends AbstractRepository implements VolumeRepositoryInt
         return new Volume($this->client, $json);
     }
 
-    public function cloneVolume(int $volumeId, array $parameters = []): void
+    public function cloneVolume(int $volumeId, array $parameters = []): Volume
     {
-        $this->client->post(sprintf('%s/%s/clone', $this->getBaseUri(), $volumeId), $parameters);
+        $response = $this->client->post(sprintf('%s/%s/clone', $this->getBaseUri(), $volumeId), $parameters);
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return new Volume($this->client, $json);
     }
 
     public function detachVolume(int $volumeId): void
@@ -82,6 +86,7 @@ class VolumeRepository extends AbstractRepository implements VolumeRepositoryInt
             Volume::FIELD_SIZE,
             Volume::FIELD_REGION,
             Volume::FIELD_LINODE_ID,
+            Volume::FIELD_LINODE_LABEL,
             Volume::FIELD_FILESYSTEM_PATH,
             Volume::FIELD_CREATED,
             Volume::FIELD_UPDATED,

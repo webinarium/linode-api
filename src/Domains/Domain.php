@@ -24,10 +24,11 @@ use Linode\Entity;
  *                                                        characters and must conform to RFC1035. Domains must be unique on Linode's
  *                                                        platform, including across different Linode accounts; there cannot be two Domains
  *                                                        representing the same domain.
- * @property string                          $type        If this Domain represents the authoritative source of information for the domain
- *                                                        it describes, or if it is a read-only copy of a master (also called a slave).
+ * @property string                          $type        Whether this Domain represents the authoritative source of information for the
+ *                                                        domain it describes ("master"), or whether it is a read-only copy of a master
+ *                                                        ("slave").
  * @property string                          $status      Used to control whether this Domain is currently being rendered.
- * @property string                          $soa_email   Start of Authority email address. This is required for master Domains.
+ * @property string                          $soa_email   Start of Authority email address. This is required for `type` master Domains.
  * @property string                          $group       The group this Domain belongs to. This is for display purposes only.
  * @property string                          $description A description for this Domain. This is for display purposes only.
  * @property int                             $ttl_sec     "Time to Live" - the amount of time in seconds that this Domain's records may be
@@ -47,7 +48,8 @@ use Linode\Entity;
  *                                                        authoritative. Valid values are 300, 3600, 7200, 14400, 28800, 57600, 86400,
  *                                                        172800, 345600, 604800, 1209600, and 2419200 - any other value will be rounded to
  *                                                        the nearest valid value.
- * @property string[]                        $master_ips  The IP addresses representing the master DNS for this Domain.
+ * @property string[]                        $master_ips  The IP addresses representing the master DNS for this Domain. At least one value
+ *                                                        is required for `type` slave Domains.
  * @property string[]                        $axfr_ips    The list of IPs that may perform a zone transfer for this Domain. This is
  *                                                        potentially dangerous, and should be set to an empty list unless you intend to use
  *                                                        it.

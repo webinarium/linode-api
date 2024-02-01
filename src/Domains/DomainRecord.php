@@ -36,6 +36,8 @@ use Linode\Entity;
  * @property null|string $protocol The protocol this Record's service communicates with. Only valid for SRV records.
  * @property int         $port     The port this Record points to.
  * @property null|string $tag      The tag portion of a CAA record. It is invalid to set this on other record types.
+ * @property string      $created  When this Domain Record was created.
+ * @property string      $updated  When this Domain Record was last updated.
  */
 class DomainRecord extends Entity
 {
@@ -51,6 +53,8 @@ class DomainRecord extends Entity
     public const FIELD_PROTOCOL = 'protocol';
     public const FIELD_PORT     = 'port';
     public const FIELD_TAG      = 'tag';
+    public const FIELD_CREATED  = 'created';
+    public const FIELD_UPDATED  = 'updated';
 
     // `FIELD_TYPE` values.
     public const TYPE_A     = 'A';

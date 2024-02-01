@@ -22,15 +22,23 @@ use Linode\Linode\Price;
  * @property string      $label       The Linode Type's label is for display purposes only.
  * @property string      $class       The class of the Linode Type. We currently offer five classes of Linodes:
  *                                    * nanode - Nanode instances are good for low-duty workloads,
- *                                    where performance isn't critical.
- *                                    * standard - Standard instances are good for medium-duty workloads and
- *                                    are a good mix of performance, resources, and price.
+ *                                    where performance isn't critical. **Note:** As of June 16th, 2020, Nanodes
+ *                                    became
+ *                                    1 GB Linodes in the Cloud Manager, however, the API, the CLI, and billing will
+ *                                    continue to refer to these instances as Nanodes.
+ *                                    * standard - Standard Shared instances are good for medium-duty workloads and
+ *                                    are a good mix of performance, resources, and price. **Note:** As of June
+ *                                    16th, 2020,
+ *                                    Standard Linodes in the Cloud Manager became Shared Linodes, however, the API,
+ *                                    the CLI, and
+ *                                    billing will continue to refer to these instances as Standard Linodes.
  *                                    * dedicated - Dedicated CPU instances are good for full-duty workloads
  *                                    where consistent performance is important.
  *                                    * gpu - Linodes with dedicated NVIDIA Quadro (R) RTX 6000 GPUs accelerate highly
  *                                    specialized applications such as machine learning, AI, and video transcoding.
  *                                    * highmem - High Memory instances favor RAM over other resources, and can be
  *                                    good for memory hungry use cases like caching and in-memory databases.
+ *                                    All High Memory plans contain dedicated CPU cores.
  * @property int         $disk        The Disk size, in MB, of the Linode Type.
  * @property int         $memory      Amount of RAM included in this Linode Type.
  * @property int         $vcpus       The number of VCPU cores this Linode Type offers.

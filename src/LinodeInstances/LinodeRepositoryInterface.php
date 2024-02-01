@@ -107,12 +107,14 @@ interface LinodeRepositoryInterface extends RepositoryInterface
      * If more concurrent clones are attempted, an HTTP 400 error will be
      * returned by this endpoint.
      *
+     * Any tags existing on the source Linode will be cloned to the target Linode.
+     *
      * @param int   $linodeId   ID of the Linode to clone.
      * @param array $parameters The requested state your Linode will be cloned into.
      *
      * @throws LinodeException
      */
-    public function cloneLinodeInstance(int $linodeId, array $parameters = []): void;
+    public function cloneLinodeInstance(int $linodeId, array $parameters = []): Linode;
 
     /**
      * Initiate a pending host migration that has been scheduled by Linode or initiate a
@@ -153,6 +155,20 @@ interface LinodeRepositoryInterface extends RepositoryInterface
      * @throws LinodeException
      */
     public function mutateLinodeInstance(int $linodeId, array $parameters = []): void;
+
+    /**
+     * Resets the root password for this Linode.
+     * * Your Linode must be shut down for a password reset to complete.
+     * * If your Linode has more than one disk (not counting its swap disk), use the
+     * Reset Disk Root Password endpoint to update a specific disk's root password.
+     * * A `password_reset` event is generated when a root password reset is successful.
+     *
+     * @param int   $linodeId   ID of the Linode for which to reset it's root password.
+     * @param array $parameters This Linode's new root password.
+     *
+     * @throws LinodeException
+     */
+    public function resetLinodePassword(int $linodeId, array $parameters = []): void;
 
     /**
      * Reboots a Linode you have permission to modify. If any actions are currently
@@ -260,6 +276,18 @@ interface LinodeRepositoryInterface extends RepositoryInterface
      * @throws LinodeException
      */
     public function getLinodeTransfer(int $linodeId): Transfer;
+
+    /**
+     * Returns a Linode's network transfer statistics for a specific month. The
+     * year/month values must be either a date in the past, or the current month.
+     *
+     * @param int $linodeId ID of the Linode to look up.
+     * @param int $year     Numeric value representing the year to look up.
+     * @param int $month    Numeric value representing the month to look up.
+     *
+     * @throws LinodeException
+     */
+    public function getLinodeTransferByYearMonth(int $linodeId, int $year, int $month): Transfer;
 
     /**
      * View Block Storage Volumes attached to this Linode.

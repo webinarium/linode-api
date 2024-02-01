@@ -45,7 +45,7 @@ class InvoiceItemRepository extends AbstractRepository implements InvoiceItemRep
             InvoiceItem::FIELD_TAX,
             InvoiceItem::FIELD_TOTAL,
             InvoiceItem::FIELD_QUANTITY,
-            InvoiceItem::FIELD_UNITPRICE,
+            InvoiceItem::FIELD_UNIT_PRICE,
             InvoiceItem::FIELD_TYPE,
         ];
     }

@@ -40,19 +40,6 @@ interface ObjectStorageBucketRepositoryInterface extends RepositoryInterface
     public function createObjectStorageBucket(array $parameters = []): ObjectStorageBucket;
 
     /**
-     * Returns a single Object Storage Bucket.
-     *
-     * This endpoint is available for convenience. It is recommended that instead you
-     * use the more fully-featured S3 API directly.
-     *
-     * @param string $clusterId The ID of the cluster this bucket exists in.
-     * @param string $bucket    The bucket name.
-     *
-     * @throws LinodeException
-     */
-    public function getObjectStorageBucket(string $clusterId, string $bucket): ObjectStorageBucket;
-
-    /**
      * Removes a single bucket. While buckets containing objects _may_ be deleted by
      * including the `force` option in the request, such operations will fail if the
      * bucket contains too many objects. The recommended way to empty large buckets is to
@@ -62,12 +49,11 @@ interface ObjectStorageBucketRepositoryInterface extends RepositoryInterface
      * This endpoint is available for convenience. It is recommended that instead you use
      * the more fully- featured S3 API directly.
      *
-     * @param string $clusterId The ID of the cluster this bucket exists in.
-     * @param string $bucket    The bucket name.
+     * @param string $bucket The bucket name.
      *
      * @throws LinodeException
      */
-    public function deleteObjectStorageBucket(string $clusterId, string $bucket): void;
+    public function deleteObjectStorageBucket(string $bucket): void;
 
     /**
      * Allows changing basic Cross-origin Resource Sharing (CORS) and Access Control
@@ -78,13 +64,12 @@ interface ObjectStorageBucketRepositoryInterface extends RepositoryInterface
      * This endpoint is available for convenience. It is recommended that instead you
      * use the more more fully-featured S3 API directly.
      *
-     * @param string $clusterId  The ID of the cluster this bucket exists in.
      * @param string $bucket     The bucket name.
      * @param array  $parameters The changes to make to the bucket's access controls.
      *
      * @throws LinodeException
      */
-    public function modifyObjectStorageBucketAccess(string $clusterId, string $bucket, array $parameters = []): void;
+    public function modifyObjectStorageBucketAccess(string $bucket, array $parameters = []): void;
 
     /**
      * Returns the contents of a bucket. The contents are paginated using a `marker`,
@@ -95,14 +80,13 @@ interface ObjectStorageBucketRepositoryInterface extends RepositoryInterface
      * This endpoint is available for convenience. It is recommended that instead you
      * use the more fully-featured S3 API directly.
      *
-     * @param string $clusterId The ID of the cluster this bucket exists in.
-     * @param string $bucket    The bucket name.
+     * @param string $bucket The bucket name.
      *
      * @return ObjectStorageObject[] One page of the requested bucket's contents.
      *
      * @throws LinodeException
      */
-    public function getObjectStorageBucketContent(string $clusterId, string $bucket): array;
+    public function getObjectStorageBucketContent(string $bucket): array;
 
     /**
      * Creates a pre-signed URL to access a single Object in a bucket. This
@@ -113,7 +97,6 @@ interface ObjectStorageBucketRepositoryInterface extends RepositoryInterface
      * use the more fully-featured S3 API
      * directly.
      *
-     * @param string $clusterId  The ID of the cluster this bucket exists in.
      * @param string $bucket     The bucket name.
      * @param array  $parameters Information about the request to sign.
      *
@@ -121,7 +104,7 @@ interface ObjectStorageBucketRepositoryInterface extends RepositoryInterface
      *
      * @throws LinodeException
      */
-    public function createObjectStorageObjectURL(string $clusterId, string $bucket, array $parameters = []): string;
+    public function createObjectStorageObjectURL(string $bucket, array $parameters = []): string;
 
     /**
      * Cancel Object Storage on an Account. All buckets on the Account must be empty

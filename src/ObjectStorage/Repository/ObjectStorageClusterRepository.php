@@ -21,6 +21,14 @@ use Linode\ObjectStorage\ObjectStorageClusterRepositoryInterface;
  */
 class ObjectStorageClusterRepository extends AbstractRepository implements ObjectStorageClusterRepositoryInterface
 {
+    public function getObjectStorageBuckets(): array
+    {
+        $response = $this->client->get('/object-storage/buckets');
+        $contents = $response->getBody()->getContents();
+
+        return json_decode($contents, true);
+    }
+
     protected function getBaseUri(): string
     {
         return '/object-storage/clusters';

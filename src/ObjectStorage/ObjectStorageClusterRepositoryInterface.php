@@ -11,6 +11,7 @@
 
 namespace Linode\ObjectStorage;
 
+use Linode\Exception\LinodeException;
 use Linode\RepositoryInterface;
 
 /**
@@ -22,4 +23,15 @@ use Linode\RepositoryInterface;
  * @method ObjectStorageCluster   findOneBy(array $criteria)
  * @method ObjectStorageCluster[] query(string $query, array $parameters = [], string $orderBy = null, string $orderDir = self::SORT_ASC)
  */
-interface ObjectStorageClusterRepositoryInterface extends RepositoryInterface {}
+interface ObjectStorageClusterRepositoryInterface extends RepositoryInterface
+{
+    /**
+     * Returns a paginated list of all Object Storage Buckets that you own.
+     *
+     * This endpoint is available for convenience. It is recommended that instead you
+     * use the more fully-featured S3 API directly.
+     *
+     * @throws LinodeException
+     */
+    public function getObjectStorageBuckets(): array;
+}

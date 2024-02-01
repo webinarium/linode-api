@@ -89,6 +89,7 @@ class NodeBalancerConfigRepository extends AbstractRepository implements NodeBal
             NodeBalancerConfig::FIELD_SSL_CERT,
             NodeBalancerConfig::FIELD_SSL_KEY,
             NodeBalancerConfig::FIELD_NODES_STATUS,
+            NodeBalancerConfig::FIELD_PROXY_PROTOCOL,
             NodeBalancerConfig::FIELD_NODEBALANCER_ID,
         ];
     }

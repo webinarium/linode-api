@@ -79,7 +79,7 @@ class Event extends Entity
     public const ACTION_DNS_RECORD_UPDATE                = 'dns_record_update';
     public const ACTION_DNS_ZONE_CREATE                  = 'dns_zone_create';
     public const ACTION_DNS_ZONE_DELETE                  = 'dns_zone_delete';
-    public const ACTION_DNS_ZONE_IMPORT                  = 'dnz_zone_import';
+    public const ACTION_DNS_ZONE_IMPORT                  = 'dns_zone_import';
     public const ACTION_DNS_ZONE_UPDATE                  = 'dns_zone_update';
     public const ACTION_HOST_REBOOT                      = 'host_reboot';
     public const ACTION_IMAGE_DELETE                     = 'image_delete';

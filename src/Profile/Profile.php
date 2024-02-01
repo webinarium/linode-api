@@ -12,6 +12,7 @@
 namespace Linode\Profile;
 
 use Linode\Account\GrantsResponse;
+use Linode\Account\Login;
 use Linode\Entity;
 use Linode\Exception\LinodeException;
 use Linode\LinodeClient;
@@ -42,12 +43,31 @@ use Linode\Profile\Repository\TrustedDeviceRepository;
  * @property bool                                   $ip_whitelist_enabled If true, logins for your User will only be allowed from whitelisted IPs. This
  *                                                                        setting is currently deprecated, and cannot be enabled.
  *                                                                        If you disable this setting, you will not be able to re-enable it.
- * @property string                                 $lish_auth_method     What methods of authentication are allowed when connecting via Lish. "keys_only"
- *                                                                        is the most secure if you intend to use Lish, and "disabled" is recommended if you
- *                                                                        do not intend to use Lish at all.
+ * @property string                                 $lish_auth_method     The authentication methods that are allowed when connecting to the Linode Shell
+ *                                                                        (Lish).
+ *                                                                        * `keys_only` is the most secure if you intend to use Lish.
+ *                                                                        * `disabled` is recommended if you do not intend to use Lish at all.
+ *                                                                        * If this account's Cloud Manager authentication type is set to a Third-Party
+ *                                                                        Authentication method, `password_keys` cannot be used as your Lish authentication
+ *                                                                        method. To view this account's Cloud Manager `authentication_type` field, send a
+ *                                                                        request to the View Profile endpoint.
  * @property null|string[]                          $authorized_keys      The list of SSH Keys authorized to use Lish for your User. This value is ignored
  *                                                                        if `lish_auth_method` is "disabled."
  * @property Referrals                              $referrals            Information about your status in our referral program.
+ * @property string                                 $authentication_type  This account's Cloud Manager authentication type. Authentication types are chosen
+ *                                                                        through
+ *                                                                        Cloud Manager and authorized when logging into your account. These authentication
+ *                                                                        types are either
+ *                                                                        the user's password (in conjunction with their username), or the name of their
+ *                                                                        indentity provider such as GitHub. For example, if a user:
+ *                                                                        - Has never used Third-Party Authentication, their authentication type will be
+ *                                                                        `password`.
+ *                                                                        - Is using Third-Party Authentication, their authentication type will be the name
+ *                                                                        of their Identity Provider (eg. `github`).
+ *                                                                        - Has used Third-Party Authentication and has since revoked it, their
+ *                                                                        authentication type will be `password`.
+ *                                                                        **Note:** This functionality may not yet be available in Cloud Manager.
+ *                                                                        See the Cloud Manager Changelog for the latest updates.
  * @property AuthorizedAppRepositoryInterface       $authorizedApps       List of OAuth apps that you've given access to your Account, and includes the
  *                                                                        level of access granted.
  * @property PersonalAccessTokenRepositoryInterface $personalAccessTokens List of Personal Access Tokens currently active for your User.
@@ -71,11 +91,16 @@ class Profile extends Entity
     public const FIELD_LISH_AUTH_METHOD     = 'lish_auth_method';
     public const FIELD_AUTHORIZED_KEYS      = 'authorized_keys';
     public const FIELD_REFERRALS            = 'referrals';
+    public const FIELD_AUTHENTICATION_TYPE  = 'authentication_type';
 
     // `FIELD_LISH_AUTH_METHOD` values.
     public const LISH_AUTH_METHOD_PASSWORD_KEYS = 'password_keys';
     public const LISH_AUTH_METHOD_KEYS_ONLY     = 'keys_only';
     public const LISH_AUTH_METHOD_DISABLED      = 'disabled';
+
+    // `FIELD_AUTHENTICATION_TYPE` values.
+    public const AUTHENTICATION_TYPE_PASSWORD = 'password';
+    public const AUTHENTICATION_TYPE_GITHUB   = 'github';
 
     /**
      * Returns information about the current User. This can be used to see who is acting
@@ -157,6 +182,40 @@ class Profile extends Entity
         $json     = json_decode($contents, true);
 
         return new GrantsResponse($this->client, $json);
+    }
+
+    /**
+     * Returns a collection of successful account logins from this user during the last
+     * 90 days.
+     *
+     * @return Login[] An array of successful account logins from this user during the last 90 days.
+     *
+     * @throws LinodeException
+     */
+    public function getProfileLogins(): array
+    {
+        $response = $this->client->get('/profile/logins');
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return array_map(fn ($data) => new Login($this->client, $data), $json['data']);
+    }
+
+    /**
+     * Returns a login object displaying information about a successful account login
+     * from this user.
+     *
+     * @param int $loginId The ID of the login object to access.
+     *
+     * @throws LinodeException
+     */
+    public function getProfileLogin(int $loginId): Login
+    {
+        $response = $this->client->get("/profile/logins/{$loginId}");
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return new Login($this->client, $json);
     }
 
     /**

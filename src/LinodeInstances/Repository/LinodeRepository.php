@@ -52,9 +52,13 @@ class LinodeRepository extends AbstractRepository implements LinodeRepositoryInt
         $this->client->post(sprintf('%s/%s/boot', $this->getBaseUri(), $linodeId), $parameters);
     }
 
-    public function cloneLinodeInstance(int $linodeId, array $parameters = []): void
+    public function cloneLinodeInstance(int $linodeId, array $parameters = []): Linode
     {
-        $this->client->post(sprintf('%s/%s/clone', $this->getBaseUri(), $linodeId), $parameters);
+        $response = $this->client->post(sprintf('%s/%s/clone', $this->getBaseUri(), $linodeId), $parameters);
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return new Linode($this->client, $json);
     }
 
     public function migrateLinodeInstance(int $linodeId, array $parameters = []): void
@@ -65,6 +69,11 @@ class LinodeRepository extends AbstractRepository implements LinodeRepositoryInt
     public function mutateLinodeInstance(int $linodeId, array $parameters = []): void
     {
         $this->client->post(sprintf('%s/%s/mutate', $this->getBaseUri(), $linodeId), $parameters);
+    }
+
+    public function resetLinodePassword(int $linodeId, array $parameters = []): void
+    {
+        $this->client->post(sprintf('%s/%s/password', $this->getBaseUri(), $linodeId), $parameters);
     }
 
     public function rebootLinodeInstance(int $linodeId, array $parameters = []): void
@@ -117,6 +126,15 @@ class LinodeRepository extends AbstractRepository implements LinodeRepositoryInt
     public function getLinodeTransfer(int $linodeId): Transfer
     {
         $response = $this->client->get(sprintf('%s/%s/transfer', $this->getBaseUri(), $linodeId));
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return new Transfer($this->client, $json);
+    }
+
+    public function getLinodeTransferByYearMonth(int $linodeId, int $year, int $month): Transfer
+    {
+        $response = $this->client->get(sprintf('%s/%s/transfer/%s/%s', $this->getBaseUri(), $linodeId, $year, $month));
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 

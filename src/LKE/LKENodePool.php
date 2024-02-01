@@ -34,4 +34,5 @@ class LKENodePool extends Entity
     // Extra fields for POST/PUT requests.
     public const FIELD_TYPE  = 'type';
     public const FIELD_COUNT = 'count';
+    public const FIELD_DISKS = 'disks';
 }

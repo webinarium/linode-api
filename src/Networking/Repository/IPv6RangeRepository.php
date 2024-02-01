@@ -30,7 +30,9 @@ class IPv6RangeRepository extends AbstractRepository implements IPv6RangeReposit
     {
         return [
             IPv6Range::FIELD_RANGE,
+            IPv6Range::FIELD_PREFIX,
             IPv6Range::FIELD_REGION,
+            IPv6Range::FIELD_ROUTE_TARGET,
         ];
     }
 

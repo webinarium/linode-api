@@ -23,6 +23,7 @@ use Linode\Entity;
  * @property bool        $is_public   True if the Image is public.
  * @property int         $size        The minimum size this Image needs to deploy. Size is in MB.
  * @property string      $created     When this Image was created.
+ * @property string      $updated     When this Image was last updated.
  * @property string      $created_by  The name of the User who created this Image, or "linode" for official Images.
  * @property bool        $deprecated  Whether or not this Image is deprecated. Will only be true for deprecated public
  *                                    Images.
@@ -43,6 +44,7 @@ class Image extends Entity
     public const FIELD_IS_PUBLIC   = 'is_public';
     public const FIELD_SIZE        = 'size';
     public const FIELD_CREATED     = 'created';
+    public const FIELD_UPDATED     = 'updated';
     public const FIELD_CREATED_BY  = 'created_by';
     public const FIELD_DEPRECATED  = 'deprecated';
     public const FIELD_TYPE        = 'type';

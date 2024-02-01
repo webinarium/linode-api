@@ -46,7 +46,7 @@ class LKEClusterRepository extends AbstractRepository implements LKEClusterRepos
 
     protected function getBaseUri(): string
     {
-        return 'beta/lke/clusters';
+        return '/lke/clusters';
     }
 
     protected function getSupportedFields(): array
@@ -57,7 +57,7 @@ class LKEClusterRepository extends AbstractRepository implements LKEClusterRepos
             LKECluster::FIELD_REGION,
             LKECluster::FIELD_CREATED,
             LKECluster::FIELD_UPDATED,
-            LKECluster::FIELD_VERSION,
+            LKECluster::FIELD_K8S_VERSION,
             LKECluster::FIELD_TAGS,
         ];
     }

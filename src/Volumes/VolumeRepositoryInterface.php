@@ -84,7 +84,7 @@ interface VolumeRepositoryInterface extends RepositoryInterface
      *
      * @throws LinodeException
      */
-    public function cloneVolume(int $volumeId, array $parameters = []): void;
+    public function cloneVolume(int $volumeId, array $parameters = []): Volume;
 
     /**
      * Detaches a Volume on your Account from a Linode on your Account. In order for this

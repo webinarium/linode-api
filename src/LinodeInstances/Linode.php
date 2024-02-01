@@ -37,8 +37,8 @@ use Linode\LinodeInstances\Repository\LinodeConfigRepository;
  * @property null|string                     $image            An Image ID to deploy the Disk from. Official Linode Images start with `linode/ `,
  *                                                             while your Images start with `private/`.
  * @property string                          $status           A brief description of this Linode's current state. This field may change without
- *                                                             direct action from you. For instance, the status will change to "running"
- *                                                             when the boot process completes.
+ *                                                             direct action from you. For example, when a Linode goes into maintenance mode its
+ *                                                             status will display "stopped".
  * @property string                          $hypervisor       The virtualization software powering this Linode.
  * @property string                          $created          When this Linode was created.
  * @property string                          $updated          When this Linode was last updated.
@@ -117,6 +117,7 @@ class Linode extends Entity
     public const STATUS_REBUILDING    = 'rebuilding';
     public const STATUS_CLONING       = 'cloning';
     public const STATUS_RESTORING     = 'restoring';
+    public const STATUS_STOPPED       = 'stopped';
 
     // `FIELD_HYPERVISOR` values.
     public const HYPERVISOR_KVM = 'kvm';

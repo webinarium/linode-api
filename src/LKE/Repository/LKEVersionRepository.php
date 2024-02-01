@@ -23,7 +23,7 @@ class LKEVersionRepository extends AbstractRepository implements LKEVersionRepos
 {
     protected function getBaseUri(): string
     {
-        return 'beta/lke/versions';
+        return '/lke/versions';
     }
 
     protected function getSupportedFields(): array

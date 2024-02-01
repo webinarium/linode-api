@@ -72,6 +72,8 @@ class DomainRecordRepository extends AbstractRepository implements DomainRecordR
             DomainRecord::FIELD_PROTOCOL,
             DomainRecord::FIELD_PORT,
             DomainRecord::FIELD_TAG,
+            DomainRecord::FIELD_CREATED,
+            DomainRecord::FIELD_UPDATED,
         ];
     }
 

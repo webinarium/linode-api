@@ -13,6 +13,7 @@ namespace Linode\ObjectStorage\Repository;
 
 use Linode\Entity;
 use Linode\Internal\AbstractRepository;
+use Linode\LinodeClient;
 use Linode\ObjectStorage\ObjectStorageBucket;
 use Linode\ObjectStorage\ObjectStorageBucketRepositoryInterface;
 use Linode\ObjectStorage\ObjectStorageObject;
@@ -22,46 +23,45 @@ use Linode\ObjectStorage\ObjectStorageObject;
  */
 class ObjectStorageBucketRepository extends AbstractRepository implements ObjectStorageBucketRepositoryInterface
 {
+    /**
+     * @param string $clusterId The ID of the cluster this bucket exists in.
+     */
+    public function __construct(LinodeClient $client, protected string $clusterId)
+    {
+        parent::__construct($client);
+    }
+
     public function createObjectStorageBucket(array $parameters = []): ObjectStorageBucket
     {
-        $response = $this->client->post($this->getBaseUri(), $parameters);
+        $response = $this->client->post('/object-storage/buckets', $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
         return new ObjectStorageBucket($this->client, $json);
     }
 
-    public function getObjectStorageBucket(string $clusterId, string $bucket): ObjectStorageBucket
+    public function deleteObjectStorageBucket(string $bucket): void
     {
-        $response = $this->client->get(sprintf('%s/%s/%s', $this->getBaseUri(), $clusterId, $bucket));
-        $contents = $response->getBody()->getContents();
-        $json     = json_decode($contents, true);
-
-        return new ObjectStorageBucket($this->client, $json);
+        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $bucket));
     }
 
-    public function deleteObjectStorageBucket(string $clusterId, string $bucket): void
+    public function modifyObjectStorageBucketAccess(string $bucket, array $parameters = []): void
     {
-        $this->client->delete(sprintf('%s/%s/%s', $this->getBaseUri(), $clusterId, $bucket));
+        $this->client->post(sprintf('%s/%s/access', $this->getBaseUri(), $bucket), $parameters);
     }
 
-    public function modifyObjectStorageBucketAccess(string $clusterId, string $bucket, array $parameters = []): void
+    public function getObjectStorageBucketContent(string $bucket): array
     {
-        $this->client->post(sprintf('%s/%s/%s/access', $this->getBaseUri(), $clusterId, $bucket), $parameters);
-    }
-
-    public function getObjectStorageBucketContent(string $clusterId, string $bucket): array
-    {
-        $response = $this->client->get(sprintf('%s/%s/%s/object-list', $this->getBaseUri(), $clusterId, $bucket));
+        $response = $this->client->get(sprintf('%s/%s/object-list', $this->getBaseUri(), $bucket));
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
         return array_map(fn ($data) => new ObjectStorageObject($this->client, $data), $json['data']);
     }
 
-    public function createObjectStorageObjectURL(string $clusterId, string $bucket, array $parameters = []): string
+    public function createObjectStorageObjectURL(string $bucket, array $parameters = []): string
     {
-        $response = $this->client->post(sprintf('%s/%s/%s/object-url', $this->getBaseUri(), $clusterId, $bucket), $parameters);
+        $response = $this->client->post(sprintf('%s/%s/object-url', $this->getBaseUri(), $bucket), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
@@ -75,7 +75,7 @@ class ObjectStorageBucketRepository extends AbstractRepository implements Object
 
     protected function getBaseUri(): string
     {
-        return '/object-storage/buckets';
+        return sprintf('/object-storage/buckets/%s', $this->clusterId);
     }
 
     protected function getSupportedFields(): array
@@ -85,6 +85,7 @@ class ObjectStorageBucketRepository extends AbstractRepository implements Object
             ObjectStorageBucket::FIELD_CLUSTER,
             ObjectStorageBucket::FIELD_LABEL,
             ObjectStorageBucket::FIELD_HOSTNAME,
+            ObjectStorageBucket::FIELD_SIZE,
         ];
     }
 

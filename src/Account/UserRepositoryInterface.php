@@ -60,10 +60,13 @@ interface UserRepositoryInterface extends RepositoryInterface
     public function deleteUser(string $username): void;
 
     /**
-     * Returns the full grants structure for this User. This includes all entities on the
-     * Account alongside what level of access this User has to each of them. Individual
-     * users may view their own grants at the /profile/grants endpoint, but will not see
-     * entities that they have no access to.
+     * Returns the full grants structure for the specified account User (other than the
+     * account owner, see below for details). This includes all entities on the Account
+     * alongside the level of access this User has to each of them.
+     *
+     * The current authenticated User, including the account owner, may view their own
+     * grants at the /profile/grants endpoint, but will not see entities that they do not
+     * have access to.
      *
      * @param string $username The username to look up.
      *
