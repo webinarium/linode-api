@@ -36,9 +36,11 @@ use Linode\Entity;
  *                                     * Only one `public` interface per Linode can be defined.
  *                                     * The Linode's default public IPv4 address is assigned to the `public`
  *                                     interface.
- *                                     * If no `public` interface is defined, the Linode is not reachable via the
- *                                     public internet; access can only be established via LISH or other Linodes
- *                                     connected to the same VLAN.
+ *                                     * A Linode must have a public interface in the first/eth0 position to be
+ *                                     reachable via the public internet upon boot without additional system
+ *                                     configuration. If no `public` interface is configured, the Linode is not directly
+ *                                     reachable via the public internet. In this case, access can only be established
+ *                                     via LISH or other Linodes connected to the same VLAN.
  *                                     * `vlan`
  *                                     * Configuring a `vlan` purpose interface attaches this Linode to the VLAN with
  *                                     the specified `label`.

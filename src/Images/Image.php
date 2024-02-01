@@ -14,25 +14,31 @@ namespace Linode\Images;
 use Linode\Entity;
 
 /**
- * Public Image object.
+ * Image object.
  *
  * @property string      $id          The unique ID of this Image.
  * @property string      $label       A short description of the Image.
  * @property null|string $vendor      The upstream distribution vendor. `None` for private Images.
- * @property string      $description A detailed description of this Image.
- * @property bool        $is_public   True if the Image is public.
+ * @property null|string $description A detailed description of this Image.
+ * @property bool        $is_public   True if the Image is a public distribution image. False if Image is private
+ *                                    Account-specific Image.
  * @property int         $size        The minimum size this Image needs to deploy. Size is in MB.
+ * @property string      $status      The current status of this Image. Only Images in an "available" status
+ *                                    can be deployed. Images in a "creating" status are being created from
+ *                                    a Linode Disk, and will become "available" shortly. Images in a
+ *                                    "pending_upload" status are waiting for data to be uploaded,
+ *                                    and become "available" after the upload and processing are complete.
  * @property string      $created     When this Image was created.
  * @property string      $updated     When this Image was last updated.
- * @property string      $created_by  The name of the User who created this Image, or "linode" for official Images.
+ * @property string      $created_by  The name of the User who created this Image, or "linode" for public Images.
  * @property bool        $deprecated  Whether or not this Image is deprecated. Will only be true for deprecated public
  *                                    Images.
- * @property string      $type        How the Image was created. Manual Images can be created at any time. "Automatic"
- *                                    Images are created automatically from a deleted Linode.
- * @property string      $expiry      Only Images created automatically (from a deleted Linode; type=automatic) will
+ * @property string      $type        How the Image was created.
+ *                                    "Manual" Images can be created at any time.
+ *                                    "Automatic" Images are created automatically from a deleted Linode.
+ * @property null|string $expiry      Only Images created automatically from a deleted Linode (type=automatic) will
  *                                    expire.
- * @property string      $eol         The date of the image's planned end of life. Some images, like custom private
- *                                    images, will not have an end of life date. In that case this field will be `None`.
+ * @property string      $eol         The date of the public Image's planned end of life. `None` for private Images.
  */
 class Image extends Entity
 {
@@ -43,6 +49,7 @@ class Image extends Entity
     public const FIELD_DESCRIPTION = 'description';
     public const FIELD_IS_PUBLIC   = 'is_public';
     public const FIELD_SIZE        = 'size';
+    public const FIELD_STATUS      = 'status';
     public const FIELD_CREATED     = 'created';
     public const FIELD_UPDATED     = 'updated';
     public const FIELD_CREATED_BY  = 'created_by';
@@ -53,6 +60,11 @@ class Image extends Entity
 
     // Extra fields for POST/PUT requests.
     public const FIELD_DISK_ID = 'disk_id';
+
+    // `FIELD_STATUS` values.
+    public const STATUS_CREATING       = 'creating';
+    public const STATUS_PENDING_UPLOAD = 'pending_upload';
+    public const STATUS_AVAILABLE      = 'available';
 
     // `FIELD_TYPE` values.
     public const TYPE_MANUAL    = 'manual';

@@ -69,6 +69,7 @@ class Firewall extends Entity
     public function __get(string $name): mixed
     {
         return match ($name) {
+            self::FIELD_RULES   => new FirewallRules($this->client, $this->data[$name]),
             self::FIELD_DEVICES => new FirewallDevicesRepository($this->client, $this->id),
             default             => parent::__get($name),
         };

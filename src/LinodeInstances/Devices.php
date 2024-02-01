@@ -18,8 +18,8 @@ use Linode\Entity;
  * profile.
  * * An empty device disk dictionary or a dictionary with empty values for device
  * slots is allowed.
- * * If no devices are specified, booting from this configuration will hold waiting
- * for a device to exist before being able to boot.
+ * * If no devices are specified, booting from this configuration will hold until a
+ * device exists that allows the boot process to start.
  *
  * @property Device $sda
  * @property Device $sdb

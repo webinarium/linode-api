@@ -25,6 +25,7 @@ use Linode\Entity;
  * @property bool   $pvops        If this Kernel is suitable for paravirtualized operations.
  * @property bool   $deprecated   If this Kernel is marked as deprecated, this field has a value of true; otherwise,
  *                                this field is false.
+ * @property string $built        The date on which this Kernel was built.
  */
 class Kernel extends Entity
 {
@@ -37,6 +38,7 @@ class Kernel extends Entity
     public const FIELD_XEN          = 'xen';
     public const FIELD_PVOPS        = 'pvops';
     public const FIELD_DEPRECATED   = 'deprecated';
+    public const FIELD_BUILT        = 'built';
 
     // `FIELD_ARCHITECTURE` values.
     public const ARCHITECTURE_X86_64 = 'x86_64';

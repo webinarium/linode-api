@@ -59,9 +59,28 @@ class LKEClusterRepository extends AbstractRepository implements LKEClusterRepos
         return new LKENodeStatus($this->client, $json);
     }
 
+    public function deleteLKEClusterNode(int $clusterId, string $nodeId): void
+    {
+        $this->client->delete(sprintf('%s/%s/nodes/%s', $this->getBaseUri(), $clusterId, $nodeId));
+    }
+
     public function postLKEClusterNodeRecycle(int $clusterId, string $nodeId): void
     {
         $this->client->post(sprintf('%s/%s/nodes/%s/recycle', $this->getBaseUri(), $clusterId, $nodeId));
+    }
+
+    public function getLKEClusterKubeconfig(int $clusterId): string
+    {
+        $response = $this->client->get(sprintf('%s/%s/kubeconfig', $this->getBaseUri(), $clusterId));
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return $json['kubeconfig'];
+    }
+
+    public function deleteLKEClusterKubeconfig(int $clusterId): void
+    {
+        $this->client->delete(sprintf('%s/%s/kubeconfig', $this->getBaseUri(), $clusterId));
     }
 
     protected function getBaseUri(): string
@@ -79,6 +98,7 @@ class LKEClusterRepository extends AbstractRepository implements LKEClusterRepos
             LKECluster::FIELD_UPDATED,
             LKECluster::FIELD_K8S_VERSION,
             LKECluster::FIELD_TAGS,
+            LKECluster::FIELD_CONTROL_PLANE,
         ];
     }
 

@@ -62,6 +62,7 @@ class LinodeClient
 
     // Response success codes.
     public const SUCCESS_OK         = 200;
+    public const SUCCESS_ACCEPTED   = 202;
     public const SUCCESS_NO_CONTENT = 204;
 
     // Response error codes.

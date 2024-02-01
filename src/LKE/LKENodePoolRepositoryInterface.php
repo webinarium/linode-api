@@ -88,15 +88,4 @@ interface LKENodePoolRepositoryInterface extends RepositoryInterface
      * @throws LinodeException
      */
     public function getLKEClusterAPIEndpoints(): array;
-
-    /**
-     * Get the Kubeconfig file for a Cluster. Please note that it often takes 2-5 minutes
-     * before
-     * the Kubeconfig file is ready after first creating a new cluster.
-     *
-     * @return string The Base64-encoded Kubeconfig file for this Cluster.
-     *
-     * @throws LinodeException
-     */
-    public function getLKEClusterKubeconfig(): string;
 }

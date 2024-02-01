@@ -15,6 +15,7 @@ use Linode\Account\Repository\EventRepository;
 use Linode\Account\Repository\InvoiceRepository;
 use Linode\Account\Repository\NotificationRepository;
 use Linode\Account\Repository\OAuthClientRepository;
+use Linode\Account\Repository\PaymentMethodRepository;
 use Linode\Account\Repository\PaymentRepository;
 use Linode\Account\Repository\ServiceTransferRepository;
 use Linode\Account\Repository\UserRepository;
@@ -51,13 +52,7 @@ use Linode\Managed\StatsDataAvailable;
  * @property CreditCard                         $credit_card        Credit Card information associated with this Account.
  * @property string                             $active_since       The datetime of when the account was activated.
  * @property string[]                           $capabilities       A list of capabilities your account supports.
- * @property Promotion[]                        $active_promotions  A list of active promotions on your account. Promotions generally
- *                                                                  offer a set amount of credit that can be used toward your Linode
- *                                                                  services, and the promotion expires after a specified date. As well,
- *                                                                  a monthly cap on the promotional offer is set.
- *                                                                  Simply put, a promotion offers a certain amount of credit every
- *                                                                  month, until either the expiration date is passed, or until the total
- *                                                                  promotional credit is used, whichever comes first.
+ * @property Promotion[]                        $active_promotions  A list of active promotions on your account.
  * @property string                             $euuid              An external unique identifier for this account.
  * @property EventRepositoryInterface           $events             List of Event objects representing actions taken on your Account. The Events
  *                                                                  returned depends on your grants.
@@ -69,6 +64,7 @@ use Linode\Managed\StatsDataAvailable;
  *                                                                  to grant some level of access to their Linodes or other entities to your
  *                                                                  application.
  * @property PaymentRepositoryInterface         $payments           List of Payments made on this Account.
+ * @property PaymentMethodRepositoryInterface   $paymentMethods     List of Payment Methods for this Account.
  * @property ServiceTransferRepositoryInterface $serviceTransfers   List of Service Transfer objects containing the details of all transfers that have
  *                                                                  been created and accepted by this account.
  * @property UserRepositoryInterface            $users              List of Users on your Account. Users may access all or part of your Account based
@@ -130,6 +126,7 @@ class Account extends Entity
             'notifications'               => new NotificationRepository($this->client),
             'oauth_clients'               => new OAuthClientRepository($this->client),
             'payments'                    => new PaymentRepository($this->client),
+            'paymentMethods'              => new PaymentMethodRepository($this->client),
             'serviceTransfers'            => new ServiceTransferRepository($this->client),
             'users'                       => new UserRepository($this->client),
             default                       => parent::__get($name),
@@ -179,15 +176,10 @@ class Account extends Entity
     }
 
     /**
-     * Adds/edit credit card information to your Account.
+     * **DEPRECATED**. Please use Payment Method Add (POST /account/payment-methods).
      *
-     * Only one credit card can be associated with your Account, so using this
-     * endpoint will overwrite your currently active card information with the
-     * new credit card.
-     *
-     * To use this endpoint, you must have a valid `zip` entered for your Account.
-     * Use the Account Update (PUT /account)
-     * endpoint to enter a new zip code.
+     * Adds a credit card Payment Method to your account and sets it as the default
+     * method.
      *
      * @param string $card_number  Your credit card number. No spaces or dashes allowed.
      * @param string $expiry_month A value from 1-12 representing the expiration month of your credit card.
@@ -376,6 +368,30 @@ class Account extends Entity
         $json     = json_decode($contents, true);
 
         return new LongviewSubscription($this->client, $json);
+    }
+
+    /**
+     * Adds an expiring Promo Credit to your account.
+     *
+     * The following restrictions apply:
+     *
+     * * Your account must be less than 90 days old.
+     * * There must not be an existing Promo Credit already on your account.
+     * * The requesting User must be unrestricted. Use the User Update
+     *   (PUT /account/users/{username}) to change a User's restricted status.
+     * * The `promo_code` must be valid and unexpired.
+     *
+     * @param array $parameters Enter a Promo Code to add its associated credit to your Account.
+     *
+     * @throws LinodeException
+     */
+    public function createPromoCredit(array $parameters = []): Promotion
+    {
+        $response = $this->client->post('/account/promo-codes', $parameters);
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return new Promotion($this->client, $json);
     }
 
     /**

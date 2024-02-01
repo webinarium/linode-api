@@ -58,6 +58,17 @@ interface DomainRepositoryInterface extends RepositoryInterface
     public function deleteDomain(int $domainId): void;
 
     /**
+     * Returns the zone file for the last rendered zone for the specified domain.
+     *
+     * @param string $domainId ID of the Domain.
+     *
+     * @return string[] An array containing the lines of the domain zone file.
+     *
+     * @throws LinodeException
+     */
+    public function getDomainZone(string $domainId): array;
+
+    /**
      * Imports a domain zone from a remote nameserver.
      * Your nameserver must allow zone transfers (AXFR) from the following IPs:
      *

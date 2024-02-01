@@ -77,6 +77,7 @@ use Linode\NodeBalancers\Repository\NodeBalancerNodeRepository;
  *                                                                fields to
  *                                                                verify that the appropriate certificate was assigned to your NodeBalancerConfig.
  * @property null|string                         $ssl_key         The PEM-formatted private key for the SSL certificate set in the `ssl_cert` field.
+ *                                                                Line breaks must be represented as "\n" in the string.
  *                                                                The contents of this field will not be shown in any responses that display
  *                                                                the NodeBalancerConfig. Instead, `<REDACTED>` will be printed where the field
  *                                                                appears.

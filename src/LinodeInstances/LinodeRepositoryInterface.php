@@ -14,6 +14,7 @@ namespace Linode\LinodeInstances;
 use Linode\Account\Transfer;
 use Linode\Exception\LinodeException;
 use Linode\Networking\Firewall;
+use Linode\NodeBalancers\NodeBalancer;
 use Linode\RepositoryInterface;
 use Linode\Volumes\Volume;
 
@@ -300,6 +301,23 @@ interface LinodeRepositoryInterface extends RepositoryInterface
      * @throws LinodeException
      */
     public function getLinodeFirewalls(int $linodeId): array;
+
+    /**
+     * Returns a list of NodeBalancers that are assigned to this Linode and readable by
+     * the requesting User.
+     *
+     * Read permission to a NodeBalancer can be given to a User by accessing the User's
+     * Grants Update
+     * (PUT /account/users/{username}/grants) endpoint.
+     *
+     * @param int $linodeId ID of the Linode to look up
+     *
+     * @return NodeBalancer[] NodeBalancers that are assigned to this Linode and readable by the requesting
+     *                        User.
+     *
+     * @throws LinodeException
+     */
+    public function getLinodeNodeBalancers(int $linodeId): array;
 
     /**
      * View Block Storage Volumes attached to this Linode.

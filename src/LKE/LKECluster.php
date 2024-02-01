@@ -17,28 +17,35 @@ use Linode\LKE\Repository\LKENodePoolRepository;
 /**
  * A Kubernetes cluster.
  *
- * @property int                            $id          This Kubernetes cluster's unique ID.
- * @property string                         $label       This Kubernetes cluster's unique label for display purposes only. If no label is
- *                                                       provided, one will be assigned automatically.
- * @property string                         $region      This Kubernetes cluster's location.
- * @property string                         $created     When this Kubernetes cluster was created.
- * @property string                         $updated     When this Kubernetes cluster was updated.
- * @property string                         $k8s_version The desired Kubernetes version for this Kubernetes cluster in the format of
- *                                                       <major>.<minor>, and the latest supported patch version will be deployed.
- * @property string[]                       $tags        An array of tags applied to the Kubernetes cluster. Tags are for organizational
- *                                                       purposes only.
- * @property LKENodePoolRepositoryInterface $nodePools   Node pools.
+ * @property int                            $id            This Kubernetes cluster's unique ID.
+ * @property string                         $label         This Kubernetes cluster's unique label for display purposes only. If no label is
+ *                                                         provided, one will be assigned automatically.
+ * @property string                         $region        This Kubernetes cluster's location.
+ * @property string                         $created       When this Kubernetes cluster was created.
+ * @property string                         $updated       When this Kubernetes cluster was updated.
+ * @property string                         $k8s_version   The desired Kubernetes version for this Kubernetes cluster in the format of
+ *                                                         <major>.<minor>, and the latest supported patch version will be deployed.
+ * @property string[]                       $tags          An array of tags applied to the Kubernetes cluster. Tags are for organizational
+ *                                                         purposes only.
+ * @property KubernetesControlPlane         $control_plane Defines settings for the Kubernetes Control Plane. Allows for the enabling of High
+ *                                                         Availability (HA) for Control Plane Components. Enabling High Avaialability for
+ *                                                         LKE is an **irreversible** change. The High Availability feature is in a **closed
+ *                                                         beta** and is not currently available to all customers. Please be aware that this
+ *                                                         feature may receive breaking updates in the future. This notice will be removed
+ *                                                         when this feature is out of beta.
+ * @property LKENodePoolRepositoryInterface $nodePools     Node pools.
  */
 class LKECluster extends Entity
 {
     // Available fields.
-    public const FIELD_ID          = 'id';
-    public const FIELD_LABEL       = 'label';
-    public const FIELD_REGION      = 'region';
-    public const FIELD_CREATED     = 'created';
-    public const FIELD_UPDATED     = 'updated';
-    public const FIELD_K8S_VERSION = 'k8s_version';
-    public const FIELD_TAGS        = 'tags';
+    public const FIELD_ID            = 'id';
+    public const FIELD_LABEL         = 'label';
+    public const FIELD_REGION        = 'region';
+    public const FIELD_CREATED       = 'created';
+    public const FIELD_UPDATED       = 'updated';
+    public const FIELD_K8S_VERSION   = 'k8s_version';
+    public const FIELD_TAGS          = 'tags';
+    public const FIELD_CONTROL_PLANE = 'control_plane';
 
     // Extra fields for POST/PUT requests.
     public const FIELD_NODE_POOLS = 'node_pools';
@@ -49,8 +56,9 @@ class LKECluster extends Entity
     public function __get(string $name): mixed
     {
         return match ($name) {
-            'nodePools' => new LKENodePoolRepository($this->client, $this->id),
-            default     => parent::__get($name),
+            self::FIELD_CONTROL_PLANE => new KubernetesControlPlane($this->client, $this->data[$name]),
+            'nodePools'               => new LKENodePoolRepository($this->client, $this->id),
+            default                   => parent::__get($name),
         };
     }
 }

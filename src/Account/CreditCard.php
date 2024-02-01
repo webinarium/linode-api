@@ -14,10 +14,16 @@ namespace Linode\Account;
 use Linode\Entity;
 
 /**
- * Credit Card information associated with this Account.
+ * Credit card information.
  *
- * @property string $last_four The last four digits of the credit card associated with this
- *                             Account.
+ * @property string $card_type The type of credit card.
+ * @property string $last_four The last four digits of the credit card number.
  * @property string $expiry    The expiration month and year of the credit card.
  */
-class CreditCard extends Entity {}
+class CreditCard extends Entity
+{
+    // Available fields.
+    public const FIELD_CARD_TYPE = 'card_type';
+    public const FIELD_LAST_FOUR = 'last_four';
+    public const FIELD_EXPIRY    = 'expiry';
+}

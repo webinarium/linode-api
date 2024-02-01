@@ -38,6 +38,7 @@ use Linode\Entity;
  * @property string      $updated         When this Volume was last updated.
  * @property string[]    $tags            An array of Tags applied to this object. Tags are for organizational purposes
  *                                        only.
+ * @property string      $hardware_type   The storage type of this Volume.
  */
 class Volume extends Entity
 {
@@ -53,6 +54,7 @@ class Volume extends Entity
     public const FIELD_CREATED         = 'created';
     public const FIELD_UPDATED         = 'updated';
     public const FIELD_TAGS            = 'tags';
+    public const FIELD_HARDWARE_TYPE   = 'hardware_type';
 
     // Extra fields for POST/PUT requests.
     public const FIELD_CONFIG_ID = 'config_id';
@@ -62,4 +64,8 @@ class Volume extends Entity
     public const STATUS_ACTIVE          = 'active';
     public const STATUS_RESIZING        = 'resizing';
     public const STATUS_CONTACT_SUPPORT = 'contact_support';
+
+    // `FIELD_HARDWARE_TYPE` values.
+    public const HARDWARE_TYPE_HDD  = 'hdd';
+    public const HARDWARE_TYPE_NVME = 'nvme';
 }

@@ -26,8 +26,13 @@ use Linode\RepositoryInterface;
 interface PaymentRepositoryInterface extends RepositoryInterface
 {
     /**
-     * Makes a Payment to your Account via credit card. This will charge your credit card
-     * the requested amount.
+     * Makes a Payment to your Account.
+     *
+     * * The requested amount is charged to the default Payment Method if no
+     * `payment_method_id` is specified.
+     *
+     * * A `payment_submitted` event is generated when a payment is successfully
+     * submitted.
      *
      * @param string $usd The amount in US Dollars of the Payment. The maximum credit card payment that can
      *                    be made is $50,000 dollars.

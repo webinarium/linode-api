@@ -27,10 +27,10 @@ interface BackupRepositoryInterface extends RepositoryInterface
 {
     /**
      * Creates a snapshot Backup of a Linode.
-     * ** If you already have a snapshot of this Linode, this is a destructive action.
-     * The previous snapshot will be deleted.**.
      *
-     * @param array $parameters The label for the new snapshot.
+     * **Important:** If you already have a snapshot of this Linode, this is a
+     * destructive
+     * action. The previous snapshot will be deleted.
      *
      * @throws LinodeException
      */

@@ -29,14 +29,14 @@ use Linode\Linode\LinodeEntity;
  *                                          for events such as, but not limited to, `linode_boot`, `linode_reboot`,
  *                                          `linode_create`, and `linode_clone` Event actions.
  * @property string       $created          When this Event was created.
- * @property string       $status           The current status of this Event.
- * @property bool         $seen             If this Event has been seen.
- * @property bool         $read             If this Event has been read.
  * @property float        $duration         The total duration in seconds that it takes for the Event to complete.
- * @property string       $rate             The rate of completion of the Event. Only some Events will return rate; for
- *                                          example, migration and resize Events.
  * @property int          $percent_complete A percentage estimating the amount of time remaining for an Event.
  *                                          Returns `null` for notification events.
+ * @property string       $rate             The rate of completion of the Event. Only some Events will return rate; for
+ *                                          example, migration and resize Events.
+ * @property bool         $read             If this Event has been read.
+ * @property bool         $seen             If this Event has been seen.
+ * @property string       $status           The current status of this Event.
  * @property null|string  $time_remaining   The estimated time remaining until the completion of this Event. This value is
  *                                          only returned for some in-progress migration events. For all other in-progress
  *                                          events, the `percent_complete` attribute will indicate about how much more work is
@@ -54,12 +54,12 @@ class Event extends Entity
     public const FIELD_ENTITY           = 'entity';
     public const FIELD_SECONDARY_ENTITY = 'secondary_entity';
     public const FIELD_CREATED          = 'created';
-    public const FIELD_STATUS           = 'status';
-    public const FIELD_SEEN             = 'seen';
-    public const FIELD_READ             = 'read';
     public const FIELD_DURATION         = 'duration';
-    public const FIELD_RATE             = 'rate';
     public const FIELD_PERCENT_COMPLETE = 'percent_complete';
+    public const FIELD_RATE             = 'rate';
+    public const FIELD_READ             = 'read';
+    public const FIELD_SEEN             = 'seen';
+    public const FIELD_STATUS           = 'status';
     public const FIELD_TIME_REMAINING   = 'time_remaining';
     public const FIELD_MESSAGE          = 'message';
 
@@ -100,6 +100,7 @@ class Event extends Entity
     public const ACTION_HOST_REBOOT                      = 'host_reboot';
     public const ACTION_IMAGE_DELETE                     = 'image_delete';
     public const ACTION_IMAGE_UPDATE                     = 'image_update';
+    public const ACTION_IMAGE_UPLOAD                     = 'image_upload';
     public const ACTION_IPADDRESS_UPDATE                 = 'ipaddress_update';
     public const ACTION_LASSIE_REBOOT                    = 'lassie_reboot';
     public const ACTION_LISH_BOOT                        = 'lish_boot';
@@ -146,6 +147,7 @@ class Event extends Entity
     public const ACTION_OAUTH_CLIENT_SECRET_RESET        = 'oauth_client_secret_reset';
     public const ACTION_OAUTH_CLIENT_UPDATE              = 'oauth_client_update';
     public const ACTION_PASSWORD_RESET                   = 'password_reset';
+    public const ACTION_PAYMENT_METHOD_ADD               = 'payment_method_add';
     public const ACTION_PAYMENT_SUBMITTED                = 'payment_submitted';
     public const ACTION_PROFILE_UPDATE                   = 'profile_update';
     public const ACTION_STACKSCRIPT_CREATE               = 'stackscript_create';
@@ -192,8 +194,9 @@ class Event extends Entity
     public function __get(string $name): mixed
     {
         return match ($name) {
-            self::FIELD_ENTITY => new LinodeEntity($this->client, $this->data[$name]),
-            default            => parent::__get($name),
+            self::FIELD_ENTITY,
+            self::FIELD_SECONDARY_ENTITY => new LinodeEntity($this->client, $this->data[$name]),
+            default                      => parent::__get($name),
         };
     }
 }

@@ -26,9 +26,7 @@ use Linode\RepositoryInterface;
 interface ImageRepositoryInterface extends RepositoryInterface
 {
     /**
-     * Creates a private gold-master Image from a Linode Disk. There is no additional
-     * charge to store Images for Linode users.
-     * Images are limited to three per Account.
+     * Captures a private gold-master Image from a Linode Disk.
      *
      * @param array $parameters Information about the Image to create.
      *
@@ -56,4 +54,43 @@ interface ImageRepositoryInterface extends RepositoryInterface
      * @throws LinodeException
      */
     public function deleteImage(string $imageId): void;
+
+    /**
+     * Initiates an Image upload.
+     *
+     * This endpoint creates a new private Image object and returns it along
+     * with the URL to which image data can be uploaded.
+     *
+     * - Image data must be uploaded within 24 hours of creation or the
+     * upload will be cancelled and the image deleted.
+     *
+     * - Image uploads should be made as an HTTP PUT request to the URL returned in the
+     * `upload_to`
+     * response parameter, with a `Content-type: application/octet-stream` header
+     * included in the
+     * request. For example:
+     *
+     *       curl -v \
+     *         -H "Content-Type: application/octet-stream" \
+     *         --upload-file example.img.gz \
+     *         $UPLOAD_URL \
+     *         --progress-bar \
+     *         --output /dev/null
+     *
+     * - Uploaded image data should be compressed in gzip (`.gz`) format. The
+     * uncompressed disk should be in raw
+     * disk image (`.img`) format. A maximum compressed file size of 5GB is supported for
+     * upload at this time.
+     *
+     * **Note:** To initiate and complete an Image upload in a single step, see our guide
+     * on how to Upload an Image using Cloud Manager or the Linode CLI `image-upload`
+     * plugin.
+     *
+     * @param array $parameters The uploaded Image details.
+     *
+     * @return Image Uploaded Image.
+     *
+     * @throws LinodeException
+     */
+    public function uploadImage(array $parameters = []): Image;
 }

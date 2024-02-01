@@ -26,37 +26,19 @@ use Linode\RepositoryInterface;
 interface FirewallDevicesRepositoryInterface extends RepositoryInterface
 {
     /**
-     * Creates a Firewall Device, which assigns a Firewall to a Linode service (referred
-     * to
-     * as the Device's `entity`). Currently, only Devices with an entity of type `linode`
-     * are accepted.
-     * A Firewall can be assigned a single Linode service at a time. Additional disabled
-     * Firewalls can be
-     * assigned to a service, but they cannot be enabled if another active Firewall
-     * is already assigned to the same service.
+     * Creates a Firewall Device, which assigns a Firewall to a service (referred to
+     * as the Device's `entity`) and applies the Firewall's Rules to the device.
      *
-     * Creating a Firewall Device will apply the Rules from a Firewall to a Linode
-     * service.
-     * A `firewall_device_add` Event is generated when the Firewall Device is added
+     * * Currently, only Devices with an entity of type `linode` are accepted.
+     *
+     * * A Firewall can be assigned to multiple Linode instances at a time.
+     *
+     * * A Linode instance can have one active, assigned Firewall at a time.
+     * Additional disabled Firewalls can be assigned to a service, but they cannot be
+     * enabled if another active Firewall is already assigned to the same service.
+     *
+     * * A `firewall_device_add` Event is generated when the Firewall Device is added
      * successfully.
-     *
-     * **Note:** When a Firewall is assigned to a Linode and you attempt
-     * to migrate the Linode to a data center that does not support Cloud Firewalls, the
-     * migration will fail.
-     * Use the List Regions endpoint to view a list of a data center's capabilities.
-     *
-     * This endpoint is in **beta**.
-     *
-     *
-     * * Gain access to Linode Cloud Firewall by signing up for our Greenlight Beta
-     * program.
-     * * During the beta, Cloud Firewall is not available in every data center region.
-     * For the current list of availability, see the Cloud Firewall Product
-     * Documentation.
-     * * Please make sure to prepend all requests with
-     * `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
-     * updates in the future. This notice will be removed when this endpoint is out of
-     * beta.
      *
      * @throws LinodeException
      */
@@ -73,19 +55,6 @@ interface FirewallDevicesRepositoryInterface extends RepositoryInterface
      * A `firewall_device_remove` Event is generated when the Firewall Device is removed
      * successfully.
      *
-     * This endpoint is in **beta**.
-     *
-     *
-     * * Gain access to Linode Cloud Firewall by signing up for our Greenlight Beta
-     * program.
-     * * During the beta, Cloud Firewall is not available in every data center region.
-     * For the current list of availability, see the Cloud Firewall Product
-     * Documentation.
-     * * Please make sure to prepend all requests with
-     * `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
-     * updates in the future. This notice will be removed when this endpoint is out of
-     * beta.
-     *
      * @param int $deviceId ID of the Firewall Device to access.
      *
      * @throws LinodeException
@@ -95,19 +64,6 @@ interface FirewallDevicesRepositoryInterface extends RepositoryInterface
     /**
      * Returns the inbound and outbound Rules for a Firewall.
      *
-     * This endpoint is in **beta**.
-     *
-     *
-     * * Gain access to Linode Cloud Firewall by signing up for our Greenlight Beta
-     * program.
-     * * During the beta, Cloud Firewall is not available in every data center region.
-     * For the current list of availability, see the Cloud Firewall Product
-     * Documentation.
-     * * Please make sure to prepend all requests with
-     * `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
-     * updates in the future. This notice will be removed when this endpoint is out of
-     * beta.
-     *
      * @return FirewallRules The requested Firewall Rules.
      *
      * @throws LinodeException
@@ -115,21 +71,10 @@ interface FirewallDevicesRepositoryInterface extends RepositoryInterface
     public function getFirewallRules(): FirewallRules;
 
     /**
-     * Updates the inbound and outbound Rules for a Firewall. Using this endpoint will
-     * replace all of a Firewall's ruleset with the Rules specified in your request.
+     * Updates the inbound and outbound Rules for a Firewall.
      *
-     * This endpoint is in **beta**.
-     *
-     *
-     * * Gain access to Linode Cloud Firewall by signing up for our Greenlight Beta
-     * program.
-     * * During the beta, Cloud Firewall is not available in every data center region.
-     * For the current list of availability, see the Cloud Firewall Product
-     * Documentation.
-     * * Please make sure to prepend all requests with
-     * `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
-     * updates in the future. This notice will be removed when this endpoint is out of
-     * beta.
+     * **Note:** This command replaces all of a Firewall's `inbound` and/or `outbound`
+     * rulesets with the values specified in your request.
      *
      * @param array $parameters The Firewall Rules information to update.
      *

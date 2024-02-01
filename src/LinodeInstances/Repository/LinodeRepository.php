@@ -18,6 +18,7 @@ use Linode\LinodeInstances\Linode;
 use Linode\LinodeInstances\LinodeRepositoryInterface;
 use Linode\LinodeInstances\LinodeStats;
 use Linode\Networking\Firewall;
+use Linode\NodeBalancers\NodeBalancer;
 use Linode\Volumes\Volume;
 
 /**
@@ -149,6 +150,15 @@ class LinodeRepository extends AbstractRepository implements LinodeRepositoryInt
         $json     = json_decode($contents, true);
 
         return array_map(fn ($data) => new Firewall($this->client, $data), $json['data']);
+    }
+
+    public function getLinodeNodeBalancers(int $linodeId): array
+    {
+        $response = $this->client->get(sprintf('%s/%s/nodebalancers', $this->getBaseUri(), $linodeId));
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return array_map(fn ($data) => new NodeBalancer($this->client, $data), $json['data']);
     }
 
     public function getLinodeVolumes(int $linodeId): array

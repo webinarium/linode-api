@@ -9,14 +9,14 @@
 //
 // ---------------------------------------------------------------------
 
-namespace Linode\Regions;
+namespace Linode\LKE;
 
 use Linode\Entity;
 
 /**
- * Region's DNS resolvers.
+ * Kubernetes Control Plane settings.
  *
- * @property string $ipv4 The IPv4 addresses for this region's DNS resolvers, separated by commas.
- * @property string $ipv6 The IPv6 addresses for this region's DNS resolvers, separated by commas.
+ * @property bool $high_availability Defines whether High Availability is enabled for the Control Plane Components of
+ *                                   the cluster. Defaults to `false`.
  */
-class Resolver extends Entity {}
+class KubernetesControlPlane extends Entity {}

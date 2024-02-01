@@ -26,7 +26,7 @@ use Linode\Entity;
  *                                                 * `paravirt` is suitable for most cases. Linodes running in paravirt mode
  *                                                 share some qualities with the host, ultimately making it run faster since
  *                                                 there is less transition between it and the host.
- *                                                 * `full_virt` affords more customization, but is slower because 100% of the VM
+ *                                                 * `fullvirt` affords more customization, but is slower because 100% of the VM
  *                                                 is virtualized.
  * @property LinodeConfigInterface[] $interfaces   An array of Network Interfaces to add to this Linode's Configuration Profile.
  * @property Helpers                 $helpers      Helpers enabled when booting to this Linode Config.

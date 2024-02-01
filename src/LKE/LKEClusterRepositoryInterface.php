@@ -99,6 +99,20 @@ interface LKEClusterRepositoryInterface extends RepositoryInterface
     public function getLKEClusterNode(int $clusterId, string $nodeId): LKENodeStatus;
 
     /**
+     * Deletes a specific Node from a Node Pool.
+     *
+     * **Deleting a Node is a destructive action and cannot be undone.**
+     *
+     * Deleting a Node will reduce the size of the Node Pool it belongs to.
+     *
+     * @param int    $clusterId ID of the Kubernetes cluster containing the Node.
+     * @param string $nodeId    ID of the Node to look up.
+     *
+     * @throws LinodeException
+     */
+    public function deleteLKEClusterNode(int $clusterId, string $nodeId): void;
+
+    /**
      * Recycles an individual Node in the designated Kubernetes Cluster. The Node will be
      * deleted
      * and replaced with a new Linode, which may take a few minutes. Replacement Nodes
@@ -114,4 +128,26 @@ interface LKEClusterRepositoryInterface extends RepositoryInterface
      * @throws LinodeException
      */
     public function postLKEClusterNodeRecycle(int $clusterId, string $nodeId): void;
+
+    /**
+     * Get the Kubeconfig file for a Cluster. Please note that it often takes 2-5 minutes
+     * before
+     * the Kubeconfig file is ready after first creating a new cluster.
+     *
+     * @param int $clusterId ID of the Kubernetes cluster to look up.
+     *
+     * @return string The Base64-encoded Kubeconfig file for this Cluster.
+     *
+     * @throws LinodeException
+     */
+    public function getLKEClusterKubeconfig(int $clusterId): string;
+
+    /**
+     * Delete and regenerate the Kubeconfig file for a Cluster.
+     *
+     * @param int $clusterId ID of the Kubernetes cluster to look up.
+     *
+     * @throws LinodeException
+     */
+    public function deleteLKEClusterKubeconfig(int $clusterId): void;
 }

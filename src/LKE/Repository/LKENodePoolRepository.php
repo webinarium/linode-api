@@ -67,15 +67,6 @@ class LKENodePoolRepository extends AbstractRepository implements LKENodePoolRep
         return array_map(static fn ($data) => $data['endpoint'], $json['data']);
     }
 
-    public function getLKEClusterKubeconfig(): string
-    {
-        $response = $this->client->get(sprintf('/lke/clusters/%s/kubeconfig', $this->getBaseUri()));
-        $contents = $response->getBody()->getContents();
-        $json     = json_decode($contents, true);
-
-        return $json['kubeconfig'];
-    }
-
     protected function getBaseUri(): string
     {
         return sprintf('/lke/clusters/%s/pools', $this->clusterId);
@@ -84,8 +75,13 @@ class LKENodePoolRepository extends AbstractRepository implements LKENodePoolRep
     protected function getSupportedFields(): array
     {
         return [
+            LKENodePool::FIELD_AUTOSCALER,
+            LKENodePool::FIELD_TYPE,
+            LKENodePool::FIELD_COUNT,
+            LKENodePool::FIELD_DISKS,
             LKENodePool::FIELD_ID,
             LKENodePool::FIELD_NODES,
+            LKENodePool::FIELD_TAGS,
         ];
     }
 

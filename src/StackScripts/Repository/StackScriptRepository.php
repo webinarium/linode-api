@@ -66,6 +66,7 @@ class StackScriptRepository extends AbstractRepository implements StackScriptRep
             StackScript::FIELD_REV_NOTE,
             StackScript::FIELD_SCRIPT,
             StackScript::FIELD_USER_DEFINED_FIELDS,
+            StackScript::FIELD_MINE,
         ];
     }
 

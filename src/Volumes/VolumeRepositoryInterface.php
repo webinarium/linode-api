@@ -49,10 +49,12 @@ interface VolumeRepositoryInterface extends RepositoryInterface
     /**
      * Deletes a Volume you have permission to `read_write`.
      *
-     * **Deleting a Volume is a destructive action and cannot be undone.**
+     * * **Deleting a Volume is a destructive action and cannot be undone.**
      *
-     * Deleting stops billing for the Volume. You will be billed for time used within
+     * * Deleting stops billing for the Volume. You will be billed for time used within
      * the billing period the Volume was active.
+     *
+     * * Volumes that are migrating cannot be deleted until the migration is finished.
      *
      * @param int $volumeId ID of the Volume to look up.
      *
@@ -78,6 +80,7 @@ interface VolumeRepositoryInterface extends RepositoryInterface
      * successfully, your User must have the `add_volumes` grant. The new Volume will
      * have the same size and data as the source Volume. Creating a new Volume will incur
      * a charge on your Account.
+     * * Only Volumes with a `status` of "active" can be cloned.
      *
      * @param int   $volumeId   ID of the Volume to clone.
      * @param array $parameters The requested state your Volume will be cloned into.
@@ -101,6 +104,7 @@ interface VolumeRepositoryInterface extends RepositoryInterface
      * Resize an existing Volume on your Account. In order for this request to complete
      * successfully, your User must have the `read_write` permissions to the Volume.
      * * Volumes can only be resized up.
+     * * Only Volumes with a `status` of "active" can be resized.
      *
      * @param int   $volumeId   ID of the Volume to resize.
      * @param array $parameters The requested size to increase your Volume to.

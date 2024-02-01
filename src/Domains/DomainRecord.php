@@ -21,32 +21,45 @@ use Linode\Entity;
  *                                 domain name with an IPv4 address, and AAAA records associate a domain name with an
  *                                 IPv6 address. For more information, see our guide on DNS Records.
  * @property string      $name     The name of this Record. For requests, this property's actual usage and whether it
- *                                 is required depends on the type of record this represents:
+ *                                 is required depends
+ *                                 on the type of record this represents:
  *                                 `A` and `AAAA`: The hostname or FQDN of the Record.
  *                                 `NS`: The subdomain, if any, to use with the Domain of the Record.
- *                                 `MX`: The subdomain.
+ *                                 `MX`: The mail server subdomain. Must be an empty string (`""`) for a Null MX
+ *                                 Record.
  *                                 `CNAME`: The hostname. Must be unique. Required.
  *                                 `TXT`: The hostname.
  *                                 `SRV`: Unused. Use the `service` property to set the service name for this record.
- *                                 `CAA`: The subdomain. Omit or enter an empty string ("") to apply to the entire
+ *                                 `CAA`: The subdomain. Omit or enter an empty string (`""`) to apply to the entire
  *                                 Domain.
- *                                 `PTR`: See our guide on how to Configure Your Linode for Reverse DNS (rDNS).
+ *                                 `PTR`: See our guide on how to Configure Your Linode for Reverse DNS
+ *                                 (rDNS).
  * @property string      $target   The target for this Record. For requests, this property's actual usage and whether
- *                                 it is required depends on the type of record this represents:
+ *                                 it is required depends
+ *                                 on the type of record this represents:
  *                                 `A` and `AAAA`: The IP address. Use `remote_addr]` to submit the IPv4 address of
  *                                 the request. Required.
  *                                 `NS`: The name server. Must be a valid domain. Required.
- *                                 `MX`: The mail server. Must be a valid domain. Required.
+ *                                 `MX`: The mail server. Must be a valid domain unless creating a Null MX Record. To
+ *                                 create a
+ *                                 [Null MX Record, first
+ *                                 remove any additional MX records, then enter an empty string
+ *                                 (`""`) for this property. If a Domain has a Null MX record, new MX records cannot
+ *                                 be created. Required.
  *                                 `CNAME`: The alias. Must be a valid domain. Required.
  *                                 `TXT`: The value. Required.
  *                                 `SRV`: The target domain or subdomain. If a subdomain is entered, it is
- *                                 automatically used with the Domain. To configure for a different domain, enter a
- *                                 valid FQDN. For example, the value `www` with a Domain for `example.com` results
- *                                 in a target set to `www.example.com`, whereas the value `sample.com` results in a
+ *                                 automatically used with the Domain.
+ *                                 To configure for a different domain, enter a valid FQDN. For example, the value
+ *                                 `www` with a Domain for
+ *                                 `example.com` results in a target set to `www.example.com`, whereas the value
+ *                                 `sample.com` results in a
  *                                 target set to `sample.com`. Required.
  *                                 `CAA`: The value. For `issue` or `issuewild` tags, the domain of your certificate
- *                                 issuer. For the `iodef` tag, a contact or submission URL (http or mailto).
- *                                 `PTR`: See our guide on how to [Configure Your Linode for Reverse DNS (rDNS).
+ *                                 issuer. For the `iodef`
+ *                                 tag, a contact or submission URL (http or mailto).
+ *                                 `PTR`: See our guide on how to Configure Your Linode for Reverse DNS
+ *                                 (rDNS).
  *                                 With the exception of A, AAAA, and CAA records, this field accepts a trailing
  *                                 period.
  * @property int         $ttl_sec  "Time to Live" - the amount of time in seconds that this Domain's records may be
@@ -54,13 +67,15 @@ use Linode\Entity;
  *                                 14400, 28800, 57600, 86400, 172800, 345600, 604800, 1209600, and 2419200 - any
  *                                 other value will be rounded to the nearest valid value.
  * @property int         $priority The priority of the target host for this Record. Lower values are preferred. Only
- *                                 valid and required for SRV record requests.
- * @property int         $weight   The relative weight of this Record. Higher values are preferred. Only valid and
- *                                 required for SRV record requests.
- * @property null|string $service  The name of the service. An underscore (_) is prepended and a period (.) is
+ *                                 valid for
+ *                                 MX and SRV record requests. Required for SRV record requests.
+ *                                 Defaults to `0` for MX record requests. Must be `0` for Null MX records.
+ * @property int         $weight   The relative weight of this Record used in the case of identical priority. Higher
+ *                                 values are preferred. Only valid and required for SRV record requests.
+ * @property null|string $service  The name of the service. An underscore (`_`) is prepended and a period (`.`) is
  *                                 appended automatically to the submitted value for this property. Only valid and
  *                                 required for SRV record requests.
- * @property null|string $protocol The protocol this Record's service communicates with. An underscore (_) is
+ * @property null|string $protocol The protocol this Record's service communicates with. An underscore (`_`) is
  *                                 prepended automatically to the submitted value for this property. Only valid for
  *                                 SRV record requests.
  * @property int         $port     The port this Record points to. Only valid and required for SRV record requests.

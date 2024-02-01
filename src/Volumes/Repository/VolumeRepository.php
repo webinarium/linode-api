@@ -91,6 +91,7 @@ class VolumeRepository extends AbstractRepository implements VolumeRepositoryInt
             Volume::FIELD_CREATED,
             Volume::FIELD_UPDATED,
             Volume::FIELD_TAGS,
+            Volume::FIELD_HARDWARE_TYPE,
         ];
     }
 

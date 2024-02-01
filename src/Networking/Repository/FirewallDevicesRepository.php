@@ -47,7 +47,7 @@ class FirewallDevicesRepository extends AbstractRepository implements FirewallDe
 
     public function getFirewallRules(): FirewallRules
     {
-        $response = $this->client->get(sprintf('beta/networking/firewalls/%s/rules', $this->getBaseUri()));
+        $response = $this->client->get(sprintf('/networking/firewalls/%s/rules', $this->getBaseUri()));
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
@@ -56,7 +56,7 @@ class FirewallDevicesRepository extends AbstractRepository implements FirewallDe
 
     public function updateFirewallRules(array $parameters = []): FirewallRules
     {
-        $response = $this->client->put(sprintf('beta/networking/firewalls/%s/rules', $this->getBaseUri()), $parameters);
+        $response = $this->client->put(sprintf('/networking/firewalls/%s/rules', $this->getBaseUri()), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
@@ -65,7 +65,7 @@ class FirewallDevicesRepository extends AbstractRepository implements FirewallDe
 
     protected function getBaseUri(): string
     {
-        return sprintf('beta/networking/firewalls/%s/devices', $this->firewallId);
+        return sprintf('/networking/firewalls/%s/devices', $this->firewallId);
     }
 
     protected function getSupportedFields(): array

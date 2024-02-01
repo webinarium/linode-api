@@ -55,6 +55,8 @@ use Linode\Profile\Repository\TrustedDeviceRepository;
  * @property null|string[]                          $authorized_keys      The list of SSH Keys authorized to use Lish for your User. This value is ignored
  *                                                                        if `lish_auth_method` is "disabled."
  * @property Referrals                              $referrals            Information about your status in our referral program.
+ *                                                                        This information becomes accessible after this Profile's Account has established
+ *                                                                        at least $25.00 USD of total payments.
  * @property string                                 $authentication_type  This account's Cloud Manager authentication type. Authentication types are chosen
  *                                                                        through
  *                                                                        Cloud Manager and authorized when logging into your account. These authentication

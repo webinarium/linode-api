@@ -26,9 +26,32 @@ use Linode\RepositoryInterface;
 interface DiskRepositoryInterface extends RepositoryInterface
 {
     /**
-     * Adds a new Disk to a Linode. You can optionally create a Disk from an Image (see
-     * /images for a list of available public images, or use one of your own), and
-     * optionally provide a StackScript to deploy with this Disk.
+     * Adds a new Disk to a Linode.
+     *
+     * * You can optionally create a Disk from an Image or an Empty Disk if no Image is
+     * provided with a request.
+     *
+     * * When creating an Empty Disk, providing a `label` is required.
+     *
+     * * If no `label` is provided, an `image` is required instead.
+     *
+     * * When creating a Disk from an Image, `root_pass` is required.
+     *
+     * * The default filesystem for new Disks is `ext4`. If creating a Disk from an
+     * Image, the filesystem
+     * of the Image is used unless otherwise specified.
+     *
+     * * When deploying a StackScript on a Disk:
+     *   * See StackScripts List (GET /linode/stackscripts) for
+     *     a list of available StackScripts.
+     *   * Requires a compatible Image to be supplied.
+     *     * See StackScript View (GET /linode/stackscript/{stackscriptId}) for
+     * compatible Images.
+     *   * It is recommended to supply SSH keys for the root User using the
+     * `authorized_keys` field.
+     *   * You may also supply a list of usernames via the `authorized_users` field.
+     *     * These users must have an SSH Key associated with their Profiles first. See
+     * SSH Key Add (POST /profile/sshkeys) for more information.
      *
      * @param array $parameters The parameters to set when creating the Disk.
      *
@@ -80,11 +103,14 @@ interface DiskRepositoryInterface extends RepositoryInterface
 
     /**
      * Resizes a Disk you have permission to `read_write`.
-     * The Linode this Disk is attached to must be shut down for resizing to take effect.
-     * If you are resizing the Disk to a smaller size, it cannot be made smaller than
-     * what is required by the total size of the files current on the Disk. The Disk must
-     * not be in use. If the Disk is in use, the request will succeed but the resize will
-     * ultimately fail.
+     *
+     * The Disk must not be in use. If the Disk is in use, the request will
+     * succeed but the resize will ultimately fail. For a request to succeed,
+     * the Linode must be shut down prior to resizing the Disk, or the Disk
+     * must not be assigned to the Linode's active Configuration Profile.
+     *
+     * If you are resizing the Disk to a smaller size, it cannot be made smaller
+     * than what is required by the total size of the files current on the Disk.
      *
      * @param int $diskId ID of the Disk to look up.
      * @param int $size   The desired size, in MB, of the disk.

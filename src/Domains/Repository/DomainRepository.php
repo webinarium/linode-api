@@ -44,6 +44,15 @@ class DomainRepository extends AbstractRepository implements DomainRepositoryInt
         $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $domainId));
     }
 
+    public function getDomainZone(string $domainId): array
+    {
+        $response = $this->client->get(sprintf('%s/%s/zone-file', $this->getBaseUri(), $domainId));
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return $json['zone_file'];
+    }
+
     public function importDomain(string $domain, string $remote_nameserver): Domain
     {
         $parameters = [

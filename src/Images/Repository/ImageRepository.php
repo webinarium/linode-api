@@ -44,6 +44,15 @@ class ImageRepository extends AbstractRepository implements ImageRepositoryInter
         $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $imageId));
     }
 
+    public function uploadImage(array $parameters = []): Image
+    {
+        $response = $this->client->post(sprintf('%s/upload', $this->getBaseUri()), $parameters);
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return new Image($this->client, $json['image']);
+    }
+
     protected function getBaseUri(): string
     {
         return '/images';
@@ -58,6 +67,7 @@ class ImageRepository extends AbstractRepository implements ImageRepositoryInter
             Image::FIELD_DESCRIPTION,
             Image::FIELD_IS_PUBLIC,
             Image::FIELD_SIZE,
+            Image::FIELD_STATUS,
             Image::FIELD_CREATED,
             Image::FIELD_UPDATED,
             Image::FIELD_CREATED_BY,

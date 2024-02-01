@@ -26,26 +26,21 @@ use Linode\RepositoryInterface;
 interface FirewallRepositoryInterface extends RepositoryInterface
 {
     /**
-     * Creates a Firewall to filter network traffic. Use the `rules` property to
-     * create inbound and outbound access rules. Use the `devices` property to assign the
-     * Firewall to a Linode service. Currently, Firewalls can only be assigned to Linode
-     * instances.
+     * Creates a Firewall to filter network traffic.
      *
-     * A Firewall can be assigned to a single Linode service at a time.
+     * * Use the `rules` property to create inbound and outbound access rules.
      *
-     * A `firewall_create` Event is generated when this endpoint returns successfully.
+     * * Use the `devices` property to assign the Firewall to a service and apply its
+     * Rules to the device. Requires `read_write` User's Grants to the device.
+     * Currently, Firewalls can only be assigned to Linode instances.
      *
-     * This endpoint is in **beta**.
+     * * A Firewall can be assigned to multiple Linode instances at a time.
      *
-     * * Gain access to Linode Cloud Firewall by signing up for our Greenlight Beta
-     * program.
-     * * During the beta, Cloud Firewall is not available in every data center region.
-     * For the current list of availability, see the Cloud Firewall Product
-     * Documentation.
-     * * Please make sure to prepend all requests with
-     * `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
-     * updates in the future. This notice will be removed when this endpoint is out of
-     * beta.
+     * * A Linode instance can have one active, assigned Firewall at a time.
+     * Additional disabled Firewalls can be assigned to a service, but they cannot be
+     * enabled if another active Firewall is already assigned to the same service.
+     *
+     * * A `firewall_create` Event is generated when this endpoint returns successfully.
      *
      * @param array $parameters Creates a Firewall object that can be applied to a Linode service to filter the
      *                          service's network traffic.
@@ -78,19 +73,6 @@ interface FirewallRepositoryInterface extends RepositoryInterface
      * `firewall_enable` or
      * `firewall_disable` Event will be generated.
      *
-     * This endpoint is in **beta**.
-     *
-     *
-     * * Gain access to Linode Cloud Firewall by signing up for our Greenlight Beta
-     * program.
-     * * During the beta, Cloud Firewall is not available in every data center region.
-     * For the current list of availability, see the Cloud Firewall Product
-     * Documentation.
-     * * Please make sure to prepend all requests with
-     * `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
-     * updates in the future. This notice will be removed when this endpoint is out of
-     * beta.
-     *
      * @param int   $firewallId ID of the Firewall to access.
      * @param array $parameters The Firewall information to update.
      *
@@ -103,19 +85,6 @@ interface FirewallRepositoryInterface extends RepositoryInterface
      * from any Linode services that the Firewall was assigned to.
      *
      * A `firewall_delete` Event is generated when this endpoint returns successfully.
-     *
-     * This endpoint is in **beta**.
-     *
-     *
-     * * Gain access to Linode Cloud Firewall by signing up for our Greenlight Beta
-     * program.
-     * * During the beta, Cloud Firewall is not available in every data center region.
-     * For the current list of availability, see the Cloud Firewall Product
-     * Documentation.
-     * * Please make sure to prepend all requests with
-     * `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
-     * updates in the future. This notice will be removed when this endpoint is out of
-     * beta.
      *
      * @param int $firewallId ID of the Firewall to access.
      *
