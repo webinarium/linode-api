@@ -81,6 +81,13 @@ class Event extends Entity
     public const ACTION_DNS_ZONE_DELETE                  = 'dns_zone_delete';
     public const ACTION_DNS_ZONE_IMPORT                  = 'dns_zone_import';
     public const ACTION_DNS_ZONE_UPDATE                  = 'dns_zone_update';
+    public const ACTION_FIREWALL_CREATE                  = 'firewall_create';
+    public const ACTION_FIREWALL_DELETE                  = 'firewall_delete';
+    public const ACTION_FIREWALL_DISABLE                 = 'firewall_disable';
+    public const ACTION_FIREWALL_ENABLE                  = 'firewall_enable';
+    public const ACTION_FIREWALL_UPDATE                  = 'firewall_update';
+    public const ACTION_FIREWALL_DEVICE_ADD              = 'firewall_device_add';
+    public const ACTION_FIREWALL_DEVICE_REMOVE           = 'firewall_device_remove';
     public const ACTION_HOST_REBOOT                      = 'host_reboot';
     public const ACTION_IMAGE_DELETE                     = 'image_delete';
     public const ACTION_IMAGE_UPDATE                     = 'image_update';

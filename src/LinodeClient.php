@@ -24,6 +24,7 @@ use Psr\Http\Message\ResponseInterface;
  *
  * @property Account\Account                                       $account
  * @property Domains\DomainRepositoryInterface                     $domains
+ * @property Networking\FirewallRepositoryInterface                $firewalls
  * @property Images\ImageRepositoryInterface                       $images
  * @property LinodeInstances\KernelRepositoryInterface             $kernels
  * @property LinodeInstances\LinodeRepositoryInterface             $linodes
@@ -96,6 +97,7 @@ class LinodeClient
         return match ($name) {
             'account'               => new Account\Account($this),
             'domains'               => new Domains\Repository\DomainRepository($this),
+            'firewalls'             => new Networking\Repository\FirewallRepository($this),
             'images'                => new Images\Repository\ImageRepository($this),
             'kernels'               => new LinodeInstances\Repository\KernelRepository($this),
             'linodes'               => new LinodeInstances\Repository\LinodeRepository($this),

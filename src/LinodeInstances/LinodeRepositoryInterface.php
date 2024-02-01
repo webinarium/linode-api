@@ -163,7 +163,7 @@ interface LinodeRepositoryInterface extends RepositoryInterface
      * Reset Disk Root Password endpoint to update a specific disk's root password.
      * * A `password_reset` event is generated when a root password reset is successful.
      *
-     * @param int   $linodeId   ID of the Linode for which to reset it's root password.
+     * @param int   $linodeId   ID of the Linode for which to reset its root password.
      * @param array $parameters This Linode's new root password.
      *
      * @throws LinodeException

@@ -31,6 +31,7 @@ use Linode\Managed\ManagedCredentialRepositoryInterface;
 use Linode\Managed\ManagedIssueRepositoryInterface;
 use Linode\Managed\ManagedLinodeSettingsRepositoryInterface;
 use Linode\Managed\ManagedServiceRepositoryInterface;
+use Linode\Networking\FirewallRepositoryInterface;
 use Linode\Networking\IPAddressRepositoryInterface;
 use Linode\Networking\IPv6PoolRepositoryInterface;
 use Linode\Networking\IPv6RangeRepositoryInterface;
@@ -63,6 +64,7 @@ final class LinodeClientTest extends TestCase
         $object = new LinodeClient();
 
         self::assertInstanceOf(DomainRepositoryInterface::class, $object->domains);
+        self::assertInstanceOf(FirewallRepositoryInterface::class, $object->firewalls);
         self::assertInstanceOf(ImageRepositoryInterface::class, $object->images);
         self::assertInstanceOf(KernelRepositoryInterface::class, $object->kernels);
         self::assertInstanceOf(LinodeRepositoryInterface::class, $object->linodes);
