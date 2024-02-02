@@ -42,6 +42,7 @@ class DatabaseRepository extends AbstractRepository implements DatabaseRepositor
             Database::FIELD_HOSTS,
             Database::FIELD_CREATED,
             Database::FIELD_UPDATED,
+            Database::FIELD_UPDATES,
             Database::FIELD_INSTANCE_URI,
         ];
     }

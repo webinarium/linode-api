@@ -35,6 +35,7 @@ class InvoiceRepository extends AbstractRepository implements InvoiceRepositoryI
             Invoice::FIELD_SUBTOTAL,
             Invoice::FIELD_TAX,
             Invoice::FIELD_TOTAL,
+            Invoice::FIELD_TAX_SUMMARY,
         ];
     }
 

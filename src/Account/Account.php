@@ -50,7 +50,7 @@ use Linode\Managed\StatsDataAvailable;
  * @property string                             $phone              The phone number associated with this Account.
  * @property string                             $tax_id             The tax identification number associated with this Account, for tax calculations
  *                                                                  in some countries. If you do not live in a country that collects tax, this should
- *                                                                  be `null`.
+ *                                                                  be an empty string (`""`).
  * @property CreditCardData                     $credit_card        Credit Card information associated with this Account.
  * @property string                             $active_since       The datetime of when the account was activated.
  * @property string[]                           $capabilities       A list of capabilities your account supports.
@@ -139,6 +139,11 @@ class Account extends Entity
      * Updates contact and billing information related to your Account.
      *
      * @param array $parameters Update contact and billing information.
+     *
+     * Account properties that are excluded from a request remain unchanged.
+     *
+     * When updating an Account's `country` to "US", an error is returned if the
+     * Account's `zip` is not a valid US zip code.
      *
      * @throws LinodeException
      */

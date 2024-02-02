@@ -24,8 +24,6 @@ use Linode\Entity;
  *                                        * `active` - the Volume is online and available for use.
  *                                        * `resizing` - the Volume is in the process of upgrading
  *                                        its current capacity.
- *                                        * `contact_support` - there is a problem with your Volume. Please
- *                                        open a Support Ticket to resolve the issue.
  * @property int         $size            The Volume's size, in GiB.
  * @property string      $region          The unique ID of this Region.
  * @property null|int    $linode_id       If a Volume is attached to a specific Linode, the ID of that Linode will be
@@ -60,10 +58,9 @@ class Volume extends Entity
     public const FIELD_CONFIG_ID = 'config_id';
 
     // `FIELD_STATUS` values.
-    public const STATUS_CREATING        = 'creating';
-    public const STATUS_ACTIVE          = 'active';
-    public const STATUS_RESIZING        = 'resizing';
-    public const STATUS_CONTACT_SUPPORT = 'contact_support';
+    public const STATUS_CREATING = 'creating';
+    public const STATUS_ACTIVE   = 'active';
+    public const STATUS_RESIZING = 'resizing';
 
     // `FIELD_HARDWARE_TYPE` values.
     public const HARDWARE_TYPE_HDD  = 'hdd';

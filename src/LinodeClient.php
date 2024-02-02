@@ -23,6 +23,12 @@ use Psr\Http\Message\ResponseInterface;
  * Linode API client.
  *
  * @property Account\Account                                       $account
+ * @property Databases\DatabaseRepositoryInterface                 $databases
+ * @property Databases\DatabaseEngineRepositoryInterface           $databaseEngines
+ * @property Databases\DatabaseTypeRepositoryInterface             $databaseTypes
+ * @property Databases\DatabaseMongoDBRepositoryInterface          $databasesMongoDB
+ * @property Databases\DatabaseMySQLRepositoryInterface            $databasesMySQL
+ * @property Databases\DatabasePostgreSQLRepositoryInterface       $databasesPostgreSQL
  * @property Domains\DomainRepositoryInterface                     $domains
  * @property Networking\FirewallRepositoryInterface                $firewalls
  * @property Images\ImageRepositoryInterface                       $images
@@ -98,6 +104,12 @@ class LinodeClient
     {
         return match ($name) {
             'account'               => new Account\Account($this),
+            'databases'             => new Databases\Repository\DatabaseRepository($this),
+            'databaseEngines'       => new Databases\Repository\DatabaseEngineRepository($this),
+            'databaseTypes'         => new Databases\Repository\DatabaseTypeRepository($this),
+            'databasesMongoDB'      => new Databases\Repository\DatabaseMongoDBRepository($this),
+            'databasesMySQL'        => new Databases\Repository\DatabaseMySQLRepository($this),
+            'databasesPostgreSQL'   => new Databases\Repository\DatabasePostgreSQLRepository($this),
             'domains'               => new Domains\Repository\DomainRepository($this),
             'firewalls'             => new Networking\Repository\FirewallRepository($this),
             'images'                => new Images\Repository\ImageRepository($this),

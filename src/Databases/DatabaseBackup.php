@@ -18,6 +18,7 @@ use Linode\Entity;
  *
  * @property int    $id      The ID of the database backup object.
  * @property string $label   The database backup's label, for display purposes only.
+ *                           Must include only ASCII letters or numbers.
  * @property string $type    The type of database backup, determined by how the backup was created.
  * @property string $created A time value given in a combined date and time format that represents when the
  *                           database backup was created.

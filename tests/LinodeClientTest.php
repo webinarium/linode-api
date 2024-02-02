@@ -16,6 +16,12 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Linode\Databases\DatabaseEngineRepositoryInterface;
+use Linode\Databases\DatabaseMongoDBRepositoryInterface;
+use Linode\Databases\DatabaseMySQLRepositoryInterface;
+use Linode\Databases\DatabasePostgreSQLRepositoryInterface;
+use Linode\Databases\DatabaseRepositoryInterface;
+use Linode\Databases\DatabaseTypeRepositoryInterface;
 use Linode\Domains\DomainRepositoryInterface;
 use Linode\Exception\LinodeException;
 use Linode\Images\ImageRepositoryInterface;
@@ -64,6 +70,12 @@ final class LinodeClientTest extends TestCase
     {
         $object = new LinodeClient();
 
+        self::assertInstanceOf(DatabaseRepositoryInterface::class, $object->databases);
+        self::assertInstanceOf(DatabaseEngineRepositoryInterface::class, $object->databaseEngines);
+        self::assertInstanceOf(DatabaseTypeRepositoryInterface::class, $object->databaseTypes);
+        self::assertInstanceOf(DatabaseMongoDBRepositoryInterface::class, $object->databasesMongoDB);
+        self::assertInstanceOf(DatabaseMySQLRepositoryInterface::class, $object->databasesMySQL);
+        self::assertInstanceOf(DatabasePostgreSQLRepositoryInterface::class, $object->databasesPostgreSQL);
         self::assertInstanceOf(DomainRepositoryInterface::class, $object->domains);
         self::assertInstanceOf(FirewallRepositoryInterface::class, $object->firewalls);
         self::assertInstanceOf(ImageRepositoryInterface::class, $object->images);
