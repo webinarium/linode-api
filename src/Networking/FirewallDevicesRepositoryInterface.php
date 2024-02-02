@@ -73,7 +73,7 @@ interface FirewallDevicesRepositoryInterface extends RepositoryInterface
     /**
      * Updates the inbound and outbound Rules for a Firewall.
      *
-     * **Note:** This command replaces all of a Firewall's `inbound` and/or `outbound`
+     * **Note:** This command replaces all of a Firewall's `inbound` and `outbound`
      * rulesets with the values specified in your request.
      *
      * @param array $parameters The Firewall Rules information to update.

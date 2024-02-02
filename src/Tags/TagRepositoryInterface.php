@@ -28,7 +28,8 @@ interface TagRepositoryInterface extends RepositoryInterface
     /**
      * Creates a new Tag and optionally tags requested objects with it immediately.
      *
-     * **Important**: You must be an unrestricted User in order to add or modify Tags.
+     * **Important**: You must be an unrestricted User in order to access, add, or modify
+     * Tags information.
      *
      * @param array $parameters The tag to create, and optionally the objects to tag.
      *
@@ -39,7 +40,8 @@ interface TagRepositoryInterface extends RepositoryInterface
     /**
      * Remove a Tag from all objects and delete it.
      *
-     * **Important**: You must be an unrestricted User in order to add or modify Tags.
+     * **Important**: You must be an unrestricted User in order to access, add, or modify
+     * Tags information.
      *
      * @throws LinodeException
      */

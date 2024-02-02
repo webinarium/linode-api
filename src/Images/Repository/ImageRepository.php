@@ -68,6 +68,7 @@ class ImageRepository extends AbstractRepository implements ImageRepositoryInter
             Image::FIELD_IS_PUBLIC,
             Image::FIELD_SIZE,
             Image::FIELD_STATUS,
+            Image::FIELD_CAPABILITIES,
             Image::FIELD_CREATED,
             Image::FIELD_UPDATED,
             Image::FIELD_CREATED_BY,

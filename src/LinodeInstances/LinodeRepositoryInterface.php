@@ -32,10 +32,78 @@ interface LinodeRepositoryInterface extends RepositoryInterface
     /**
      * Creates a Linode Instance on your Account. In order for this
      * request to complete successfully, your User must have the `add_linodes` grant.
-     * Creating a new Linode will incur a charge on your Account.
+     * Creating a
+     * new Linode will incur a charge on your Account.
      *
-     * **Important**: You must be an unrestricted User in order to add or modify
-     * tags on Linodes.
+     * Linodes can be created using one of the available Types. See
+     * Types List (GET /linode/types) to get more
+     * information about each Type's specs and cost.
+     *
+     * Linodes can be created in any one of our available Regions, which are accessible
+     * from the
+     * Regions List (GET /regions) endpoint.
+     *
+     * In an effort to fight spam, Linode restricts outbound connections on ports 25,
+     * 465, and 587
+     * on all Linodes for new accounts created after November 5th, 2019. For more
+     * information,
+     * see our guide on Running a Mail Server.
+     *
+     * **Important**: You must be an unrestricted User in order to add or modify tags on
+     * Linodes.
+     *
+     * Linodes can be created in a number of ways:
+     *
+     * * Using a Linode Public Image distribution or a Private Image you created based on
+     * another Linode.
+     *   * Access the Images List (GET /images) endpoint with authentication to view
+     *     all available Images.
+     *   * The Linode will be `running` after it completes `provisioning`.
+     *   * A default config with two Disks, one being a 512 swap disk, is created.
+     *     * `swap_size` can be used to customize the swap disk size.
+     *   * Requires a `root_pass` be supplied to use for the root User's Account.
+     *   * It is recommended to supply SSH keys for the root User using the
+     * `authorized_keys` field.
+     *   * You may also supply a list of usernames via the `authorized_users` field.
+     *     * These users must have an SSH Key associated with your Profile first. See SSH
+     * Key Add (POST /profile/sshkeys) for more information.
+     *
+     * * Using cloud-init with Metadata.
+     *   * Automate system configuration and software installation by providing a base-64
+     * encoded cloud-config file.
+     *   * Requires a compatible Image. You can determine compatible Images by checking
+     * for `cloud-init` under `capabilities` when using Images List (GET /images).
+     *   * Requires a compatible Region. You can determine compatible Regions by checking
+     * for `Metadata` under `capabilities` when using Regions List (GET /regions).
+     *
+     * * Using a StackScript.
+     *   * See StackScripts List (GET /linode/stackscripts) for
+     *     a list of available StackScripts.
+     *   * The Linode will be `running` after it completes `provisioning`.
+     *   * Requires a compatible Image to be supplied.
+     *     * See StackScript View (GET /linode/stackscript/{stackscriptId}) for
+     * compatible Images.
+     *   * Requires a `root_pass` be supplied to use for the root User's Account.
+     *   * It is recommended to supply SSH keys for the root User using the
+     * `authorized_keys` field.
+     *   * You may also supply a list of usernames via the `authorized_users` field.
+     *     * These users must have an SSH Key associated with your Profile first. See SSH
+     * Key Add (POST /profile/sshkeys) for more information.
+     *
+     * * Using one of your other Linode's backups.
+     *   * You must create a Linode large enough to accommodate the Backup's size.
+     *   * The Disks and Config will match that of the Linode that was backed up.
+     *   * The `root_pass` will match that of the Linode that was backed up.
+     *
+     * * Attached to a private VLAN.
+     *   * Review the `interfaces` property of the Request Body Schema for details.
+     *   * For more information, see our guide on Getting Started with VLANs.
+     *
+     * * Create an empty Linode.
+     *   * The Linode will remain `offline` and must be manually started.
+     *     * See Linode Boot (POST /linode/instances/{linodeId}/boot).
+     *   * Disks and Configs must be created manually.
+     *   * This is only recommended for advanced use cases.
      *
      * @param array $parameters The requested initial state of a new Linode.
      *
@@ -67,6 +135,7 @@ interface LinodeRepositoryInterface extends RepositoryInterface
      *
      *   * Gives up any IP addresses the Linode was assigned.
      *   * Deletes all Disks, Backups, Configs, etc.
+     *   * Detaches any Volumes associated with the Linode.
      *   * Stops billing for the Linode and its associated services. You will be billed
      * for time used
      *     within the billing period the Linode was active.
@@ -113,6 +182,9 @@ interface LinodeRepositoryInterface extends RepositoryInterface
      * returned by this endpoint.
      *
      * Any tags existing on the source Linode will be cloned to the target Linode.
+     *
+     * Linodes utilizing Metadata (`"has_user_data": true`) must be cloned to a new
+     * Linode with `metadata.user_data` included with the clone request.
      *
      * @param int   $linodeId   ID of the Linode to clone.
      * @param array $parameters The requested state your Linode will be cloned into.
@@ -189,14 +261,28 @@ interface LinodeRepositoryInterface extends RepositoryInterface
 
     /**
      * Rebuilds a Linode you have the `read_write` permission to modify.
-     * A rebuild will first shut down the Linode, delete all disks and configs on the
-     * Linode, and then deploy a new `image` to the Linode with the given attributes.
-     * Additionally:
+     *
+     * A rebuild will first shut down the Linode, delete all disks and configs
+     * on the Linode, and then deploy a new `image` to the Linode with the given
+     * attributes. Additionally:
      *
      *   * Requires an `image` be supplied.
      *   * Requires a `root_pass` be supplied to use for the root User's Account.
      *   * It is recommended to supply SSH keys for the root User using the
      *     `authorized_keys` field.
+     *   * Linodes utilizing Metadata (`"has_user_data": true`) should include
+     * `metadata.user_data` in the rebuild request to continue using the service.
+     *
+     * You also have the option to resize the Linode to a different plan by including the
+     * `type` parameter with your request. Note that resizing involves migrating the
+     * Linode to a new hardware host, while rebuilding without resizing maintains the
+     * same hardware host. Resizing also requires significantly more time for completion
+     * of this command. The following additional conditions apply:
+     *
+     *   * The Linode must not have a pending migration.
+     *   * Your Account cannot have an outstanding balance.
+     *   * The Linode must not have more disk allocation than the new Type allows.
+     *     * In that situation, you must first delete or resize the disk to be smaller.
      *
      * @param int   $linodeId   ID of the Linode to rebuild.
      * @param array $parameters The requested state your Linode will be rebuilt into.
@@ -231,6 +317,7 @@ interface LinodeRepositoryInterface extends RepositoryInterface
      *   * Your Account cannot have an outstanding balance.
      *   * The Linode must not have more disk allocation than the new Type allows.
      *     * In that situation, you must first delete or resize the disk to be smaller.
+     * You can also resize a Linode when using the Linode Rebuild command.
      *
      * @param int   $linodeId   ID of the Linode to resize.
      * @param array $parameters The Type your current Linode will resize to, and whether to attempt to

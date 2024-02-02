@@ -21,7 +21,6 @@ use Linode\Entity;
  * @property string $version      Linux Kernel version.
  * @property string $architecture The architecture of this Kernel.
  * @property bool   $kvm          If this Kernel is suitable for KVM Linodes.
- * @property bool   $xen          If this Kernel is suitable for Xen Linodes.
  * @property bool   $pvops        If this Kernel is suitable for paravirtualized operations.
  * @property bool   $deprecated   If this Kernel is marked as deprecated, this field has a value of true; otherwise,
  *                                this field is false.
@@ -35,7 +34,6 @@ class Kernel extends Entity
     public const FIELD_VERSION      = 'version';
     public const FIELD_ARCHITECTURE = 'architecture';
     public const FIELD_KVM          = 'kvm';
-    public const FIELD_XEN          = 'xen';
     public const FIELD_PVOPS        = 'pvops';
     public const FIELD_DEPRECATED   = 'deprecated';
     public const FIELD_BUILT        = 'built';

@@ -64,6 +64,9 @@ use Linode\LinodeInstances\Repository\LinodeConfigRepository;
  * @property LinodeBackups                   $backups          Information about this Linode's backups status. For information about available
  *                                                             backups, see /linode/instances/{linodeId}/backups.
  * @property string                          $host_uuid        The Linode's host machine, as a UUID.
+ * @property bool                            $has_user_data    Whether this compute instance was provisioned utilizing `user_data` provided via
+ *                                                             the Metadata service. See the Linode Create description for more information on
+ *                                                             Metadata.
  * @property BackupRepositoryInterface       $linodeBackups    Linode backups.
  * @property DiskRepositoryInterface         $linodeDisks      Linode disks.
  * @property LinodeConfigRepositoryInterface $linodeConfigs    Linode configs.
@@ -89,6 +92,7 @@ class Linode extends Entity
     public const FIELD_ALERTS           = 'alerts';
     public const FIELD_BACKUPS          = 'backups';
     public const FIELD_HOST_UUID        = 'host_uuid';
+    public const FIELD_HAS_USER_DATA    = 'has_user_data';
 
     // Extra fields for POST/PUT requests.
     public const FIELD_ALLOW_AUTO_DISK_RESIZE = 'allow_auto_disk_resize';

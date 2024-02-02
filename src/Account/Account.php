@@ -29,12 +29,15 @@ use Linode\Managed\StatsDataAvailable;
  * Account object.
  *
  * @property string                             $first_name         The first name of the person associated with this Account.
+ *                                                                  Must not include any of the following characters: `<` `>` `(` `)` `"` `=`
  * @property string                             $last_name          The last name of the person associated with this Account.
+ *                                                                  Must not include any of the following characters: `<` `>` `(` `)` `"` `=`
  * @property string                             $email              The email address of the person associated with this Account.
  * @property float                              $balance            This Account's balance, in US dollars.
  * @property float                              $balance_uninvoiced This Account's current estimated invoice in US dollars. This is not your final
  *                                                                  invoice balance. Transfer charges are not included in the estimate.
  * @property string                             $company            The company name associated with this Account.
+ *                                                                  Must not include any of the following characters: `<` `>` `(` `)` `"` `=`
  * @property string                             $address_1          First line of this Account's billing address.
  * @property string                             $address_2          Second line of this Account's billing address.
  * @property string                             $city               The city for this Account's billing address.
@@ -257,7 +260,7 @@ class Account extends Entity
 
     /**
      * Returns a collection of Maintenance objects for any entity a user has permissions
-     * to view. Cancelled Maintenance objects are not returned.
+     * to view. Canceled Maintenance objects are not returned.
      *
      * Currently, Linodes are the only entities available for viewing.
      *

@@ -20,25 +20,31 @@ use Linode\Linode\Price;
  *
  * @property string      $id          The ID representing the Linode Type.
  * @property string      $label       The Linode Type's label is for display purposes only.
- * @property string      $class       The class of the Linode Type. We currently offer five classes of Linodes:
- *                                    * nanode - Nanode instances are good for low-duty workloads,
- *                                    where performance isn't critical. **Note:** As of June 16th, 2020, Nanodes
- *                                    became
- *                                    1 GB Linodes in the Cloud Manager, however, the API, the CLI, and billing will
- *                                    continue to refer to these instances as Nanodes.
- *                                    * standard - Standard Shared instances are good for medium-duty workloads and
- *                                    are a good mix of performance, resources, and price. **Note:** As of June
- *                                    16th, 2020,
- *                                    Standard Linodes in the Cloud Manager became Shared Linodes, however, the API,
- *                                    the CLI, and
- *                                    billing will continue to refer to these instances as Standard Linodes.
- *                                    * dedicated - Dedicated CPU instances are good for full-duty workloads
- *                                    where consistent performance is important.
- *                                    * gpu - Linodes with dedicated NVIDIA Quadro (R) RTX 6000 GPUs accelerate highly
- *                                    specialized applications such as machine learning, AI, and video transcoding.
- *                                    * highmem - High Memory instances favor RAM over other resources, and can be
- *                                    good for memory hungry use cases like caching and in-memory databases.
- *                                    All High Memory plans contain dedicated CPU cores.
+ * @property string      $class       The class of the Linode Type.
+ *                                    We currently offer six classes of compute instances:
+ *                                    * `nanode` - Nanode instances are good for low-duty workloads, where performance
+ *                                    isn't critical. **Note:** As of June 16th, 2020, Nanodes became 1 GB Linodes in
+ *                                    the Cloud Manager, however, the API, the CLI, and billing will continue to refer
+ *                                    to these instances as Nanodes.
+ *                                    * `standard` - Standard Shared instances are good for medium-duty workloads and
+ *                                    are a good mix of performance, resources, and price. **Note:** As of June 16th,
+ *                                    2020, Standard Linodes in the Cloud Manager became Shared Linodes, however, the
+ *                                    API, the CLI, and billing will continue to refer to these instances as Standard
+ *                                    Linodes.
+ *                                    * `dedicated` - Dedicated CPU instances are good for full-duty workloads where
+ *                                    consistent performance is important.
+ *                                    * `premium` (limited Regions) - In addition to the features of Dedicated
+ *                                    instances, Premium instances come equipped with the latest AMD EPYC&trade; CPUs,
+ *                                    ensuring your applications are running on the latest hardware with consistently
+ *                                    high performance. Only available in Regions with "Premium Plans" in their
+ *                                    `capabilities`
+ *                                    * `gpu` (limited Regions) - Linodes with dedicated NVIDIA Quadro(R) RTX 6000
+ *                                    GPUs accelerate highly specialized applications such as machine learning, AI, and
+ *                                    video transcoding. Only available in Regions with "GPU Linodes" in their
+ *                                    `capabilities`
+ *                                    * `highmem` - High Memory instances favor RAM over other resources, and can be
+ *                                    good for memory hungry use cases like caching and in-memory databases. All High
+ *                                    Memory plans contain dedicated CPU cores.
  * @property int         $disk        The Disk size, in MB, of the Linode Type.
  * @property int         $memory      Amount of RAM included in this Linode Type.
  * @property int         $vcpus       The number of VCPU cores this Linode Type offers.
@@ -70,6 +76,7 @@ class LinodeType extends Entity
     public const CLASS_NANODE    = 'nanode';
     public const CLASS_STANDARD  = 'standard';
     public const CLASS_DEDICATED = 'dedicated';
+    public const CLASS_PREMIUM   = 'premium';
     public const CLASS_GPU       = 'gpu';
     public const CLASS_HIGHMEM   = 'highmem';
 

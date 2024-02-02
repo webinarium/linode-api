@@ -38,6 +38,10 @@ use Linode\Networking\Repository\FirewallDevicesRepository;
  * @property string                             $updated When this Firewall was last updated.
  * @property FirewallRules                      $rules   The inbound and outbound access rules to apply to the Firewall.
  *                                                       A Firewall may have up to 25 rules across its inbound and outbound rulesets.
+ *                                                       Multiple rules are applied in order. If two rules conflict, the first rule takes
+ *                                                       precedence. For example, if the first rule accepts inbound traffic from an
+ *                                                       address, and the second rule drops inbound traffic the same address, the first
+ *                                                       rule applies and inbound traffic from that address is accepted.
  * @property string[]                           $tags    An array of tags applied to this object. Tags are for organizational purposes
  *                                                       only.
  * @property FirewallDevicesRepositoryInterface $devices Firewall devices.

@@ -16,49 +16,53 @@ use Linode\Entity;
 /**
  * Image object.
  *
- * @property string      $id          The unique ID of this Image.
- * @property string      $label       A short description of the Image.
- * @property null|string $vendor      The upstream distribution vendor. `None` for private Images.
- * @property null|string $description A detailed description of this Image.
- * @property bool        $is_public   True if the Image is a public distribution image. False if Image is private
- *                                    Account-specific Image.
- * @property int         $size        The minimum size this Image needs to deploy. Size is in MB.
- * @property string      $status      The current status of this Image.
- *                                    Only Images in an "available" status can be deployed. Images in a "creating"
- *                                    status are being created from a Linode Disk, and will become "available" shortly.
- *                                    Images in a "pending_upload" status are waiting for data to be uploaded, and
- *                                    become "available" after the upload and processing are complete.
- *                                    The "+order_by" and "+order" operators are not available for filtering on this
- *                                    key.
- * @property string      $created     When this Image was created.
- * @property string      $updated     When this Image was last updated.
- * @property string      $created_by  The name of the User who created this Image, or "linode" for public Images.
- * @property bool        $deprecated  Whether or not this Image is deprecated. Will only be true for deprecated public
- *                                    Images.
- * @property string      $type        How the Image was created.
- *                                    "Manual" Images can be created at any time.
- *                                    "Automatic" Images are created automatically from a deleted Linode.
- * @property null|string $expiry      Only Images created automatically from a deleted Linode (type=automatic) will
- *                                    expire.
- * @property string      $eol         The date of the public Image's planned end of life. `None` for private Images.
+ * @property string      $id           The unique ID of this Image.
+ * @property string      $label        A short description of the Image.
+ * @property null|string $vendor       The upstream distribution vendor. `None` for private Images.
+ * @property null|string $description  A detailed description of this Image.
+ * @property bool        $is_public    True if the Image is a public distribution image. False if Image is private
+ *                                     Account-specific Image.
+ * @property int         $size         The minimum size this Image needs to deploy. Size is in MB.
+ * @property string      $status       The current status of this Image.
+ *                                     Only Images in an "available" status can be deployed. Images in a "creating"
+ *                                     status are being created from a Linode Disk, and will become "available" shortly.
+ *                                     Images in a "pending_upload" status are waiting for data to be uploaded, and
+ *                                     become "available" after the upload and processing are complete.
+ *                                     The "+order_by" and "+order" operators are not available for filtering on this
+ *                                     key.
+ * @property string[]    $capabilities A list containing the following possible capabilities of this Image:
+ *                                     `cloud-init`: This Image supports cloud-init with Metadata. Only applies to public
+ *                                     Images.
+ * @property string      $created      When this Image was created.
+ * @property string      $updated      When this Image was last updated.
+ * @property string      $created_by   The name of the User who created this Image, or "linode" for public Images.
+ * @property bool        $deprecated   Whether or not this Image is deprecated. Will only be true for deprecated public
+ *                                     Images.
+ * @property string      $type         How the Image was created.
+ *                                     "Manual" Images can be created at any time.
+ *                                     "Automatic" Images are created automatically from a deleted Linode.
+ * @property null|string $expiry       Only Images created automatically from a deleted Linode (type=automatic) will
+ *                                     expire.
+ * @property string      $eol          The date of the public Image's planned end of life. `None` for private Images.
  */
 class Image extends Entity
 {
     // Available fields.
-    public const FIELD_ID          = 'id';
-    public const FIELD_LABEL       = 'label';
-    public const FIELD_VENDOR      = 'vendor';
-    public const FIELD_DESCRIPTION = 'description';
-    public const FIELD_IS_PUBLIC   = 'is_public';
-    public const FIELD_SIZE        = 'size';
-    public const FIELD_STATUS      = 'status';
-    public const FIELD_CREATED     = 'created';
-    public const FIELD_UPDATED     = 'updated';
-    public const FIELD_CREATED_BY  = 'created_by';
-    public const FIELD_DEPRECATED  = 'deprecated';
-    public const FIELD_TYPE        = 'type';
-    public const FIELD_EXPIRY      = 'expiry';
-    public const FIELD_EOL         = 'eol';
+    public const FIELD_ID           = 'id';
+    public const FIELD_LABEL        = 'label';
+    public const FIELD_VENDOR       = 'vendor';
+    public const FIELD_DESCRIPTION  = 'description';
+    public const FIELD_IS_PUBLIC    = 'is_public';
+    public const FIELD_SIZE         = 'size';
+    public const FIELD_STATUS       = 'status';
+    public const FIELD_CAPABILITIES = 'capabilities';
+    public const FIELD_CREATED      = 'created';
+    public const FIELD_UPDATED      = 'updated';
+    public const FIELD_CREATED_BY   = 'created_by';
+    public const FIELD_DEPRECATED   = 'deprecated';
+    public const FIELD_TYPE         = 'type';
+    public const FIELD_EXPIRY       = 'expiry';
+    public const FIELD_EOL          = 'eol';
 
     // Extra fields for POST/PUT requests.
     public const FIELD_DISK_ID = 'disk_id';

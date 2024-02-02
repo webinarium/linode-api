@@ -17,8 +17,8 @@ use Linode\Entity;
  * An object representing an IPv6 pool.
  *
  * @property string      $range        The IPv6 range of addresses in this pool.
- * @property int         $prefix       The prefix length of the address, denoting how many addresses can be assigned from
- *                                     this pool calculated as 2 <sup>128-prefix</sup>.
+ * @property int         $prefix       The prefix length of the address. The total number of addresses that can be
+ *                                     assigned from this range is calculated as 2<sup>(128 - prefix length)</sup>.
  * @property string      $region       The region for this pool of IPv6 addresses.
  * @property null|string $route_target The last address in this block of IPv6 addresses.
  */

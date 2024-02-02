@@ -20,12 +20,12 @@ use Linode\Entity;
  * @property string $status    The status of the transfer request.
  *                             `accepted`: The transfer has been accepted by another user and is currently in
  *                             progress. Transfers can take up to 3 hours to complete.
- *                             `cancelled`: The transfer has been cancelled by the sender.
+ *                             `canceled`: The transfer has been canceled by the sender.
  *                             `completed`: The transfer has completed successfully.
  *                             `failed`: The transfer has failed after initiation.
  *                             `pending`: The transfer is ready to be accepted.
  *                             `stale`: The transfer has exceeded its expiration date. It can no longer be
- *                             accepted or cancelled.
+ *                             accepted or canceled.
  * @property string $expiry    When this transfer expires. Transfers will automatically expire 24 hours after
  *                             creation.
  * @property bool   $is_sender If the requesting account created this transfer.
@@ -47,7 +47,7 @@ class EntityTransfer extends Entity
 
     // `FIELD_STATUS` values.
     public const STATUS_ACCEPTED  = 'accepted';
-    public const STATUS_CANCELLED = 'cancelled';
+    public const STATUS_CANCELED  = 'canceled';
     public const STATUS_COMPLETED = 'completed';
     public const STATUS_FAILED    = 'failed';
     public const STATUS_PENDING   = 'pending';

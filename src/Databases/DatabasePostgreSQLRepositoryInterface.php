@@ -208,7 +208,8 @@ interface DatabasePostgreSQLRepositoryInterface extends RepositoryInterface
      *
      * Requires `read_write` access to the Database.
      *
-     * The Database must have an `active` status to perform this command.
+     * The Database must have an `active`, `degraded`, or `failed` status to perform this
+     * command.
      *
      * **Note**: Restoring from a backup will erase all existing data on the database
      * instance and replace it with backup data.

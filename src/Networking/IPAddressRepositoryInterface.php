@@ -58,6 +58,7 @@ interface IPAddressRepositoryInterface extends RepositoryInterface
      * assignment.
      * * Linodes may have no more than one assigned private IPv4 address.
      * * Linodes may have no more than one assigned IPv6 range.
+     * * Shared IP addresses cannot be swapped between Linodes.
      *
      * Open a Support Ticket to request additional IPv4 addresses or IPv6 ranges beyond
      * standard account limits.

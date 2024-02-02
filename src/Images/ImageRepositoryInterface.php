@@ -62,7 +62,7 @@ interface ImageRepositoryInterface extends RepositoryInterface
      * with the URL to which image data can be uploaded.
      *
      * - Image data must be uploaded within 24 hours of creation or the
-     * upload will be cancelled and the image deleted.
+     * upload will be canceled and the image deleted.
      *
      * - Image uploads should be made as an HTTP PUT request to the URL returned in the
      * `upload_to`

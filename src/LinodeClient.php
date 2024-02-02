@@ -26,7 +26,6 @@ use Psr\Http\Message\ResponseInterface;
  * @property Databases\DatabaseRepositoryInterface                 $databases
  * @property Databases\DatabaseEngineRepositoryInterface           $databaseEngines
  * @property Databases\DatabaseTypeRepositoryInterface             $databaseTypes
- * @property Databases\DatabaseMongoDBRepositoryInterface          $databasesMongoDB
  * @property Databases\DatabaseMySQLRepositoryInterface            $databasesMySQL
  * @property Databases\DatabasePostgreSQLRepositoryInterface       $databasesPostgreSQL
  * @property Domains\DomainRepositoryInterface                     $domains
@@ -107,7 +106,6 @@ class LinodeClient
             'databases'             => new Databases\Repository\DatabaseRepository($this),
             'databaseEngines'       => new Databases\Repository\DatabaseEngineRepository($this),
             'databaseTypes'         => new Databases\Repository\DatabaseTypeRepository($this),
-            'databasesMongoDB'      => new Databases\Repository\DatabaseMongoDBRepository($this),
             'databasesMySQL'        => new Databases\Repository\DatabaseMySQLRepository($this),
             'databasesPostgreSQL'   => new Databases\Repository\DatabasePostgreSQLRepository($this),
             'domains'               => new Domains\Repository\DomainRepository($this),

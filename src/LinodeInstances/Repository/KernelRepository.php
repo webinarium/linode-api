@@ -34,7 +34,6 @@ class KernelRepository extends AbstractRepository implements KernelRepositoryInt
             Kernel::FIELD_VERSION,
             Kernel::FIELD_ARCHITECTURE,
             Kernel::FIELD_KVM,
-            Kernel::FIELD_XEN,
             Kernel::FIELD_PVOPS,
             Kernel::FIELD_DEPRECATED,
             Kernel::FIELD_BUILT,

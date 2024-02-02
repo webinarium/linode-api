@@ -66,7 +66,6 @@ class Database extends Entity
     public const CLUSTER_SIZE_3 = 3;
 
     // `FIELD_ENGINE` values.
-    public const ENGINE_MONGODB    = 'mongodb';
     public const ENGINE_MYSQL      = 'mysql';
     public const ENGINE_POSTGRESQL = 'postgresql';
 

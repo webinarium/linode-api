@@ -18,7 +18,14 @@ use Linode\Entity;
  *
  * @property int                     $id           The ID of this Config.
  * @property string                  $label        The Config's label is for display purposes only.
- * @property string                  $kernel       A Kernel ID to boot a Linode with. Defaults to "linode/latest-64bit".
+ * @property string                  $kernel       A Kernel ID to boot a Linode with. Here are examples of commonly-used kernels:
+ *                                                 * `linode/latest-64bit` (default): Our latest kernel at the time of instance
+ *                                                 boot/reboot.
+ *                                                 * `linode/grub2`: The upstream distribution-supplied kernel that is installed on
+ *                                                 the primary disk, or a custom kernel if installed.
+ *                                                 * `linode/direct-disk`: The MBR (Master Boot Record) of the primary disk/root
+ *                                                 device, used instead of a Linux kernel.
+ *                                                 For a complete list of options, use the Kernels List command.
  * @property null|string             $comments     Optional field for arbitrary User comments on this Config.
  * @property int                     $memory_limit Defaults to the total RAM of the Linode.
  * @property string                  $run_level    Defines the state of your Linode after booting. Defaults to `default`.
@@ -31,9 +38,9 @@ use Linode\Entity;
  * @property LinodeConfigInterface[] $interfaces   An array of Network Interfaces to add to this Linode's Configuration Profile.
  *                                                 Up to three interface objects can be entered in this array. The position in the
  *                                                 array determines the interface to which the settings apply:
- *                                                 - First/0:  eth0
- *                                                 - Second/1: eth1
- *                                                 - Third/2:  eth2
+ *                                                 - First 0]:  eth0
+ *                                                 - Second [1]: eth1
+ *                                                 - Third [2]:  eth2
  *                                                 When updating a Linode's interfaces, *each interface must be redefined*. An empty
  *                                                 interfaces array results in a default public interface configuration only.
  *                                                 If no public interface is configured, public IP addresses are still assigned to
@@ -41,7 +48,7 @@ use Linode\Entity;
  *                                                 **Note:** Changes to Linode interface configurations can be enabled by rebooting
  *                                                 the Linode.
  *                                                 **Note:** Only Next Generation Network (NGN) data centers support VLANs. Use the
- *                                                 Regions (/regions) endpoint to view the capabilities of data center regions.
+ *                                                 Regions ([/regions) endpoint to view the capabilities of data center regions.
  *                                                 If a VLAN is attached to your Linode and you attempt to migrate or clone it to a
  *                                                 non-NGN data center,
  *                                                 the migration or cloning will not initiate. If a Linode cannot be migrated because

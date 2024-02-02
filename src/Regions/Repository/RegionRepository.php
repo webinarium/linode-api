@@ -14,6 +14,7 @@ namespace Linode\Regions\Repository;
 use Linode\Entity;
 use Linode\Internal\AbstractRepository;
 use Linode\Regions\Region;
+use Linode\Regions\RegionAvailability;
 use Linode\Regions\RegionRepositoryInterface;
 
 /**
@@ -21,6 +22,24 @@ use Linode\Regions\RegionRepositoryInterface;
  */
 class RegionRepository extends AbstractRepository implements RegionRepositoryInterface
 {
+    public function getRegionsAvailability(): array
+    {
+        $response = $this->client->get(sprintf('%s/availability', $this->getBaseUri()));
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return array_map(fn ($data) => new RegionAvailability($this->client, $data), $json['data']);
+    }
+
+    public function getRegionAvailability(string $regionId): RegionAvailability
+    {
+        $response = $this->client->get(sprintf('%s/%s/availability', $this->getBaseUri(), $regionId));
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return new RegionAvailability($this->client, $json);
+    }
+
     protected function getBaseUri(): string
     {
         return '/regions';

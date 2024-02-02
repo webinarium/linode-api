@@ -64,9 +64,9 @@ interface VolumeRepositoryInterface extends RepositoryInterface
 
     /**
      * Attaches a Volume on your Account to an existing Linode on your Account. In order
-     * for this request to complete successfully, your User must have `read_only` or
-     * `read_write` permission to the Volume and `read_write` permission to the Linode.
-     * Additionally, the Volume and Linode must be located in the same Region.
+     * for this request to complete successfully, your User must have `read_write`
+     * permission to the Volume and `read_write` permission to the Linode. Additionally,
+     * the Volume and Linode must be located in the same Region.
      *
      * @param int   $volumeId   ID of the Volume to attach.
      * @param array $parameters Volume to attach to a Linode.
@@ -93,6 +93,8 @@ interface VolumeRepositoryInterface extends RepositoryInterface
      * Detaches a Volume on your Account from a Linode on your Account. In order for this
      * request to complete successfully, your User must have `read_write` access to the
      * Volume and `read_write` access to the Linode.
+     *
+     * Volumes are automatically detached from deleted Linodes.
      *
      * @param int $volumeId ID of the Volume to detach.
      *

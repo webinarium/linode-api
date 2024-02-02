@@ -57,7 +57,7 @@ use Linode\Profile\Repository\TrustedDeviceRepository;
  * @property Referrals                              $referrals             Information about your status in our referral program.
  *                                                                         This information becomes accessible after this Profile's Account has established
  *                                                                         at least $25.00 USD of total payments.
- * @property string                                 $verified_phone_number The phone number verified for this Profile with the **Phone Number Verify** (POST
+ * @property null|string                            $verified_phone_number The phone number verified for this Profile with the **Phone Number Verify** (POST
  *                                                                         /profile/phone-number/verify) command.
  *                                                                         `null` if this Profile has no verified phone number.
  * @property string                                 $authentication_type   This account's Cloud Manager authentication type. Authentication types are chosen

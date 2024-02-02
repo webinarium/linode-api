@@ -196,6 +196,7 @@ class LinodeRepository extends AbstractRepository implements LinodeRepositoryInt
             Linode::FIELD_ALERTS,
             Linode::FIELD_BACKUPS,
             Linode::FIELD_HOST_UUID,
+            Linode::FIELD_HAS_USER_DATA,
         ];
     }
 

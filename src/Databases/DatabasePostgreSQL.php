@@ -27,15 +27,13 @@ use Linode\Entity;
  * @property string          $version                 The Managed Database engine version.
  * @property int             $port                    The access port for this Managed Database.
  * @property string          $replication_type        The replication method used for the Managed Database.
- *                                                    Defaults to `none` for a single cluster and `semi_synch` for a high availability
+ *                                                    Defaults to `none` for a single cluster and `asynch` for a high availability
  *                                                    cluster.
  *                                                    Must be `none` for a single node cluster.
- *                                                    Must be `asynch` or `semi_synch` for a high availability cluster.
+ *                                                    Must be `asynch` for a high availability cluster.
  * @property string          $status                  The operating status of the Managed Database.
  * @property string          $replication_commit_type The synchronization level of the replicating server.
  *                                                    Must be `local` or `off` for the `asynch` replication type.
- *                                                    Must be `on`, `remote_write`, or `remote_apply` for the `semi_synch` replication
- *                                                    type.
  * @property bool            $encrypted               Whether the Managed Databases is encrypted.
  * @property string[]        $allow_list              A list of IP addresses that can access the Managed Database. Each item can be a
  *                                                    single IP address or a range in CIDR format.
@@ -82,9 +80,8 @@ class DatabasePostgreSQL extends Entity
     public const CLUSTER_SIZE_3 = 3;
 
     // `FIELD_REPLICATION_TYPE` values.
-    public const REPLICATION_TYPE_NONE       = 'none';
-    public const REPLICATION_TYPE_ASYNCH     = 'asynch';
-    public const REPLICATION_TYPE_SEMI_SYNCH = 'semi_synch';
+    public const REPLICATION_TYPE_NONE   = 'none';
+    public const REPLICATION_TYPE_ASYNCH = 'asynch';
 
     // `FIELD_STATUS` values.
     public const STATUS_PROVISIONING = 'provisioning';
