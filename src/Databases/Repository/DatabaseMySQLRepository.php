@@ -120,6 +120,8 @@ class DatabaseMySQLRepository extends AbstractRepository implements DatabaseMySQ
             DatabaseMySQL::FIELD_LABEL,
             DatabaseMySQL::FIELD_REGION,
             DatabaseMySQL::FIELD_TYPE,
+            DatabaseMySQL::FIELD_TOTAL_DISK_SIZE_GB,
+            DatabaseMySQL::FIELD_USED_DISK_SIZE_GB,
             DatabaseMySQL::FIELD_CLUSTER_SIZE,
             DatabaseMySQL::FIELD_ENGINE,
             DatabaseMySQL::FIELD_VERSION,

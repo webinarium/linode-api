@@ -15,15 +15,15 @@ use Linode\Entity;
 use Linode\Linode\LinodeEntity;
 
 /**
- * Associates a Firewall with a Linode service. A Firewall can be assigned to a
- * single Linode service at a time. Additional disabled Firewalls can be assigned to
- * a service, but they cannot be enabled if another active Firewall is already
- * assigned to the same service.
+ * Associates a Firewall with a Linode or NodeBalancer service. A Firewall can be
+ * assigned to a single entity at a time. Additional disabled Firewalls can be
+ * assigned to a service, but they cannot be enabled if another active Firewall is
+ * already assigned to the same service.
  *
  * @property int          $id      The Device's unique ID
  * @property string       $created When this Device was created.
  * @property string       $updated When this Device was last updated.
- * @property LinodeEntity $entity  The Linode service that this Firewall has been applied to.
+ * @property LinodeEntity $entity  The compute service that this Firewall has been applied to.
  */
 class FirewallDevices extends Entity
 {

@@ -113,18 +113,19 @@ class Linode extends Entity
     public const FIELD_DISKS                  = 'disks';
 
     // `FIELD_STATUS` values.
-    public const STATUS_RUNNING       = 'running';
-    public const STATUS_OFFLINE       = 'offline';
-    public const STATUS_BOOTING       = 'booting';
-    public const STATUS_REBOOTING     = 'rebooting';
-    public const STATUS_SHUTTING_DOWN = 'shutting_down';
-    public const STATUS_PROVISIONING  = 'provisioning';
-    public const STATUS_DELETING      = 'deleting';
-    public const STATUS_MIGRATING     = 'migrating';
-    public const STATUS_REBUILDING    = 'rebuilding';
-    public const STATUS_CLONING       = 'cloning';
-    public const STATUS_RESTORING     = 'restoring';
-    public const STATUS_STOPPED       = 'stopped';
+    public const STATUS_RUNNING            = 'running';
+    public const STATUS_OFFLINE            = 'offline';
+    public const STATUS_BOOTING            = 'booting';
+    public const STATUS_REBOOTING          = 'rebooting';
+    public const STATUS_SHUTTING_DOWN      = 'shutting_down';
+    public const STATUS_PROVISIONING       = 'provisioning';
+    public const STATUS_DELETING           = 'deleting';
+    public const STATUS_MIGRATING          = 'migrating';
+    public const STATUS_REBUILDING         = 'rebuilding';
+    public const STATUS_CLONING            = 'cloning';
+    public const STATUS_RESTORING          = 'restoring';
+    public const STATUS_STOPPED            = 'stopped';
+    public const STATUS_BILLING_SUSPENSION = 'billing_suspension';
 
     // `FIELD_HYPERVISOR` values.
     public const HYPERVISOR_KVM = 'kvm';

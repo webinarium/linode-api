@@ -123,6 +123,8 @@ class DatabasePostgreSQLRepository extends AbstractRepository implements Databas
             DatabasePostgreSQL::FIELD_CLUSTER_SIZE,
             DatabasePostgreSQL::FIELD_ENGINE,
             DatabasePostgreSQL::FIELD_VERSION,
+            DatabasePostgreSQL::FIELD_TOTAL_DISK_SIZE_GB,
+            DatabasePostgreSQL::FIELD_USED_DISK_SIZE_GB,
             DatabasePostgreSQL::FIELD_PORT,
             DatabasePostgreSQL::FIELD_REPLICATION_TYPE,
             DatabasePostgreSQL::FIELD_STATUS,

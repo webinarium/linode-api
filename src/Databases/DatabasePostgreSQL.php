@@ -25,6 +25,8 @@ use Linode\Entity;
  *                                                    and 2 replica nodes.
  * @property string          $engine                  The Managed Database engine type.
  * @property string          $version                 The Managed Database engine version.
+ * @property int             $total_disk_size_gb      The total disk size of the database in GB.
+ * @property int             $used_disk_size_gb       The used space of the database in GB.
  * @property int             $port                    The access port for this Managed Database.
  * @property string          $replication_type        The replication method used for the Managed Database.
  *                                                    Defaults to `none` for a single cluster and `asynch` for a high availability
@@ -63,6 +65,8 @@ class DatabasePostgreSQL extends Entity
     public const FIELD_CLUSTER_SIZE            = 'cluster_size';
     public const FIELD_ENGINE                  = 'engine';
     public const FIELD_VERSION                 = 'version';
+    public const FIELD_TOTAL_DISK_SIZE_GB      = 'total_disk_size_gb';
+    public const FIELD_USED_DISK_SIZE_GB       = 'used_disk_size_gb';
     public const FIELD_PORT                    = 'port';
     public const FIELD_REPLICATION_TYPE        = 'replication_type';
     public const FIELD_STATUS                  = 'status';

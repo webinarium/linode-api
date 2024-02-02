@@ -15,10 +15,10 @@ use Linode\Entity;
 use Linode\Networking\Repository\FirewallDevicesRepository;
 
 /**
- * A resource that controls incoming and outgoing network traffic to a Linode
- * service. Only one Firewall can be attached to a Linode at any given time. Create a
- * Firewall Device to assign a Firewall to a Linode service. Currently, Firewalls can
- * only be assigned to Linode instances.
+ * A resource that controls incoming and outgoing network traffic to a compute
+ * service. Only one enabled Firewall can be attached to a particular service at any
+ * given time. Create a Firewall Device to assign a Firewall to a service. Currently,
+ * Firewalls can assigned to Linode compute instances and NodeBalancers.
  *
  * @property int                                $id      The Firewall's unique ID.
  * @property string                             $label   The Firewall's label, for display purposes only.

@@ -36,8 +36,9 @@ use Linode\Entity;
  *                                                 * `fullvirt` affords more customization, but is slower because 100% of the VM
  *                                                 is virtualized.
  * @property LinodeConfigInterface[] $interfaces   An array of Network Interfaces to add to this Linode's Configuration Profile.
- *                                                 Up to three interface objects can be entered in this array. The position in the
- *                                                 array determines the interface to which the settings apply:
+ *                                                 At least one and up to three interface objects can be entered in this array. The
+ *                                                 position in the array determines which of the Linode's network interfaces is
+ *                                                 configured:
  *                                                 - First 0]:  eth0
  *                                                 - Second [1]: eth1
  *                                                 - Third [2]:  eth2
@@ -51,9 +52,9 @@ use Linode\Entity;
  *                                                 Regions ([/regions) endpoint to view the capabilities of data center regions.
  *                                                 If a VLAN is attached to your Linode and you attempt to migrate or clone it to a
  *                                                 non-NGN data center,
- *                                                 the migration or cloning will not initiate. If a Linode cannot be migrated because
- *                                                 of an incompatibility,
- *                                                 you will be prompted to select a different data center or contact support.
+ *                                                 the migration or cloning will not initiate. If a Linode cannot be migrated or
+ *                                                 cloned because of an incompatibility, you will be prompted to select a different
+ *                                                 data center or contact support.
  *                                                 **Note:** See the VLANs Overview guide to view additional specifications and
  *                                                 limitations.
  * @property Helpers                 $helpers      Helpers enabled when booting to this Linode Config.

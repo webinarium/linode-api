@@ -12,6 +12,7 @@
 namespace Linode\NodeBalancers;
 
 use Linode\Exception\LinodeException;
+use Linode\Networking\Firewall;
 use Linode\RepositoryInterface;
 
 /**
@@ -75,4 +76,15 @@ interface NodeBalancerRepositoryInterface extends RepositoryInterface
      * @throws LinodeException
      */
     public function getNodeBalancerStats(int $nodeBalancerId): NodeBalancerStats;
+
+    /**
+     * View information for Firewalls assigned to this NodeBalancer.
+     *
+     * @param int $nodeBalancerId The ID of the NodeBalancer to access.
+     *
+     * @return Firewall[] List of Firewalls assigned to this NodeBalancer.
+     *
+     * @throws LinodeException
+     */
+    public function getNodeBalancerFirewalls(int $nodeBalancerId): array;
 }

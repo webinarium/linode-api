@@ -32,6 +32,8 @@ class DatabaseEngineRepository extends AbstractRepository implements DatabaseEng
             DatabaseEngine::FIELD_ID,
             DatabaseEngine::FIELD_ENGINE,
             DatabaseEngine::FIELD_VERSION,
+            DatabaseEngine::FIELD_TOTAL_DISK_SIZE_GB,
+            DatabaseEngine::FIELD_USED_DISK_SIZE_GB,
         ];
     }
 

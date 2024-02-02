@@ -26,6 +26,9 @@ use Linode\RepositoryInterface;
 interface DatabasePostgreSQLRepositoryInterface extends RepositoryInterface
 {
     /**
+     * **This command is currently only available for customers who already have an
+     * active Managed Database.**.
+     *
      * Provision a Managed PostgreSQL Database.
      *
      * Restricted Users must have the `add_databases` grant to use this command.
@@ -73,6 +76,9 @@ interface DatabasePostgreSQLRepositoryInterface extends RepositoryInterface
     public function postDatabasesPostgreSQLInstances(array $parameters = []): DatabasePostgreSQL;
 
     /**
+     * **This command is currently only available for customers who already have an
+     * active Managed Database.**.
+     *
      * Update a Managed PostgreSQL Database.
      *
      * Requires `read_write` access to the Database.
@@ -118,6 +124,9 @@ interface DatabasePostgreSQLRepositoryInterface extends RepositoryInterface
     public function putDatabasesPostgreSQLInstance(int $instanceId, array $parameters = []): DatabasePostgreSQL;
 
     /**
+     * **This command is currently only available for customers who already have an
+     * active Managed Database.**.
+     *
      * Remove a Managed PostgreSQL Database from your Account.
      *
      * Requires `read_write` access to the Database.
@@ -135,6 +144,9 @@ interface DatabasePostgreSQLRepositoryInterface extends RepositoryInterface
     public function deleteDatabasesPostgreSQLInstance(int $instanceId): void;
 
     /**
+     * **This command is currently only available for customers who already have an
+     * active Managed Database.**.
+     *
      * Display all backups for an accessible Managed PostgreSQL Database.
      *
      * The Database must not be provisioning to perform this command.
@@ -155,6 +167,9 @@ interface DatabasePostgreSQLRepositoryInterface extends RepositoryInterface
     public function getDatabasesPostgreSQLInstanceBackups(int $instanceId): array;
 
     /**
+     * **This command is currently only available for customers who already have an
+     * active Managed Database.**.
+     *
      * Creates a snapshot backup of a Managed PostgreSQL Database.
      *
      * Requires `read_write` access to the Database.
@@ -177,6 +192,9 @@ interface DatabasePostgreSQLRepositoryInterface extends RepositoryInterface
     public function postDatabasesPostgreSQLInstanceBackup(int $instanceId, array $parameters = []): void;
 
     /**
+     * **This command is currently only available for customers who already have an
+     * active Managed Database.**.
+     *
      * Display information for a single backup for an accessible Managed PostgreSQL
      * Database.
      *
@@ -190,6 +208,9 @@ interface DatabasePostgreSQLRepositoryInterface extends RepositoryInterface
     public function getDatabasesPostgreSQLInstanceBackup(int $instanceId, int $backupId): DatabaseBackup;
 
     /**
+     * **This command is currently only available for customers who already have an
+     * active Managed Database.**.
+     *
      * Delete a single backup for an accessible Managed PostgreSQL Database.
      *
      * Requires `read_write` access to the Database.
@@ -204,6 +225,9 @@ interface DatabasePostgreSQLRepositoryInterface extends RepositoryInterface
     public function deleteDatabasePostgreSQLInstanceBackup(int $instanceId, int $backupId): void;
 
     /**
+     * **This command is currently only available for customers who already have an
+     * active Managed Database.**.
+     *
      * Restore a backup to a Managed PostgreSQL Database on your Account.
      *
      * Requires `read_write` access to the Database.
@@ -226,6 +250,9 @@ interface DatabasePostgreSQLRepositoryInterface extends RepositoryInterface
     public function postDatabasesPostgreSQLInstanceBackupRestore(int $instanceId, int $backupId): void;
 
     /**
+     * **This command is currently only available for customers who already have an
+     * active Managed Database.**.
+     *
      * Display the root username and password for an accessible Managed PostgreSQL
      * Database.
      *
@@ -238,6 +265,9 @@ interface DatabasePostgreSQLRepositoryInterface extends RepositoryInterface
     public function getDatabasesPostgreSQLInstanceCredentials(int $instanceId): DatabaseCredentials;
 
     /**
+     * **This command is currently only available for customers who already have an
+     * active Managed Database.**.
+     *
      * Reset the root password for a Managed PostgreSQL Database.
      *
      * Requires `read_write` access to the Database.
@@ -258,6 +288,9 @@ interface DatabasePostgreSQLRepositoryInterface extends RepositoryInterface
     public function postDatabasesPostgreSQLInstanceCredentialsReset(int $instanceId): void;
 
     /**
+     * **This command is currently only available for customers who already have an
+     * active Managed Database.**.
+     *
      * Display the SSL CA certificate for an accessible Managed PostgreSQL Database.
      *
      * The Database must have an `active` status to perform this command.
@@ -269,6 +302,9 @@ interface DatabasePostgreSQLRepositoryInterface extends RepositoryInterface
     public function getDatabasesPostgreSQLInstanceSSL(int $instanceId): DatabaseSSL;
 
     /**
+     * **This command is currently only available for customers who already have an
+     * active Managed Database.**.
+     *
      * Apply security patches and updates to the underlying operating system of the
      * Managed PostgreSQL Database. This function runs during regular maintenance
      * windows, which are configurable with the **Managed PostgreSQL Database Update**

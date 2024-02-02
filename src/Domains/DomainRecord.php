@@ -28,7 +28,12 @@ use Linode\Entity;
  *                                 records (`*`) are not supported.
  *                                 `MX`: The mail subdomain. For example, `sub` for the address
  *                                 `user@sub.example.com` under the `example.com`
- *                                 Domain. Must be an empty string (`""`) for a Null MX Record.
+ *                                 Domain.
+ *                                 * The left-most subdomain component may be an asterix (`*`) to designate a
+ *                                 wildcard subdomain.
+ *                                 * Other subdomain components must only contain letters, digits, and hyphens, start
+ *                                 with a letter, end with a letter or digit, and contain less than 64 characters.
+ *                                 * Must be an empty string (`""`) for a Null MX Record.
  *                                 `CNAME`: The hostname. Must be unique. Required.
  *                                 `TXT`: The hostname.
  *                                 `SRV`: Unused. Use the `service` property to set the service name for this record.
@@ -42,12 +47,16 @@ use Linode\Entity;
  *                                 `A` and `AAAA`: The IP address. Use `remote_addr]` to submit the IPv4 address of
  *                                 the request. Required.
  *                                 `NS`: The name server. Must be a valid domain. Required.
- *                                 `MX`: The mail server. Must be a valid domain unless creating a Null MX Record. To
- *                                 create a
- *                                 [Null MX Record, first
- *                                 remove any additional MX records, create an MX record with empty strings
- *                                 (`""`) for the `target` and `name`. If a Domain has a Null MX record, new MX
- *                                 records cannot be created. Required.
+ *                                 `MX`: The mail server. Must be a valid domain unless creating a Null MX Record.
+ *                                 Required.
+ *                                 * Must have less than 254 total characters.
+ *                                 * The left-most domain component may be an asterix (`*`) to designate a wildcard
+ *                                 domain.
+ *                                 * Other domain components must only contain letters, digits, and hyphens, start
+ *                                 with a letter, end with a letter or digit, and contain less than 64 characters.
+ *                                 * To create a [Null MX Record, first remove any additional MX records, then create
+ *                                 an MX record with empty strings (`""`) for the `target` and `name`. If a Domain
+ *                                 has a Null MX record, new MX records cannot be created.
  *                                 `CNAME`: The alias. Must be a valid domain. Required.
  *                                 `TXT`: The value. Required.
  *                                 `SRV`: The target domain or subdomain. If a subdomain is entered, it is

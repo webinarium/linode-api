@@ -16,16 +16,18 @@ use Linode\Entity;
 /**
  * An InvoiceItem object.
  *
- * @property string $label      The Invoice Item's display label.
- * @property string $from       The date the Invoice Item started, based on month.
- * @property string $to         The date the Invoice Item ended, based on month.
- * @property float  $amount     The price, in US dollars, of the Invoice Item. Equal to the unit price multiplied
- *                              by quantity.
- * @property float  $tax        The amount of tax levied on this Item in US Dollars.
- * @property float  $total      The price of this Item after taxes in US Dollars.
- * @property int    $quantity   The quantity of this Item for the specified Invoice.
- * @property float  $unit_price The monthly service fee in US Dollars for this Item.
- * @property string $type       The type of service, ether `hourly` or `misc`.
+ * @property string      $label      The Invoice Item's display label.
+ * @property string      $from       The date the Invoice Item started, based on month.
+ * @property string      $to         The date the Invoice Item ended, based on month.
+ * @property float       $amount     The price, in US dollars, of the Invoice Item. Equal to the unit price multiplied
+ *                                   by quantity.
+ * @property float       $tax        The amount of tax levied on this Item in US Dollars.
+ * @property float       $total      The price of this Item after taxes in US Dollars.
+ * @property null|string $region     The ID of the applicable Region associated with this Invoice Item.
+ *                                   `null` if there is no applicable Region.
+ * @property int         $quantity   The quantity of this Item for the specified Invoice.
+ * @property float       $unit_price The monthly service fee in US Dollars for this Item.
+ * @property string      $type       The type of service, ether `hourly` or `misc`.
  */
 class InvoiceItem extends Entity
 {
@@ -36,6 +38,7 @@ class InvoiceItem extends Entity
     public const FIELD_AMOUNT     = 'amount';
     public const FIELD_TAX        = 'tax';
     public const FIELD_TOTAL      = 'total';
+    public const FIELD_REGION     = 'region';
     public const FIELD_QUANTITY   = 'quantity';
     public const FIELD_UNIT_PRICE = 'unit_price';
     public const FIELD_TYPE       = 'type';

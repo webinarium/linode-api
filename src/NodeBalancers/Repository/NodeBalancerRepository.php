@@ -13,6 +13,7 @@ namespace Linode\NodeBalancers\Repository;
 
 use Linode\Entity;
 use Linode\Internal\AbstractRepository;
+use Linode\Networking\Firewall;
 use Linode\NodeBalancers\NodeBalancer;
 use Linode\NodeBalancers\NodeBalancerRepositoryInterface;
 use Linode\NodeBalancers\NodeBalancerStats;
@@ -52,6 +53,15 @@ class NodeBalancerRepository extends AbstractRepository implements NodeBalancerR
         $json     = json_decode($contents, true);
 
         return new NodeBalancerStats($this->client, $json);
+    }
+
+    public function getNodeBalancerFirewalls(int $nodeBalancerId): array
+    {
+        $response = $this->client->get(sprintf('%s/%s/firewalls', $this->getBaseUri(), $nodeBalancerId));
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return array_map(fn ($data) => new Firewall($this->client, $data), $json['data']);
     }
 
     protected function getBaseUri(): string

@@ -28,14 +28,12 @@ interface ObjectStorageKeyRepositoryInterface extends RepositoryInterface
     /**
      * Provisions a new Object Storage Key on your account.
      *
-     * Accounts with negative balances cannot access this command.
-     *
+     * * Accounts with negative balances cannot access this command.
+     * * A successful request triggers an `obj_access_key_create` event.
      * * To create a Limited Access Key with specific permissions, send a `bucket_access`
      * array.
-     *
      * * To create a Limited Access Key without access to any buckets, send an empty
      * `bucket_access` array.
-     *
      * * To create an Access Key with unlimited access to all clusters and all buckets,
      * omit the `bucket_access` array.
      *
@@ -50,6 +48,8 @@ interface ObjectStorageKeyRepositoryInterface extends RepositoryInterface
     /**
      * Updates an Object Storage Key on your account.
      *
+     * * A successful request triggers an `obj_access_key_update` event.
+     *
      * @param int   $keyId      The key to look up.
      * @param array $parameters The fields to update.
      *
@@ -60,6 +60,8 @@ interface ObjectStorageKeyRepositoryInterface extends RepositoryInterface
     /**
      * Revokes an Object Storage Key. This keypair will no longer be usable by
      * third-party clients.
+     *
+     * * A successful request triggers an `obj_access_key_delete` event.
      *
      * @param int $keyId The key to look up.
      *

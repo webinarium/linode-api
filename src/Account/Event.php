@@ -30,13 +30,13 @@ use Linode\Linode\LinodeEntity;
  *                                          `linode_create`, and `linode_clone` Event actions.
  * @property string       $created          When this Event was created.
  * @property float        $duration         The total duration in seconds that it takes for the Event to complete.
- * @property int          $percent_complete A percentage estimating the amount of time remaining for an Event.
- *                                          Returns `null` for notification events.
+ * @property string       $status           The current status of this Event.
+ * @property bool         $seen             If this Event has been seen.
+ * @property bool         $read             If this Event has been read.
  * @property string       $rate             The rate of completion of the Event. Only some Events will return rate; for
  *                                          example, migration and resize Events.
- * @property bool         $read             If this Event has been read.
- * @property bool         $seen             If this Event has been seen.
- * @property string       $status           The current status of this Event.
+ * @property int          $percent_complete A percentage estimating the amount of time remaining for an Event.
+ *                                          Returns `null` for notification events.
  * @property null|string  $time_remaining   The estimated time remaining until the completion of this Event. This value is
  *                                          only returned for some in-progress migration events. For all other in-progress
  *                                          events, the `percent_complete` attribute will indicate about how much more work is
@@ -55,11 +55,11 @@ class Event extends Entity
     public const FIELD_SECONDARY_ENTITY = 'secondary_entity';
     public const FIELD_CREATED          = 'created';
     public const FIELD_DURATION         = 'duration';
-    public const FIELD_PERCENT_COMPLETE = 'percent_complete';
-    public const FIELD_RATE             = 'rate';
-    public const FIELD_READ             = 'read';
-    public const FIELD_SEEN             = 'seen';
     public const FIELD_STATUS           = 'status';
+    public const FIELD_SEEN             = 'seen';
+    public const FIELD_READ             = 'read';
+    public const FIELD_RATE             = 'rate';
+    public const FIELD_PERCENT_COMPLETE = 'percent_complete';
     public const FIELD_TIME_REMAINING   = 'time_remaining';
     public const FIELD_MESSAGE          = 'message';
 
@@ -146,6 +146,9 @@ class Event extends Entity
     public const ACTION_OAUTH_CLIENT_DELETE              = 'oauth_client_delete';
     public const ACTION_OAUTH_CLIENT_SECRET_RESET        = 'oauth_client_secret_reset';
     public const ACTION_OAUTH_CLIENT_UPDATE              = 'oauth_client_update';
+    public const ACTION_OBJ_ACCESS_KEY_CREATE            = 'obj_access_key_create';
+    public const ACTION_OBJ_ACCESS_KEY_DELETE            = 'obj_access_key_delete';
+    public const ACTION_OBJ_ACCESS_KEY_UPDATE            = 'obj_access_key_update';
     public const ACTION_PASSWORD_RESET                   = 'password_reset';
     public const ACTION_PAYMENT_METHOD_ADD               = 'payment_method_add';
     public const ACTION_PAYMENT_SUBMITTED                = 'payment_submitted';

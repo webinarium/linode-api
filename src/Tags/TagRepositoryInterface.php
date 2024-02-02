@@ -45,5 +45,5 @@ interface TagRepositoryInterface extends RepositoryInterface
      *
      * @throws LinodeException
      */
-    public function deleteTag(string $label): void;
+    public function deleteTag(string $tagLabel): void;
 }

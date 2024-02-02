@@ -32,32 +32,45 @@ interface FirewallRepositoryInterface extends RepositoryInterface
      *
      * * Use the `devices` property to assign the Firewall to a service and apply its
      * Rules to the device. Requires `read_write` User's Grants to the device.
-     * Currently, Firewalls can only be assigned to Linode instances.
+     * Currently, Firewalls can be assigned to Linode compute instances and
+     * NodeBalancers.
      *
-     * * A Firewall can be assigned to multiple Linode instances at a time.
+     * * A Firewall can be assigned to multiple services at a time.
      *
-     * * A Linode instance can have one active, assigned Firewall at a time.
+     * * A service can have one active, assigned Firewall at a time.
      * Additional disabled Firewalls can be assigned to a service, but they cannot be
      * enabled if another active Firewall is already assigned to the same service.
      *
+     * * Firewalls apply to all of a Linode's non-`vlan` purpose Configuration Profile
+     * Interfaces.
+     *
+     * * Assigned Linodes must not have any ongoing live migrations.
+     *
      * * A `firewall_create` Event is generated when this endpoint returns successfully.
      *
-     * @param array $parameters Creates a Firewall object that can be applied to a Linode service to filter the
-     *                          service's network traffic.
+     * @param array $parameters Creates a Firewall object that can be applied to a service to filter the service's
+     *                          network traffic.
      *
      * @throws LinodeException
      */
     public function createFirewalls(array $parameters = []): Firewall;
 
     /**
-     * Updates information for a Firewall. Some parts of a Firewall's configuration
-     * cannot
+     * Updates information for a Firewall.
+     *
+     * * Assigned Linodes must not have any ongoing live migrations.
+     *
+     * * If a Firewall's status is changed with this endpoint, a corresponding
+     * `firewall_enable` or
+     * `firewall_disable` Event will be generated.
+     *
+     * Some parts of a Firewall's configuration cannot
      * be manipulated by this endpoint:
      *
      * - A Firewall's Devices cannot be set with this endpoint. Instead, use the
      * Create Firewall Device
      * and Delete Firewall Device
-     * endpoints to assign and remove this Firewall from Linode services.
+     * endpoints to assign and remove this Firewall from services.
      *
      * - A Firewall's Rules cannot be changed with this endpoint. Instead, use the
      * Update Firewall Rules
@@ -69,10 +82,6 @@ interface FirewallRepositoryInterface extends RepositoryInterface
      * Delete Firewall
      * endpoint to delete a Firewall.
      *
-     * If a Firewall's status is changed with this endpoint, a corresponding
-     * `firewall_enable` or
-     * `firewall_disable` Event will be generated.
-     *
      * @param int   $firewallId ID of the Firewall to access.
      * @param array $parameters The Firewall information to update.
      *
@@ -81,10 +90,12 @@ interface FirewallRepositoryInterface extends RepositoryInterface
     public function updateFirewall(int $firewallId, array $parameters = []): Firewall;
 
     /**
-     * Delete a Firewall resource by its ID. This will remove all of the Firewall's Rules
-     * from any Linode services that the Firewall was assigned to.
+     * Delete a Firewall resource by its ID. This removes all of the Firewall's Rules
+     * from any services that the Firewall was assigned to.
      *
-     * A `firewall_delete` Event is generated when this endpoint returns successfully.
+     * * Assigned Linodes must not have any ongoing live migrations.
+     *
+     * * A `firewall_delete` Event is generated when this endpoint returns successfully.
      *
      * @param int $firewallId ID of the Firewall to access.
      *

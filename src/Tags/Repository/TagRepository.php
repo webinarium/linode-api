@@ -30,9 +30,9 @@ class TagRepository extends AbstractRepository implements TagRepositoryInterface
         return new Tag($this->client, $json);
     }
 
-    public function deleteTag(string $label): void
+    public function deleteTag(string $tagLabel): void
     {
-        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $label));
+        $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $tagLabel));
     }
 
     protected function getBaseUri(): string

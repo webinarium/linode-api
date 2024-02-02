@@ -16,6 +16,7 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Linode\BetaPrograms\BetaProgramRepositoryInterface;
 use Linode\Databases\DatabaseEngineRepositoryInterface;
 use Linode\Databases\DatabaseMySQLRepositoryInterface;
 use Linode\Databases\DatabasePostgreSQLRepositoryInterface;
@@ -69,6 +70,7 @@ final class LinodeClientTest extends TestCase
     {
         $object = new LinodeClient();
 
+        self::assertInstanceOf(BetaProgramRepositoryInterface::class, $object->betaPrograms);
         self::assertInstanceOf(DatabaseRepositoryInterface::class, $object->databases);
         self::assertInstanceOf(DatabaseEngineRepositoryInterface::class, $object->databaseEngines);
         self::assertInstanceOf(DatabaseTypeRepositoryInterface::class, $object->databaseTypes);

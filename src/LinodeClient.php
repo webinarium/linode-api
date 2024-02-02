@@ -23,6 +23,7 @@ use Psr\Http\Message\ResponseInterface;
  * Linode API client.
  *
  * @property Account\Account                                       $account
+ * @property BetaPrograms\BetaProgramRepositoryInterface           $betaPrograms
  * @property Databases\DatabaseRepositoryInterface                 $databases
  * @property Databases\DatabaseEngineRepositoryInterface           $databaseEngines
  * @property Databases\DatabaseTypeRepositoryInterface             $databaseTypes
@@ -103,6 +104,7 @@ class LinodeClient
     {
         return match ($name) {
             'account'               => new Account\Account($this),
+            'betaPrograms'          => new BetaPrograms\Repository\BetaProgramRepository($this),
             'databases'             => new Databases\Repository\DatabaseRepository($this),
             'databaseEngines'       => new Databases\Repository\DatabaseEngineRepository($this),
             'databaseTypes'         => new Databases\Repository\DatabaseTypeRepository($this),

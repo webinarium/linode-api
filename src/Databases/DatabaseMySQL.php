@@ -16,61 +16,65 @@ use Linode\Entity;
 /**
  * Managed MySQL Databases object.
  *
- * @property int             $id               A unique ID that can be used to identify and reference the Managed Database.
- * @property string          $label            A unique, user-defined string referring to the Managed Database.
- * @property string          $region           The Region ID for the Managed Database.
- * @property string          $type             The Linode Instance type used by the Managed Database for its nodes.
- * @property int             $cluster_size     The number of Linode Instance nodes deployed to the Managed Database.
- *                                             Choosing 3 nodes creates a high availability cluster consisting of 1 primary node
- *                                             and 2 replica nodes.
- * @property string          $engine           The Managed Database engine type.
- * @property string          $version          The Managed Database engine version.
- * @property int             $port             The access port for this Managed Database.
- * @property string          $replication_type The replication method used for the Managed Database.
- *                                             Defaults to `none` for a single cluster and `semi_synch` for a high availability
- *                                             cluster.
- *                                             Must be `none` for a single node cluster.
- *                                             Must be `asynch` or `semi_synch` for a high availability cluster.
- * @property string          $status           The operating status of the Managed Database.
- * @property bool            $encrypted        Whether the Managed Databases is encrypted.
- * @property string[]        $allow_list       A list of IP addresses that can access the Managed Database. Each item can be a
- *                                             single IP address or a range in CIDR format.
- *                                             By default, this is an empty array (`[]`), which blocks all connections (both
- *                                             public and private) to the Managed Database.
- *                                             If `0.0.0.0/0` is a value in this list, then all IP addresses can access the
- *                                             Managed Database.
- * @property DatabaseHosts   $hosts            The primary and secondary hosts for the Managed Database. These are assigned after
- *                                             provisioning is complete.
- * @property bool            $ssl_connection   Whether to require SSL credentials to establish a connection to the Managed
- *                                             Database.
- *                                             Use the **Managed MySQL Database Credentials View** (GET
- *                                             /databases/mysql/instances/{instanceId}/credentials) command for access
- *                                             information.
- * @property string          $created          When this Managed Database was created.
- * @property string          $updated          When this Managed Database was last updated.
- * @property DatabaseUpdates $updates          Configuration settings for automated patch update maintenance for the Managed
- *                                             Database.
+ * @property int             $id                 A unique ID that can be used to identify and reference the Managed Database.
+ * @property string          $label              A unique, user-defined string referring to the Managed Database.
+ * @property string          $region             The Region ID for the Managed Database.
+ * @property string          $type               The Linode Instance type used by the Managed Database for its nodes.
+ * @property int             $total_disk_size_gb The total disk size of the database in GB.
+ * @property int             $used_disk_size_gb  The used space of the database in GB.
+ * @property int             $cluster_size       The number of Linode Instance nodes deployed to the Managed Database.
+ *                                               Choosing 3 nodes creates a high availability cluster consisting of 1 primary node
+ *                                               and 2 replica nodes.
+ * @property string          $engine             The Managed Database engine type.
+ * @property string          $version            The Managed Database engine version.
+ * @property int             $port               The access port for this Managed Database.
+ * @property string          $replication_type   The replication method used for the Managed Database.
+ *                                               Defaults to `none` for a single cluster and `semi_synch` for a high availability
+ *                                               cluster.
+ *                                               Must be `none` for a single node cluster.
+ *                                               Must be `asynch` or `semi_synch` for a high availability cluster.
+ * @property string          $status             The operating status of the Managed Database.
+ * @property bool            $encrypted          Whether the Managed Databases is encrypted.
+ * @property string[]        $allow_list         A list of IP addresses that can access the Managed Database. Each item can be a
+ *                                               single IP address or a range in CIDR format.
+ *                                               By default, this is an empty array (`[]`), which blocks all connections (both
+ *                                               public and private) to the Managed Database.
+ *                                               If `0.0.0.0/0` is a value in this list, then all IP addresses can access the
+ *                                               Managed Database.
+ * @property DatabaseHosts   $hosts              The primary and secondary hosts for the Managed Database. These are assigned after
+ *                                               provisioning is complete.
+ * @property bool            $ssl_connection     Whether to require SSL credentials to establish a connection to the Managed
+ *                                               Database.
+ *                                               Use the **Managed MySQL Database Credentials View** (GET
+ *                                               /databases/mysql/instances/{instanceId}/credentials) command for access
+ *                                               information.
+ * @property string          $created            When this Managed Database was created.
+ * @property string          $updated            When this Managed Database was last updated.
+ * @property DatabaseUpdates $updates            Configuration settings for automated patch update maintenance for the Managed
+ *                                               Database.
  */
 class DatabaseMySQL extends Entity
 {
     // Available fields.
-    public const FIELD_ID               = 'id';
-    public const FIELD_LABEL            = 'label';
-    public const FIELD_REGION           = 'region';
-    public const FIELD_TYPE             = 'type';
-    public const FIELD_CLUSTER_SIZE     = 'cluster_size';
-    public const FIELD_ENGINE           = 'engine';
-    public const FIELD_VERSION          = 'version';
-    public const FIELD_PORT             = 'port';
-    public const FIELD_REPLICATION_TYPE = 'replication_type';
-    public const FIELD_STATUS           = 'status';
-    public const FIELD_ENCRYPTED        = 'encrypted';
-    public const FIELD_ALLOW_LIST       = 'allow_list';
-    public const FIELD_HOSTS            = 'hosts';
-    public const FIELD_SSL_CONNECTION   = 'ssl_connection';
-    public const FIELD_CREATED          = 'created';
-    public const FIELD_UPDATED          = 'updated';
-    public const FIELD_UPDATES          = 'updates';
+    public const FIELD_ID                 = 'id';
+    public const FIELD_LABEL              = 'label';
+    public const FIELD_REGION             = 'region';
+    public const FIELD_TYPE               = 'type';
+    public const FIELD_TOTAL_DISK_SIZE_GB = 'total_disk_size_gb';
+    public const FIELD_USED_DISK_SIZE_GB  = 'used_disk_size_gb';
+    public const FIELD_CLUSTER_SIZE       = 'cluster_size';
+    public const FIELD_ENGINE             = 'engine';
+    public const FIELD_VERSION            = 'version';
+    public const FIELD_PORT               = 'port';
+    public const FIELD_REPLICATION_TYPE   = 'replication_type';
+    public const FIELD_STATUS             = 'status';
+    public const FIELD_ENCRYPTED          = 'encrypted';
+    public const FIELD_ALLOW_LIST         = 'allow_list';
+    public const FIELD_HOSTS              = 'hosts';
+    public const FIELD_SSL_CONNECTION     = 'ssl_connection';
+    public const FIELD_CREATED            = 'created';
+    public const FIELD_UPDATED            = 'updated';
+    public const FIELD_UPDATES            = 'updates';
 
     // `FIELD_CLUSTER_SIZE` values.
     public const CLUSTER_SIZE_1 = 1;

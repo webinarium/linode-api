@@ -26,6 +26,9 @@ use Linode\RepositoryInterface;
 interface DatabaseMySQLRepositoryInterface extends RepositoryInterface
 {
     /**
+     * **This command is currently only available for customers who already have an
+     * active Managed Database.**.
+     *
      * Provision a Managed MySQL Database.
      *
      * Restricted Users must have the `add_databases` grant to use this command.
@@ -72,6 +75,9 @@ interface DatabaseMySQLRepositoryInterface extends RepositoryInterface
     public function postDatabasesMySQLInstances(array $parameters = []): DatabaseMySQL;
 
     /**
+     * **This command is currently only available for customers who already have an
+     * active Managed Database.**.
+     *
      * Update a Managed MySQL Database.
      *
      * Requires `read_write` access to the Database.
@@ -117,6 +123,9 @@ interface DatabaseMySQLRepositoryInterface extends RepositoryInterface
     public function putDatabasesMySQLInstance(int $instanceId, array $parameters = []): DatabaseMySQL;
 
     /**
+     * **This command is currently only available for customers who already have an
+     * active Managed Database.**.
+     *
      * Remove a Managed MySQL Database from your Account.
      *
      * Requires `read_write` access to the Database.
@@ -134,6 +143,9 @@ interface DatabaseMySQLRepositoryInterface extends RepositoryInterface
     public function deleteDatabasesMySQLInstance(int $instanceId): void;
 
     /**
+     * **This command is currently only available for customers who already have an
+     * active Managed Database.**.
+     *
      * Display all backups for an accessible Managed MySQL Database.
      *
      * The Database must not be provisioning to perform this command.
@@ -154,6 +166,9 @@ interface DatabaseMySQLRepositoryInterface extends RepositoryInterface
     public function getDatabasesMySQLInstanceBackups(int $instanceId): array;
 
     /**
+     * **This command is currently only available for customers who already have an
+     * active Managed Database.**.
+     *
      * Creates a snapshot backup of a Managed MySQL Database.
      *
      * Requires `read_write` access to the Database.
@@ -176,6 +191,9 @@ interface DatabaseMySQLRepositoryInterface extends RepositoryInterface
     public function postDatabasesMySQLInstanceBackup(int $instanceId, array $parameters = []): void;
 
     /**
+     * **This command is currently only available for customers who already have an
+     * active Managed Database.**.
+     *
      * Display information for a single backup for an accessible Managed MySQL Database.
      *
      * The Database must not be provisioning to perform this command.
@@ -188,6 +206,9 @@ interface DatabaseMySQLRepositoryInterface extends RepositoryInterface
     public function getDatabasesMySQLInstanceBackup(int $instanceId, int $backupId): DatabaseBackup;
 
     /**
+     * **This command is currently only available for customers who already have an
+     * active Managed Database.**.
+     *
      * Delete a single backup for an accessible Managed MySQL Database.
      *
      * Requires `read_write` access to the Database.
@@ -202,6 +223,9 @@ interface DatabaseMySQLRepositoryInterface extends RepositoryInterface
     public function deleteDatabaseMySQLInstanceBackup(int $instanceId, int $backupId): void;
 
     /**
+     * **This command is currently only available for customers who already have an
+     * active Managed Database.**.
+     *
      * Restore a backup to a Managed MySQL Database on your Account.
      *
      * Requires `read_write` access to the Database.
@@ -224,6 +248,9 @@ interface DatabaseMySQLRepositoryInterface extends RepositoryInterface
     public function postDatabasesMySQLInstanceBackupRestore(int $instanceId, int $backupId): void;
 
     /**
+     * **This command is currently only available for customers who already have an
+     * active Managed Database.**.
+     *
      * Display the root username and password for an accessible Managed MySQL Database.
      *
      * The Database must have an `active` status to perform this command.
@@ -235,6 +262,9 @@ interface DatabaseMySQLRepositoryInterface extends RepositoryInterface
     public function getDatabasesMySQLInstanceCredentials(int $instanceId): DatabaseCredentials;
 
     /**
+     * **This command is currently only available for customers who already have an
+     * active Managed Database.**.
+     *
      * Reset the root password for a Managed MySQL Database.
      *
      * Requires `read_write` access to the Database.
@@ -255,6 +285,9 @@ interface DatabaseMySQLRepositoryInterface extends RepositoryInterface
     public function postDatabasesMySQLInstanceCredentialsReset(int $instanceId): void;
 
     /**
+     * **This command is currently only available for customers who already have an
+     * active Managed Database.**.
+     *
      * Display the SSL CA certificate for an accessible Managed MySQL Database.
      *
      * The Database must have an `active` status to perform this command.
@@ -266,6 +299,9 @@ interface DatabaseMySQLRepositoryInterface extends RepositoryInterface
     public function getDatabasesMySQLInstanceSSL(int $instanceId): DatabaseSSL;
 
     /**
+     * **This command is currently only available for customers who already have an
+     * active Managed Database.**.
+     *
      * Apply security patches and updates to the underlying operating system of the
      * Managed MySQL Database. This function runs during regular maintenance windows,
      * which are configurable with the **Managed MySQL Database Update** (PUT

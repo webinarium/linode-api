@@ -186,6 +186,12 @@ interface LinodeRepositoryInterface extends RepositoryInterface
      * Linodes utilizing Metadata (`"has_user_data": true`) must be cloned to a new
      * Linode with `metadata.user_data` included with the clone request.
      *
+     * **Note:** Only Next Generation Network (NGN) data centers support VLANs. If a VLAN
+     * is attached to your Linode and you attempt clone it to a non-NGN data center, the
+     * cloning will not initiate. If a Linode cannot be cloned because of an
+     * incompatibility, you will be prompted to select a different data center or contact
+     * support.
+     *
      * @param int   $linodeId   ID of the Linode to clone.
      * @param array $parameters The requested state your Linode will be cloned into.
      *
@@ -194,23 +200,34 @@ interface LinodeRepositoryInterface extends RepositoryInterface
     public function cloneLinodeInstance(int $linodeId, array $parameters = []): Linode;
 
     /**
-     * Initiate a pending host migration that has been scheduled by Linode or initiate a
-     * cross data center (DC) migration. A list of pending migrations, if any, can be
-     * accessed from GET /account/notifications. When the migration begins, your Linode
-     * will be shutdown if not already off. If the migration initiated the shutdown, it
-     * will reboot the Linode when completed.
+     * Initiate a pending host migration that has been scheduled by Linode or
+     * initiate a cross data center (DC) migration. A list of pending migrations,
+     * if any, can be accessed from GET /account/notifications.
+     * When the migration begins, your Linode will be shutdown if not already off.
+     * If the migration initiated the shutdown, it will reboot the Linode when completed.
      *
      * To initiate a cross DC migration, you must pass a `region` parameter to the
-     * request body specifying the target data center region. You can view a list of all
-     * available regions and their feature capabilities from GET /regions. If your Linode
-     * has a DC migration already queued or you have initiated a previously scheduled
-     * migration, you will not be able to initiate a DC migration until it has completed.
+     * request body specifying the target data center region.
+     * You can view a list of all available regions and their feature capabilities
+     * from GET /regions. See our Pricing Page for Region-specific pricing, which applies
+     * after migration is complete. If your Linode has a DC migration already queued
+     * or you have initiated a previously scheduled migration, you will not be able to
+     * initiate
+     * a DC migration until it has completed.
      *
      * **Note:** Next Generation Network (NGN) data centers do not support IPv6 `/116`
-     * pools or IP Failover. If you have these features enabled on your Linode and
-     * attempt to migrate to an NGN data center, the migration will not initiate. If a
-     * Linode cannot be migrated because of an incompatibility, you will be prompted to
-     * select a different data center or contact support.
+     * pools or IP Failover.
+     * If you have these features enabled on your Linode and attempt to migrate to an NGN
+     * data center,
+     * the migration will not initiate. If a Linode cannot be migrated because of an
+     * incompatibility,
+     * you will be prompted to select a different data center or contact support.
+     *
+     * **Note:** Only Next Generation Network (NGN) data centers support VLANs. If a VLAN
+     * is attached to your Linode and you attempt to migrate it to a non-NGN data center,
+     * the migration will not initiate. If a Linode cannot be migrated because of an
+     * incompatibility, you will be prompted to select a different data center or contact
+     * support.
      *
      * @param int $linodeId ID of the Linode to migrate.
      *
@@ -382,9 +399,9 @@ interface LinodeRepositoryInterface extends RepositoryInterface
     public function getLinodeTransferByYearMonth(int $linodeId, int $year, int $month): Transfer;
 
     /**
-     * View Firewall information for Firewalls associated with this Linode.
+     * View Firewall information for Firewalls assigned to this Linode.
      *
-     * @param int $linodeId ID of the Linode to look up.
+     * @param int $linodeId ID of the Linode to access.
      *
      * @return Firewall[] Firewalls associated with this Linode.
      *
