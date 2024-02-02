@@ -28,6 +28,8 @@ interface ObjectStorageKeyRepositoryInterface extends RepositoryInterface
     /**
      * Provisions a new Object Storage Key on your account.
      *
+     * Accounts with negative balances cannot access this command.
+     *
      * * To create a Limited Access Key with specific permissions, send a `bucket_access`
      * array.
      *

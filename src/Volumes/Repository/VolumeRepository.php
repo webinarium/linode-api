@@ -67,9 +67,13 @@ class VolumeRepository extends AbstractRepository implements VolumeRepositoryInt
         $this->client->post(sprintf('%s/%s/detach', $this->getBaseUri(), $volumeId));
     }
 
-    public function resizeVolume(int $volumeId, array $parameters = []): void
+    public function resizeVolume(int $volumeId, array $parameters = []): Volume
     {
-        $this->client->post(sprintf('%s/%s/resize', $this->getBaseUri(), $volumeId), $parameters);
+        $response = $this->client->post(sprintf('%s/%s/resize', $this->getBaseUri(), $volumeId), $parameters);
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return new Volume($this->client, $json);
     }
 
     protected function getBaseUri(): string

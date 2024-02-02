@@ -31,6 +31,9 @@ class DatabaseBackup extends Entity
     public const FIELD_TYPE    = 'type';
     public const FIELD_CREATED = 'created';
 
+    // Extra fields for POST/PUT requests.
+    public const FIELD_TARGET = 'target';
+
     // `FIELD_TYPE` values.
     public const TYPE_SNAPSHOT = 'snapshot';
     public const TYPE_AUTO     = 'auto';

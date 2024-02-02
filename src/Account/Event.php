@@ -20,7 +20,7 @@ use Linode\Linode\LinodeEntity;
  * The Events returned depends on your grants.
  *
  * @property int          $id               The unique ID of this Event.
- * @property string       $username         The username of the User who caused the Event.
+ * @property null|string  $username         The username of the User who caused the Event.
  * @property string       $action           The action that caused this Event. New actions may be added in the future.
  * @property LinodeEntity $entity           Detailed information about the Event's entity, including ID, type, label, and URL
  *                                          used to access it.

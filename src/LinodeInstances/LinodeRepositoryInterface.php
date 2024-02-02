@@ -71,6 +71,9 @@ interface LinodeRepositoryInterface extends RepositoryInterface
      * for time used
      *     within the billing period the Linode was active.
      *
+     * Linodes that are in the process of cloning or backup restoration cannot be
+     * deleted.
+     *
      * @param int $linodeId ID of the Linode to look up
      *
      * @throws LinodeException

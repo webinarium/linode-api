@@ -107,6 +107,44 @@ interface LKEClusterRepositoryInterface extends RepositoryInterface
     public function postLKEClusterRecycle(int $clusterId): void;
 
     /**
+     * Regenerate the Kubeconfig file and/or the service account token for a Cluster.
+     *
+     * This is a helper command that allows performing both the Kubeconfig Delete and the
+     * Service Token Delete actions with a single request.
+     *
+     * When using this command, at least one of `kubeconfig` or `servicetoken` is
+     * required.
+     *
+     * **Note**: When regenerating a service account token, the Cluster's control plane
+     * components and Linode CSI drivers are also restarted and configured with the new
+     * token. High Availability Clusters should not experience any disruption, while
+     * standard Clusters may experience brief control plane downtime while components are
+     * restarted.
+     *
+     * @param int  $clusterId    ID of the target Kubernetes cluster.
+     * @param bool $kubeconfig   Whether to delete and regenerate the Kubeconfig file for this Cluster.
+     * @param bool $servicetoken Whether to delete and regenerate the service access token for this Cluster.
+     *
+     * @throws LinodeException
+     */
+    public function postLKEClusterRegenerate(int $clusterId, bool $kubeconfig, bool $servicetoken): void;
+
+    /**
+     * Delete and regenerate the service account token for a Cluster.
+     *
+     * **Note**: When regenerating a service account token, the Cluster's control plane
+     * components and Linode CSI drivers are also restarted and configured with the new
+     * token. High Availability Clusters should not experience any disruption, while
+     * standard Clusters may experience brief control plane downtime while components are
+     * restarted.
+     *
+     * @param int $clusterId ID of the target Kubernetes cluster.
+     *
+     * @throws LinodeException
+     */
+    public function postLKECServiceTokenDelete(int $clusterId): void;
+
+    /**
      * Returns the values for a specified node object.
      *
      * @param int    $clusterId ID of the Kubernetes cluster containing the Node.

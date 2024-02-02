@@ -55,6 +55,11 @@ use Linode\Managed\StatsDataAvailable;
  * @property string                             $active_since       The datetime of when the account was activated.
  * @property string[]                           $capabilities       A list of capabilities your account supports.
  * @property Promotion[]                        $active_promotions  A list of active promotions on your account.
+ * @property string                             $billing_source     The source of service charges for this Account, as determined by its relationship
+ *                                                                  with Akamai.
+ *                                                                  Accounts that are associated with Akamai-specific customers return a value of
+ *                                                                  `akamai`.
+ *                                                                  All other Accounts return a value of `linode`.
  * @property string                             $euuid              An external unique identifier for this account.
  * @property EventRepositoryInterface           $events             List of Event objects representing actions taken on your Account. The Events
  *                                                                  returned depends on your grants.
@@ -97,7 +102,12 @@ class Account extends Entity
     public const FIELD_ACTIVE_SINCE       = 'active_since';
     public const FIELD_CAPABILITIES       = 'capabilities';
     public const FIELD_ACTIVE_PROMOTIONS  = 'active_promotions';
+    public const FIELD_BILLING_SOURCE     = 'billing_source';
     public const FIELD_EUUID              = 'euuid';
+
+    // `FIELD_BILLING_SOURCE` values.
+    public const BILLING_SOURCE_AKAMAI = 'akamai';
+    public const BILLING_SOURCE_LINODE = 'linode';
 
     /**
      * Returns the contact and billing information related to your Account.
@@ -247,14 +257,9 @@ class Account extends Entity
 
     /**
      * Returns a collection of Maintenance objects for any entity a user has permissions
-     * to view.
+     * to view. Cancelled Maintenance objects are not returned.
      *
      * Currently, Linodes are the only entities available for viewing.
-     *
-     * **Beta**: This endpoint is in beta. Please make sure to prepend all requests with
-     * `/v4beta` instead of `/v4`, and be aware that this endpoint may receive breaking
-     * updates in the future. This notice will be removed when this endpoint is out of
-     * beta.
      *
      * @throws LinodeException
      */
@@ -322,9 +327,128 @@ class Account extends Entity
      *
      * @throws LinodeException
      */
-    public function enableAccountManged(): void
+    public function enableAccountManaged(): void
     {
         $this->client->post('/account/settings/managed-enable');
+    }
+
+    /**
+     * Send a one-time verification code via SMS message to the submitted phone number.
+     * Providing your phone number helps ensure you can securely access your Account in
+     * case other ways to connect are lost. Your phone number is only used to verify your
+     * identity by sending an SMS message. Standard carrier messaging fees may apply.
+     *
+     * * By accessing this command you are opting in to receive SMS messages. You can opt
+     * out of SMS messages by using the **Phone Number Delete** (DELETE
+     * /profile/phone-number) command after your phone number is verified.
+     *
+     * * Verification codes are valid for 10 minutes after they are sent.
+     *
+     * * Subsequent requests made prior to code expiration result in sending the same
+     * code.
+     *
+     * Once a verification code is received, verify your phone number with the **Phone
+     * Number Verify** (POST /profile/phone-number/verify) command.
+     *
+     * @param string $iso_code     The two-letter ISO 3166 country code associated with the phone number.
+     * @param string $phone_number A valid phone number.
+     *
+     * @throws LinodeException
+     */
+    public function postProfilePhoneNumber(string $iso_code, string $phone_number): void
+    {
+        $parameters = [
+            'iso_code'     => $iso_code,
+            'phone_number' => $phone_number,
+        ];
+
+        $this->client->post('/profile/phone-number', $parameters);
+    }
+
+    /**
+     * Verify a phone number by confirming the one-time code received via SMS message
+     * after accessing the **Phone Verification Code Send** (POST /profile/phone-number)
+     * command.
+     *
+     * * Verification codes are valid for 10 minutes after they are sent.
+     *
+     * * Only the same User that made the verification code request can use that code
+     * with this command.
+     *
+     * Once completed, the verified phone number is assigned to the User making the
+     * request. To change the verified phone number for a User, first use the **Phone
+     * Number Delete** (DELETE /profile/phone-number) command, then begin the
+     * verification process again with the **Phone Verification Code Send** (POST
+     * /profile/phone-number) command.
+     *
+     * @param string $otp_code The one-time code received via SMS message after accessing the **Phone
+     *                         Verification Code Send** (POST /profile/phone-number) command.
+     *
+     * @throws LinodeException
+     */
+    public function postProfilePhoneNumberVerify(string $otp_code): void
+    {
+        $parameters = [
+            'otp_code' => $otp_code,
+        ];
+
+        $this->client->post('/profile/phone-number/verify', $parameters);
+    }
+
+    /**
+     * Delete the verified phone number for the User making this request.
+     *
+     * Use this command to opt out of SMS messages for the requesting User after a phone
+     * number has been verified with the **Phone Number Verify** (POST
+     * /profile/phone-number/verify) command.
+     *
+     * @throws LinodeException
+     */
+    public function deleteProfilePhoneNumber(): void
+    {
+        $this->client->delete('/profile/phone-number');
+    }
+
+    /**
+     * Returns a collection of security questions and their responses, if any, for your
+     * User Profile.
+     *
+     * @return SecurityQuestion[] List of security questions.
+     *
+     * @throws LinodeException
+     */
+    public function getSecurityQuestions(): array
+    {
+        $response = $this->client->get('/profile/security-questions');
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return array_map(fn ($data) => new SecurityQuestion($this->client, $data), $json['security_questions']);
+    }
+
+    /**
+     * Adds security question responses for your User.
+     *
+     * Requires exactly three unique questions.
+     *
+     * Previous responses are overwritten if answered or reset to `null` if unanswered.
+     *
+     * **Note**: Security questions must be answered for your User prior to accessing the
+     * **Two Factor Secret Create** (POST /profile/tfa-enable) command.
+     *
+     * @param array $parameters Answer Security Questions
+     *
+     * @return SecurityQuestion[] List of security questions.
+     *
+     * @throws LinodeException
+     */
+    public function postSecurityQuestions(array $parameters = []): array
+    {
+        $response = $this->client->post('/profile/security-questions', $parameters);
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return array_map(fn ($data) => new SecurityQuestion($this->client, $data), $json['security_questions']);
     }
 
     /**
@@ -414,6 +538,8 @@ class Account extends Entity
      * * swap
      * * network in
      * * network out
+     *
+     * This command can only be accessed by the unrestricted users of an account.
      *
      * @return StatsDataAvailable A list of Managed Stats from the last 24 hours.
      *

@@ -23,11 +23,13 @@ use Linode\Entity;
  * @property bool        $is_public   True if the Image is a public distribution image. False if Image is private
  *                                    Account-specific Image.
  * @property int         $size        The minimum size this Image needs to deploy. Size is in MB.
- * @property string      $status      The current status of this Image. Only Images in an "available" status
- *                                    can be deployed. Images in a "creating" status are being created from
- *                                    a Linode Disk, and will become "available" shortly. Images in a
- *                                    "pending_upload" status are waiting for data to be uploaded,
- *                                    and become "available" after the upload and processing are complete.
+ * @property string      $status      The current status of this Image.
+ *                                    Only Images in an "available" status can be deployed. Images in a "creating"
+ *                                    status are being created from a Linode Disk, and will become "available" shortly.
+ *                                    Images in a "pending_upload" status are waiting for data to be uploaded, and
+ *                                    become "available" after the upload and processing are complete.
+ *                                    The "+order_by" and "+order" operators are not available for filtering on this
+ *                                    key.
  * @property string      $created     When this Image was created.
  * @property string      $updated     When this Image was last updated.
  * @property string      $created_by  The name of the User who created this Image, or "linode" for public Images.

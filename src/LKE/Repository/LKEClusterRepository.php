@@ -59,6 +59,21 @@ class LKEClusterRepository extends AbstractRepository implements LKEClusterRepos
         $this->client->post(sprintf('%s/%s/recycle', $this->getBaseUri(), $clusterId));
     }
 
+    public function postLKEClusterRegenerate(int $clusterId, bool $kubeconfig, bool $servicetoken): void
+    {
+        $parameters = [
+            'kubeconfig'   => $kubeconfig,
+            'servicetoken' => $servicetoken,
+        ];
+
+        $this->client->post(sprintf('%s/%s/regenerate', $this->getBaseUri(), $clusterId), $parameters);
+    }
+
+    public function postLKECServiceTokenDelete(int $clusterId): void
+    {
+        $this->client->delete(sprintf('%s/%s/servicetoken', $this->getBaseUri(), $clusterId));
+    }
+
     public function getLKEClusterNode(int $clusterId, string $nodeId): LKENodeStatus
     {
         $response = $this->client->get(sprintf('%s/%s/nodes/%s', $this->getBaseUri(), $clusterId, $nodeId));

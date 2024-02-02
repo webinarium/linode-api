@@ -44,8 +44,8 @@ interface PaymentRepositoryInterface extends RepositoryInterface
 
     /**
      * **Note**: This endpoint is disabled and no longer accessible. PayPal can be
-     * designated as a Payment Method for automated payments using
-     * Cloud Manager.
+     * designated as a Payment Method for automated payments using the Cloud Manager. See
+     * Manage Payment Methods.
      *
      * @param string $usd          The payment amount in USD. Minimum accepted value of $5 USD. Maximum accepted
      *                             value of $500 USD or credit card payment limit; whichever value is highest.
@@ -61,8 +61,8 @@ interface PaymentRepositoryInterface extends RepositoryInterface
 
     /**
      * **Note**: This endpoint is disabled and no longer accessible. PayPal can be
-     * designated as a Payment Method for automated payments using
-     * Cloud Manager.
+     * designated as a Payment Method for automated payments using the Cloud Manager. See
+     * Manage Payment Methods.
      *
      * @param string $payer_id   The PayerID returned by PayPal during the transaction authorization process.
      * @param string $payment_id The PaymentID returned from `createPayPalPayment` that has been approved with

@@ -28,6 +28,8 @@ interface DomainRecordRepositoryInterface extends RepositoryInterface
     /**
      * Adds a new Domain Record to the zonefile this Domain represents.
      *
+     * Each domain can have up to 12,000 active records.
+     *
      * @param array $parameters Information about the new Record to add.
      *
      * @throws LinodeException

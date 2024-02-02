@@ -26,56 +26,6 @@ use Linode\RepositoryInterface;
 interface DatabaseMongoDBRepositoryInterface extends RepositoryInterface
 {
     /**
-     * Provision a Managed MongoDB Database.
-     *
-     * Restricted Users must have the `add_databases` grant to use this command.
-     *
-     * New instances can take approximately 15 to 30 minutes to provision.
-     *
-     * The `allow_list` is used to control access to the Managed Database.
-     *
-     * * IP addresses on this list can access the Managed Database. All other sources are
-     * blocked.
-     * * Entering an empty array (`]`) blocks all connections (both public and private)
-     * to the Managed Database.
-     *
-     * All Managed Databases include automatic, daily backups. Up to seven backups are
-     * automatically stored for each Managed Database, providing restore points for each
-     * day of the past week.
-     *
-     * All Managed Databases include automatic patch updates, which apply security
-     * patches and updates to the underlying operating system of the Managed MongoDB
-     * Database during configurable maintenance windows.
-     *
-     * * By default, the maintenance window is set to start *every week* on *Sunday* at
-     * *20:00 UTC* and lasts for 3 hours.
-     *
-     * * If your database cluster is configured with a single node, you will experience
-     * downtime during this maintenance window when any updates occur. It's recommended
-     * that you adjust this window to match a time that will be the least disruptive for
-     * your application and users. You may also want to consider upgrading to a high
-     * availability plan to avoid any downtime due to maintenance.
-     *
-     * * **The database software is not updated automatically.** To upgrade to a new
-     * database engine version, consider deploying a new Managed Database with your
-     * preferred version. You can then migrate your databases from the original Managed
-     * Database cluster to the new one.
-     *
-     * * To modify update the maintenance window for a Database, use the **Managed
-     * MongoDB Database Update** ([PUT /databases/mongodb/instances/{instanceId})
-     * command.
-     *
-     * **Note**: Managed MongoDB clusters are currently accessible over public IP
-     * addresses. To provide an additional layer of protection, support for private IP
-     * addresses is in development.
-     *
-     * @param array $parameters Information about the Managed MongoDB Database you are creating.
-     *
-     * @throws LinodeException
-     */
-    public function postDatabasesMongoDBInstances(array $parameters = []): DatabaseMongoDB;
-
-    /**
      * Update a Managed MongoDB Database.
      *
      * Requires `read_write` access to the Database.
@@ -84,10 +34,15 @@ interface DatabaseMongoDBRepositoryInterface extends RepositoryInterface
      *
      * Updating addresses in the `allow_list` overwrites any existing addresses.
      *
-     * * IP addresses on this list can access the Managed Database. All other sources are
-     * blocked.
+     * * IP addresses and ranges on this list can access the Managed Database. All other
+     * sources are blocked.
+     *
+     * * If `0.0.0.0/0` is a value in this list, then all IP addresses can access the
+     * Managed Database.
+     *
      * * Entering an empty array (`[]`) blocks all connections (both public and private)
      * to the Managed Database.
+     *
      * * **Note**: Updates to the `allow_list` may take a short period of time to
      * complete, making this command inappropriate for rapid successive updates to this
      * property.
@@ -97,9 +52,6 @@ interface DatabaseMongoDBRepositoryInterface extends RepositoryInterface
      * Database. The maintenance window for these updates is configured with the Managed
      * Database's `updates` property.
      *
-     * * By default, the maintenance window is set to start *every week* on *Sunday* at
-     * *20:00 UTC* and lasts for 3 hours.
-     *
      * * If your database cluster is configured with a single node, you will experience
      * downtime during this maintenance window when any updates occur. It's recommended
      * that you adjust this window to match a time that will be the least disruptive for
@@ -110,6 +62,8 @@ interface DatabaseMongoDBRepositoryInterface extends RepositoryInterface
      * database engine version, consider deploying a new Managed Database with your
      * preferred version. You can then migrate your databases from the original Managed
      * Database cluster to the new one.
+     *
+     * **Note**: New MongoDB Databases cannot currently be created.
      *
      * @param int   $instanceId The ID of the Managed MongoDB Database.
      * @param array $parameters Updated information for the Managed MongoDB Database.
@@ -129,6 +83,8 @@ interface DatabaseMongoDBRepositoryInterface extends RepositoryInterface
      * Only unrestricted Users can access this command, and have access regardless of the
      * acting token's OAuth scopes.
      *
+     * **Note**: New MongoDB Databases cannot currently be created.
+     *
      * @param int $instanceId The ID of the Managed MongoDB Database.
      *
      * @throws LinodeException
@@ -147,6 +103,8 @@ interface DatabaseMongoDBRepositoryInterface extends RepositoryInterface
      * Database Backup Snapshot Create** (POST
      * /databases/mongodb/instances/{instanceId}/backups) command.
      *
+     * **Note**: New MongoDB Databases cannot currently be created.
+     *
      * @param int $instanceId The ID of the Managed MongoDB Database.
      *
      * @return DatabaseBackup[] List of backups for the Managed MongoDB Database.
@@ -160,11 +118,17 @@ interface DatabaseMongoDBRepositoryInterface extends RepositoryInterface
      *
      * Requires `read_write` access to the Database.
      *
+     * Up to 3 snapshot backups for each Database can be stored at a time. If 3 snapshots
+     * have been created for a Database, one must be deleted before another can be made.
+     *
      * Backups generated by this command have the type `snapshot`. Snapshot backups may
      * take several minutes to complete, after which they will be accessible to view or
      * restore.
      *
-     * The Database must have an `active` status to perform this command.
+     * The Database must have an `active` status to perform this command. If another
+     * backup is in progress, it must complete before a new backup can be initiated.
+     *
+     * **Note**: New MongoDB Databases cannot currently be created.
      *
      * @param int   $instanceId The ID of the Managed MongoDB Database.
      * @param array $parameters Information about the snapshot backup to create.
@@ -179,6 +143,8 @@ interface DatabaseMongoDBRepositoryInterface extends RepositoryInterface
      *
      * The Database must not be provisioning to perform this command.
      *
+     * **Note**: New MongoDB Databases cannot currently be created.
+     *
      * @param int $instanceId The ID of the Managed MongoDB Database.
      * @param int $backupId   The ID of the Managed MongoDB Database backup.
      *
@@ -192,6 +158,8 @@ interface DatabaseMongoDBRepositoryInterface extends RepositoryInterface
      * Requires `read_write` access to the Database.
      *
      * The Database must not be provisioning to perform this command.
+     *
+     * **Note**: New MongoDB Databases cannot currently be created.
      *
      * @param int $instanceId The ID of the Managed MongoDB Database.
      * @param int $backupId   The ID of the Managed MongoDB Database backup.
@@ -214,6 +182,8 @@ interface DatabaseMongoDBRepositoryInterface extends RepositoryInterface
      * credentials results in a failed cluster. Please contact Customer Support if this
      * occurs.
      *
+     * **Note**: New MongoDB Databases cannot currently be created.
+     *
      * @param int $instanceId The ID of the Managed MongoDB Database.
      * @param int $backupId   The ID of the Managed MongoDB Database backup.
      *
@@ -222,10 +192,11 @@ interface DatabaseMongoDBRepositoryInterface extends RepositoryInterface
     public function postDatabasesMongoDBInstanceBackupRestore(int $instanceId, int $backupId): void;
 
     /**
-     * Display the the root username and password for an accessible Managed MongoDB
-     * Database.
+     * Display the root username and password for an accessible Managed MongoDB Database.
      *
      * The Database must have an `active` status to perform this command.
+     *
+     * **Note**: New MongoDB Databases cannot currently be created.
      *
      * @param int $instanceId The ID of the Managed MongoDB Database.
      *
@@ -247,6 +218,8 @@ interface DatabaseMongoDBRepositoryInterface extends RepositoryInterface
      *
      * **Note**: Note that it may take several seconds for credentials to reset.
      *
+     * **Note**: New MongoDB Databases cannot currently be created.
+     *
      * @param int $instanceId The ID of the Managed MongoDB Database.
      *
      * @throws LinodeException
@@ -257,6 +230,8 @@ interface DatabaseMongoDBRepositoryInterface extends RepositoryInterface
      * Display the SSL CA certificate for an accessible Managed MongoDB Database.
      *
      * The Database must have an `active` status to perform this command.
+     *
+     * **Note**: New MongoDB Databases cannot currently be created.
      *
      * @param int $instanceId The ID of the Managed MongoDB Database.
      *
@@ -269,12 +244,11 @@ interface DatabaseMongoDBRepositoryInterface extends RepositoryInterface
      * Managed MongoDB Database. This function runs during regular maintenance windows,
      * which are configurable with the **Managed MongoDB Database Update** (PUT
      * /databases/mongodb/instances/{instanceId}) command.
-     *
      * Requires `read_write` access to the Database.
      *
      * The Database must have an `active` status to perform this command.
      *
-     * **Note**
+     * **Note**:
      *
      * * If your database cluster is configured with a single node, you will experience
      * downtime during this maintenance. Consider upgrading to a high availability plan
@@ -284,6 +258,8 @@ interface DatabaseMongoDBRepositoryInterface extends RepositoryInterface
      * database engine version, consider deploying a new Managed Database with your
      * preferred version. You can then migrate your databases from the original Managed
      * Database cluster to the new one.
+     *
+     * **Note**: New MongoDB Databases cannot currently be created.
      *
      * @param int $instanceId The ID of the Managed MongoDB Database.
      *

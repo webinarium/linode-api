@@ -30,8 +30,9 @@ use Linode\NodeBalancers\Repository\NodeBalancerNodeRepository;
  *                                                                used for HTTPS, you do not need SSL configured to have a NodeBalancer listening on
  *                                                                port 443.
  * @property string                              $protocol        The protocol this port is configured to serve.
- *                                                                * If using `http` or `tcp` protocol, `ssl_cert` and `ssl_key` are not supported.
- *                                                                * If using `https` protocol, `ssl_cert` and `ssl_key` are required.
+ *                                                                * The `http` and `tcp` protocols do not support `ssl_cert` and `ssl_key`.
+ *                                                                * The `https` protocol is mutually required with `ssl_cert` and `ssl_key`.
+ *                                                                Review our guide on Available Protocols for information on protocol features.
  * @property string                              $algorithm       What algorithm this NodeBalancer should use for routing traffic to backends.
  * @property string                              $stickiness      Controls how session stickiness is handled on this port.
  *                                                                * If set to `none` connections will always be assigned a backend based on the
@@ -48,7 +49,9 @@ use Linode\NodeBalancers\Repository\NodeBalancerNodeRepository;
  *                                                                * `http` and `http_body` rely on the backend serving HTTP, and that
  *                                                                the response returned matches what is expected.
  * @property int                                 $check_interval  How often, in seconds, to check that backends are up and serving requests.
+ *                                                                Must be greater than `check_timeout`.
  * @property int                                 $check_timeout   How long, in seconds, to wait for a check attempt before considering it failed.
+ *                                                                Must be less than `check_interval`.
  * @property int                                 $check_attempts  How many times to attempt a check before considering a backend to be down.
  * @property string                              $check_path      The URL path to check on each backend. If the backend does not respond to this
  *                                                                request it is considered to be down.
@@ -62,12 +65,15 @@ use Linode\NodeBalancers\Repository\NodeBalancerNodeRepository;
  * @property string                              $ssl_commonname  The read-only common name automatically derived from the SSL certificate assigned
  *                                                                to this NodeBalancerConfig. Please refer to this field to verify that the
  *                                                                appropriate certificate is assigned to your NodeBalancerConfig.
- * @property string                              $ssl_fingerprint The read-only fingerprint automatically derived from the SSL certificate assigned
- *                                                                to this NodeBalancerConfig. Please refer to this field to verify that the
- *                                                                appropriate certificate is assigned to your NodeBalancerConfig.
+ * @property string                              $ssl_fingerprint The read-only SHA1-encoded fingerprint automatically derived from the SSL
+ *                                                                certificate assigned to this NodeBalancerConfig. Please refer to this field to
+ *                                                                verify that the appropriate certificate is assigned to your NodeBalancerConfig.
  * @property null|string                         $ssl_cert        The PEM-formatted public SSL certificate (or the combined PEM-formatted SSL
  *                                                                certificate and Certificate Authority chain) that should be served on this
  *                                                                NodeBalancerConfig's port.
+ *                                                                Line breaks must be represented as "\n" in the string for requests (but not when
+ *                                                                using the Linode CLI).
+ *                                                                Diffie-Hellman Parameters can be included in this value to enable forward secrecy.
  *                                                                The contents of this field will not be shown in any responses that display
  *                                                                the NodeBalancerConfig. Instead, `<REDACTED>` will be printed where the field
  *                                                                appears.
@@ -77,7 +83,8 @@ use Linode\NodeBalancers\Repository\NodeBalancerNodeRepository;
  *                                                                fields to
  *                                                                verify that the appropriate certificate was assigned to your NodeBalancerConfig.
  * @property null|string                         $ssl_key         The PEM-formatted private key for the SSL certificate set in the `ssl_cert` field.
- *                                                                Line breaks must be represented as "\n" in the string.
+ *                                                                Line breaks must be represented as "\n" in the string for requests (but not when
+ *                                                                using the Linode CLI).
  *                                                                The contents of this field will not be shown in any responses that display
  *                                                                the NodeBalancerConfig. Instead, `<REDACTED>` will be printed where the field
  *                                                                appears.
@@ -94,8 +101,10 @@ use Linode\NodeBalancers\Repository\NodeBalancerNodeRepository;
  *                                                                ProxyProtocol if enabled.
  *                                                                * If ommited, or set to `none`, the NodeBalancer doesn't send any auxilary data
  *                                                                over TCP connections. This is the default.
- *                                                                * If set to `v1`, the human-readable header format (Version 1) is used.
- *                                                                * If set to `v2`, the binary header format (Version 2) is used.
+ *                                                                * If set to `v1`, the human-readable header format (Version 1) is used. Requires
+ *                                                                `tcp` protocol.
+ *                                                                * If set to `v2`, the binary header format (Version 2) is used. Requires `tcp`
+ *                                                                protocol.
  * @property int                                 $nodebalancer_id The ID for the NodeBalancer this config belongs to.
  * @property NodeBalancerNodeRepositoryInterface $nodes           NodeBalancer nodes.
  */

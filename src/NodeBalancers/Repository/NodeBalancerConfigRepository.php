@@ -14,7 +14,6 @@ namespace Linode\NodeBalancers\Repository;
 use Linode\Entity;
 use Linode\Internal\AbstractRepository;
 use Linode\LinodeClient;
-use Linode\NodeBalancers\NodeBalancer;
 use Linode\NodeBalancers\NodeBalancerConfig;
 use Linode\NodeBalancers\NodeBalancerConfigRepositoryInterface;
 
@@ -54,13 +53,13 @@ class NodeBalancerConfigRepository extends AbstractRepository implements NodeBal
         $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $configId));
     }
 
-    public function rebuildNodeBalancerConfig(int $configId, array $parameters = []): NodeBalancer
+    public function rebuildNodeBalancerConfig(int $configId, array $parameters = []): NodeBalancerConfig
     {
         $response = $this->client->post(sprintf('%s/%s/rebuild', $this->getBaseUri(), $configId), $parameters);
         $contents = $response->getBody()->getContents();
         $json     = json_decode($contents, true);
 
-        return new NodeBalancer($this->client, $json);
+        return new NodeBalancerConfig($this->client, $json);
     }
 
     protected function getBaseUri(): string

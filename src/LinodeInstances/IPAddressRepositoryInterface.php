@@ -49,8 +49,11 @@ interface IPAddressRepositoryInterface
     public function addLinodeIP(array $parameters = []): IPAddress;
 
     /**
-     * Updates a particular IP Address associated with this Linode. Only allows
-     * setting/resetting reverse DNS.
+     * Updates a the reverse DNS (RDNS) for a particular IP Address associated with this
+     * Linode.
+     *
+     * Setting the RDNS to `null` for a public IPv4 address, resets it to the default
+     * "ip.linodeusercontent.com" RDNS value.
      *
      * @param string $address    The IP address to look up.
      * @param array  $parameters The information to update for the IP address.
@@ -60,9 +63,8 @@ interface IPAddressRepositoryInterface
     public function updateLinodeIP(string $address, array $parameters = []): IPAddress;
 
     /**
-     * Deletes a public IPv4 address associated with this Linode. This will fail if it is
-     * the Linode's last remaining public IPv4 address. Private IPv4 addresses cannot be
-     * removed via this endpoint.
+     * Deletes a public or private IPv4 address associated with this Linode. This will
+     * fail if it is the Linode's last remaining public IPv4 address.
      *
      * @param string $address The IP address to look up.
      *

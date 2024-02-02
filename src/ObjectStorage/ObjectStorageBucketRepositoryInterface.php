@@ -26,12 +26,15 @@ use Linode\RepositoryInterface;
 interface ObjectStorageBucketRepositoryInterface extends RepositoryInterface
 {
     /**
-     * Creates an Object Storage Bucket in the cluster specified. If the
-     * bucket already exists and is owned by you, this endpoint will return a
-     * `200` response with that bucket as if it had just been created.
+     * Creates an Object Storage Bucket in the specified cluster.
      *
-     * This endpoint is available for convenience. It is recommended that instead you
-     * use the more fully-featured S3 API directly.
+     * Accounts with negative balances cannot access this command.
+     *
+     * If the bucket already exists and is owned by you, this endpoint returns a `200`
+     * response with that bucket as if it had just been created.
+     *
+     * This endpoint is available for convenience. It is recommended that instead you use
+     * the more fully-featured S3 API directly.
      *
      * @param array $parameters Information about the bucket you want to create.
      *
@@ -90,7 +93,7 @@ interface ObjectStorageBucketRepositoryInterface extends RepositoryInterface
     public function updateObjectStorageBucketAccess(string $bucket, array $parameters = []): void;
 
     /**
-     * View an Object’s configured Access Control List (ACL) in this Object Storage
+     * View an Object's configured Access Control List (ACL) in this Object Storage
      * bucket.
      * ACLs define who can access your buckets and objects and specify the level of
      * access
@@ -208,7 +211,7 @@ interface ObjectStorageBucketRepositoryInterface extends RepositoryInterface
      * buckets.
      * Object Storage adds 1 terabyte of outbound data transfer to your data transfer
      * pool.
-     * See the Object Storage Pricing and Limitations
+     * See the Object Storage Overview
      * guide for details on Object Storage transfer quotas.
      *
      * @return int The amount of outbound data transfer used by your account's Object Storage

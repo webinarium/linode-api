@@ -47,7 +47,7 @@ use Linode\Entity;
  *                                                 the migration or cloning will not initiate. If a Linode cannot be migrated because
  *                                                 of an incompatibility,
  *                                                 you will be prompted to select a different data center or contact support.
- *                                                 **Note:** See our guide on Getting Started with VLANs to view additional
+ *                                                 **Note:** See the VLANs Overview guide to view additional specifications and
  *                                                 limitations.
  * @property Helpers                 $helpers      Helpers enabled when booting to this Linode Config.
  * @property Devices                 $devices      A dictionary of device disks to use as a device map in a Linode's configuration

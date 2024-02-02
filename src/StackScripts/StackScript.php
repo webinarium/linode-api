@@ -20,8 +20,10 @@ use Linode\Entity;
  * @property int                $id                  The unique ID of this StackScript.
  * @property string             $username            The User who created the StackScript.
  * @property string             $label               The StackScript's label is for display purposes only.
- * @property string[]           $images              An array of Image IDs. These are the images that can be deployed with this
- *                                                   Stackscript.
+ * @property string[]           $images              An array of Image IDs. These are the Images that can be deployed with this
+ *                                                   StackScript.
+ *                                                   `any/all` indicates that all available Images, including private Images, are
+ *                                                   accepted.
  * @property bool               $is_public           This determines whether other users can use your StackScript. **Once a StackScript
  *                                                   is made public, it cannot be made private.**
  * @property string             $created             The date this StackScript was created.
@@ -34,8 +36,8 @@ use Linode\Entity;
  *                                                   StackScript.
  * @property string             $script              The script to execute when provisioning a new Linode with this StackScript.
  * @property UserDefinedField[] $user_defined_fields This is a list of fields defined with a special syntax inside this StackScript
- *                                                   that allow for supplying customized parameters during deployment. See Variables
- *                                                   and UDFs for more information.
+ *                                                   that allow for supplying customized parameters during deployment. See Declare
+ *                                                   User-Defined Fields (UDFs) for more information.
  * @property bool               $mine                Returns `true` if this StackScript is owned by the account of the user making the
  *                                                   request, and the user
  *                                                   making the request is unrestricted or has access to this StackScript.

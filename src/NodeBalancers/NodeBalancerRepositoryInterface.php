@@ -26,8 +26,14 @@ use Linode\RepositoryInterface;
 interface NodeBalancerRepositoryInterface extends RepositoryInterface
 {
     /**
-     * Creates a NodeBalancer in the requested Region. This NodeBalancer will not start
-     * serving requests until it is configured.
+     * Creates a NodeBalancer in the requested Region.
+     *
+     * NodeBalancers require a port Config with at least one backend Node to start
+     * serving requests.
+     *
+     * When using the Linode CLI to create a NodeBalancer, first create a NodeBalancer
+     * without any Configs. Then, create Configs and Nodes for that NodeBalancer with the
+     * respective Config Create and Node Create commands.
      *
      * @param array $parameters Information about the NodeBalancer to create.
      *

@@ -19,7 +19,7 @@ use Linode\Entity;
  * @property string      $address     The IP address.
  * @property string      $type        The type of address this is.
  * @property bool        $public      Whether this is a public or private IP address.
- * @property string      $rdns        The reverse DNS assigned to this address. For public IPv4 addresses, this will be
+ * @property null|string $rdns        The reverse DNS assigned to this address. For public IPv4 addresses, this will be
  *                                    set to a default value provided by Linode if not explicitly set.
  * @property string      $region      The Region this IP address resides in.
  * @property int         $linode_id   The ID of the Linode this address currently belongs to. For IPv4 addresses, this

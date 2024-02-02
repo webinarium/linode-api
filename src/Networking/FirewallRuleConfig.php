@@ -19,17 +19,17 @@ use Linode\Entity;
  *
  * @property string                $protocol    The type of network traffic to allow.
  * @property string                $ports       A string representing the port or ports on which traffic will be allowed:
- *                                              - The string may be a single port, a range of ports, or a comma-separated list
- *                                              of single ports and port ranges. A space is permitted following each comma.
- *                                              - A range of ports is inclusive of the start and end values for the range. The
- *                                              end value of the range must be greater than the start value.
+ *                                              - The string may be a single port, a range of ports, or a comma-separated list of
+ *                                              single ports and port ranges. A space is permitted following each comma.
+ *                                              - A range of ports is inclusive of the start and end values for the range. The end
+ *                                              value of the range must be greater than the start value.
  *                                              - Ports must be within 1 and 65535, and may not contain any leading zeroes. For
  *                                              example, port "080" is not allowed.
- *                                              - Ports may not be specified if a rule's protocol is `ICMP`. At least one port
- *                                              must be specified if a rule's protocol is `TCP` or `UDP`.
- *                                              - The ports string can have up to 15 *pieces*, where a single port is treated
- *                                              as one piece, and a port range is treated as two pieces. For example,
- *                                              the string "22-24, 80, 443" has four pieces.
+ *                                              - Ports may not be specified if a rule's protocol is `ICMP` or `IPENCAP`.
+ *                                              - At least one port must be specified if a rule's protocol is `TCP` or `UDP`.
+ *                                              - The ports string can have up to 15 *pieces*, where a single port is treated as
+ *                                              one piece, and a port range is treated as two pieces. For example, the string
+ *                                              "22-24, 80, 443" has four pieces.
  * @property FirewallRuleAddresses $addresses   Allowed IPv4 or IPv6 addresses. A Rule can have up to 255 addresses or networks
  *                                              listed across its IPv4 and IPv6 arrays. A network and a single IP are treated as
  *                                              equivalent when accounting for this limit.
@@ -50,9 +50,10 @@ class FirewallRuleConfig extends Entity
     public const FIELD_DESCRIPTION = 'description';
 
     // `FIELD_PROTOCOL` values.
-    public const PROTOCOL_TCP  = 'TCP';
-    public const PROTOCOL_UDP  = 'UDP';
-    public const PROTOCOL_ICMP = 'ICMP';
+    public const PROTOCOL_TCP     = 'TCP';
+    public const PROTOCOL_UDP     = 'UDP';
+    public const PROTOCOL_ICMP    = 'ICMP';
+    public const PROTOCOL_IPENCAP = 'IPENCAP';
 
     // `FIELD_ACTION` values.
     public const ACTION_ACCEPT = 'ACCEPT';

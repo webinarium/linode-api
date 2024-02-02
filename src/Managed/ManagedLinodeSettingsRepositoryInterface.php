@@ -27,6 +27,7 @@ interface ManagedLinodeSettingsRepositoryInterface extends RepositoryInterface
 {
     /**
      * Updates a single Linode's Managed settings.
+     * This command can only be accessed by the unrestricted users of an account.
      *
      * @param int   $linodeId   The Linode ID whose settings we are accessing.
      * @param array $parameters The settings to update.

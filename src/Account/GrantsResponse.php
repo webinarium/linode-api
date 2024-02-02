@@ -20,26 +20,22 @@ use Linode\Entity;
  * has no access will be omitted.
  *
  * @property GlobalGrant $global       A structure containing the Account-level grants a User has.
- * @property Grant[]     $linode       The grants this User has pertaining to Linodes on this Account. There will be one
- *                                     entry per Linode on the Account.
- * @property Grant[]     $domain       The grants this User has pertaining to Domains on this Account. There will be one
- *                                     entry per Domain on the Account.
- * @property Grant[]     $nodebalancer The grants this User has pertaining to NodeBalancers on this Account. There will
- *                                     be one entry per NodeBalancer on the Account.
- * @property Grant[]     $image        The grants this User has pertaining to Images on this Account. There will be one
- *                                     entry per Image on the Account.
- * @property Grant[]     $longview     The grants this User has pertaining to Longview Clients on this Account. There
- *                                     will be one entry per Longview Client on the Account.
- * @property Grant[]     $stackscript  The grants this User has pertaining to StackScripts on this Account. There will be
- *                                     one entry per StackScript on the Account.
- * @property Grant[]     $volume       The grants this User has pertaining to Volumes on this Account. There will be one
- *                                     entry per Volume on the Account.
+ * @property Grant[]     $linode       The grants this User has for each Linode that is owned by this Account.
+ * @property Grant[]     $database     The grants this User has for each Database that is owned by this Account.
+ * @property Grant[]     $domain       The grants this User has for each Domain that is owned by this Account.
+ * @property Grant[]     $nodebalancer The grants this User has for each NodeBalancer that is owned by this Account.
+ * @property Grant[]     $image        The grants this User has for each Image that is owned by this Account.
+ * @property Grant[]     $longview     The grants this User has for each Longview Client that is owned by this Account.
+ * @property Grant[]     $stackscript  The grants this User has for each StackScript that is owned by this Account.
+ * @property Grant[]     $volume       The grants this User has for each Block Storage Volume that is owned by this
+ *                                     Account.
  */
 class GrantsResponse extends Entity
 {
     // Available fields.
     public const FIELD_GLOBAL       = 'global';
     public const FIELD_LINODE       = 'linode';
+    public const FIELD_DATABASE     = 'database';
     public const FIELD_DOMAIN       = 'domain';
     public const FIELD_NODEBALANCER = 'nodebalancer';
     public const FIELD_IMAGE        = 'image';

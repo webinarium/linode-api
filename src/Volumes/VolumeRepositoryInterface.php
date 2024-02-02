@@ -111,5 +111,5 @@ interface VolumeRepositoryInterface extends RepositoryInterface
      *
      * @throws LinodeException
      */
-    public function resizeVolume(int $volumeId, array $parameters = []): void;
+    public function resizeVolume(int $volumeId, array $parameters = []): Volume;
 }

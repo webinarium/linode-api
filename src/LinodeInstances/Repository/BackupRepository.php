@@ -76,6 +76,7 @@ class BackupRepository extends AbstractRepository implements BackupRepositoryInt
             Backup::FIELD_LABEL,
             Backup::FIELD_CONFIGS,
             Backup::FIELD_DISKS,
+            Backup::FIELD_AVAILABLE,
         ];
     }
 

@@ -57,10 +57,12 @@ use Linode\Entity;
  *                                                        * Any other value is rounded up to the nearest valid value.
  *                                                        * A value of 0 is equivalent to the default value of 1209600.
  * @property string[]                        $master_ips  The IP addresses representing the master DNS for this Domain. At least one value
- *                                                        is required for `type` slave Domains.
- * @property string[]                        $axfr_ips    The list of IPs that may perform a zone transfer for this Domain. This is
- *                                                        potentially dangerous, and should be set to an empty list unless you intend to use
- *                                                        it.
+ *                                                        is required for `type` slave Domains. The total combined length of all data within
+ *                                                        this array cannot exceed 1000 characters.
+ * @property string[]                        $axfr_ips    The list of IPs that may perform a zone transfer for this Domain. The total
+ *                                                        combined length of all data within this array cannot exceed 1000 characters.
+ *                                                        **Note**: This is potentially dangerous, and should be set to an empty list unless
+ *                                                        you intend to use it.
  * @property string[]                        $tags        An array of tags applied to this object. Tags are for organizational purposes
  *                                                        only.
  * @property DomainRecordRepositoryInterface $records     Domain records.

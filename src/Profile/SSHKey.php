@@ -21,6 +21,12 @@ use Linode\Entity;
  * @property string $label   A label for the SSH Key.
  * @property string $ssh_key The public SSH Key, which is used to authenticate to the root user of the Linodes
  *                           you deploy.
+ *                           Accepted formats:
+ *                           * ssh-dss
+ *                           * ssh-rsa
+ *                           * ecdsa-sha2-nistp
+ *                           * ssh-ed25519
+ *                           * sk-ecdsa-sha2-nistp256 (Akamai-specific)
  * @property string $created The date this key was added.
  */
 class SSHKey extends Entity

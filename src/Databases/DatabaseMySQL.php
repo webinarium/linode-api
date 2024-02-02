@@ -37,6 +37,8 @@ use Linode\Entity;
  *                                             single IP address or a range in CIDR format.
  *                                             By default, this is an empty array (`[]`), which blocks all connections (both
  *                                             public and private) to the Managed Database.
+ *                                             If `0.0.0.0/0` is a value in this list, then all IP addresses can access the
+ *                                             Managed Database.
  * @property DatabaseHosts   $hosts            The primary and secondary hosts for the Managed Database. These are assigned after
  *                                             provisioning is complete.
  * @property bool            $ssl_connection   Whether to require SSL credentials to establish a connection to the Managed

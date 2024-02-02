@@ -64,10 +64,13 @@ interface NodeBalancerConfigRepositoryInterface extends RepositoryInterface
     /**
      * Rebuilds a NodeBalancer Config and its Nodes that you have permission to modify.
      *
+     * Use this command to update a NodeBalancer's Config and Nodes with a single
+     * request.
+     *
      * @param int   $configId   The ID of the Config to access.
      * @param array $parameters Information about the NodeBalancer Config to rebuild.
      *
      * @throws LinodeException
      */
-    public function rebuildNodeBalancerConfig(int $configId, array $parameters = []): NodeBalancer;
+    public function rebuildNodeBalancerConfig(int $configId, array $parameters = []): NodeBalancerConfig;
 }

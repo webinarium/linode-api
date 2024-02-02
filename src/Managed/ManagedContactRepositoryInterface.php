@@ -26,8 +26,11 @@ use Linode\RepositoryInterface;
 interface ManagedContactRepositoryInterface extends RepositoryInterface
 {
     /**
-     * Creates a Managed Contact. A Managed Contact is someone Linode special forces can
-     * contact in the course of attempting to resolve an issue with a Managed Service.
+     * Creates a Managed Contact. A Managed Contact is someone Linode
+     * special forces can contact in the course of attempting to resolve an issue
+     * with a Managed Service.
+     *
+     * This command can only be accessed by the unrestricted users of an account.
      *
      * @param array $parameters Information about the contact to create.
      *
@@ -37,6 +40,7 @@ interface ManagedContactRepositoryInterface extends RepositoryInterface
 
     /**
      * Updates information about a Managed Contact.
+     * This command can only be accessed by the unrestricted users of an account.
      *
      * @param int   $contactId  The ID of the contact to access.
      * @param array $parameters The fields to update.
@@ -47,6 +51,8 @@ interface ManagedContactRepositoryInterface extends RepositoryInterface
 
     /**
      * Deletes a Managed Contact.
+     *
+     * This command can only be accessed by the unrestricted users of an account.
      *
      * @param int $contactId The ID of the contact to access.
      *

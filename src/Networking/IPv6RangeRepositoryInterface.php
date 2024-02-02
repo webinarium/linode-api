@@ -36,7 +36,7 @@ interface IPv6RangeRepositoryInterface extends RepositoryInterface
      * corresponds to the provided `linode_id` or `route_target`.
      *   * Your Linode is responsible for routing individual addresses in the range, or
      * handling traffic for all the addresses in the range.
-     *   * Access the Linodes Assign IPs (POST /networking/ips/assign) endpoint to
+     *   * Access the IP Addresses Assign (POST /networking/ips/assign) endpoint to
      * re-assign IPv6 Ranges to your Linodes.
      *
      * **Note**: The following restrictions apply:

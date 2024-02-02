@@ -24,15 +24,6 @@ use Linode\Internal\AbstractRepository;
  */
 class DatabaseMongoDBRepository extends AbstractRepository implements DatabaseMongoDBRepositoryInterface
 {
-    public function postDatabasesMongoDBInstances(array $parameters = []): DatabaseMongoDB
-    {
-        $response = $this->client->post($this->getBaseUri(), $parameters);
-        $contents = $response->getBody()->getContents();
-        $json     = json_decode($contents, true);
-
-        return new DatabaseMongoDB($this->client, $json);
-    }
-
     public function putDatabasesMongoDBInstance(int $instanceId, array $parameters = []): DatabaseMongoDB
     {
         $response = $this->client->put(sprintf('%s/%s', $this->getBaseUri(), $instanceId), $parameters);

@@ -18,7 +18,11 @@ use Linode\Entity;
  * Object Storage bucket via HTTPS.
  *
  * @property string $certificate Your Base64 encoded and PEM formatted SSL certificate.
+ *                               Line breaks must be represented as "\n" in the string for requests (but not when
+ *                               using the Linode CLI)
  * @property string $private_key The private key associated with this TLS/SSL certificate.
+ *                               Line breaks must be represented as "\n" in the string for requests (but not when
+ *                               using the Linode CLI)
  */
 class ObjectStorageSSL extends Entity
 {

@@ -19,12 +19,13 @@ use Linode\Entity;
  * @property int         $id       This Record's unique ID.
  * @property string      $type     The type of Record this is in the DNS system. For example, A records associate a
  *                                 domain name with an IPv4 address, and AAAA records associate a domain name with an
- *                                 IPv6 address. For more information, see our guide on DNS Records.
+ *                                 IPv6 address. For more information, see the guides on DNS Record Types.
  * @property string      $name     The name of this Record. For requests, this property's actual usage and whether it
  *                                 is required depends
  *                                 on the type of record this represents:
  *                                 `A` and `AAAA`: The hostname or FQDN of the Record.
- *                                 `NS`: The subdomain, if any, to use with the Domain of the Record.
+ *                                 `NS`: The subdomain, if any, to use with the Domain of the Record. Wildcard NS
+ *                                 records (`*`) are not supported.
  *                                 `MX`: The mail subdomain. For example, `sub` for the address
  *                                 `user@sub.example.com` under the `example.com`
  *                                 Domain. Must be an empty string (`""`) for a Null MX Record.
@@ -58,8 +59,14 @@ use Linode\Entity;
  *                                 target set to `sample.com`. Required.
  *                                 `CAA`: The value. For `issue` or `issuewild` tags, the domain of your certificate
  *                                 issuer. For the `iodef`
- *                                 tag, a contact or submission URL (http or mailto).
- *                                 `PTR`: See our guide on how to Configure Your Linode for Reverse DNS
+ *                                 tag, a contact or submission URL (domain, http, https, or mailto). Requirements
+ *                                 depend on the tag for this record:
+ *                                 * `issue`: The domain of your certificate issuer. Must be a valid domain.
+ *                                 * `issuewild`: The domain of your wildcard certificate issuer. Must be a valid
+ *                                 domain and must not start with an asterisk (`*`).
+ *                                 * `iodef`: Must be either (1) a valid domain, (2) a valid domain prepended with
+ *                                 `http://` or `https://`, or (3) a valid email address prepended with `mailto:`.
+ *                                 `PTR`: Required. See our guide on how to Configure Your Linode for Reverse DNS
  *                                 (rDNS).
  *                                 With the exception of A, AAAA, and CAA records, this field accepts a trailing
  *                                 period.

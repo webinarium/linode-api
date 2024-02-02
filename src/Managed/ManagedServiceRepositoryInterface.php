@@ -26,8 +26,10 @@ use Linode\RepositoryInterface;
 interface ManagedServiceRepositoryInterface extends RepositoryInterface
 {
     /**
-     * Creates a Managed Service. Linode Managed will begin monitoring this service and
-     * reporting and attempting to resolve any Issues.
+     * Creates a Managed Service. Linode Managed will begin monitoring this
+     * service and reporting and attempting to resolve any Issues.
+     *
+     * This command can only be accessed by the unrestricted users of an account.
      *
      * @param array $parameters Information about the service to monitor.
      *
@@ -38,6 +40,8 @@ interface ManagedServiceRepositoryInterface extends RepositoryInterface
     /**
      * Updates information about a Managed Service.
      *
+     * This command can only be accessed by the unrestricted users of an account.
+     *
      * @param int   $serviceId  The ID of the Managed Service to access.
      * @param array $parameters The fields to update.
      *
@@ -46,8 +50,10 @@ interface ManagedServiceRepositoryInterface extends RepositoryInterface
     public function updateManagedService(int $serviceId, array $parameters = []): ManagedService;
 
     /**
-     * Deletes a Managed Service. This service will no longer be monitored by Linode
-     * Managed.
+     * Deletes a Managed Service. This service will no longer be monitored by
+     * Linode Managed.
+     *
+     * This command can only be accessed by the unrestricted users of an account.
      *
      * @param int $serviceId The ID of the Managed Service to access.
      *
@@ -58,6 +64,8 @@ interface ManagedServiceRepositoryInterface extends RepositoryInterface
     /**
      * Temporarily disables monitoring of a Managed Service.
      *
+     * This command can only be accessed by the unrestricted users of an account.
+     *
      * @param int $serviceId The ID of the Managed Service to disable.
      *
      * @throws LinodeException
@@ -66,6 +74,8 @@ interface ManagedServiceRepositoryInterface extends RepositoryInterface
 
     /**
      * Enables monitoring of a Managed Service.
+     *
+     * This command can only be accessed by the unrestricted users of an account.
      *
      * @param int $serviceId The ID of the Managed Service to enable.
      *

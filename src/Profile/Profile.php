@@ -27,74 +27,78 @@ use Linode\Profile\Repository\TrustedDeviceRepository;
  * regardless of requested scopes, and can be used to populate User information in
  * third-party applications.
  *
- * @property int                                    $uid                  Your unique ID in our system. This value will never change, and can safely be used
- *                                                                        to identify your User.
- * @property string                                 $username             Your username, used for logging in to our system.
- * @property string                                 $email                Your email address. This address will be used for communication with Linode as
- *                                                                        necessary.
- * @property bool                                   $restricted           If true, your User has restrictions on what can be accessed on your Account. To
- *                                                                        get details on what entities/actions you can access/perform, see /profile/grants.
- * @property bool                                   $two_factor_auth      If true, logins from untrusted computers will require Two Factor Authentication.
- *                                                                        See /profile/tfa-enable to enable Two Factor Authentication.
- * @property string                                 $timezone             The timezone you prefer to see times in. This is not used by the API directly. It
- *                                                                        is provided for the benefit of clients such as the Linode Cloud Manager and other
- *                                                                        clients built on the API. All times returned by the API are in UTC.
- * @property bool                                   $email_notifications  If true, you will receive email notifications about account activity. If false,
- *                                                                        you may still receive business-critical communications through email.
- * @property bool                                   $ip_whitelist_enabled If true, logins for your User will only be allowed from whitelisted IPs. This
- *                                                                        setting is currently deprecated, and cannot be enabled.
- *                                                                        If you disable this setting, you will not be able to re-enable it.
- * @property string                                 $lish_auth_method     The authentication methods that are allowed when connecting to the Linode Shell
- *                                                                        (Lish).
- *                                                                        * `keys_only` is the most secure if you intend to use Lish.
- *                                                                        * `disabled` is recommended if you do not intend to use Lish at all.
- *                                                                        * If this account's Cloud Manager authentication type is set to a Third-Party
- *                                                                        Authentication method, `password_keys` cannot be used as your Lish authentication
- *                                                                        method. To view this account's Cloud Manager `authentication_type` field, send a
- *                                                                        request to the View Profile endpoint.
- * @property null|string[]                          $authorized_keys      The list of SSH Keys authorized to use Lish for your User. This value is ignored
- *                                                                        if `lish_auth_method` is "disabled."
- * @property Referrals                              $referrals            Information about your status in our referral program.
- *                                                                        This information becomes accessible after this Profile's Account has established
- *                                                                        at least $25.00 USD of total payments.
- * @property string                                 $authentication_type  This account's Cloud Manager authentication type. Authentication types are chosen
- *                                                                        through
- *                                                                        Cloud Manager and authorized when logging into your account. These authentication
- *                                                                        types are either
- *                                                                        the user's password (in conjunction with their username), or the name of their
- *                                                                        indentity provider such as GitHub. For example, if a user:
- *                                                                        - Has never used Third-Party Authentication, their authentication type will be
- *                                                                        `password`.
- *                                                                        - Is using Third-Party Authentication, their authentication type will be the name
- *                                                                        of their Identity Provider (eg. `github`).
- *                                                                        - Has used Third-Party Authentication and has since revoked it, their
- *                                                                        authentication type will be `password`.
- *                                                                        **Note:** This functionality may not yet be available in Cloud Manager.
- *                                                                        See the Cloud Manager Changelog for the latest updates.
- * @property AuthorizedAppRepositoryInterface       $authorizedApps       List of OAuth apps that you've given access to your Account, and includes the
- *                                                                        level of access granted.
- * @property PersonalAccessTokenRepositoryInterface $personalAccessTokens List of Personal Access Tokens currently active for your User.
- * @property SSHKeyRepositoryInterface              $sshKeys              List of SSH Keys you've added to your Profile.
- * @property TrustedDeviceRepositoryInterface       $trustedDevices       List of active TrustedDevices for your User. Browsers with an active Remember Me
- *                                                                        Session are logged into your account until the session expires or is revoked.
+ * @property int                                    $uid                   Your unique ID in our system. This value will never change, and can safely be used
+ *                                                                         to identify your User.
+ * @property string                                 $username              Your username, used for logging in to our system.
+ * @property string                                 $email                 Your email address. This address will be used for communication with Linode as
+ *                                                                         necessary.
+ * @property bool                                   $restricted            If true, your User has restrictions on what can be accessed on your Account. To
+ *                                                                         get details on what entities/actions you can access/perform, see /profile/grants.
+ * @property bool                                   $two_factor_auth       If true, logins from untrusted computers will require Two Factor Authentication.
+ *                                                                         See /profile/tfa-enable to enable Two Factor Authentication.
+ * @property string                                 $timezone              The timezone you prefer to see times in. This is not used by the API directly. It
+ *                                                                         is provided for the benefit of clients such as the Linode Cloud Manager and other
+ *                                                                         clients built on the API. All times returned by the API are in UTC.
+ * @property bool                                   $email_notifications   If true, you will receive email notifications about account activity. If false,
+ *                                                                         you may still receive business-critical communications through email.
+ * @property bool                                   $ip_whitelist_enabled  If true, logins for your User will only be allowed from whitelisted IPs. This
+ *                                                                         setting is currently deprecated, and cannot be enabled.
+ *                                                                         If you disable this setting, you will not be able to re-enable it.
+ * @property string                                 $lish_auth_method      The authentication methods that are allowed when connecting to the Linode Shell
+ *                                                                         (Lish).
+ *                                                                         * `keys_only` is the most secure if you intend to use Lish.
+ *                                                                         * `disabled` is recommended if you do not intend to use Lish at all.
+ *                                                                         * If this account's Cloud Manager authentication type is set to a Third-Party
+ *                                                                         Authentication method, `password_keys` cannot be used as your Lish authentication
+ *                                                                         method. To view this account's Cloud Manager `authentication_type` field, send a
+ *                                                                         request to the View Profile endpoint.
+ * @property null|string[]                          $authorized_keys       The list of SSH Keys authorized to use Lish for your User. This value is ignored
+ *                                                                         if `lish_auth_method` is "disabled."
+ * @property Referrals                              $referrals             Information about your status in our referral program.
+ *                                                                         This information becomes accessible after this Profile's Account has established
+ *                                                                         at least $25.00 USD of total payments.
+ * @property string                                 $verified_phone_number The phone number verified for this Profile with the **Phone Number Verify** (POST
+ *                                                                         /profile/phone-number/verify) command.
+ *                                                                         `null` if this Profile has no verified phone number.
+ * @property string                                 $authentication_type   This account's Cloud Manager authentication type. Authentication types are chosen
+ *                                                                         through
+ *                                                                         Cloud Manager and authorized when logging into your account. These authentication
+ *                                                                         types are either
+ *                                                                         the user's password (in conjunction with their username), or the name of their
+ *                                                                         indentity provider such as GitHub. For example, if a user:
+ *                                                                         - Has never used Third-Party Authentication, their authentication type will be
+ *                                                                         `password`.
+ *                                                                         - Is using Third-Party Authentication, their authentication type will be the name
+ *                                                                         of their Identity Provider (eg. `github`).
+ *                                                                         - Has used Third-Party Authentication and has since revoked it, their
+ *                                                                         authentication type will be `password`.
+ *                                                                         **Note:** This functionality may not yet be available in Cloud Manager.
+ *                                                                         See the Cloud Manager Changelog for the latest updates.
+ * @property AuthorizedAppRepositoryInterface       $authorizedApps        List of OAuth apps that you've given access to your Account, and includes the
+ *                                                                         level of access granted.
+ * @property PersonalAccessTokenRepositoryInterface $personalAccessTokens  List of Personal Access Tokens currently active for your User.
+ * @property SSHKeyRepositoryInterface              $sshKeys               List of SSH Keys you've added to your Profile.
+ * @property TrustedDeviceRepositoryInterface       $trustedDevices        List of active TrustedDevices for your User. Browsers with an active Remember Me
+ *                                                                         Session are logged into your account until the session expires or is revoked.
  *
  * @codeCoverageIgnore This class was autogenerated.
  */
 class Profile extends Entity
 {
     // Available fields.
-    public const FIELD_UID                  = 'uid';
-    public const FIELD_USERNAME             = 'username';
-    public const FIELD_EMAIL                = 'email';
-    public const FIELD_RESTRICTED           = 'restricted';
-    public const FIELD_TWO_FACTOR_AUTH      = 'two_factor_auth';
-    public const FIELD_TIMEZONE             = 'timezone';
-    public const FIELD_EMAIL_NOTIFICATIONS  = 'email_notifications';
-    public const FIELD_IP_WHITELIST_ENABLED = 'ip_whitelist_enabled';
-    public const FIELD_LISH_AUTH_METHOD     = 'lish_auth_method';
-    public const FIELD_AUTHORIZED_KEYS      = 'authorized_keys';
-    public const FIELD_REFERRALS            = 'referrals';
-    public const FIELD_AUTHENTICATION_TYPE  = 'authentication_type';
+    public const FIELD_UID                   = 'uid';
+    public const FIELD_USERNAME              = 'username';
+    public const FIELD_EMAIL                 = 'email';
+    public const FIELD_RESTRICTED            = 'restricted';
+    public const FIELD_TWO_FACTOR_AUTH       = 'two_factor_auth';
+    public const FIELD_TIMEZONE              = 'timezone';
+    public const FIELD_EMAIL_NOTIFICATIONS   = 'email_notifications';
+    public const FIELD_IP_WHITELIST_ENABLED  = 'ip_whitelist_enabled';
+    public const FIELD_LISH_AUTH_METHOD      = 'lish_auth_method';
+    public const FIELD_AUTHORIZED_KEYS       = 'authorized_keys';
+    public const FIELD_REFERRALS             = 'referrals';
+    public const FIELD_VERIFIED_PHONE_NUMBER = 'verified_phone_number';
+    public const FIELD_AUTHENTICATION_TYPE   = 'authentication_type';
 
     // `FIELD_LISH_AUTH_METHOD` values.
     public const LISH_AUTH_METHOD_PASSWORD_KEYS = 'password_keys';
@@ -272,10 +276,15 @@ class Profile extends Entity
     }
 
     /**
-     * Generates a Two Factor secret for your User. TFA will not be enabled until you
-     * have successfully confirmed the code you were given with tfa-enable-confirm (see
-     * below). Once enabled, logins from untrusted computers will be required to provide
+     * Generates a Two Factor secret for your User. To enable TFA for your User, enter
+     * the secret obtained from this command with the **Two Factor Authentication
+     * Confirm/Enable** (POST /profile/tfa-enable-confirm) command.
+     * Once enabled, logins from untrusted computers are required to provide
      * a TFA code before they are successful.
+     *
+     * **Note**: Before you can enable TFA, security questions must be answered for your
+     * User by accessing the **Security Questions Answer** (POST
+     * /profile/security-questions) command.
      *
      * @return TwoFactorSecret Two Factor secret generated.
      *

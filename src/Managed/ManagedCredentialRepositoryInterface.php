@@ -26,8 +26,11 @@ use Linode\RepositoryInterface;
 interface ManagedCredentialRepositoryInterface extends RepositoryInterface
 {
     /**
-     * Creates a Managed Credential. A Managed Credential is stored securely to allow
-     * Linode special forces to access your Managed Services and resolve issues.
+     * Creates a Managed Credential. A Managed Credential is stored securely
+     * to allow Linode special forces to access your Managed Services and resolve
+     * issues.
+     *
+     * This command can only be accessed by the unrestricted users of an account.
      *
      * @param array $parameters Information about the Credential to create.
      *
@@ -40,6 +43,7 @@ interface ManagedCredentialRepositoryInterface extends RepositoryInterface
      * username and password for a Managed Credential. To do this, use the Managed
      * Credential Username and Password Update (POST
      * /managed/credentials/{credentialId}/update) endpoint instead.
+     * This command can only be accessed by the unrestricted users of an account.
      *
      * @param int   $credentialId The ID of the Credential to access.
      * @param array $parameters   The fields to update.
@@ -51,6 +55,8 @@ interface ManagedCredentialRepositoryInterface extends RepositoryInterface
     /**
      * Updates the username and password for a Managed Credential.
      *
+     * This command can only be accessed by the unrestricted users of an account.
+     *
      * @param int         $credentialId The ID of the Credential to update.
      * @param null|string $username     The username to use when accessing the Managed Service.
      * @param string      $password     The password to use when accessing the Managed Service.
@@ -60,8 +66,10 @@ interface ManagedCredentialRepositoryInterface extends RepositoryInterface
     public function updateManagedCredentialUsernamePassword(int $credentialId, ?string $username, string $password): void;
 
     /**
-     * Deletes a Managed Credential. Linode special forces will no longer have access to
-     * this Credential when attempting to resolve issues.
+     * Deletes a Managed Credential. Linode special forces will no longer
+     * have access to this Credential when attempting to resolve issues.
+     *
+     * This command can only be accessed by the unrestricted users of an account.
      *
      * @param int $credentialId The ID of the Credential to access.
      *
@@ -70,10 +78,12 @@ interface ManagedCredentialRepositoryInterface extends RepositoryInterface
     public function deleteManagedCredential(int $credentialId): void;
 
     /**
-     * Returns the unique SSH public key assigned to your Linode account's Managed
-     * service. If you add this public key to a Linode on your account, Linode special
-     * forces will be able to log in to the Linode with this key when attempting to
-     * resolve issues.
+     * Returns the unique SSH public key assigned to your Linode account's
+     * Managed service. If you add this public key to a Linode on your account,
+     * Linode special forces will be able to log in to the Linode with this key
+     * when attempting to resolve issues.
+     *
+     * This command can only be accessed by the unrestricted users of an account.
      *
      * @return string The unique SSH public key assigned to your Linode account's Managed service.
      *
