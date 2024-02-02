@@ -49,16 +49,58 @@ interface IPAddressRepositoryInterface extends RepositoryInterface
     public function updateIP(string $address, array $parameters = []): IPAddress;
 
     /**
-     * Assign multiple IPs to multiple Linodes in one Region. This allows swapping,
+     * Assign multiple IPv4 addresses and/or IPv6 ranges to multiple Linodes in one
+     * Region. This allows
+     * swapping, shuffling, or otherwise reorganizing IPs to your Linodes.
+     *
+     * The following restrictions apply:
+     * * All Linodes involved must have at least one public IPv4 address after
+     * assignment.
+     * * Linodes may have no more than one assigned private IPv4 address.
+     * * Linodes may have no more than one assigned IPv6 range.
+     * * Open a Support Ticket to request additional IPv4 addresses or IPv6 ranges.
+     *
+     * @param array $parameters Information about what IPv4 address or IPv6 range to assign, and to which Linode.
+     *
+     * @throws LinodeException
+     */
+    public function assignIPs(array $parameters = []): void;
+
+    /**
+     * Configure shared IPs.
+     *
+     * IP sharing allows IP address reassignment (also referred to as IP failover) from
+     * one Linode to another if
+     * the primary Linode becomes unresponsive. This means that requests to the primary
+     * Linode's IP address can be
+     * automatically rerouted to secondary Linodes at the configured shared IP addresses.
+     *
+     * IP failover requires configuration of a failover service (such as Keepalived)
+     * within the internal system of the primary Linode.
+     *
+     * **Note**: IPv6 range sharing has limited availability in certain regions. Please
+     * contact customer support for
+     * assistance in enabling IPv6 range sharing for your Linodes.
+     *
+     * @param array $parameters Information about what IPs to share with which Linode.
+     *
+     * @throws LinodeException
+     */
+    public function shareIPs(array $parameters = []): void;
+
+    /**
+     * Assign multiple IPv4s to multiple Linodes in one Region. This allows swapping,
      * shuffling, or otherwise reorganizing IPv4 Addresses to your Linodes. When the
      * assignment is finished, all Linodes must end up with at least one public IPv4 and
      * no more than one private IPv4.
+     * To assign IPv6 ranges or to use the CLI, see the Linodes Assign IPs (POST
+     * /networking/ips/assign) command.
      *
      * @param array $parameters Information about what IPv4 address to assign, and to which Linode.
      *
      * @throws LinodeException
      */
-    public function assignIPs(array $parameters = []): void;
+    public function assignIPv4s(array $parameters = []): void;
 
     /**
      * Configure shared IPs. A shared IP may be brought up on a Linode other than the one
@@ -69,5 +111,5 @@ interface IPAddressRepositoryInterface extends RepositoryInterface
      *
      * @throws LinodeException
      */
-    public function shareIPs(array $parameters = []): void;
+    public function shareIPv4s(array $parameters = []): void;
 }

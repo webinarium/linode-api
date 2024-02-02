@@ -25,8 +25,9 @@ use Linode\Entity;
  *                                 on the type of record this represents:
  *                                 `A` and `AAAA`: The hostname or FQDN of the Record.
  *                                 `NS`: The subdomain, if any, to use with the Domain of the Record.
- *                                 `MX`: The mail server subdomain. Must be an empty string (`""`) for a Null MX
- *                                 Record.
+ *                                 `MX`: The mail subdomain. For example, `sub` for the address
+ *                                 `user@sub.example.com` under the `example.com`
+ *                                 Domain. Must be an empty string (`""`) for a Null MX Record.
  *                                 `CNAME`: The hostname. Must be unique. Required.
  *                                 `TXT`: The hostname.
  *                                 `SRV`: Unused. Use the `service` property to set the service name for this record.
@@ -43,9 +44,9 @@ use Linode\Entity;
  *                                 `MX`: The mail server. Must be a valid domain unless creating a Null MX Record. To
  *                                 create a
  *                                 [Null MX Record, first
- *                                 remove any additional MX records, then enter an empty string
- *                                 (`""`) for this property. If a Domain has a Null MX record, new MX records cannot
- *                                 be created. Required.
+ *                                 remove any additional MX records, create an MX record with empty strings
+ *                                 (`""`) for the `target` and `name`. If a Domain has a Null MX record, new MX
+ *                                 records cannot be created. Required.
  *                                 `CNAME`: The alias. Must be a valid domain. Required.
  *                                 `TXT`: The value. Required.
  *                                 `SRV`: The target domain or subdomain. If a subdomain is entered, it is

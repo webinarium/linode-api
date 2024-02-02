@@ -37,9 +37,9 @@ interface ManagedCredentialRepositoryInterface extends RepositoryInterface
 
     /**
      * Updates the label of a Managed Credential. This endpoint does not update the
-     * username and password for a Managed Credential. To do this, use the Update Managed
-     * Credential Username and Password (POST /managed/credentials/{credentialId}/update)
-     * endpoint instead.
+     * username and password for a Managed Credential. To do this, use the Managed
+     * Credential Username and Password Update (POST
+     * /managed/credentials/{credentialId}/update) endpoint instead.
      *
      * @param int   $credentialId The ID of the Credential to access.
      * @param array $parameters   The fields to update.

@@ -29,10 +29,7 @@ use Linode\LKE\Repository\LKENodePoolRepository;
  *                                                         purposes only.
  * @property KubernetesControlPlane         $control_plane Defines settings for the Kubernetes Control Plane. Allows for the enabling of High
  *                                                         Availability (HA) for Control Plane Components. Enabling High Avaialability for
- *                                                         LKE is an **irreversible** change. The High Availability feature is in a **closed
- *                                                         beta** and is not currently available to all customers. Please be aware that this
- *                                                         feature may receive breaking updates in the future. This notice will be removed
- *                                                         when this feature is out of beta.
+ *                                                         LKE is an **irreversible** change.
  * @property LKENodePoolRepositoryInterface $nodePools     Node pools.
  */
 class LKECluster extends Entity

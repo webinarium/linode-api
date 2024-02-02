@@ -1,6 +1,6 @@
 openapi: 3.0.1
 info:
-  version: 4.108.1
+  version: 4.117.0
 
   title: Linode API
   description: |
@@ -82,9 +82,9 @@ info:
     | 2.  Your application then redirects the user to Linode's [login server](https://login.linode.com) with the client application's `client_id` and requested OAuth `scope`, which should appear in the URL of the login page. | 2.  Your application then redirects the user to Linode's [login server](https://login.linode.com) with the client application's `client_id` and requested OAuth `scope`, which should appear in the URL of the login page. |
     | 3.  The user logs into the login server with their username and password. | 3.  The user logs into the login server with their username and password. |
     | 4.  The login server redirects the user to the specificed redirect URL with a temporary authorization `code` (exchange code) in the URL. | 4.  The login server redirects the user back to your application with an OAuth `access_token` embedded in the redirect URL's hash. This is temporary and expires in two hours. No `refresh_token` is issued. Therefore, once the `access_token` expires, a new one will need to be issued by having the user log in again. |
-    | 5.  The application issues a POST request (*see below*) to the login server with the exchange code, `client_id`, and the client application's `client_secret`. | |
+    | 5.  The application issues a POST request (*see additional details below*) to the login server with the exchange code, `client_id`, and the client application's `client_secret`. | |
     | 6.  The login server responds to the client application with a new OAuth `access_token` and `refresh_token`. The `access_token` is set to expire in two hours. | |
-    | 7.  The `refresh_token` can be used by contacting the login server with the `client_id`, `client_secret`, `grant_type`, and `refresh_token` to get a new OAuth `access_token` and `refresh_token`. The new `access_token` is good for another two hours, and the new `refresh_token`, can be used to extend the session again by this same method. | |
+    | 7.  The `refresh_token` can be used by contacting the login server with the `client_id`, `client_secret`, `grant_type`, and `refresh_token` to get a new OAuth `access_token` and `refresh_token`. The new `access_token` is good for another two hours, and the new `refresh_token` can be used to extend the session again by this same method (*see additional details below*). | |
 
     #### OAuth Private Workflow - Additional Details
 
@@ -103,7 +103,6 @@ info:
 
     | PARAMETER | DESCRIPTION |
     |-----------|-------------|
-    | grant_type | The grant type you're using for renewal.  Currently only the string "refresh_token" is accepted. |
     | client_id | Your app's client ID. |
     | client_secret | Your app's client secret. |
     | code | The code you just received from the redirect. |
@@ -113,18 +112,30 @@ info:
     ```json
     {
       "scope": "linodes:read_write",
-      "access_token": "03d084436a6c91fbafd5c4b20c82e5056a2e9ce1635920c30dc8d81dc7a6665c"
+      "access_token": "03d084436a6c91fbafd5c4b20c82e5056a2e9ce1635920c30dc8d81dc7a6665c",
+      "refresh_token": "f2ec9712e616fdb5a2a21aa0e88cfadea7502ebc62cf5bd758dbcd65e1803bad",
       "token_type": "bearer",
-      "expires_in": 7200,
+      "expires_in": 7200
     }
     ```
 
-    Included in the reponse is an `access_token`. With this token, you can proceed to make
+    Included in the response is an `access_token`. With this token, you can proceed to make
     authenticated HTTP requests to the API by adding this header to each request:
 
     ```
     Authorization: Bearer 03d084436a6c91fbafd5c4b20c82e5056a2e9ce1635920c30dc8d81dc7a6665c
     ```
+
+    This `access_token` is set to expire in two hours. To refresh access prior to expiration, make another request to the same URL with the following parameters in the POST body:
+
+    | PARAMETER | DESCRIPTION |
+    |-----------|-------------|
+    | grant_type | The grant type you're using. Use "refresh_token" when refreshing access. |
+    | client_id | Your app's client ID. |
+    | client_secret | Your app's client secret. |
+    | refresh_token | The `refresh_token` received from the previous response. |
+
+    You'll get another response with an updated `access_token` and `refresh_token`, which can then be used to refresh access again.
 
     #### OAuth Reference
 
@@ -156,6 +167,7 @@ info:
     | 200 OK  | The request was successful. |
     | 202 Accepted | The request was successful, but processing has not been completed. The response body includes a "warnings" array containing the details of incomplete processes. |
     | 204 No Content | The server successfully fulfilled the request and there is no additional content to send. |
+    | 299 Deprecated | The request was successful, but involved a deprecated endpoint. The response body includes a "warnings" array containing warning messages. |
     | 400 Bad Request | You submitted an invalid request (missing parameters, etc.). |
     | 401 Unauthorized | You failed to authenticate for this resource. |
     | 403 Forbidden | You are authenticated, but don't have permission to do this. |
@@ -327,7 +339,7 @@ info:
     ## Rate Limiting
 
     With the Linode API, you can make up to 1,600 general API requests every two minutes per user as
-    determined by IP adddress or by OAuth token. Additionally, there are endpoint specfic limits defined below.
+    determined by IP address or by OAuth token. Additionally, there are endpoint specific limits defined below.
 
     **Note:** There may be rate limiting applied at other levels outside of the API, for example, at the load balancer.
 
@@ -504,8 +516,7 @@ paths:
                   survey_link:
                     type: string
                     description: A link to Linode's exit survey.
-                example: {'survey_link':
-                'https://alinktothesurvey.com'}
+                example: {'survey_link': https://alinktothesurvey.com'}
         '409':
           description: Could not charge the credit card on file
           content:
@@ -601,6 +612,7 @@ paths:
     get:
       deprecated: true
       x-linode-grant: unrestricted only
+      x-linode-cli-skip: true
       parameters:
       - $ref: '#/components/parameters/pageOffset'
       - $ref: '#/components/parameters/pageSize'
@@ -639,6 +651,7 @@ paths:
     post:
       deprecated: true
       x-linode-grant: unrestricted only
+      x-linode-cli-skip: true
       tags:
       - Account
       summary: Entity Transfer Create
@@ -696,6 +709,7 @@ paths:
     get:
       deprecated: true
       x-linode-grant: unrestricted only
+      x-linode-cli-skip: true
       tags:
       - Account
       summary: Entity Transfer View
@@ -724,6 +738,7 @@ paths:
     delete:
       deprecated: true
       x-linode-grant: unrestricted only
+      x-linode-cli-skip: true
       tags:
       - Account
       summary: Entity Transfer Cancel
@@ -762,6 +777,7 @@ paths:
     post:
       deprecated: true
       x-linode-grant: unrestricted only
+      x-linode-cli-skip: true
       tags:
       - Account
       summary: Entity Transfer Accept
@@ -1715,7 +1731,7 @@ paths:
                   description: |
                     The type of Payment Method.
 
-                    Alternative Payment Methods including Google Pay can be added using Linode Cloud Manager. See our
+                    Alternative Payment Methods including Google Pay and PayPal can be added using Linode Cloud Manager. See our
                     guide on [Managing Billing in the Cloud Manager](/docs/guides/manage-billing-in-cloud-manager/)
                     for details and instructions.
                   example: 'credit_card'
@@ -1957,7 +1973,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Payment'
         '202':
-          $ref: '#/components/responses/WarningResponse'
+          $ref: '#/components/responses/AcceptedResponse'
         default:
           $ref: '#/components/responses/ErrorResponse'
       x-code-samples:
@@ -2020,15 +2036,21 @@ paths:
     x-linode-cli-command: account
     post:
       x-linode-grant: read_only
+      deprecated: true
+      x-linode-cli-skip: true
       tags:
       - Account
       summary: PayPal Payment Stage
-      description: >
+      description: |
         This begins the process of submitting a Payment via PayPal. After calling
         this endpoint, you must take the resulting `payment_id` along with
         the `payer_id` from your PayPal account and
         [POST /account/payments/paypal-execute](/docs/api/account/#stagedapproved-paypal-payment-execute)
         to complete the Payment.
+
+        **Note**: This endpoint is deprecated and may be removed in a future release. PayPal can now be
+        designated as a Payment Method for automated payments using
+        [Cloud Manager](/docs/guides/manage-billing-in-cloud-manager/#adding-a-new-payment-method).
       operationId: createPayPalPayment
       x-linode-cli-action: paypal-start
       security:
@@ -2063,6 +2085,8 @@ paths:
                         The checkout token generated for this Payment.
                       example: EC-1A2B3C4D5E6F7G8H9
                       readOnly: true
+        '299':
+          $ref: '#/components/responses/DeprecatedResponse'
         default:
           $ref: '#/components/responses/ErrorResponse'
       x-code-samples:
@@ -2086,13 +2110,19 @@ paths:
     x-linode-cli-command: account
     post:
       x-linode-grant: read_write
+      deprecated: true
+      x-linode-cli-skip: true
       tags:
       - Account
       summary: Staged/Approved PayPal Payment Execute
-      description: >
+      description: |
         Given a PaymentID and PayerID - as generated by PayPal during the
         transaction authorization process - this endpoint executes the Payment
         to capture the funds and credit your Linode Account.
+
+        **Note**: This endpoint is deprecated and may be removed in a future release. PayPal can now be
+        designated as a Payment Method for automated or manual payments using
+        [Cloud Manager](/docs/guides/manage-billing-in-cloud-manager/#adding-a-new-payment-method).
       operationId: executePayPalPayment
       x-linode-cli-action: paypal-execute
       security:
@@ -2115,7 +2145,9 @@ paths:
              schema:
                type: object
         '202':
-          $ref: '#/components/responses/WarningResponse'
+          $ref: '#/components/responses/AcceptedResponse'
+        '299':
+          $ref: '#/components/responses/DeprecatedResponse'
         default:
           $ref: '#/components/responses/ErrorResponse'
       x-code-samples:
@@ -3328,6 +3360,7 @@ paths:
         source: >
           linode-cli domains zone-file 123
   /domains/import:
+    x-linode-cli-command: domains
     post:
       x-linode-grant: read_write
       x-linode-cli-command: domains
@@ -4938,6 +4971,8 @@ paths:
                   example: 124
                 label:
                   type: string
+                  minLength: 3
+                  maxLength: 64
                   description: >
                     The label to assign this Linode when cloning to a new Linode.
 
@@ -7474,7 +7509,7 @@ paths:
                 control_plane:
                   type: object
                   description: >
-                    Defines settings for the Kubernetes Control Plane. Allows for the enabling of High Availability (HA) for Control Plane Components. Enabling High Availability for LKE is an **irreversible** change. The High Availability feature is in a **closed beta** and is not currently available to all customers. Please be aware that this feature may receive breaking updates in the future. This notice will be removed when this feature is out of beta.
+                    Defines settings for the Kubernetes Control Plane. Allows for the enabling of High Availability (HA) for Control Plane Components. Enabling High Availability for LKE is an **irreversible** change.
                   properties:
                     high_availability:
                       type: boolean
@@ -7615,10 +7650,18 @@ paths:
                       The Kubernetes version of a cluster can not be downgraded.
                 control_plane:
                     type: object
-                    description: >
+                    description: |
                       Defines settings for the Kubernetes Control Plane. Allows for the enabling of High Availability (HA) for Control Plane Components.
 
-                      Enabling High Availability for LKE is an **irreversible** change. The High Availability feature is in a **closed beta** and is not currently available to all customers. Please be aware that this feature may receive breaking updates in the future. This notice will be removed when this feature is out of beta.
+                      Enabling High Availability for LKE is an **irreversible** change.
+
+                      When upgrading pre-existing LKE clusters to use the HA Control Plane, the following changes will additionally occur:
+
+                      - All nodes will be deleted and new nodes will be created to replace them.
+
+                      - Any local storage (such as `hostPath` volumes) will be erased.
+
+                      - The upgrade process may take several minutes to complete, as nodes will be replaced on a rolling basis.
                     properties:
                       high_availability:
                         type: boolean
@@ -9190,8 +9233,8 @@ paths:
       description: >
         Updates the label of a Managed Credential. This endpoint
         does not update the username and password for a Managed Credential.
-        To do this, use the Update Managed Credential Username and Password
-        ([POST /managed/credentials/{credentialId}/update](https://developers.linode.com/api/docs/v4#operation/updateManagedCredentialUsernamePassword))
+        To do this, use the Managed Credential Username and Password Update
+        ([POST /managed/credentials/{credentialId}/update](/docs/api/managed/#managed-credential-username-and-password-update))
         endpoint instead.
       operationId: updateManagedCredential
       x-linode-cli-action: credential-update
@@ -10185,20 +10228,210 @@ paths:
           linode-cli networking ip-update \
             97.107.143.141 \
             --rdns "test.example.org"
-  /networking/ipv4/assign:
+  /networking/ips/assign:
     x-linode-cli-command: networking
     post:
       x-linode-grant: read_write
       tags:
       - Networking
       summary: Linodes Assign IPs
+      description: |
+        Assign multiple IPv4 addresses and/or IPv6 ranges to multiple Linodes in one Region. This allows
+        swapping, shuffling, or otherwise reorganizing IPs to your Linodes.
+
+        The following restrictions apply:
+        * All Linodes involved must have at least one public IPv4 address after assignment.
+        * Linodes may have no more than one assigned private IPv4 address.
+        * Linodes may have no more than one assigned IPv6 range.
+        * [Open a Support Ticket](/docs/api/support/#support-ticket-open) to request additional IPv4 addresses or IPv6 ranges.
+      operationId: assignIPs
+      x-linode-cli-action: ip-assign
+      security:
+      - personalAccessToken: []
+      - oauth:
+        - ips:read_write
+        - linodes:read_write
+      requestBody:
+        description: >
+          Information about what IPv4 address or IPv6 range to assign, and to which Linode.
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+              - region
+              - assignments
+              properties:
+                region:
+                  type: string
+                  description: >
+                    The ID of the Region in which these assignments are to take
+                    place. All IPs and Linodes must exist in this Region.
+                  example: us-east
+                assignments:
+                  type: array
+                  description: >
+                    The list of assignments to make. You must have read_write
+                    access to all IPs being assigned and all Linodes being
+                    assigned to in order for the assignments to succeed.
+                  required:
+                    - address
+                    - linode_id
+                  items:
+                    type: object
+                    properties:
+                      address:
+                        type: string
+                        format: ipv4|ipv6/prefix_length
+                        description: |
+                          The IPv4 address or IPv6 range for this assignment.
+                          * Must be an IPv4 address or an IPv6 range you can access in the Region specified.
+                          * IPv6 ranges must include a prefix length of `/56` or `/64`, for example: `2001:db8:3c4d:15::/64`.
+                          * Assignment of an IPv6 range to a Linode updates the route target of the range to the assigned Linode's SLAAC address.
+                          * May be a public or private address.
+                        example: 12.34.56.78
+                      linode_id:
+                        type: integer
+                        description: >
+                          The ID of the Linode to assign this address to. The IP's
+                          previous Linode will lose this address, and must end up
+                          with at least one public address and no more than one
+                          private address once all assignments have been made.
+                        example: 123
+      responses:
+        '200':
+          description: All assignments completed successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      x-code-samples:
+      - lang: Shell
+        source: >
+          curl -H "Content-Type: application/json" \
+              -H "Authorization: Bearer $TOKEN" \
+              -X POST -d '{
+                "region": "us-east",
+                "assignments": [
+                  {
+                    "address": "12.34.56.100",
+                    "linode_id": 123
+                  },
+                  {
+                    "address": "2001:db8:3c4d:15::/64",
+                    "linode_id": 234
+                  }
+                ]
+              }' \
+              https://api.linode.com/v4/networking/ipvs/assign
+      - lang: CLI
+        source: >
+          linode-cli networking ip-assign \
+            --region us-east \
+            --assignments.address 2001:db8:3c4d:15::/64 \
+            --assignments.linode_id 123
+  /networking/ips/share:
+    x-linode-cli-command: networking
+    post:
+      servers:
+      - url: https://api.linode.com/v4beta
+      - url: https://api.linode.com/v4
+      x-linode-grant: read_write
+      tags:
+      - Networking
+      summary: IP Addresses Share
+      description: |
+        Configure shared IPs.
+
+        IP sharing allows IP address reassignment (also referred to as IP failover) from one Linode to another if
+        the primary Linode becomes unresponsive. This means that requests to the primary Linode's IP address can be
+        automatically rerouted to secondary Linodes at the configured shared IP addresses.
+
+        IP failover requires configuration of a failover service (such as [Keepalived](/docs/guides/ip-failover-keepalived))
+        within the internal system of the primary Linode.
+
+        **Note**: IPv6 range sharing has limited availability in certain regions. Please contact customer support for
+        assistance in enabling IPv6 range sharing for your Linodes.
+      operationId: shareIPs
+      x-linode-cli-action: ip-share
+      security:
+      - personalAccessToken: []
+      - oauth:
+        - ips:read_write
+        - linodes:read_write
+      requestBody:
+        description: Information about what IPs to share with which Linode.
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+              - linode_id
+              - ips
+              properties:
+                linode_id:
+                  type: integer
+                  description: >
+                    The ID of the primary Linode that the addresses will be shared with.
+                  example: 123
+                ips:
+                  type: array
+                  items:
+                    type: string
+                    format: ip
+                  description: |
+                    A list of secondary Linode IPs to share with the primary Linode.
+                    * Can include both IPv4 addresses and IPv6 ranges (omit /56 and /64 prefix lengths)
+                    * Can include both private and public IPv4 addresses.
+                    * You must have access to all of these addresses and they must be in the same Region as the primary
+                    Linode.
+                    * Enter an empty array to remove all shared IP addresses.
+      responses:
+        '200':
+          description: IP Address sharing successful.
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      x-code-samples:
+      - lang: Shell
+        source: >
+          curl -H "Content-Type: application/json" \
+              -H "Authorization: Bearer $TOKEN" \
+              -X POST -d '{
+                "linode_id": 123,
+                "ips": [
+                  "192.0.2.1",
+                  "2001:db8:3c4d:15::"
+                ]
+              }' \
+              https://api.linode.com/v4beta2/networking/ips/share
+      - lang: CLI
+        source: >
+          linode-cli networking ip-share \
+            --linode_id 123 \
+            --ips 192.0.2.1 \
+            --ips 2001:db8:3c4d:15::
+  /networking/ipv4/assign:
+    x-linode-cli-command: networking
+    post:
+      x-linode-grant: read_write
+      tags:
+      - Networking
+      summary: Linodes Assign IPv4s
       description: >
-        Assign multiple IPs to multiple Linodes in one Region. This allows
+        Assign multiple IPv4s to multiple Linodes in one Region. This allows
         swapping, shuffling, or otherwise reorganizing IPv4 Addresses to your
         Linodes.  When the assignment is finished, all Linodes must end up with
         at least one public IPv4 and no more than one private IPv4.
-      operationId: assignIPs
-      x-linode-cli-action: ip-assign
+
+        To assign IPv6 ranges or to use the CLI, see the Linodes Assign IPs ([POST /networking/ips/assign](/docs/api/networking/#linodes-assign-ips)) command.
+      operationId: assignIPv4s
+      x-linode-cli-skip: true
       security:
       - personalAccessToken: []
       - oauth:
@@ -10227,6 +10460,9 @@ paths:
                     The list of assignments to make.  You must have read_write
                     access to all IPs being assigned and all Linodes being
                     assigned to in order for the assignments to succeed.
+                  required:
+                  - address
+                  - linode_id
                   items:
                     type: object
                     properties:
@@ -10274,27 +10510,19 @@ paths:
                 ]
               }' \
               https://api.linode.com/v4/networking/ipv4/assign
-      - lang: CLI
-        source: >
-          linode-cli networking ip-assign \
-            --region us-east \
-            --assignments \
-              '{"address": "12.34.56.100", "linode_id": 123}' \
-            --assignments \
-              '{"23.45.67.200", "linode_id": 234}'
   /networking/ipv4/share:
     x-linode-cli-command: networking
     post:
       x-linode-grant: read_write
       tags:
       - Networking
-      summary: IP Sharing Configure
+      summary: IPv4 Sharing Configure
       description: >
         Configure shared IPs.  A shared IP may be brought up on a Linode other
         than the one it lists in its response.  This can be used to allow one
         Linode to begin serving requests should another become unresponsive.
-      operationId: shareIPs
-      x-linode-cli-action: ip-share
+      operationId: shareIPv4s
+      x-linode-cli-skip: true
       security:
       - personalAccessToken: []
       - oauth:
@@ -10414,11 +10642,11 @@ paths:
         Displays the IPv6 ranges on your Account.
 
 
-          * An IPv6 range is a `/64` block of IPv6 addresses routed to a single Linode in a given [Region](/docs/api/regions/#regions-list).
+          * An IPv6 range is a `/64` or `/54` block of IPv6 addresses routed to a single Linode in a given [Region](/docs/api/regions/#regions-list).
 
           * Your Linode is responsible for routing individual addresses in the range, or handling traffic for all the addresses in the range.
 
-          * You must [open a support ticket](/docs/api/support/#support-ticket-open) to request a `/64` block of IPv6 addresses to be added to your account.
+          * Access the IPv6 Range Create ([POST /networking/ipv6/ranges](/docs/api/networking/#ipv6-range-create)) endpoint to add a `/64` or `/56` block of IPv6 addresses to your account.
       operationId: getIPv6Ranges
       x-linode-cli-action: v6-ranges
       security:
@@ -10453,6 +10681,176 @@ paths:
       - lang: CLI
         source: >
           linode-cli networking v6-ranges
+    post:
+      tags:
+      - Networking
+      summary: IPv6 Range Create
+      description: |
+        Creates an IPv6 Range and assigns it based on the provided Linode or route target IPv6 SLAAC address. See the `ipv6` property when accessing the Linode View ([GET /linode/instances/{linodeId}](/docs/api/linode-instances/#linode-view)) endpoint to view a Linode's IPv6 SLAAC address.
+          * Either `linode_id` or `route_target` is required in a request.
+          * `linode_id` and `route_target` are mutually exclusive. Submitting values for both properties in a request results in an error.
+          * Upon a successful request, an IPv6 range is created in the [Region](/docs/api/regions/#regions-list) that corresponds to the provided `linode_id` or `route_target`.
+          * Your Linode is responsible for routing individual addresses in the range, or handling traffic for all the addresses in the range.
+          * Access the Linodes Assign IPs ([POST /networking/ips/assign](/docs/api/networking/#linodes-assign-ips)) endpoint to re-assign IPv6 Ranges to your Linodes.
+
+        **Note**: The following restrictions apply:
+          * A Linode can only have one IPv6 range targeting its SLAAC address.
+          * An account can only have one IPv6 range in each [Region](/docs/api/regions/#regions-list).
+          * [Open a Support Ticket](/docs/api/support/#support-ticket-open) to request expansion of these restrictions.
+      operationId: postIPv6Range
+      x-linode-cli-action: v6-range-create
+      security:
+      - personalAccessToken: []
+      - oauth:
+        - ips:read_write
+        - linodes:read_write
+      requestBody:
+        description: >
+          Information about the IPv6 range to create.
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+              - prefix_length
+              properties:
+                linode_id:
+                  type: integer
+                  description: |
+                    The ID of the Linode to assign this range to. The SLAAC address for the provided Linode is used as the range's `route_target`.
+
+                    * **Required** if `route_target` is omitted from the request.
+
+                    * Mutually exclusive with `route_target`. Submitting values for both properties in a request results in an error.
+                  example: 123
+                prefix_length:
+                  type: integer
+                  enum:
+                  - 56
+                  - 64
+                  description: >
+                    The prefix length of the IPv6 range.
+                route_target:
+                  type: string
+                  format: ipv6
+                  description: |
+                    The IPv6 SLAAC address to assign this range to.
+
+                    * **Required** if `linode_id` is omitted from the request.
+
+                    * Mutually exclusive with `linode_id`. Submitting values for both properties in a request results in an error.
+
+                    * **Note**: Omit the `/128` prefix length of the SLAAC address when using this property.
+                  example: 2001:0db8::1
+      responses:
+        '200':
+          description: IPv6 range created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  range:
+                    type: string
+                    format: ipv6/prefix_length
+                    description: >
+                      The IPv6 network range, including subnet and prefix length.
+                    example: 2001:0db8::/64
+                  route_target:
+                    type: string
+                    format: ipv6
+                    description: >
+                      The route target IPV6 SLAAC address for this range. Does not include the prefix length.
+                    example: 2001:0db8::1
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      x-code-samples:
+      - lang: Shell
+        source: >
+          curl -H "Authorization: Bearer $TOKEN" \
+              -X POST -d '{
+                  "linode_id": 123,
+                  "prefix_length": 64
+              }' \
+              https://api.linode.com/v4/networking/ipv6/ranges
+      - lang: CLI
+        source: >
+          linode-cli networking v6-range-create \
+            --linode_id 123 \
+            --prefix_length 64
+  /networking/ipv6/ranges/{range}:
+    parameters:
+      - name: range
+        in: path
+        description: |
+          The IPv6 range to access. Corresponds to the `range` property of objects returned from the IPv6 Ranges List ([GET /networking/ipv6/ranges](/docs/api/networking/#ipv6-ranges-list)) command.
+
+          **Note**: Omit the prefix length of the IPv6 range.
+        required: true
+        schema:
+          type: string
+          format: ipv6
+    x-linode-cli-command: networking
+    get:
+      tags:
+      - Networking
+      summary: IPv6 Range View
+      description: |
+        View IPv6 range information.
+      operationId: getIPv6Range
+      x-linode-cli-action: v6-range-view
+      security:
+      - personalAccessToken: []
+      - oauth:
+        - ips:read
+      responses:
+        '200':
+          description: Returns IPv6 range information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IPv6RangeBGP'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      x-code-samples:
+      - lang: Shell
+        source: >
+          curl -H "Authorization: Bearer $TOKEN" https://api.linode.com/v4/networking/ipv6/ranges/2001:0db8::
+      - lang: CLI
+        source: >
+          linode-cli networking v6-range-view 2001:0db8::
+    delete:
+      tags:
+      - Networking
+      summary: IPv6 Range Delete
+      description: |
+        Removes this IPv6 range from your account and disconnects the range from any assigned Linodes.
+
+        **Note:** Shared IPv6 ranges cannot be deleted at this time. Please contact Customer Support for assistance.
+      operationId: deleteIPv6Range
+      x-linode-cli-action: v6-range-delete
+      security:
+      - personalAccessToken: []
+      - oauth:
+        - ips:read_write
+      responses:
+        '200':
+          description: IPv6 Range deleted.
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      x-code-samples:
+      - lang: Shell
+        source: >
+          curl -H "Authorization: Bearer $TOKEN" \
+              -X DELETE \
+              https://api.linode.com/v4/networking/ipv6/ranges/2001:0db8::
+      - lang: CLI
+        source: >
+          linode-cli networking v6-range-delete 2001:0db8::
   /networking/firewalls:
     x-linode-cli-command: firewalls
     get:
@@ -11202,7 +11600,7 @@ paths:
       - lang: Shell
         source: >
           curl -H "Authorization: Bearer $TOKEN" \
-              https://api.linode.com/v4/networking/vlans/
+              https://api.linode.com/v4beta/networking/vlans/
       - lang: CLI
         source: >
           linode-cli networking vlans-list
@@ -12320,13 +12718,14 @@ paths:
       servers:
       - url: https://api.linode.com/v4
       summary: Object Storage Bucket Remove
-      description: >
-        Removes a single bucket. While buckets containing objects _may_ be
-        deleted by including the `force` option in the request, such operations
-        will fail if the bucket contains too many objects. The recommended
+      description: |
+        Removes a single bucket.
+
+        Bucket objects must be removed prior to removing the bucket. While buckets containing objects _may_ be
+        deleted using the [s3cmd command-line tool](/docs/products/storage/object-storage/guides/s3cmd/#delete-a-bucket), such operations
+        can fail if the bucket contains too many objects. The recommended
         way to empty large buckets is to use the [S3 API to configure lifecycle policies](https://docs.ceph.com/en/latest/radosgw/bucketpolicy/#) that
         remove all objects, then delete the bucket.
-
 
         This endpoint is available for convenience. It is recommended that instead you
         use the more [fully-featured S3 API](https://docs.ceph.com/en/latest/radosgw/s3/bucketops/#delete-bucket) directly.
@@ -13202,14 +13601,9 @@ paths:
       - url: https://api.linode.com/v4
       summary: Object Storage Cancel
       description: |
-        Cancel Object Storage on an Account. All buckets on the Account must be empty
-        before Object Storage can be cancelled:
+        Cancel Object Storage on an Account.
 
-        - To delete a smaller number of objects, review the instructions in our
-        [How to Use Object Storage](/docs/platform/object-storage/how-to-use-object-storage/)
-        guide.
-        - To delete large amounts of objects, consult our guide on
-        [Lifecycle Policies](/docs/platform/object-storage/lifecycle-policies/).
+        **Warning**: Removes all buckets and their contents from your Account. This data is irretrievable once removed.
       security:
       - personalAccessToken: []
       - oauth:
@@ -15776,6 +16170,34 @@ components:
             'volumes:read_only': Allows access to GET your Volumes.
             'volumes:read_write': Allows access to all endpoints related to your Volumes.
   responses:
+    AcceptedResponse:
+      description: |
+        Accepted with warning.
+
+        A warnings array is included with the standard 200 response body.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              warnings:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WarningObject'
+    DeprecatedResponse:
+      description: |
+        Request successful. This endpoint is deprecated and may be removed in a future release.
+
+        A warnings array is included with the standard 200 response body.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              warnings:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WarningObject'
     ErrorResponse:
       description: Error
       content:
@@ -15787,20 +16209,6 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/ErrorObject'
-    WarningResponse:
-      description: |
-        Accepted with warning.
-
-        A warning object is included with the standard 200 response.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              warnings:
-                type: array
-                items:
-                  $ref: '#/components/schemas/WarningObject'
   parameters:
     pageOffset:
       name: page
@@ -15957,9 +16365,7 @@ components:
         country:
           type: string
           description: >
-            The two-letter country code of this Account's billing address.
-          minLength: 2
-          maxLength: 2
+            The two-letter ISO 3166 country code of this Account's billing address.
           example: US
         email:
           type: string
@@ -15987,12 +16393,12 @@ components:
         state:
           type: string
           description: >
-            If billing address is in the United States, this is the State
-            portion of the Account's billing address. If the address is outside
-            the US, this is the Province associated with the Account's billing
+            If billing address is in the United States (US) or Canada (CA), only the two-letter
+            ISO 3166 State or Province code are accepted. If the address is outside
+            the US or CA, this is the Province associated with the Account's billing
             address.
           maxLength: 24
-          example: Pennsylvania
+          example: PA
         tax_id:
           type: string
           description: >
@@ -16447,6 +16853,8 @@ components:
           description: |
             This sets the root user's password on a newly-created Linode Disk when deploying from an Image.
 
+            * **Required** when creating a Linode Disk from an Image, including when using a StackScript.
+
             * Must meet a password strength score requirement that is calculated internally by the API.
             If the strength requirement is not met, you will receive a `Password does not meet strength requirement` error.
         stackscript_id:
@@ -16667,7 +17075,8 @@ components:
 
             `NS`: The subdomain, if any, to use with the Domain of the Record.
 
-            `MX`: The mail server subdomain. Must be an empty string (`""`) for a Null MX Record.
+            `MX`: The mail subdomain. For example, `sub` for the address `user@sub.example.com` under the `example.com`
+            Domain. Must be an empty string (`""`) for a Null MX Record.
 
             `CNAME`: The hostname. Must be unique. Required.
 
@@ -16695,8 +17104,8 @@ components:
 
             `MX`: The mail server. Must be a valid domain unless creating a Null MX Record. To create a
             [Null MX Record](https://datatracker.ietf.org/doc/html/rfc7505), first
-            [remove](/docs/api/domains/#domain-record-delete) any additional MX records, then enter an empty string
-            (`""`) for this property. If a Domain has a Null MX record, new MX records cannot be created. Required.
+            [remove](/docs/api/domains/#domain-record-delete) any additional MX records, create an MX record with empty strings
+            (`""`) for the `target` and `name`. If a Domain has a Null MX record, new MX records cannot be created. Required.
 
             `CNAME`: The alias. Must be a valid domain. Required.
 
@@ -18191,6 +18600,48 @@ components:
             The last address in this block of IPv6 addresses.
           example: '2600:3c01::ffff:ffff:ffff:ffff'
           nullable: true
+    IPv6RangeBGP:
+      type: object
+      description: >
+        An object representing an IPv6 range.
+      properties:
+        range:
+          type: string
+          description: >
+            The IPv6 range of addresses in this pool.
+          example: '2600:3c01::'
+          readOnly: true
+          x-linode-cli-display: 1
+        prefix:
+          type: integer
+          description: >
+            The prefix length of the address, denoting how many addresses can be
+            assigned from this range calculated as 2 <sup>128-prefix</sup>.
+          example: 64
+          x-linode-cli-display: 2
+        region:
+          type: string
+          description: >
+            The region for this range of IPv6 addresses.
+          example: us-east
+          readOnly: true
+          x-linode-cli-display: 3
+        is_bgp:
+          type: boolean
+          description: >
+            Whether this IPv6 range is shared.
+          example: false
+          readOnly: true
+        linodes:
+          type: array
+          items:
+            type: integer
+          example:
+          - 123
+          description: >
+            A list of Linodes targeted by this IPv6 range. Includes Linodes with IP sharing.
+          readOnly: true
+          x-linode-cli-display: 4
     Kernel:
       type: object
       description: Linux kernel object
@@ -18274,7 +18725,7 @@ components:
               * Cannot have two dashes (`--`), underscores (`__`) or periods (`..`) in a row.
           example: linode123
           minLength: 3
-          maxLength: 32
+          maxLength: 64
           pattern: '^[a-zA-Z]((?!--|__|..)[a-zA-Z0-9-_.])+$'
         region:
           type: string
@@ -19130,7 +19581,7 @@ components:
         control_plane:
           type: object
           description: >
-            Defines settings for the Kubernetes Control Plane. Allows for the enabling of High Availability (HA) for Control Plane Components. Enabling High Avaialability for LKE is an **irreversible** change. The High Availability feature is in a **closed beta** and is not currently available to all customers. Please be aware that this feature may receive breaking updates in the future. This notice will be removed when this feature is out of beta.
+            Defines settings for the Kubernetes Control Plane. Allows for the enabling of High Availability (HA) for Control Plane Components. Enabling High Avaialability for LKE is an **irreversible** change.
           properties:
             high_availability:
               type: boolean
@@ -19977,8 +20428,8 @@ components:
         hostname:
           type: string
           description: >
-            This NodeBalancer's hostname, ending with _.nodebalancer.linode.com_
-          example: nb-207-192-68-16.newark.nodebalancer.linode.com
+            This NodeBalancer's hostname, beginning with its IP address and ending with _.ip.linodeusercontent.com_.
+          example: 192.0.2.1.ip.linodeusercontent.com
           readOnly: true
           x-linode-cli-display: 4
         ipv4:
@@ -20915,6 +21366,7 @@ components:
           enum:
             - credit_card
             - google_pay
+            - paypal
           description: The type of Payment Method.
           example: 'credit_card'
           x-linode-cli-display: 2
@@ -20931,28 +21383,71 @@ components:
           description: When the Payment Method was added to the Account.
           example: '2018-01-15T00:01:01'
         data:
-          type: object
-          description: Credit card information.
-          properties:
-            card_type:
-              type: string
-              readOnly: true
-              description: The type of credit card.
-              example: "Discover"
-              x-linode-cli-display: 8
-            last_four:
-              type: string
-              readOnly: true
-              description: The last four digits of the credit card number.
-              example: "1234"
-              x-linode-cli-display: 9
-            expiry:
-              type: string
-              readOnly: true
-              format: MM/YYYY
-              description: The expiration month and year of the credit card.
-              example: 06/2022
-              x-linode-cli-display: 10
+          x-linode-cli-format: json
+          x-linode-cli-display: 4
+          oneOf:
+            - x-linode-ref-name: "Credit Card"
+              $ref: '#/components/schemas/CreditCardData'
+            - x-linode-ref-name: "Google Pay"
+              $ref: '#/components/schemas/GooglePayData'
+            - x-linode-ref-name: "Paypal"
+              $ref: '#/components/schemas/PayPalData'
+          discriminator:
+            propertyName: type
+    CreditCardData:
+      type: object
+      description: Credit card information.
+      properties:
+        card_type:
+          type: string
+          readOnly: true
+          description: The type of credit card.
+          example: "Discover"
+        last_four:
+          type: string
+          readOnly: true
+          description: The last four digits of the credit card number.
+          example: "1234"
+        expiry:
+          type: string
+          readOnly: true
+          format: MM/YYYY
+          description: The expiration month and year of the credit card.
+          example: 06/2022
+    GooglePayData:
+      type: object
+      description: Google Pay information.
+      properties:
+        card_type:
+          type: string
+          readOnly: true
+          description: The type of credit card.
+          example: "Discover"
+        last_four:
+          type: string
+          readOnly: true
+          description: The last four digits of the credit card number.
+          example: "1234"
+        expiry:
+          type: string
+          readOnly: true
+          format: MM/YYYY
+          description: The expiration month and year of the credit card.
+          example: 06/2022
+    PayPalData:
+      type: object
+      description: PayPal information.
+      properties:
+        email:
+          type: string
+          readOnly: true
+          description: The email address associated with your PayPal account.
+          example: "example@linode.com"
+        paypal_id:
+          type: string
+          readOnly: true
+          description: PayPal Merchant ID associated with your PayPal account.
+          example: "ABC1234567890"
     PaymentRequest:
       type: object
       required:
@@ -22348,7 +22843,7 @@ components:
     WarningObject:
       type: object
       description: >
-        An object for describing a single warning for incomplete processing associated with an accepted request.
+        An object for describing a single warning associated with a response.
       properties:
         title:
           type: string

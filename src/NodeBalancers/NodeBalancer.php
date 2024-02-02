@@ -25,7 +25,8 @@ use Linode\NodeBalancers\Repository\NodeBalancerConfigRepository;
  * @property string                                $label                This NodeBalancer's label. These must be unique on your Account.
  * @property string                                $region               The Region where this NodeBalancer is located. NodeBalancers only support backends
  *                                                                       in the same Region.
- * @property string                                $hostname             This NodeBalancer's hostname, ending with _.nodebalancer.linode.com_
+ * @property string                                $hostname             This NodeBalancer's hostname, beginning with its IP address and ending with
+ *                                                                       _.ip.linodeusercontent.com_.
  * @property string                                $ipv4                 This NodeBalancer's public IPv4 address.
  * @property null|string                           $ipv6                 This NodeBalancer's public IPv6 address.
  * @property int                                   $client_conn_throttle Throttle connections per second. Set to 0 (zero) to disable throttling.

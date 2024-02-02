@@ -20,7 +20,7 @@ use Linode\Entity;
  * @property string $last_four The last four digits of the credit card number.
  * @property string $expiry    The expiration month and year of the credit card.
  */
-class CreditCard extends Entity
+class CreditCardData extends Entity
 {
     // Available fields.
     public const FIELD_CARD_TYPE = 'card_type';

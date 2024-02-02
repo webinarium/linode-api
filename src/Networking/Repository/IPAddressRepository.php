@@ -41,10 +41,20 @@ class IPAddressRepository extends AbstractRepository implements IPAddressReposit
 
     public function assignIPs(array $parameters = []): void
     {
-        $this->client->post('/networking/ipv4/assign', $parameters);
+        $this->client->post(sprintf('%s/assign', $this->getBaseUri()), $parameters);
     }
 
     public function shareIPs(array $parameters = []): void
+    {
+        $this->client->post(sprintf('%s/share', $this->getBaseUri()), $parameters);
+    }
+
+    public function assignIPv4s(array $parameters = []): void
+    {
+        $this->client->post('/networking/ipv4/assign', $parameters);
+    }
+
+    public function shareIPv4s(array $parameters = []): void
     {
         $this->client->post('/networking/ipv4/share', $parameters);
     }

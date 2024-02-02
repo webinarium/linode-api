@@ -40,14 +40,18 @@ interface ObjectStorageBucketRepositoryInterface extends RepositoryInterface
     public function createObjectStorageBucket(array $parameters = []): ObjectStorageBucket;
 
     /**
-     * Removes a single bucket. While buckets containing objects _may_ be deleted by
-     * including the `force` option in the request, such operations will fail if the
-     * bucket contains too many objects. The recommended way to empty large buckets is to
-     * use the S3 API to configure lifecycle policies that remove all objects, then
-     * delete the bucket.
+     * Removes a single bucket.
      *
-     * This endpoint is available for convenience. It is recommended that instead you use
-     * the more fully-featured S3 API directly.
+     * Bucket objects must be removed prior to removing the bucket. While buckets
+     * containing objects _may_ be
+     * deleted using the s3cmd command-line tool, such operations
+     * can fail if the bucket contains too many objects. The recommended
+     * way to empty large buckets is to use the S3 API to configure lifecycle policies
+     * that
+     * remove all objects, then delete the bucket.
+     *
+     * This endpoint is available for convenience. It is recommended that instead you
+     * use the more fully-featured S3 API directly.
      *
      * @param string $bucket The bucket name.
      *
@@ -215,14 +219,10 @@ interface ObjectStorageBucketRepositoryInterface extends RepositoryInterface
     public function getObjectStorageTransfer(): int;
 
     /**
-     * Cancel Object Storage on an Account. All buckets on the Account must be empty
-     * before Object Storage can be cancelled:
+     * Cancel Object Storage on an Account.
      *
-     * - To delete a smaller number of objects, review the instructions in our
-     * How to Use Object Storage
-     * guide.
-     * - To delete large amounts of objects, consult our guide on
-     * Lifecycle Policies.
+     * **Warning**: Removes all buckets and their contents from your Account. This data
+     * is irretrievable once removed.
      *
      * @throws LinodeException
      */

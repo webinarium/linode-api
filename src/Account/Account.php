@@ -38,18 +38,18 @@ use Linode\Managed\StatsDataAvailable;
  * @property string                             $address_1          First line of this Account's billing address.
  * @property string                             $address_2          Second line of this Account's billing address.
  * @property string                             $city               The city for this Account's billing address.
- * @property string                             $state              If billing address is in the United States, this is the State portion of the
- *                                                                  Account's billing address. If the address is outside the US, this is the Province
- *                                                                  associated with the Account's billing address.
+ * @property string                             $state              If billing address is in the United States (US) or Canada (CA), only the
+ *                                                                  two-letter ISO 3166 State or Province code are accepted. If the address is outside
+ *                                                                  the US or CA, this is the Province associated with the Account's billing address.
  * @property string                             $zip                The zip code of this Account's billing address. The following restrictions apply:
  *                                                                  - May only consist of letters, numbers, spaces, and hyphens.
  *                                                                  - Must not contain more than 9 letter or number characters.
- * @property string                             $country            The two-letter country code of this Account's billing address.
+ * @property string                             $country            The two-letter ISO 3166 country code of this Account's billing address.
  * @property string                             $phone              The phone number associated with this Account.
  * @property string                             $tax_id             The tax identification number associated with this Account, for tax calculations
  *                                                                  in some countries. If you do not live in a country that collects tax, this should
  *                                                                  be `null`.
- * @property CreditCard                         $credit_card        Credit Card information associated with this Account.
+ * @property CreditCardData                     $credit_card        Credit Card information associated with this Account.
  * @property string                             $active_since       The datetime of when the account was activated.
  * @property string[]                           $capabilities       A list of capabilities your account supports.
  * @property Promotion[]                        $active_promotions  A list of active promotions on your account.
@@ -119,7 +119,7 @@ class Account extends Entity
     public function __get(string $name): mixed
     {
         return match ($name) {
-            self::FIELD_CREDIT_CARD       => new CreditCard($this->client, $this->data[$name]),
+            self::FIELD_CREDIT_CARD       => new CreditCardData($this->client, $this->data[$name]),
             self::FIELD_ACTIVE_PROMOTIONS => array_map(fn ($data) => new Promotion($this->client, $data), $this->data[$name]),
             'events'                      => new EventRepository($this->client),
             'invoices'                    => new InvoiceRepository($this->client),

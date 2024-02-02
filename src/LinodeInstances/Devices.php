@@ -21,14 +21,30 @@ use Linode\Entity;
  * * If no devices are specified, booting from this configuration will hold until a
  * device exists that allows the boot process to start.
  *
- * @property Device $sda
- * @property Device $sdb
- * @property Device $sdc
- * @property Device $sdd
- * @property Device $sde
- * @property Device $sdf
- * @property Device $sdg
- * @property Device $sdh
+ * @property Device $sda Device can be either a Disk or Volume identified by `disk_id` or `volume_id`. Only
+ *                       one type per slot allowed. Can be null.
+ *                       Devices mapped from _sde_ through _sdh_ are unavailable in `fullvirt` virt_mode.
+ * @property Device $sdb Device can be either a Disk or Volume identified by `disk_id` or `volume_id`. Only
+ *                       one type per slot allowed. Can be null.
+ *                       Devices mapped from _sde_ through _sdh_ are unavailable in `fullvirt` virt_mode.
+ * @property Device $sdc Device can be either a Disk or Volume identified by `disk_id` or `volume_id`. Only
+ *                       one type per slot allowed. Can be null.
+ *                       Devices mapped from _sde_ through _sdh_ are unavailable in `fullvirt` virt_mode.
+ * @property Device $sdd Device can be either a Disk or Volume identified by `disk_id` or `volume_id`. Only
+ *                       one type per slot allowed. Can be null.
+ *                       Devices mapped from _sde_ through _sdh_ are unavailable in `fullvirt` virt_mode.
+ * @property Device $sde Device can be either a Disk or Volume identified by `disk_id` or `volume_id`. Only
+ *                       one type per slot allowed. Can be null.
+ *                       Devices mapped from _sde_ through _sdh_ are unavailable in `fullvirt` virt_mode.
+ * @property Device $sdf Device can be either a Disk or Volume identified by `disk_id` or `volume_id`. Only
+ *                       one type per slot allowed. Can be null.
+ *                       Devices mapped from _sde_ through _sdh_ are unavailable in `fullvirt` virt_mode.
+ * @property Device $sdg Device can be either a Disk or Volume identified by `disk_id` or `volume_id`. Only
+ *                       one type per slot allowed. Can be null.
+ *                       Devices mapped from _sde_ through _sdh_ are unavailable in `fullvirt` virt_mode.
+ * @property Device $sdh Device can be either a Disk or Volume identified by `disk_id` or `volume_id`. Only
+ *                       one type per slot allowed. Can be null.
+ *                       Devices mapped from _sde_ through _sdh_ are unavailable in `fullvirt` virt_mode.
  */
 class Devices extends Entity
 {
