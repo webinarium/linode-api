@@ -35,7 +35,7 @@ interface LKENodePoolRepositoryInterface extends RepositoryInterface
     public function postLKEClusterPools(array $parameters = []): LKENodePool;
 
     /**
-     * Updates a Node Pool's count.
+     * Updates a Node Pool's count and autoscaler configuration.
      *
      * Linodes will be created or deleted to match changes to the Node Pool's count.
      *

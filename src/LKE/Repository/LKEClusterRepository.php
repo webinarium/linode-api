@@ -45,6 +45,15 @@ class LKEClusterRepository extends AbstractRepository implements LKEClusterRepos
         $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $clusterId));
     }
 
+    public function getLKEClusterDashboard(int $clusterId): string
+    {
+        $response = $this->client->get(sprintf('%s/%s/dashboard', $this->getBaseUri(), $clusterId));
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return $json['url'];
+    }
+
     public function postLKEClusterRecycle(int $clusterId): void
     {
         $this->client->post(sprintf('%s/%s/recycle', $this->getBaseUri(), $clusterId));

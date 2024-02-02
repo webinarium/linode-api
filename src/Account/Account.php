@@ -39,8 +39,10 @@ use Linode\Managed\StatsDataAvailable;
  * @property string                             $address_2          Second line of this Account's billing address.
  * @property string                             $city               The city for this Account's billing address.
  * @property string                             $state              If billing address is in the United States (US) or Canada (CA), only the
- *                                                                  two-letter ISO 3166 State or Province code are accepted. If the address is outside
- *                                                                  the US or CA, this is the Province associated with the Account's billing address.
+ *                                                                  two-letter ISO 3166 State or Province code are accepted. If entering a US military
+ *                                                                  address, state abbreviations (AA, AE, AP) should be entered. If the address is
+ *                                                                  outside the US or CA, this is the Province associated with the Account's billing
+ *                                                                  address.
  * @property string                             $zip                The zip code of this Account's billing address. The following restrictions apply:
  *                                                                  - May only consist of letters, numbers, spaces, and hyphens.
  *                                                                  - Must not contain more than 9 letter or number characters.

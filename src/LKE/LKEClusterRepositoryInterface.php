@@ -70,6 +70,26 @@ interface LKEClusterRepositoryInterface extends RepositoryInterface
     public function deleteLKECluster(int $clusterId): void;
 
     /**
+     * Get a Kubernetes Dashboard access URL for this Cluster, which enables performance
+     * of administrative tasks through a web interface.
+     *
+     * Dashboards are installed for Clusters by default.
+     *
+     * To access the Cluster Dashboard login prompt, enter the URL in a web browser.
+     * Select either **Token** or **Kubeconfig** authentication, then select **Sign in**.
+     *
+     * For additional guidance on using the Cluster Dashboard, see the Navigating the
+     * Cluster Dashboard section of our guide on Using the Kubernetes Dashboard on LKE.
+     *
+     * @param int $clusterId ID of the Kubernetes cluster to look up.
+     *
+     * @return string The Cluster Dashboard access URL.
+     *
+     * @throws LinodeException
+     */
+    public function getLKEClusterDashboard(int $clusterId): string;
+
+    /**
      * Recycles all nodes in all pools of a designated Kubernetes Cluster. All Linodes
      * within the Cluster will be deleted
      * and replaced with new Linodes on a rolling basis, which may take several minutes.
