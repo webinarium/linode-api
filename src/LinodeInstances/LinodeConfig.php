@@ -35,28 +35,29 @@ use Linode\Entity;
  *                                                 there is less transition between it and the host.
  *                                                 * `fullvirt` affords more customization, but is slower because 100% of the VM
  *                                                 is virtualized.
- * @property LinodeConfigInterface[] $interfaces   An array of Network Interfaces to add to this Linode's Configuration Profile.
- *                                                 At least one and up to three interface objects can be entered in this array. The
- *                                                 position in the array determines which of the Linode's network interfaces is
- *                                                 configured:
+ * @property LinodeConfigInterface[] $interfaces   An array of Network Interfaces to add to this Linode's Configuration Profile. At
+ *                                                 least one and up to three Interface objects can exist in this array. The position
+ *                                                 in the array determines which of the Linode's network Interfaces is configured:
  *                                                 - First 0]:  eth0
  *                                                 - Second [1]: eth1
  *                                                 - Third [2]:  eth2
- *                                                 When updating a Linode's interfaces, *each interface must be redefined*. An empty
- *                                                 interfaces array results in a default public interface configuration only.
- *                                                 If no public interface is configured, public IP addresses are still assigned to
+ *                                                 When updating a Linode's Interfaces, *each Interface must be redefined*. An empty
+ *                                                 `interfaces` array results in a default `public` type Interface configuration
+ *                                                 only.
+ *                                                 If no public Interface is configured, public IP addresses are still assigned to
  *                                                 the Linode but will not be usable without manual configuration.
- *                                                 **Note:** Changes to Linode interface configurations can be enabled by rebooting
+ *                                                 **Note:** Changes to Linode Interface configurations can be enabled by rebooting
  *                                                 the Linode.
- *                                                 **Note:** Only Next Generation Network (NGN) data centers support VLANs. Use the
- *                                                 Regions ([/regions) endpoint to view the capabilities of data center regions.
- *                                                 If a VLAN is attached to your Linode and you attempt to migrate or clone it to a
- *                                                 non-NGN data center,
- *                                                 the migration or cloning will not initiate. If a Linode cannot be migrated or
- *                                                 cloned because of an incompatibility, you will be prompted to select a different
- *                                                 data center or contact support.
- *                                                 **Note:** See the VLANs Overview guide to view additional specifications and
- *                                                 limitations.
+ *                                                 `vpc` details
+ *                                                 See the [VPC documentation guide for its specifications and limitations.
+ *                                                 `vlan` details
+ *                                                 - Only Next Generation Network (NGN) data centers support VLANs. Use the Regions
+ *                                                 (/regions) endpoint to view the capabilities of data center regions. If a VLAN is
+ *                                                 attached to your Linode and you attempt to migrate or clone it to a non-NGN data
+ *                                                 center, the migration or cloning will not initiate. If a Linode cannot be migrated
+ *                                                 or cloned because of an incompatibility, you will be prompted to select a
+ *                                                 different data center or contact support.
+ *                                                 - See the VLANs Overview guide to view additional specifications and limitations.
  * @property Helpers                 $helpers      Helpers enabled when booting to this Linode Config.
  * @property Devices                 $devices      A dictionary of device disks to use as a device map in a Linode's configuration
  *                                                 profile.

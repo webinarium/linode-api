@@ -23,7 +23,7 @@ class VlansRepository extends AbstractRepository implements VlansRepositoryInter
 {
     protected function getBaseUri(): string
     {
-        return 'beta/networking/vlans';
+        return '/networking/vlans';
     }
 
     protected function getSupportedFields(): array

@@ -64,7 +64,8 @@ interface IPAddressRepositoryInterface
 
     /**
      * Deletes a public or private IPv4 address associated with this Linode. This will
-     * fail if it is the Linode's last remaining public IPv4 address.
+     * fail if it is the Linode's last remaining public IPv4 address, or if the address
+     * has a 1:1 NAT with an active VPC Subnet address.
      *
      * @param string $address The IP address.
      *

@@ -37,7 +37,11 @@ interface FirewallRepositoryInterface extends RepositoryInterface
      *
      * * A Firewall can be assigned to multiple services at a time.
      *
+     * * A Firewall can be assigned during Linode creation by utilizing the `firewall_id`
+     * Linode Create Request property.
+     *
      * * A service can have one active, assigned Firewall at a time.
+     *
      * Additional disabled Firewalls can be assigned to a service, but they cannot be
      * enabled if another active Firewall is already assigned to the same service.
      *

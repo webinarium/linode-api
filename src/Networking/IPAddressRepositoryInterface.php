@@ -69,6 +69,9 @@ interface IPAddressRepositoryInterface extends RepositoryInterface
      * * **Linode's Managed Settings View** (GET /managed/linode-settings/{linodeId})
      * * **Linode's Managed Settings Update** (PUT /managed/linode-settings/{linodeId})
      *
+     * **Note:** Addresses with an active 1:1 NAT to a VPC Interface address cannot be
+     * assigned to other Linodes.
+     *
      * @param array $parameters Information about what IPv4 address or IPv6 range to assign, and to which Linode.
      *
      * @throws LinodeException
@@ -85,6 +88,9 @@ interface IPAddressRepositoryInterface extends RepositoryInterface
      *
      * IP failover requires configuration of a failover service (such as Keepalived)
      * within the internal system of the primary Linode.
+     *
+     * **Note:** A public IPv4 address cannot be shared if it is configured for a 1:1 NAT
+     * on a `vpc` purpose Configuration Profile Interface.
      *
      * @param array $parameters Information about what IPs to share with which Linode.
      *

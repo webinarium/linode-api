@@ -15,6 +15,7 @@ use Linode\Entity;
 use Linode\Internal\AbstractRepository;
 use Linode\LinodeClient;
 use Linode\LinodeInstances\LinodeConfig;
+use Linode\LinodeInstances\LinodeConfigInterface;
 use Linode\LinodeInstances\LinodeConfigRepositoryInterface;
 
 /**
@@ -51,6 +52,52 @@ class LinodeConfigRepository extends AbstractRepository implements LinodeConfigR
     public function deleteLinodeConfig(int $configId): void
     {
         $this->client->delete(sprintf('%s/%s', $this->getBaseUri(), $configId));
+    }
+
+    public function getLinodeConfigInterfaces(int $configId): array
+    {
+        $response = $this->client->get(sprintf('%s/%s/interfaces', $this->getBaseUri(), $configId));
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return array_map(fn ($data) => new LinodeConfigInterface($this->client, $data), $json);
+    }
+
+    public function getLinodeConfigInterface(int $configId, int $interfaceId): LinodeConfigInterface
+    {
+        $response = $this->client->get(sprintf('%s/%s/interfaces/%s', $this->getBaseUri(), $configId, $interfaceId));
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return new LinodeConfigInterface($this->client, $json);
+    }
+
+    public function addLinodeConfigInterface(int $configId, array $parameters = []): LinodeConfigInterface
+    {
+        $response = $this->client->post(sprintf('%s/%s/interfaces', $this->getBaseUri(), $configId), $parameters);
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return new LinodeConfigInterface($this->client, $json);
+    }
+
+    public function updateLinodeConfigInterface(int $configId, int $interfaceId, array $parameters = []): LinodeConfigInterface
+    {
+        $response = $this->client->put(sprintf('%s/%s/interfaces/%s', $this->getBaseUri(), $configId, $interfaceId), $parameters);
+        $contents = $response->getBody()->getContents();
+        $json     = json_decode($contents, true);
+
+        return new LinodeConfigInterface($this->client, $json);
+    }
+
+    public function deleteLinodeConfigInterface(int $configId, int $interfaceId): void
+    {
+        $this->client->delete(sprintf('%s/%s/interfaces/%s', $this->getBaseUri(), $configId, $interfaceId));
+    }
+
+    public function orderLinodeConfigInterfaces(int $configId, array $parameters = []): void
+    {
+        $this->client->post(sprintf('%s/%s/interfaces/order', $this->getBaseUri(), $configId), $parameters);
     }
 
     protected function getBaseUri(): string

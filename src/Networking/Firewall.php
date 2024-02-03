@@ -24,9 +24,9 @@ use Linode\Networking\Repository\FirewallDevicesRepository;
  * @property string                             $label   The Firewall's label, for display purposes only.
  *                                                       Firewall labels have the following constraints:
  *                                                       * Must begin and end with an alphanumeric character.
- *                                                       * May only consist of alphanumeric characters, dashes (`-`), underscores (`_`)
+ *                                                       * May only consist of alphanumeric characters, hyphens (`-`), underscores (`_`)
  *                                                       or periods (`.`).
- *                                                       * Cannot have two dashes (`--`), underscores (`__`) or periods (`..`) in a row.
+ *                                                       * Cannot have two hyphens (`--`), underscores (`__`) or periods (`..`) in a row.
  *                                                       * Must be between 3 and 32 characters.
  *                                                       * Must be unique.
  * @property string                             $status  The status of this Firewall.

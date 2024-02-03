@@ -25,9 +25,9 @@ use Linode\LinodeInstances\Repository\LinodeConfigRepository;
  *                                                             a default will be assigned.
  *                                                             Linode labels have the following constraints:
  *                                                             * Must begin and end with an alphanumeric character.
- *                                                             * May only consist of alphanumeric characters, dashes (`-`), underscores (`_`)
+ *                                                             * May only consist of alphanumeric characters, hyphens (`-`), underscores (`_`)
  *                                                             or periods (`.`).
- *                                                             * Cannot have two dashes (`--`), underscores (`__`) or periods (`..`) in a row.
+ *                                                             * Cannot have two hyphens (`--`), underscores (`__`) or periods (`..`) in a row.
  * @property string                          $region           This is the Region where the Linode was deployed. A Linode's region can only be
  *                                                             changed by initiating a cross data center migration.
  * @property string                          $type             This is the Linode Type that this Linode was deployed with.

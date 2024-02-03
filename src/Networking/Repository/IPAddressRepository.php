@@ -76,6 +76,7 @@ class IPAddressRepository extends AbstractRepository implements IPAddressReposit
             IPAddress::FIELD_GATEWAY,
             IPAddress::FIELD_SUBNET_MASK,
             IPAddress::FIELD_PREFIX,
+            IPAddress::FIELD_VPC_NAT_1_1,
         ];
     }
 

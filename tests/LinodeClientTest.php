@@ -50,6 +50,7 @@ use Linode\StackScripts\StackScriptRepositoryInterface;
 use Linode\Support\SupportTicketRepositoryInterface;
 use Linode\Tags\TagRepositoryInterface;
 use Linode\Volumes\VolumeRepositoryInterface;
+use Linode\VPC\VPCRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 
@@ -103,6 +104,7 @@ final class LinodeClientTest extends TestCase
         self::assertInstanceOf(TagRepositoryInterface::class, $object->tags);
         self::assertInstanceOf(VlansRepositoryInterface::class, $object->vlans);
         self::assertInstanceOf(VolumeRepositoryInterface::class, $object->volumes);
+        self::assertInstanceOf(VPCRepositoryInterface::class, $object->vpcs);
 
         self::assertNull($object->unknown);
     }

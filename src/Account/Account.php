@@ -49,7 +49,7 @@ use Linode\Managed\StatsDataAvailable;
  *                                                                      outside the US or CA, this is the Province associated with the Account's billing
  *                                                                      address.
  * @property string                                 $zip                The zip code of this Account's billing address. The following restrictions apply:
- *                                                                      - May only consist of letters, numbers, spaces, and hyphens.
+ *                                                                      - Can only contain ASCII letters, numbers, and hyphens (`-`).
  *                                                                      - Must not contain more than 9 letter or number characters.
  * @property string                                 $country            The two-letter ISO 3166 country code of this Account's billing address.
  * @property string                                 $phone              The phone number associated with this Account.

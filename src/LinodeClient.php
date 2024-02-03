@@ -55,8 +55,9 @@ use Psr\Http\Message\ResponseInterface;
  * @property StackScripts\StackScriptRepositoryInterface           $stackScripts
  * @property Support\SupportTicketRepositoryInterface              $supportTickets
  * @property Tags\TagRepositoryInterface                           $tags
- * @property Volumes\VolumeRepositoryInterface                     $volumes
  * @property Networking\VlansRepositoryInterface                   $vlans
+ * @property Volumes\VolumeRepositoryInterface                     $volumes
+ * @property VPC\VPCRepositoryInterface                            $vpcs
  */
 class LinodeClient
 {
@@ -138,6 +139,7 @@ class LinodeClient
             'tags'                  => new Tags\Repository\TagRepository($this),
             'vlans'                 => new Networking\Repository\VlansRepository($this),
             'volumes'               => new Volumes\Repository\VolumeRepository($this),
+            'vpcs'                  => new VPC\Repository\VPCRepository($this),
             default                 => null,
         };
     }

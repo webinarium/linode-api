@@ -186,11 +186,21 @@ interface LinodeRepositoryInterface extends RepositoryInterface
      * Linodes utilizing Metadata (`"has_user_data": true`) must be cloned to a new
      * Linode with `metadata.user_data` included with the clone request.
      *
-     * **Note:** Only Next Generation Network (NGN) data centers support VLANs. If a VLAN
-     * is attached to your Linode and you attempt clone it to a non-NGN data center, the
+     * `vpc` details
+     *
+     * - If the Linode you are cloning has a `vpc` purpose Interface on its active
+     * Configuration Profile that includes a 1:1 NAT, the resulting clone is configured
+     * with an `any` 1:1 NAT.
+     * - See the VPC documentation guide for its specifications and limitations.
+     *
+     * `vlan` details
+     *
+     * - Only Next Generation Network (NGN) data centers support VLANs. If a VLAN is
+     * attached to your Linode and you attempt clone it to a non-NGN data center, the
      * cloning will not initiate. If a Linode cannot be cloned because of an
      * incompatibility, you will be prompted to select a different data center or contact
      * support.
+     * - See the VLANs Overview guide to view additional specifications and limitations.
      *
      * @param int   $linodeId   ID of the Linode to clone.
      * @param array $parameters The requested state your Linode will be cloned into.
@@ -207,27 +217,36 @@ interface LinodeRepositoryInterface extends RepositoryInterface
      * If the migration initiated the shutdown, it will reboot the Linode when completed.
      *
      * To initiate a cross DC migration, you must pass a `region` parameter to the
-     * request body specifying the target data center region.
-     * You can view a list of all available regions and their feature capabilities
+     * request body specifying the target data center region. You can view a list of all
+     * available regions and their feature capabilities
      * from GET /regions. See our Pricing Page for Region-specific pricing, which applies
-     * after migration is complete. If your Linode has a DC migration already queued
-     * or you have initiated a previously scheduled migration, you will not be able to
+     * after migration is complete. If your Linode has a DC migration already queued or
+     * you have initiated a previously scheduled migration, you will not be able to
      * initiate
      * a DC migration until it has completed.
      *
-     * **Note:** Next Generation Network (NGN) data centers do not support IPv6 `/116`
-     * pools or IP Failover.
+     * `vpc` details
+     *
+     * - Cross DC migrations are not allowed for Linodes that have a `vpc` purpose
+     * Configuration Profile Interface. Host migrations within the same DC are permitted.
+     * - See the VPC documentation guide for its specifications and limitations.
+     *
+     * `vlan` details
+     *
+     * - Only Next Generation Network (NGN) data centers support VLANs. Use the Regions
+     * (/regions) endpoint to view the capabilities of data center regions. If a VLAN is
+     * attached to your Linode and you attempt to migrate or clone it to a non-NGN data
+     * center, the migration or cloning will not initiate. If a Linode cannot be migrated
+     * or cloned because of an incompatibility, you will be prompted to select a
+     * different data center or contact support.
+     * - Next Generation Network (NGN) data centers do not support IPv6 `/116` pools or
+     * IP Failover.
      * If you have these features enabled on your Linode and attempt to migrate to an NGN
      * data center,
      * the migration will not initiate. If a Linode cannot be migrated because of an
      * incompatibility,
      * you will be prompted to select a different data center or contact support.
-     *
-     * **Note:** Only Next Generation Network (NGN) data centers support VLANs. If a VLAN
-     * is attached to your Linode and you attempt to migrate it to a non-NGN data center,
-     * the migration will not initiate. If a Linode cannot be migrated because of an
-     * incompatibility, you will be prompted to select a different data center or contact
-     * support.
+     * - See the VLANs Overview guide to view additional specifications and limitations.
      *
      * @param int $linodeId ID of the Linode to migrate.
      *
